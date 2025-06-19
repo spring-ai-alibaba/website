@@ -8,7 +8,7 @@ description: "本章介绍了 MCP（Model Context Protocol），一个旨在标�
 - 本文档基于 Spring AI 1.0.0 版本，Spring AI Alibaba 1.0.0.2 版本
 - 本章是MCP快速上手 + 源码解读（MCP、SpringAI下的MCP）
 
-## 第七章：MCP 使用范式
+## 第七章：MCP 快速上手
 
 > MCP 官方文档：[https://modelcontextprotocol.io/introduction](https://modelcontextprotocol.io/introduction),
 > MCP（Model Context Protocol）是一种标准化协议，使 AI 模型能够以结构化方式与外部工具和资源交互
