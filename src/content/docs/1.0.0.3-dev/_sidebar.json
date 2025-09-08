@@ -10,7 +10,7 @@
 				"link": "docs/1.0.0.3-dev/overview/what-is-saa"
 			},
 			{
-				"label": "SAA vs Spring AI",
+				"label": "SAA 与 Spring AI 的关系",
 				"translations": { "en": "SAA vs Spring AI" },
 				"link": "docs/1.0.0.3-dev/overview/saa-vs-spring-ai"
 			}
