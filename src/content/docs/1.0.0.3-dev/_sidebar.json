@@ -27,14 +27,9 @@
 				"link": "docs/1.0.0.3-dev/concepts/agent"
 			},
 			{
-				"label": "大语言模型 (LLM)",
-				"translations": { "en": "LLM" },
-				"link": "docs/1.0.0.3-dev/concepts/llm"
-			},
-			{
-				"label": "提示词 (Prompt)",
-				"translations": { "en": "Prompt" },
-				"link": "docs/1.0.0.3-dev/concepts/prompt"
+				"label": "AI 模型 (AI Models)",
+				"translations": { "en": "AI Models" },
+				"link": "docs/1.0.0.3-dev/concepts/ai-models"
 			},
 			{
 				"label": "工具 (Tool)",
@@ -42,22 +37,27 @@
 				"link": "docs/1.0.0.3-dev/concepts/tool"
 			},
 			{
+				"label": "上下文 (Context)",
+				"translations": { "en": "Context" },
+				"link": "docs/1.0.0.3-dev/concepts/context"
+			},
+			{
 				"label": "记忆 (Memory)",
 				"translations": { "en": "Memory" },
 				"link": "docs/1.0.0.3-dev/concepts/memory"
 			},
 			{
-				"label": "RAG",
+				"label": "检索增强生成 (RAG)",
 				"translations": { "en": "RAG" },
 				"link": "docs/1.0.0.3-dev/concepts/rag"
 			},
 			{
-				"label": "MCP",
+				"label": "模型上下文协议 (MCP)",
 				"translations": { "en": "MCP" },
 				"link": "docs/1.0.0.3-dev/concepts/mcp"
 			},
 			{
-				"label": "A2A",
+				"label": "智能体互联协议 (A2A)",
 				"translations": { "en": "A2A" },
 				"link": "docs/1.0.0.3-dev/concepts/a2a"
 			}
