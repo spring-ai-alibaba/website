@@ -77,11 +77,6 @@
 				"label": "第一个智能体",
 				"translations": { "en": "Your First Agent" },
 				"link": "docs/1.0.0.3-dev/get-started/first-agent"
-			},
-			{
-				"label": "示例仓库",
-				"translations": { "en": "Examples Repository" },
-				"link": "https://github.com/spring-ai-alibaba/spring-ai-alibaba-examples"
 			}
 		]
 	},
@@ -91,46 +86,51 @@
 		"collapsed": false,
 		"items": [
 			{
-				"label": "StateGraph 基础",
-				"translations": { "en": "StateGraph Basics" },
-				"link": "docs/1.0.0.3-dev/building/state-graph-basics"
-			},
-			{
-				"label": "节点开发",
-				"translations": { "en": "Node Development" },
-				"collapsed": true,
+				"label": "Agent 模式",
+				"translations": { "en": "Agent Patterns" },
+				"collapsed": false,
 				"items": [
 					{
-						"label": "节点基础与自定义",
-						"translations": { "en": "Node Basics & Custom" },
-						"link": "docs/1.0.0.3-dev/building/nodes/basics"
+						"label": "ReAct 模式",
+						"translations": { "en": "The ReAct Pattern" },
+						"link": "docs/1.0.0.3-dev/building/patterns/react"
 					},
 					{
-						"label": "内置节点",
-						"translations": { "en": "Built-in Nodes" },
-						"link": "docs/1.0.0.3-dev/building/nodes/builtin"
+						"label": "流程模式 (Flow)",
+						"translations": { "en": "The Flow Pattern" },
+						"link": "docs/1.0.0.3-dev/building/patterns/flow"
+					},
+					{
+						"label": "反思模式 (Reflect)",
+						"translations": { "en": "The Reflect Pattern" },
+						"link": "docs/1.0.0.3-dev/building/patterns/reflect"
+					},
+					{
+						"label": "多智能体协作模式 (A2A)",
+						"translations": { "en": "The Multi-Agent Pattern (A2A)" },
+						"link": "docs/1.0.0.3-dev/building/patterns/a2a"
 					}
 				]
 			},
 			{
-				"label": "边与路由",
-				"translations": { "en": "Edges & Routing" },
-				"link": "docs/1.0.0.3-dev/building/edges-routing"
-			},
-			{
-				"label": "提示词管理",
-				"translations": { "en": "Prompt Management" },
+				"label": "底层核心：StateGraph",
+				"translations": { "en": "Core Engine: StateGraph" },
 				"collapsed": true,
 				"items": [
 					{
-						"label": "动态模板配置",
-						"translations": { "en": "Dynamic Template Config" },
-						"link": "docs/1.0.0.3-dev/building/prompts/dynamic-config"
+						"label": "StateGraph 基础",
+						"translations": { "en": "StateGraph Basics" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/basics"
 					},
 					{
-						"label": "输出解析器",
-						"translations": { "en": "Output Parsers" },
-						"link": "docs/1.0.0.3-dev/building/prompts/output-parsers"
+						"label": "节点 (Node) 开发",
+						"translations": { "en": "Node Development" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/nodes"
+					},
+					{
+						"label": "边 (Edge) 与路由",
+						"translations": { "en": "Edge & Routing" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/edges"
 					}
 				]
 			},
@@ -140,36 +140,19 @@
 				"collapsed": true,
 				"items": [
 					{
-						"label": "并行执行",
-						"translations": { "en": "Parallel Execution" },
-						"link": "docs/1.0.0.3-dev/building/advanced/parallel"
-					},
-					{
-						"label": "子图与嵌套",
-						"translations": { "en": "Subgraphs & Nesting" },
-						"link": "docs/1.0.0.3-dev/building/advanced/subgraphs"
-					},
-					{
 						"label": "人机交互",
 						"translations": { "en": "Human-in-the-Loop" },
 						"link": "docs/1.0.0.3-dev/building/advanced/human-in-loop"
-					}
-				]
-			},
-			{
-				"label": "生产就绪",
-				"translations": { "en": "Production Ready" },
-				"collapsed": true,
-				"items": [
+					},
 					{
-						"label": "持久化",
-						"translations": { "en": "Persistence" },
-						"link": "docs/1.0.0.3-dev/building/production/persistence"
+						"label": "持久化与恢复",
+						"translations": { "en": "Persistence & Resuming" },
+						"link": "docs/1.0.0.3-dev/building/advanced/persistence"
 					},
 					{
 						"label": "可观测性",
 						"translations": { "en": "Observability" },
-						"link": "docs/1.0.0.3-dev/building/production/observability"
+						"link": "docs/1.0.0.3-dev/building/advanced/observability"
 					}
 				]
 			}
@@ -296,6 +279,18 @@
 						"link": "docs/1.0.0.3-dev/integration/spring-ai/llm-integration"
 					}
 				]
+			}
+		]
+	},
+	{
+		"label": "示例代码",
+		"translations": { "en": "Code Examples" },
+		"collapsed": true,
+		"items": [
+			{
+				"label": "示例仓库",
+				"translations": { "en": "Examples Repository" },
+				"link": "https://github.com/spring-ai-alibaba/spring-ai-alibaba-examples"
 			}
 		]
 	},
