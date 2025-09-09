@@ -91,29 +91,34 @@
 				"collapsed": false,
 				"items": [
 					{
-						"label": "ReAct 模式",
-						"translations": { "en": "The ReAct Pattern" },
+						"label": "ReAct Agent",
+						"translations": { "en": "ReAct Agent" },
 						"link": "docs/1.0.0.3-dev/building/patterns/react"
 					},
+					{ 
+						"label": "人机交互的ReAct Agent",  
+						"translations": { "en": "ReAct With Human Agent" },
+						"link": "docs/1.0.0.3-dev/building/patterns/react-with-human"
+					},
 					{
-						"label": "流程模式 (Flow)",
-						"translations": { "en": "The Flow Pattern" },
+						"label": "工作流智能体",
+						"translations": { "en": "Flow Agent" },
 						"link": "docs/1.0.0.3-dev/building/patterns/flow"
 					},
 					{
-						"label": "反思模式 (Reflect)",
-						"translations": { "en": "The Reflect Pattern" },
+						"label": "反思智能体",
+						"translations": { "en": "Reflect Agent" },
 						"link": "docs/1.0.0.3-dev/building/patterns/reflect"
 					},
 					{
 						"label": "多智能体协作模式 (A2A)",
-						"translations": { "en": "The Multi-Agent Pattern (A2A)" },
+						"translations": { "en": "Multi-Agent (A2A)" },
 						"link": "docs/1.0.0.3-dev/building/patterns/a2a"
 					}
 				]
 			},
 			{
-				"label": "底层核心：StateGraph",
+				"label": "Graph 模式",
 				"translations": { "en": "Core Engine: StateGraph" },
 				"collapsed": true,
 				"items": [
@@ -153,6 +158,26 @@
 						"label": "可观测性",
 						"translations": { "en": "Observability" },
 						"link": "docs/1.0.0.3-dev/building/advanced/observability"
+					},
+					{
+						"label": "子图 (SubGraphs)",
+						"translations": { "en": "SubGraphs" },
+						"link": "docs/1.0.0.3-dev/building/advanced/subgraphs"
+					},
+					{
+						"label": "流式响应",
+						"translations": { "en": "Streaming Response" },
+						"link": "docs/1.0.0.3-dev/building/advanced/streaming"
+					},
+					{
+						"label": "并行节点",
+						"translations": { "en": "Parallel Node" },
+						"link": "docs/1.0.0.3-dev/building/advanced/parallel-node"
+					},
+					{
+						"label": "图可视化",
+						"translations": { "en": "Graph Visualization" },
+						"link": "docs/1.0.0.3-dev/building/advanced/visualization"
 					}
 				]
 			}

@@ -93,59 +93,102 @@ try {
 
 ## 2. 并行流 (`ParallelAgent`)
 
-当多个任务之间没有依赖关系时，让它们并行执行可以大大缩短总耗时。
+当多个任务之间没有依赖关系时，让它们并行执行可以大大缩短总耗时。`ParallelAgent` 就是为此而生，它提供了强大的并发控制和灵活的结果合并机制。
 
-**场景**: 在确定了城市和景点后，规划师需要同时查询“**① 当地的天气**”和“**② 推荐的酒店**”。这两个任务可以并行进行。
+**场景**: 在确定了城市后，规划师需要同时获取“**① 当地的天气**”、“**② 推荐的酒店**”以及“**③ 本地新闻**”。这三个任务可以并行进行。
 
 ```java
 import com.alibaba.cloud.ai.graph.agent.flow.agent.ParallelAgent;
-import com.alibaba.cloud.ai.graph.exception.GraphStateException;
-import com.alibaba.cloud.ai.graph.exception.GraphRunnerException;
+import java.util.List;
+import java.util.Map;
 
-// agent3: 查询天气
-ReactAgent weatherAgent = ReactAgent.builder()
-    .name("WeatherAgent")
-    .description("查询指定城市的天气信息")
-    .chatClient(chatClient)
-    .inputKey("cityName")
-    .outputKey("weatherInfo")
-    .instruction("你是一个天气查询助手，根据城市名称提供天气信息。")
-    .build();
-
-// agent4: 查询酒店
-ReactAgent hotelAgent = ReactAgent.builder()
-    .name("HotelAgent")
-    .description("查询指定城市的酒店推荐")
-    .chatClient(chatClient)
-    .inputKey("cityName")
-    .outputKey("hotelInfo")
-    .instruction("你是一个酒店推荐助手，根据城市名称推荐合适的酒店。")
-    .build();
+// 假设我们已经定义了三个子 Agent：
+// weatherAgent: inputKey="city", outputKey="weather_info"
+// hotelAgent: inputKey="city", outputKey="hotel_info"
+// newsAgent: inputKey="city", outputKey="news_info"
 
 // 使用 ParallelAgent 并行执行
 ParallelAgent searchParallel = ParallelAgent.builder()
     .name("SearchParallelFlow")
-    .subAgents(List.of(weatherAgent, hotelAgent))
+    .subAgents(List.of(weatherAgent, hotelAgent, newsAgent))
     .build();
     
 // 执行并行流
-try {
-    Map<String, Object> parallelResult = searchParallel.invoke(
-        Map.of("cityName", "杭州")
-    ).get().data();
+Map<String, Object> parallelResult = searchParallel.invoke(
+    Map.of("city", "上海")
+).get().data();
 
-    // parallelResult 中将同时包含 weatherInfo 和 hotelInfo
-    System.out.println(parallelResult.get("weatherInfo"));
-    System.out.println(parallelResult.get("hotelInfo"));
-} catch (GraphStateException | GraphRunnerException e) {
-    e.printStackTrace();
-}
+// parallelResult 中将同时包含 weather_info, hotel_info, news_info
+System.out.println(parallelResult);
 ```
 
-**核心要点**:
--   **结果合并**: 默认情况下，`ParallelAgent` 会将所有子 Agent 的输出（根据它们各自的 `outputKey`）合并到一个 `Map` 中返回。
--   **MergeStrategy**: 您可以通过 `.mergeStrategy()` 方法指定不同的结果合并策略，例如 `ListMergeStrategy` (将所有结果合并成一个 List) 或 `ConcatenationMergeStrategy` (将所有字符串结果拼接起来)。
--   **约束**: 并行流中的所有子 Agent 必须拥有**唯一**的 `outputKey`，否则会因键冲突而出错。
+### 并发控制 (`maxConcurrency`)
+
+在某些场景下，您可能不希望所有的子任务立刻同时执行，例如为了避免对下游 API 造成过大的请求压力。`ParallelAgent` 提供了 `.maxConcurrency()` 方法来限制同时执行的子 Agent 数量。
+
+```java
+ParallelAgent searchParallelWithLimit = ParallelAgent.builder()
+    .name("SearchParallelFlowWithLimit")
+    .subAgents(List.of(weatherAgent, hotelAgent, newsAgent))
+    // 虽然有 3 个子 Agent，但最多只会有 2 个同时在运行
+    .maxConcurrency(2)
+    .build();
+```
+
+### 结果合并策略 (`MergeStrategy`)
+
+`ParallelAgent` 在所有子任务执行完毕后，需要将它们各自的结果合并成一个最终的输出。通过 `.mergeStrategy()` 方法，您可以指定不同的合并策略。
+
+#### 内置合并策略
+
+1.  **`DefaultMergeStrategy` (默认)**: 将所有子 Agent 的输出（以其 `outputKey` 为键）合并到一个 `Map<String, Object>` 中。**要求所有子 Agent 的 `outputKey` 必须唯一**。
+    ```java
+    // .mergeStrategy(new ParallelAgent.DefaultMergeStrategy()) 是默认行为
+    // 输出: { "weather_info": "...", "hotel_info": "...", "news_info": "..." }
+    ```
+
+2.  **`ListMergeStrategy`**: 将所有子 Agent 的输出收集到一个 `List<Object>` 中。
+    ```java
+    .mergeStrategy(new ParallelAgent.ListMergeStrategy())
+    // 输出: [ "weather_result", "hotel_result", "news_result" ]
+    ```
+
+3.  **`ConcatenationMergeStrategy`**: 将所有子 Agent 的**字符串类型**输出，用指定的分隔符拼接成一个单一的字符串。
+    ```java
+    .mergeStrategy(new ParallelAgent.ConcatenationMergeStrategy("\n\n---\n\n"))
+    // 输出: "weather_result\n\n---\n\nhotel_result\n\n---\n\nnews_result"
+    ```
+
+#### 自定义合并策略
+
+如果内置策略无法满足您的需求，您可以轻松实现 `ParallelAgent.MergeStrategy` 接口来定义自己的合并逻辑。
+
+**场景**: 我们只想保留所有并行结果中，字符串长度最长的那一个。
+
+```java
+import java.util.Comparator;
+import java.util.Map;
+
+// 1. 实现 MergeStrategy 接口
+public class SelectLongestResultStrategy implements ParallelAgent.MergeStrategy {
+    @Override
+    public Object merge(Map<String, Object> subAgentResults, OverAllState overallState) {
+        // subAgentResults 的 key 是子 Agent 的名称，value 是其执行结果
+        return subAgentResults.values()
+            .stream()
+            .map(Object::toString)
+            .max(Comparator.comparing(String::length))
+            .orElse("无结果");
+    }
+}
+
+// 2. 在 ParallelAgent 中使用自定义策略
+ParallelAgent searchParallelCustomMerge = ParallelAgent.builder()
+    .name("SearchParallelCustomMerge")
+    .subAgents(List.of(weatherAgent, hotelAgent, newsAgent))
+    .mergeStrategy(new SelectLongestResultStrategy())
+    .build();
+```
 
 ## 3. 路由流 (`LlmRoutingAgent`)
 
