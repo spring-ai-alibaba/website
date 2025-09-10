@@ -68,7 +68,7 @@ public class SubGraphSimpleExample {
             return Map.of("input", "你好，子图！");
         });
 
-        // ✨ 关键步骤: 直接将 StateGraph 实例作为节点添加
+        // 关键步骤: 直接将 StateGraph 实例作为节点添加
         mainGraph.addNode("text_analyzer_subgraph", textAnalysisSubGraph);
 
         // 定义主图流程

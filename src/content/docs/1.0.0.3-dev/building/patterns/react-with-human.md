@@ -95,8 +95,8 @@ public class HumanInteractionExample {
             .name("HumanConfirmAgent")
             .chatClient(chatClient)
             .tools(List.of(sendEmailTool))
-            .compileConfig(compileConfig) // ✨ 关键：提供包含 Checkpointer 的编译配置
-            .shouldInterruptFunction(InterruptConditions.needsEmailConfirmation()) // ✨ 关键：设置中断条件
+            .compileConfig(compileConfig) // 关键：提供包含 Checkpointer 的编译配置
+            .shouldInterruptFunction(InterruptConditions.needsEmailConfirmation()) // 关键：设置中断条件
             .build();
 
         // --- 3. 编译得到可执行的图 ---

@@ -78,7 +78,7 @@ public class MyGraphConfiguration {
     @Bean
     public CompiledGraph compiledGraph(
             StateGraph myStateGraph, 
-            // ✨ 关键：直接从 Spring 上下文注入配置好的 CompileConfig
+            // 直接从 Spring 上下文注入配置好的 CompileConfig
             CompileConfig observationCompileConfig) {
         
         // 使用这个自动配置的 CompileConfig 来编译图
@@ -99,7 +99,7 @@ public class MyGraphConfiguration {
 
 启用观测性 Starter 后，您将自动获得以下强大能力：
 
-### 📊 指标 (Metrics) 收集
+### 指标 (Metrics) 收集
 
 Starter 会自动记录图执行过程中的关键性能指标，并以 Micrometer 的格式暴露出来。
 
@@ -228,7 +228,7 @@ Langfuse 是一个强大的 LLM 应用观测平台，特别适合跟踪和分析
 import com.alibaba.cloud.ai.graph.GraphLifecycleListener;
 import org.springframework.stereotype.Component;
 
-@Component // ✨ 注册为 Spring Bean
+@Component // 注册为 Spring Bean
 public class CustomGraphMonitor implements GraphLifecycleListener {
 
     @Override

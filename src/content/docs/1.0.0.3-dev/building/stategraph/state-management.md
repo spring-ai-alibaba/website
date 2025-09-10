@@ -77,7 +77,7 @@ KeyStrategyFactory factory = KeyStrategy.builder()
     .addStrategy("messages", KeyStrategy.APPEND)
     .addStrategy("config", KeyStrategy.MERGE)
     .addStrategy("metadata", KeyStrategy.MERGE)
-    .defaultStrategy(KeyStrategy.REPLACE) // ✨ 设置默认策略，无需为每个其他键单独配置
+     .defaultStrategy(KeyStrategy.REPLACE) // 设置默认策略，无需为每个其他键单独配置
     .build();
 ```
 
@@ -148,7 +148,7 @@ AppenderChannel<String> messageChannel = AppenderChannel.of(ArrayList::new);
 // 当前消息列表
 List<String> currentMessages = List.of("msg1", "msg2", "msg3", "msg2");
 
-// ✨ 核心功能：使用 RemoveByHash 删除特定值的元素
+     // 核心功能：使用 RemoveByHash 删除特定值的元素
 // 这会返回一个特殊的 RemoveIdentifier 对象
 var removeMsg2 = RemoveByHash.of("msg2");
 

@@ -41,11 +41,11 @@ public StateGraph parallelGraph(ChatClient.Builder chatClientBuilder) throws Gra
             .addNode("translator", new TranslatorNode(chatClientBuilder))
             .addNode("merge", new MergeNode());
 
-    // ✨ 核心：让 START 同时连接到两个独立节点，触发并行
+    // 核心：让 START 同时连接到两个独立节点，触发并行
     stateGraph.addEdge(StateGraph.START, "expander");
     stateGraph.addEdge(StateGraph.START, "translator");
 
-    // ✨ 核心：让两个并行分支的结果都汇入 merge 节点
+    // 核心：让两个并行分支的结果都汇入 merge 节点
     stateGraph.addEdge("expander", "merge");
     stateGraph.addEdge("translator", "merge");
 
@@ -164,7 +164,7 @@ Executor customExecutor = Executors.newFixedThreadPool(4);
 // 2. 在执行时，通过 RunnableConfig 注入
 RunnableConfig config = RunnableConfig.builder()
         .threadId("my-thread-1")
-        // ✨ 正确的做法：为自动生成的并行节点指定 Executor
+        // 正确的做法：为自动生成的并行节点指定 Executor
         .addParallelNodeExecutor("__PARALLEL__(START)", customExecutor)
         .build();
 

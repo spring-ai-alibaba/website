@@ -68,7 +68,7 @@ public class PersistenceExample {
         
         CompileConfig compileConfig = CompileConfig.builder()
             .saverConfig(saverConfig)
-            .interruptAfter("step_A") // ✨ 在 step_A 执行完毕后，流程自动中断
+            .interruptAfter("step_A") // 在 step_A 执行完毕后，流程自动中断
             .build();
 
         CompiledGraph compiledGraph = stateGraph.compile(compileConfig);
@@ -135,7 +135,7 @@ public class GenericObjectSerializer extends PlainTextStateSerializer {
         super(OverAllState::new);
         this.mapper = new ObjectMapper();
         
-        // ✨ 核心配置：启用默认类型处理。
+        // 核心配置：启用默认类型处理。
         // 这会在序列化的JSON中加入"@class"属性，指明对象的具体类型，
         // 从而让 Jackson 在反序列化时能够准确地恢复任何复杂对象。
         mapper.activateDefaultTyping(
@@ -171,7 +171,7 @@ public class GenericObjectSerializer extends PlainTextStateSerializer {
     }
 }
 
-// ✨ 如何使用: 在构建 StateGraph 时将其传入
+// 如何使用: 在构建 StateGraph 时将其传入
 StateGraph stateGraph = new StateGraph(
     keyStrategyFactory,
     new GenericObjectSerializer() // 注入自定义序列化器
@@ -198,7 +198,7 @@ SAA Graph 内置了强大的人机交互机制，它正是**基于持久化与�
 ```java
 public static class HumanFeedback {
     private Map<String, Object> data;          // 人类提供的反馈数据 (如评论、决策)
-    private String nextNodeId;                 // ✨ 关键：指定恢复后要跳转到的**逻辑边名称**
+    private String nextNodeId;                 // 关键：指定恢复后要跳转到的**逻辑边名称**
     // ...
 }
 ```
@@ -216,7 +216,7 @@ public static CompiledGraph createApprovalWorkflow() throws GraphStateException 
     
     graph.addNode("receive_request", /* ... 节点逻辑 ... */);
     graph.addNode("wait_for_approval", (state) -> {
-        System.out.println("⏸️ 工作流暂停，等待人类审批...");
+        System.out.println("工作流暂停，等待人类审批...");
         state.setInterruptMessage("Waiting for human approval");
         return Map.of();
     });
@@ -226,7 +226,7 @@ public static CompiledGraph createApprovalWorkflow() throws GraphStateException 
     graph.setEntryPoint("receive_request");
     graph.addEdge("receive_request", "wait_for_approval");
     
-    // ✨ 核心：从 wait_for_approval 节点出发的条件边
+    // 核心：从 wait_for_approval 节点出发的条件边
     // 这个路由函数会检查状态中的 HumanFeedback，并根据其 nextNodeId 决定走向
     graph.addConditionalEdges("wait_for_approval", 
         (state) -> state.humanFeedback() != null ? state.humanFeedback().nextNodeId() : "wait_for_approval",
@@ -260,13 +260,13 @@ RunnableConfig config = RunnableConfig.builder().threadId(threadId).build();
 // 1. 第一次执行：运行直到中断点
 System.out.println("=== 步骤 1: 运行直到需要人类审批 ===");
 workflow.invoke(Map.of("user_request", "申请..."), config);
-System.out.println("🔄 工作流已中断，等待人类审批...\n");
+System.out.println("工作流已中断，等待人类审批...\n");
 
 // 2. 模拟人类审批，并创建 HumanFeedback 对象
 System.out.println("=== 步骤 2: 人类决定批准请求 ===");
 HumanFeedback approvalFeedback = new HumanFeedback(
     Map.of("comments", "业务需求合理，批准。"), // 附加数据
-    "approved"                               // ✨ 指定路由到 "approved" 这条边
+    "approved"                               // 指定路由到 "approved" 这条边
 );
 
 // 3. 注入反馈并恢复执行
@@ -277,7 +277,7 @@ Optional<OverAllState> approvedResult = workflow
     .invoke(Map.of(), config);              // 从中断点继续执行
 
 if (approvedResult.isPresent()) {
-    System.out.println("✅ 工作流完成，最终结果: " + approvedResult.get().value("final_result").orElse(""));
+    System.out.println("工作流完成，最终结果: " + approvedResult.get().value("final_result").orElse(""));
 }
 ```
 
