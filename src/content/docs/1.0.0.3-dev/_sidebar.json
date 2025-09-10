@@ -128,6 +128,11 @@
 						"link": "docs/1.0.0.3-dev/building/stategraph/basics"
 					},
 					{
+						"label": "状态管理 (KeyStrategy)",
+						"translations": { "en": "State Management (KeyStrategy)" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/state-management"
+					},
+					{
 						"label": "节点 (Node) 开发",
 						"translations": { "en": "Node Development" },
 						"link": "docs/1.0.0.3-dev/building/stategraph/nodes"
