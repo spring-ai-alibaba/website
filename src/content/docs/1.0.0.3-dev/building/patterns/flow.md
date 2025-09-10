@@ -71,7 +71,7 @@ ReactAgent findAttractionsAgent = ReactAgent.builder()
 // 使用 SequentialAgent 将它们串联起来
 SequentialAgent planInitialIdeas = SequentialAgent.builder()
     .name("PlanInitialIdeasFlow")
-    .subAgents(List.of(chooseCityAgent, findAttractionsAgent))
+    .agents(chooseCityAgent, findAttractionsAgent)
     .build();
 
 // 执行顺序流
@@ -88,212 +88,117 @@ try {
 ```
 
 **核心要点**:
--   `SequentialAgent` 通过 `.subAgents()` 方法接收一个 `List<BaseAgent>`，并会严格按照列表的顺序执行。
+-   `SequentialAgent` 通过 `.agents()` 方法接收多个 `BaseAgent` 参数，并会严格按照参数的顺序执行。
 -   **数据流转**: 通过为子 Agent 设置 `.inputKey()` 和 `.outputKey()`，我们构建了一条数据管道。`chooseCityAgent` 将结果写入 `"cityName"`，`findAttractionsAgent` 从 `"cityName"` 读取数据，实现了 Agent 间的自动数据传递。
 
-## 2. 并行流 (`ParallelAgent`)
+## 2. 并行智能体 (`ParallelAgent`)
 
-当多个任务之间没有依赖关系时，让它们并行执行可以大大缩短总耗时。`ParallelAgent` 就是为此而生，它提供了强大的并发控制和灵活的结果合并机制。
+`ParallelAgent` 用于并行执行多个智能体，然后将它们的结果进行合并。这对于需要同时从多个独立来源收集信息或执行多个独立子任务的场景至关重要。
 
-**场景**: 在确定了城市后，规划师需要同时获取“**① 当地的天气**”、“**② 推荐的酒店**”以及“**③ 本地新闻**”。这三个任务可以并行进行。
+#### 高级配置
 
+`ParallelAgent` 提供了丰富的配置选项以应对复杂的并行需求：
+-   **`maxConcurrency`**: 设置最大并发数。例如，如果有 10 个 Agent，但 `maxConcurrency` 设置为 3，那么框架将分批执行，每一批最多 3 个 Agent 并行。
+-   **`MergeStrategy`**: 定义如何合并来自不同并行分支的结果。这是一个函数式接口 `(Map<String, OverAllState>) -> Map<String, Object>`，您可以实现自定义逻辑。
+
+#### 核心示例：并行搜索并自定义合并结果
+
+假设旅行计划需要同时搜索“航班信息”和“酒店信息”，并且我们希望将两者的结果合并为一个定制的 JSON 对象。
+
+**步骤 1: 实现自定义合并策略**
 ```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.ParallelAgent;
-import java.util.List;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.agent.flow.agent.MergeStrategy;
+
 import java.util.Map;
 
-// 假设我们已经定义了三个子 Agent：
-// weatherAgent: inputKey="city", outputKey="weather_info"
-// hotelAgent: inputKey="city", outputKey="hotel_info"
-// newsAgent: inputKey="city", outputKey="news_info"
-
-// 使用 ParallelAgent 并行执行
-ParallelAgent searchParallel = ParallelAgent.builder()
-    .name("SearchParallelFlow")
-    .subAgents(List.of(weatherAgent, hotelAgent, newsAgent))
-    .build();
-    
-// 执行并行流
-Map<String, Object> parallelResult = searchParallel.invoke(
-    Map.of("city", "上海")
-).get().data();
-
-// parallelResult 中将同时包含 weather_info, hotel_info, news_info
-System.out.println(parallelResult);
-```
-
-### 并发控制 (`maxConcurrency`)
-
-在某些场景下，您可能不希望所有的子任务立刻同时执行，例如为了避免对下游 API 造成过大的请求压力。`ParallelAgent` 提供了 `.maxConcurrency()` 方法来限制同时执行的子 Agent 数量。
-
-```java
-ParallelAgent searchParallelWithLimit = ParallelAgent.builder()
-    .name("SearchParallelFlowWithLimit")
-    .subAgents(List.of(weatherAgent, hotelAgent, newsAgent))
-    // 虽然有 3 个子 Agent，但最多只会有 2 个同时在运行
-    .maxConcurrency(2)
-    .build();
-```
-
-### 结果合并策略 (`MergeStrategy`)
-
-`ParallelAgent` 在所有子任务执行完毕后，需要将它们各自的结果合并成一个最终的输出。通过 `.mergeStrategy()` 方法，您可以指定不同的合并策略。
-
-#### 内置合并策略
-
-1.  **`DefaultMergeStrategy` (默认)**: 将所有子 Agent 的输出（以其 `outputKey` 为键）合并到一个 `Map<String, Object>` 中。**要求所有子 Agent 的 `outputKey` 必须唯一**。
-    ```java
-    // .mergeStrategy(new ParallelAgent.DefaultMergeStrategy()) 是默认行为
-    // 输出: { "weather_info": "...", "hotel_info": "...", "news_info": "..." }
-    ```
-
-2.  **`ListMergeStrategy`**: 将所有子 Agent 的输出收集到一个 `List<Object>` 中。
-    ```java
-    .mergeStrategy(new ParallelAgent.ListMergeStrategy())
-    // 输出: [ "weather_result", "hotel_result", "news_result" ]
-    ```
-
-3.  **`ConcatenationMergeStrategy`**: 将所有子 Agent 的**字符串类型**输出，用指定的分隔符拼接成一个单一的字符串。
-    ```java
-    .mergeStrategy(new ParallelAgent.ConcatenationMergeStrategy("\n\n---\n\n"))
-    // 输出: "weather_result\n\n---\n\nhotel_result\n\n---\n\nnews_result"
-    ```
-
-#### 自定义合并策略
-
-如果内置策略无法满足您的需求，您可以轻松实现 `ParallelAgent.MergeStrategy` 接口来定义自己的合并逻辑。
-
-**场景**: 我们只想保留所有并行结果中，字符串长度最长的那一个。
-
-```java
-import java.util.Comparator;
-import java.util.Map;
-
-// 1. 实现 MergeStrategy 接口
-public class SelectLongestResultStrategy implements ParallelAgent.MergeStrategy {
+public class CustomTravelMergeStrategy implements MergeStrategy {
     @Override
-    public Object merge(Map<String, Object> subAgentResults, OverAllState overallState) {
-        // subAgentResults 的 key 是子 Agent 的名称，value 是其执行结果
-        return subAgentResults.values()
-            .stream()
-            .map(Object::toString)
-            .max(Comparator.comparing(String::length))
-            .orElse("无结果");
+    public Map<String, Object> merge(Map<String, OverAllState> agentStates) {
+        // 从各自 Agent 的最终状态中提取结果
+        String flightResult = agentStates.get("flight_search_agent")
+                .value("flight_info", String.class)
+                .orElse("未能查询到航班信息");
+
+        String hotelResult = agentStates.get("hotel_search_agent")
+                .value("hotel_info", String.class)
+                .orElse("未能查询到酒店信息");
+
+        // 将结果合并为一个自定义结构
+        Map<String, String> travelPlan = Map.of(
+                "flight", flightResult,
+                "hotel", hotelResult
+        );
+
+        // 将合并后的结果放入最终状态的 "travel_plan" 字段
+        return Map.of("travel_plan", travelPlan);
     }
 }
-
-// 2. 在 ParallelAgent 中使用自定义策略
-ParallelAgent searchParallelCustomMerge = ParallelAgent.builder()
-    .name("SearchParallelCustomMerge")
-    .subAgents(List.of(weatherAgent, hotelAgent, newsAgent))
-    .mergeStrategy(new SelectLongestResultStrategy())
-    .build();
 ```
 
-## 3. 路由流 (`LlmRoutingAgent`)
+**步骤 2: 构建 `ParallelAgent`**
+```java
+// 假设 flightSearchAgent 和 hotelSearchAgent 已经定义好
+ParallelAgent parallelSearchAgent = ParallelAgent.builder()
+        .name("parallel_search_agent")
+        .agents(flightSearchAgent, hotelSearchAgent)
+        .maxConcurrency(2) // 设置最大并发数为 2
+        .mergeStrategy(new CustomTravelMergeStrategy()) // 应用自定义合并策略
+        .build();
 
-路由流为确定性的工作流增加了一丝“智能”。它利用 LLM 的理解能力，在多个预设的分支中选择最合适的一个来执行。
+// 执行
+OverAllState finalState = parallelSearchAgent.invoke(
+    Map.of("destination", "北京", "date", "2025-10-01")
+);
 
-**场景**: 我们的规划师需要根据用户的预算，决定是推荐“**① 经济型酒店**”还是“**② 豪华型酒店**”。
+// finalState.value("travel_plan") 将会得到包含航班和酒店信息的 Map
+```
+
+> **底层探究**: `ParallelAgent` 的强大能力构建于 SAA Graph 的原生[并行执行](../advanced/parallel-execution)机制之上。当您需要更精细地控制并行流程的拓扑结构时，可以直接使用 `StateGraph` 来构建。
+
+### 3. 大语言模型路由智能体 (`LlmRoutingAgent`)
+
+`LlmRoutingAgent` 根据用户的输入，利用大语言模型（LLM）的决策能力，从多个候选的智能体中选择一个最合适的来执行。
 
 ```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.LlmRoutingAgent;
-import org.springframework.ai.chat.model.ChatModel;
+// 假设 weatherAgent 和 calculatorAgent 已经定义好
+LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
+        .name("smart_router")
+        .chatModel(chatModel) // 提供用于决策的 ChatModel
+        .agents(weatherAgent, calculatorAgent)
+        .build();
 
-// agent5: 推荐经济型酒店
-ReactAgent budgetHotelAgent = ReactAgent.builder()
-    .name("BudgetHotelAgent")
-    .description("为预算有限的旅客推荐经济实惠的酒店。") // 清晰的描述是路由判断的依据
-    .chatClient(chatClient)
-    .outputKey("hotelRecommendation")
-    .instruction("你是一个经济型酒店推荐专家，专门为预算有限的旅客推荐性价比高的住宿。")
-    .build();
+// LLM 会根据问题内容决定调用 weatherAgent
+routingAgent.invoke(Map.of("input", "今天上海天气怎么样?"));
 
-// agent6: 推荐豪华型酒店
-ReactAgent luxuryHotelAgent = ReactAgent.builder()
-    .name("LuxuryHotelAgent")
-    .description("为追求高端体验的旅客推荐豪华五星级酒店。") // 清晰的描述是路由判断的依据
-    .chatClient(chatClient)
-    .outputKey("hotelRecommendation")
-    .instruction("你是一个豪华酒店推荐专家，专门为追求高端体验的旅客推荐五星级酒店。")
-    .build();
-
-// 使用 LlmRoutingAgent 进行智能路由
-LlmRoutingAgent hotelRouter = LlmRoutingAgent.builder()
-    .name("HotelRouter")
-    .chatModel(chatModel) // 必须提供一个 ChatModel 用于决策
-    .subAgents(List.of(budgetHotelAgent, luxuryHotelAgent))
-    .build();
-
-// 执行路由流
-try {
-    // 假设 userInput = "我的预算不多，帮我找个性价比高的酒店"
-    String userInput = "我的预算不多，帮我找个性价比高的酒店";
-    Map<String, Object> routingResult = hotelRouter.invoke(
-        Map.of("messages", userInput)
-    ).get().data();
-
-    // LLM 会根据 userInput 和子 Agent 的 description，选择执行 budgetHotelAgent
-    // routingResult 中会包含 hotelRecommendation 的结果
-    System.out.println(routingResult.get("hotelRecommendation"));
-} catch (GraphStateException | GraphRunnerException e) {
-    e.printStackTrace();
-}
+// LLM 会根据问题内容决定调用 calculatorAgent
+routingAgent.invoke(Map.of("input", "计算 1024 * 768"));
 ```
 
-**核心要点**:
--   **决策依据**: `LlmRoutingAgent` 将用户的输入和所有子 Agent 的 `.description()` 一起发送给 LLM，让 LLM 判断哪个子 Agent 的描述最符合用户的意图。因此，**为子 Agent 编写清晰、准确的 `description` 至关重要**。
--   **`chatModel`**: 必须通过 `.model()` 方法提供一个 `ChatModel` 实例，用于执行路由决策。
+### 4. 循环智能体 (`LoopAgent`)
 
-## 4. 循环流 (`LoopAgent`)
-
-循环流让 Agent 能够执行重复性任务，是实现批处理、重试、迭代优化等高级功能的关键。
-
-**场景**: 在生成了景点列表后，规划师需要“**为列表中的每一个景点，分别撰写一段详细的介绍**”。
+`LoopAgent` 重复执行一个或多个智能体，直到满足特定条件为止。它支持多种循环模式 (`LoopAgent.Mode`)：
+-   `WHILE`: 先判断条件，再执行。
+-   `DO_WHILE`: 先执行一次，再判断条件。
+-   `REPEAT`: 固定次数循环。
 
 ```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.LoopAgent;
+// 该 Agent 用于评估研究论文的质量，返回一个包含 "score" 和 "critique" 的 Map
+BaseAgent paperReviewAgent = ...;
 
-// agent7: 为单个景点撰写介绍
-ReactAgent attractionDescriberAgent = ReactAgent.builder()
-    .name("AttractionDescriberAgent")
-    .description("为单个景点撰写详细介绍")
-    .chatClient(chatClient)
-    .inputKey("attractionName")
-    .outputKey("description")
-    .instruction("你是一个导游，请为指定的景点写一段 100 字左右的生动介绍。")
-    .build();
-
-// 使用 LoopAgent 遍历景点列表
-LoopAgent describeAllAttractions = LoopAgent.builder()
-    .name("DescribeAllAttractionsLoop")
-    .subAgents(List.of(attractionDescriberAgent)) // 定义循环体
-    .loopMode(LoopAgent.LoopMode.JSON_ARRAY)    // 设置循环模式
-    .inputKey("attractionsJson")                // 包含 JSON 数组的输入键
-    .outputKey("allDescriptions")               // 收集所有循环结果的输出键
-    .build();
-
-// 执行循环流
-try {
-    String attractionsJson = "[\"西湖\", \"灵隐寺\", \"宋城\"]";
-    Map<String, Object> loopResult = describeAllAttractions.invoke(
-        Map.of("attractionsJson", attractionsJson)
-    ).get().data();
-
-    // loopResult.get("allDescriptions") 将会是一个包含三段景点介绍的 List
-    System.out.println(loopResult.get("allDescriptions"));
-} catch (GraphStateException | GraphRunnerException e) {
-    e.printStackTrace();
-}
+LoopAgent iterativeReviewer = LoopAgent.builder()
+        .name("iterative_reviewer")
+        .loopMode(LoopAgent.LoopMode.WHILE)
+        .agents(paperReviewAgent)
+        .maxLoops(5) // 最多循环 5 次，防止死循环
+        .condition((state) -> {
+            // 从上次 paperReviewAgent 的执行状态中获取分数
+            int score = state.value("score", Integer.class).orElse(0);
+            // 当分数低于 90 时，继续循环
+            return score < 90;
+        })
+        .build();
 ```
-
-**核心要点**:
--   **循环模式 (`.loopMode()`)**: `LoopAgent` 提供了多种强大的循环模式：
-    -   `COUNT`: 按固定次数循环。
-    -   `CONDITION`: 循环直到满足某个条件（通过 `.loopCondition()` 提供一个 `Predicate`）。非常适合实现“自我修正”：让一个 Agent 生成内容，另一个 Agent 评审，不满意就循环，直到评审通过。
-    -   `ITERABLE`, `ARRAY`, `JSON_ARRAY`: 分别用于遍历 Java 集合、数组或 JSON 数组字符串。
--   **数据传递**: 在 `ITERABLE` 等模式下，`LoopAgent` 会将集合中的**每一个元素**依次放入一个临时的内部键中（默认为 `__iterator_item`），循环体内的子 Agent 通过 `.inputKey()` 从这个内部键读取数据。
--   **结果收集**: 循环体在每一次迭代中产生的输出，会被自动收集到一个 `List` 中，并最终放入您在 `.outputKey()` 中指定的键。
 
 ## 综合应用：打造完整的 AI 旅游规划师
 
@@ -306,14 +211,14 @@ try {
 // ★ Step 1 & 2: 顺序流 - 先确定城市，再查景点
 SequentialAgent planInitialIdeas = SequentialAgent.builder()
     .name("PlanInitialIdeasFlow")
-    .subAgents(List.of(chooseCityAgent, findAttractionsAgent))
+    .agents(chooseCityAgent, findAttractionsAgent)
     .outputKey("initialPlan") // 将整个初步规划的结果输出
     .build();
 
 // ★ Step 3: 循环流 - 为每个景点写介绍
 LoopAgent describeAllAttractions = LoopAgent.builder()
     .name("DescribeAllAttractionsLoop")
-    .subAgents(List.of(attractionDescriberAgent))
+    .agents(attractionDescriberAgent)
     .loopMode(LoopAgent.LoopMode.JSON_ARRAY)
     .inputKey("attractionsJson")
     .outputKey("allDescriptions")
@@ -322,19 +227,19 @@ LoopAgent describeAllAttractions = LoopAgent.builder()
 // ★ Step 4: 并行流 - 同时查天气和酒店
 ParallelAgent searchParallel = ParallelAgent.builder()
     .name("SearchParallelFlow")
-    .subAgents(List.of(weatherAgent, hotelRouter)) // hotelRouter 本身是一个路由流
+    .agents(weatherAgent, hotelRouter) // hotelRouter 本身是一个路由流
     .outputKey("searchResult")
     .build();
 
 // ★ Step 5: 最终的顺序总装流
 SequentialAgent finalItineraryPlanner = SequentialAgent.builder()
     .name("FinalItineraryPlanner")
-    .subAgents(List.of(
+    .agents(
         planInitialIdeas, 
         describeAllAttractions, 
         searchParallel, 
         finalSummaryAgent // 最后一个 Agent，用于汇总所有信息生成最终报告
-    ))
+    )
     .build();
 
 // 执行最终的 Agent

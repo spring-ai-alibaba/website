@@ -145,11 +145,6 @@
 				"collapsed": true,
 				"items": [
 					{
-						"label": "人机交互",
-						"translations": { "en": "Human-in-the-Loop" },
-						"link": "docs/1.0.0.3-dev/building/advanced/human-in-loop"
-					},
-					{
 						"label": "持久化与恢复",
 						"translations": { "en": "Persistence & Resuming" },
 						"link": "docs/1.0.0.3-dev/building/advanced/persistence"
@@ -170,9 +165,9 @@
 						"link": "docs/1.0.0.3-dev/building/advanced/streaming"
 					},
 					{
-						"label": "并行节点",
-						"translations": { "en": "Parallel Node" },
-						"link": "docs/1.0.0.3-dev/building/advanced/parallel-node"
+						"label": "并行执行",
+						"translations": { "en": "Parallel Execution" },
+						"link": "docs/1.0.0.3-dev/building/advanced/parallel-execution"
 					},
 					{
 						"label": "图可视化",

@@ -124,8 +124,8 @@ public class HumanInteractionExample {
         if ("yes".equalsIgnoreCase(humanInput)) {
             System.out.println("\nUSER: '好的，继续。'");
             
-            // ✨ 关键：再次调用 invoke，使用相同的 threadId，即可自动从上次中断的位置恢复
-            Optional<OverAllState> finalResult = compiledGraph.invoke(Map.of(), config);
+             // 再次调用 invoke，使用相同的 threadId，图会检测到有保存的检查点，自动从中断位置恢复
+             Optional<OverAllState> finalResult = compiledGraph.invoke(Map.of(), config);
             
             System.out.println("\nAGENT: 流程已恢复并执行完毕。");
             System.out.println("流程是否已结束: " + finalResult.isPresent());
@@ -143,7 +143,7 @@ public class HumanInteractionExample {
 -   **`ReactAgentWithHuman` 是构建器**: 它用于定义和配置一个具备人机交互能力的图，而不是直接调用。
 -   **必须配置持久化**: 人机交互的“暂停”和“继续”能力依赖于检查点机制，因此必须在 `CompileConfig` 中提供 `SaverConfig`。
 -   **执行依赖 `CompiledGraph`**: 真正的执行、中断和恢复都通过编译后的 `CompiledGraph` 对象来完成。
--   **恢复是自动的**: 只要使用相同的 `threadId` 再次调用 `invoke`，工作流就会自动从上一个中断点加载状态并继续执行。
+-   **恢复机制**: 使用相同的 `threadId` 再次调用 `invoke` 时，图会检测到保存的检查点并自动从中断点恢复执行。
 
 ## 高级用法：直接使用 `HumanNode`
 

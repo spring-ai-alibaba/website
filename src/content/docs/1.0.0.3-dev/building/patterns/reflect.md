@@ -118,8 +118,7 @@ public class ReflectionService {
     private final CompiledGraph reflectionGraph;
 
     public ReflectionService(ReactAgent executorAgent, LlmNode reflectorAgent) throws GraphStateException {
-        // 将 Agent 转换为 StateGraph 可执行的 NodeAction
-        NodeAction executorNode = executorAgent.asNodeAction();
+        NodeAction executorNode = executorAgent;
         NodeAction reflectorNode = reflectorAgent;
 
         // 构建 ReflectAgent

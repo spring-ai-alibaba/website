@@ -1,236 +1,194 @@
 ---
 title: 并行执行 (Parallel Execution)
-description: 学习如何通过定义 StateGraph 的拓扑结构来实现节点的并行执行，以提升 Agent 处理独立任务的效率。
+description: 了解 SAA Graph 如何通过图的拓扑结构自动实现节点的并行执行，以提升复杂工作流的性能和效率。
 ---
 
-在许多复杂的 Agent 工作流中，多个任务之间并没有严格的先后依赖关系，可以同时处理。例如，在处理用户请求时，Agent 可能需要**同时**进行信息检索、调用工具和生成初步思考。如果串行执行这些任务，会不必要地延长总响应时间。
+在构建复杂的 Agent 工作流时，我们经常会遇到可以同时处理的独立任务。例如，在处理用户请求时，可能需要同时进行“意图识别”、“实体提取”和“情感分析”。如果串行执行这些任务，会大大增加总响应时间。
 
-SAA Graph 的执行引擎能够自动识别图中可以并行的路径，并以多线程方式并发执行它们，从而显著提升效率。
+SAA Graph 提供了**隐式的并行执行**能力。您无需编写任何多线程或异步代码，只需通过定义图的拓扑结构，引擎就能自动识别并并发执行没有相互依赖关系的节点。
 
-## 并行执行的核心原理
+### 核心理念：拓扑驱动的并行
 
-在 SAA Graph 中，并行执行并非由某个特殊的 API 或节点类型来启用，而是**由图的拓扑结构决定的**。
+SAA Graph 的并行机制是“拓扑驱动”的，这意味着并行行为完全由您定义的节点和边的关系决定。其核心规则是：
 
-其核心原理非常简单：**如果从同一个父节点出发，连接了多个子节点，那么这些子节点将被并行执行。**
+> 如果多个节点连接到同一个父节点，并且它们之间没有直接或间接的依赖关系，那么这些节点就可以被并行执行。
 
-执行引擎在遇到这种“分叉”结构时，会为每个分支创建一个独立的执行任务，并让它们在线程池中并发运行。
+最常见的并行模式是“分发-收集”（Scatter-Gather）：
+1.  **分发 (Scatter)**: 一个起始节点（如 `START`）将相同的输入分发给多个并行的处理分支。
+2.  **并行处理**: 每个分支独立、并发地执行其任务。
+3.  **收集 (Gather)**: 一个或多个后续节点等待所有或部分并行分支完成后，收集它们的结果进行合并或进一步处理。
 
-## 生产级并行模式：分发-收集 (Dispatcher-Collector)
+### 核心示例：多维度查询增强
 
-虽然最简单的并行可以从 `START` 节点直接分叉，但在实际应用中，一种更健壮和可扩展的模式是**“分发-收集”**模式：
+让我们通过一个实际场景来理解并行执行。假设我们希望在执行搜索前，对用户的原始查询进行“多维度增强”：
+1.  **分支一（扩展）**: 将原始查询扩展成多个相似但不同角度的问题。
+2.  **分支二（翻译）**: 将原始查询翻译成英文，以进行跨语言搜索。
 
-1.  **分发节点 (Dispatcher)**: 作为并行任务的起点。它负责接收输入，进行预处理，并为即将开始的并行任务设置初始状态。
-2.  **并行任务 (Parallel Tasks)**: 多个独立的业务节点，它们从 `Dispatcher` 节点分叉出去，并同时执行。
-3.  **收集节点 (Collector)**: 作为并行任务的终点。它会等待所有并行的分支都执行完毕，然后收集、验证和合并结果，并根据结果决定工作流的下一步走向。
+这两个任务互不依赖，可以完美地并行执行。
 
-下面的示例将完整地展示如何使用 SAA Graph 来实现这个强大的模式。
+#### 1. 定义并行拓扑结构
 
-### 核心示例
-
-该示例将构建一个包含分发器、两个并行任务（文本翻译和内容扩展）以及一个收集器的完整工作流。
+实现上述场景的关键在于图的定义。我们让 `START` 节点同时连接到 `expander`（扩展器）和 `translator`（翻译器）两个节点。这两个节点处理完成后，再将结果都汇集到 `merge`（合并）节点。
 
 ```java
-import com.alibaba.cloud.ai.graph.CompiledGraph;
-import com.alibaba.cloud.ai.graph.StateGraph;
-import com.alibaba.cloud.ai.graph.OverAllState;
-import com.alibaba.cloud.ai.graph.KeyStrategy;
-import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
-import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
-import com.alibaba.cloud.ai.graph.action.NodeAction;
-import com.alibaba.cloud.ai.graph.dispatcher.CollectorDispatcher;
-import org.springframework.ai.chat.client.ChatClient;
+// 在 Spring @Configuration 类中
+@Bean
+public StateGraph parallelGraph(ChatClient.Builder chatClientBuilder) throws GraphStateException {
+    // ... (省略 KeyStrategyFactory 的定义)
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Optional;
+    StateGraph stateGraph = new StateGraph(keyStrategyFactory)
+            .addNode("expander", new ExpanderNode(chatClientBuilder))
+            .addNode("translator", new TranslatorNode(chatClientBuilder))
+            .addNode("merge", new MergeNode());
 
-import static com.alibaba.cloud.ai.graph.StateGraph.END;
-import static com.alibaba.cloud.ai.graph.StateGraph.START;
-import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
-import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
+    // ✨ 核心：让 START 同时连接到两个独立节点，触发并行
+    stateGraph.addEdge(StateGraph.START, "expander");
+    stateGraph.addEdge(StateGraph.START, "translator");
 
-public class ParallelExecutionExample {
+    // ✨ 核心：让两个并行分支的结果都汇入 merge 节点
+    stateGraph.addEdge("expander", "merge");
+    stateGraph.addEdge("translator", "merge");
 
-    public static void main(String[] args) throws Exception {
-        // === 1. 定义状态策略 ===
-        // 定义了工作流中所有可能用到的状态字段及其更新策略。
-        KeyStrategyFactory keyStrategyFactory = () -> {
-            Map<String, KeyStrategy> strategies = new HashMap<>();
-            strategies.put("query", new ReplaceStrategy());
-            strategies.put("translate_language", new ReplaceStrategy());
-            strategies.put("translate_content", new ReplaceStrategy());
-            strategies.put("expander_content", new ReplaceStrategy());
-            strategies.put("expand_status", new ReplaceStrategy());
-            strategies.put("translate_status", new ReplaceStrategy());
-            strategies.put("collector_next_node", new ReplaceStrategy());
-            return strategies;
-        };
+    stateGraph.addEdge("merge", StateGraph.END);
 
-        // === 2. 构建并行图 ===
-        // 定义了四个核心节点，并用边将它们连接起来。
-        StateGraph stateGraph = new StateGraph(keyStrategyFactory)
-            .addNode("dispatcher", node_async(new DispatcherNode()))
-            .addNode("translator", node_async(new TranslatorNode()))
-            .addNode("expander", node_async(new ExpanderNode()))
-            .addNode("collector", node_async(new CollectorNode()))
-            
-            // === 3. 定义图的拓扑结构 ===
-            .addEdge(START, "dispatcher")
-            // 从 dispatcher 同时分叉到两个并行任务
-            .addEdge("dispatcher", "translator")
-            .addEdge("dispatcher", "expander")
-            // 两个并行任务都汇聚到 collector
-            .addEdge("translator", "collector")
-            .addEdge("expander", "collector")
-            // 条件边：根据收集器的决策决定下一步是结束(END)还是重试(dispatcher)
-            .addConditionalEdges("collector", edge_async(new CollectorDispatcher()),
-                Map.of("dispatcher", "dispatcher", END, END));
+    return stateGraph;
+}
+```
+当这个图被执行时，`expander` 和 `translator` 节点将在独立的线程中同时运行。
 
-        // === 4. 执行并行图 ===
-        System.out.println("开始执行并行图...");
-        long startTime = System.currentTimeMillis();
+#### 2. 实现并行节点
 
-        CompiledGraph compiledGraph = stateGraph.compile();
-        Optional<OverAllState> finalState = compiledGraph.invoke(Map.of(
-            "query", "Hello, this is a test message",
-            "translate_language", "中文"
+并行节点的实现与普通节点完全相同。您只需关注单个节点的业务逻辑，无需关心线程管理。
+
+**`ExpanderNode.java`**:
+```java
+public class ExpanderNode implements NodeAction {
+    // ... (省略 PromptTemplate 定义)
+    private final ChatClient chatClient;
+
+    public ExpanderNode(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.build();
+    }
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) {
+        String query = state.value("query", "");
+        // ... 调用 LLM 进行查询扩展 ...
+        String expandedQueries = this.chatClient.prompt()... .call().content();
+        return Map.of("expanded_content", expandedQueries);
+    }
+}
+```
+
+**`TranslatorNode.java`**:
+```java
+public class TranslatorNode implements NodeAction {
+    // ... (省略 PromptTemplate 定义)
+    private final ChatClient chatClient;
+
+    public TranslatorNode(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.build();
+    }
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) {
+        String query = state.value("query", "");
+        // ... 调用 LLM 进行查询翻译 ...
+        String translatedQuery = this.chatClient.prompt()... .call().content();
+        return Map.of("translated_content", translatedQuery);
+    }
+}
+```
+
+#### 3. 实现收集节点
+
+`merge` 节点负责等待 `expander` 和 `translator` 都执行完毕，然后从 `OverAllState` 中读取它们各自的输出，并将其合并成最终结果。
+
+**`MergeNode.java`**:
+```java
+private static class MergeNode implements NodeAction {
+    @Override
+    public Map<String, Object> apply(OverAllState state) {
+        // 此时，两个并行分支的结果都已经写入了 OverAllState
+        Object expandedContent = state.value("expanded_content").orElse("N/A");
+        String translatedContent = state.value("translated_content", "N/A");
+
+        return Map.of("final_result", Map.of(
+                "expanded", expandedContent,
+                "translated", translatedContent
         ));
-
-        long endTime = System.currentTimeMillis();
-        System.out.println("图执行完毕。总耗时: " + (endTime - startTime) + " ms");
-
-        // 打印最终结果
-        if (finalState.isPresent()) {
-            OverAllState state = finalState.get();
-            System.out.println("翻译结果: " + state.value("translate_content", String.class).orElse("无"));
-            System.out.println("扩展结果: " + state.value("expander_content", String.class).orElse("无"));
-        }
-    }
-
-    // === 节点实现: 分发器 ===
-    static class DispatcherNode implements NodeAction {
-        @Override
-        public Map<String, Object> apply(OverAllState state) throws Exception {
-            System.out.println("分发器开始执行... (线程: " + Thread.currentThread().getName() + ")");
-            Map<String, Object> updated = new HashMap<>();
-            updated.put("expand_status", "assigned");
-            updated.put("translate_status", "assigned");
-            System.out.println("分发器执行完毕，启动并行任务。");
-            return updated;
-        }
-    }
-
-    // === 节点实现: 翻译器 (并行任务1) ===
-    static class TranslatorNode implements NodeAction {
-        @Override
-        public Map<String, Object> apply(OverAllState state) throws Exception {
-            System.out.println("翻译任务开始执行... (线程: " + Thread.currentThread().getName() + ")");
-            String query = state.value("query", String.class).orElse("");
-            String language = state.value("translate_language", String.class).orElse("中文");
-            Thread.sleep(1000); // 模拟翻译处理时间
-            String result = String.format("将 '%s' 翻译为%s的结果", query, language);
-            System.out.println("翻译任务执行完毕。");
-            return Map.of("translate_content", result);
-        }
-    }
-
-    // === 节点实现: 扩展器 (并行任务2) ===
-    static class ExpanderNode implements NodeAction {
-        @Override
-        public Map<String, Object> apply(OverAllState state) throws Exception {
-            System.out.println("扩展任务开始执行... (线程: " + Thread.currentThread().getName() + ")");
-            String query = state.value("query", String.class).orElse("");
-            Thread.sleep(1200); // 模拟扩展处理时间
-            String result = String.format("对 '%s' 进行扩展和变体生成的结果", query);
-            System.out.println("扩展任务执行完毕。");
-            return Map.of("expander_content", result);
-        }
-    }
-
-    // === 节点实现: 收集器 ===
-    static class CollectorNode implements NodeAction {
-        @Override
-        public Map<String, Object> apply(OverAllState state) throws Exception {
-            System.out.println("收集器开始执行，等待所有并行任务完成...");
-            String nextStep = END;
-            // 检查所有并行任务是否都已完成
-            boolean translateDone = state.value("translate_content").isPresent();
-            boolean expandDone = state.value("expander_content").isPresent();
-            
-            if (translateDone && expandDone) {
-                System.out.println("所有并行任务已成功完成，流程结束。");
-                nextStep = END;
-            } else {
-                System.out.println("部分任务未完成，将重新分发。");
-                nextStep = "dispatcher";  // 如果有任务未完成，重新分发
-            }
-            return Map.of("collector_next_node", nextStep);
-        }
-    }
-
-    // === 边实现: 收集器的决策逻辑 ===
-    static class CollectorDispatcher implements com.alibaba.cloud.ai.graph.action.EdgeAction {
-        @Override
-        public String apply(OverAllState state) throws Exception {
-            // 根据 CollectorNode 写入的状态，返回下一个节点的名称
-            return state.value("collector_next_node", String.class).orElse(END);
-        }
     }
 }
 ```
 
-## 收集器节点：并行流程的“质控中心”
+#### 4. 执行图
 
-在并行流程中，收集器节点（示例中的 `CollectorNode`）扮演着至关重要的角色：
-
-1.  **同步等待**: 它会**等待所有指向它的上游并行分支全部执行完成**后，才会开始执行，起到了“屏障”或“同步点”的作用。
-2.  **结果验证**: 在节点内部，您可以编写逻辑来检查所有并行任务是否都产生了预期的输出。
-3.  **流程控制**: 基于验证结果，它可以动态地决定工作流的下一步走向——是成功汇入下一阶段，还是在某些任务失败时进行重试（如示例中返回 `dispatcher`）或进入异常处理流程。
-
-这使得收集器不仅是结果的合并点，更是整个并行流程的**质量控制与决策中心**。
-
-## 与 `ParallelAgent` 的关系
-
-正如“子图”是 `SequentialAgent` 的基石一样，**“分发-收集”的并行图结构是 `ParallelAgent` 模式的底层实现基础**。
-
-当您使用 `ParallelAgent` 来组合多个 Agent 或 `Tool` 时，`FlowAgent` 框架在幕后会自动为您构建一个类似于我们上面手动创建的并行 `StateGraph`。`ParallelAgent` 提供了一个更高层、更方便的抽象，但理解其底层的并行图原理，能让您在遇到更复杂的场景时，有能力构建高度定制化的并行工作流。
-
-## 高级配置：自定义线程池
-
-默认情况下，SAA Graph 使用一个公共的 `ForkJoinPool` 来执行所有并行任务。但在生产环境中，您可能希望对资源进行更精细的控制，例如：
-- 为不同优先级的并行任务分配不同的线程池。
-- 隔离 I/O 密集型和 CPU 密集型任务，防止它们相互干扰。
-
-SAA Graph 允许您通过 `RunnableConfig` 在**每次执行时**为特定的并行“分叉点”指定一个自定义的线程池。
+执行并行图的调用方式与串行图完全一样。引擎会自动处理并发逻辑。
 
 ```java
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-// ... 其他 import
+// 在 Spring @RestController 中
+@GetMapping("/enrich-query")
+public Map<String, Object> enrichQuery(@RequestParam String query) {
+    // ... (假设 compiledGraph 已经通过 stateGraph.compile() 创建)
+    
+    Optional<OverAllState> result = this.compiledGraph.invoke(Map.of("query", query));
 
-public class CustomThreadPoolExample {
-    public static void main(String[] args) throws Exception {
-        // (假设 stateGraph 和 compiledGraph 的定义和之前的示例一样)
-        StateGraph stateGraph = createParallelGraph(); // 这是一个代表之前示例中图定义的方法
-        CompiledGraph compiledGraph = stateGraph.compile();
-
-        // === 创建并指定自定义线程池 ===
-        ExecutorService customExecutor = Executors.newFixedThreadPool(4);
-
-        RunnableConfig config = RunnableConfig.builder()
-            .threadId("custom_session")
-            // 为 dispatcher 节点（分叉点）配置线程池
-            // 这意味着从 dispatcher 分支出去的所有并行任务 (translator, expander)
-            // 都将在这个自定义线程池中执行。
-            .addParallelNodeExecutor("dispatcher", customExecutor)
-            .build();
-
-        // === 执行时传入带有自定义配置的 config ===
-        compiledGraph.invoke(Map.of(/*... initial data ...*/), config);
-
-        // 在应用关闭时，记得清理资源
-        customExecutor.shutdown();
-    }
+    return result.map(OverAllState::data).orElse(Map.of());
 }
 ```
+
+当调用 `/enrich-query` 端点时，您会观察到两个对 LLM 的调用是几乎同时发出的，大大缩短了总处理时间。
+
+### 高级配置：自定义线程池
+
+默认情况下，SAA Graph 使用 Java 的 `ForkJoinPool.commonPool()` 来执行并行任务。对于大多数场景，这已经足够了。但在需要精细控制线程资源（例如，避免与 Web 服务器的线程池冲突，或为 AI 任务设置专用资源）的生产环境中，您可以为并行节点指定自定义的 `Executor`。
+
+#### 自动生成的并行节点
+
+当您在 `StateGraph` 中让一个源节点连接到多个目标节点时（如上面例子中的 `START` 连接到 `expander` 和 `translator`），SAA Graph 编译器会**自动检测**这种模式，并在编译时创建一个特殊的 `ParallelNode` 来管理并行执行。
+
+这个自动生成的并行节点的 ID 遵循固定格式：**`__PARALLEL__(源节点ID)`**
+
+- 对于从 `START` 出发的并行分支：`__PARALLEL__(START)`  
+- 对于从 `nodeA` 出发的并行分支：`__PARALLEL__(nodeA)`
+
+这可以通过 `RunnableConfig` 来配置：
+
+```java
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+// 1. 创建一个或多个自定义的 Executor
+Executor customExecutor = Executors.newFixedThreadPool(4);
+
+// 2. 在执行时，通过 RunnableConfig 注入
+RunnableConfig config = RunnableConfig.builder()
+        .threadId("my-thread-1")
+        // ✨ 正确的做法：为自动生成的并行节点指定 Executor
+        .addParallelNodeExecutor("__PARALLEL__(START)", customExecutor)
+        .build();
+
+// 3. 调用 invoke
+compiledGraph.invoke(Map.of("query", query), config);
+
+// 4. 记得在使用完毕后关闭自定义线程池
+// customExecutor.shutdown(); (如果 Executor 是 ExecutorService)
+```
+
+### 与 `ParallelAgent` 的关系
+
+正如“子图”是 `SequentialAgent` 的底层实现基础一样，我们在这里手动构建的“分发-收集”并行图，正是 [`FlowAgent` 模式](../patterns/flow)中 `ParallelAgent` 的底层实现原理。
+
+-   **`StateGraph` 并行 (本章内容)**: 提供了最底层、最灵活的并行控制。您可以通过任意方式组合节点和边，构建出复杂的并行、条件、循环混合的工作流。这是**追求极致灵活性**时的选择。
+-   **`ParallelAgent` (高层 API)**: 专门针对“将一组独立的 Agent 并行执行，然后合并结果”这一常见场景进行了封装。它隐藏了图的构建细节，让您可以更快速地实现并行任务。这是**追求开发效率**时的选择。
+
+当您的需求可以通过 `ParallelAgent` 满足时，我们推荐使用这个更高层的抽象。当您需要构建非对称、带条件判断或更复杂的并行逻辑时，可以直接使用 `StateGraph` 来获得完全的控制。
+
+### 总结
+
+SAA Graph 的并行执行能力是其强大工作流编排功能的核心体现之一：
+- **简单易用**: 通过简单的拓扑定义即可实现并行，无需手动管理线程。
+- **性能强大**: 显著降低复杂工作流的执行延迟。
+- **灵活可控**: 支持通过 `RunnableConfig` 注入自定义线程池，满足生产级需求。
+
+通过合理利用并行执行，您可以构建出响应更快、资源利用率更高的复杂智能 Agent。
