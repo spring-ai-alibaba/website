@@ -1,43 +1,24 @@
 ---
-title: 状态管理 (KeyStrategy)
-description: 深入理解 StateGraph 的核心状态管理机制 OverAllState 与 KeyStrategy，学习如何精确控制工作流中的数据合并行为，避免常见的数据覆盖问题。
+title: 状态管理 (KeyStrategy 与 Channel)
+description: 深入理解 StateGraph 的核心状态管理机制 OverAllState、KeyStrategy 与 Channel，学习如何精确控制工作流中的数据合并与转换行为。
 ---
 
 在 SAA Graph 中，所有的数据都存储在一个名为 `OverAllState` 的中央状态容器中。工作流中的每个节点都会读取这个容器中的数据，并在执行完毕后将新的数据写回。
 
-那么，当一个节点尝试写入一个已经存在的键（Key）时，新的数据应该如何与旧的数据合并呢？是直接覆盖，还是追加到后面？**`KeyStrategy`** 正是用于定义这种合并行为的核心机制。
+那么，当一个节点尝试写入一个已经存在的键（Key）时，新的数据应该如何与旧的数据合并呢？是直接覆盖，还是追加到后面，或是进行更复杂的逻辑合并？精确地控制这种行为，对于构建健壮、可预测的工作流至关重要。
 
-精确地理解和配置 `KeyStrategy` 对于构建健壮、可预测的工作流至关重要。
+本文将由浅入深，介绍 SAA Graph 提供的从基础到高级的状态管理工具：`KeyStrategy` 和 `Channel` 系统。
 
-## `OverAllState`：中央状态容器
+## `KeyStrategy`：三大核心合并策略
 
-`OverAllState` 本质上是一个 `Map<String, Object>` 的封装。它在整个图的执行过程中流动，所有节点共享同一个 `OverAllState` 实例。
-
-当一个节点执行完毕并返回一个新的 `Map<String, Object>` 作为其输出时，`StateGraph` 会在内部调用 `OverAllState.updateState()` 方法，将节点返回的这个新 Map 合并到主 `OverAllState` 中。合并的过程会逐一对每个键应用其预定义的 `KeyStrategy`。
-
-## `KeyStrategy`：定义合并策略
-
-`KeyStrategy` 是一个简单的函数式接口，它定义了当新旧值同时存在时应如何处理。
-
-```java
-public interface KeyStrategy {
-    Object apply(Object oldValue, Object newValue);
-}
-```
-
-SAA Graph 内置了三种核心策略：`ReplaceStrategy`、`AppendStrategy` 和 `MergeStrategy`。
+`KeyStrategy` 是一个简单的函数式接口，定义了当新旧值同时存在时应如何处理。SAA Graph 内置了三种最核心、最常用的策略。
 
 ### `ReplaceStrategy` (替换策略)
-
 最简单、最常用的策略。逻辑是：**无论旧值是什么，都直接用新值覆盖它**。
 
-**适用场景**:
--   几乎所有单值状态的管理，例如：`user_input`, `classification_result`, `final_answer` 等。
--   当您需要用一个全新的集合替换旧的集合时。
--   这是绝大多数键的默认选择。
+- **适用场景**: 绝大多数单值状态的管理，如 `user_input`, `final_answer` 等。
 
 ### `AppendStrategy` (追加策略)
-
 逻辑是**将新值追加到旧值的后面**。它的行为会根据值的类型智能调整：
 
 -   **`List` + `List`**: 将新 `List` 中的*所有元素*追加到旧 `List` 的末尾。
@@ -45,26 +26,19 @@ SAA Graph 内置了三种核心策略：`ReplaceStrategy`、`AppendStrategy` 和
 -   **`String` + `String`**: 将新字符串拼接到旧字符串的末尾。
 -   **`null` + `新值`**: 创建一个新 `List` 并将新值添加进去。
 
-**适用场景**:
--   **对话历史 (`messages`)**: 最典型的场景。`LlmNode` 或 `ToolNode` 产生的新消息，会被追加到 `messages` 列表中，形成完整的对话历史。
--   **日志或步骤记录**: 记录工作流的执行步骤，形成执行轨迹。
--   **累积结果**: 将多个并行分支的结果收集到一个列表中。
+- **适用场景**: 对话历史 (`messages`)、日志记录、累积多个分支的结果。
 
 ### `MergeStrategy` (合并策略)
-
 逻辑是**智能合并两个值**，特别适合处理 `Map` 类型的数据。
 
 -   **`Map` + `Map`**: 创建一个新 `Map`，包含旧 `Map` 的所有键值对，然后将新 `Map` 的键值对合并进去（如果键冲突，新值会覆盖旧值）。
 -   **其他情况**: 行为类似于 `ReplaceStrategy`，直接返回新值。
 
-**适用场景**:
--   **配置合并**: 不同节点产生不同的配置参数，需要将它们合并到一个 `config` 对象中。
--   **元数据聚合**: 收集和合并来自多个节点的元数据信息。
--   **结果汇总**: 当多个节点产生的结果需要以键值对的形式组织在一起时。
+- **适用场景**: 合并不同节点产生的配置 (`config`) 或元数据 (`metadata`)。
 
-## 基础配置方式
+## 配置方式一：基础 `KeyStrategyFactory`
 
-在构建 `StateGraph` 时，您必须提供一个 `KeyStrategyFactory`。这是一个工厂，用于创建一个包含所有键及其对应策略的 `Map`。
+在构建 `StateGraph` 时，您必须提供一个 `KeyStrategyFactory`。最基础的方式是直接创建一个 `Map`。
 
 ```java
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -73,157 +47,163 @@ import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-// ...
-
 // 推荐使用 KeyStrategy 接口中定义的静态常量，使代码更简洁
 KeyStrategyFactory keyStrategyFactory = () -> {
     Map<String, KeyStrategy> strategies = new HashMap<>();
     
-    // 使用静态常量，代码更简洁
     strategies.put("messages", KeyStrategy.APPEND);
     strategies.put("config", KeyStrategy.MERGE);
-    strategies.put("metadata", KeyStrategy.MERGE);
     strategies.put("user_query", KeyStrategy.REPLACE);
-    strategies.put("search_results", KeyStrategy.REPLACE);
-    strategies.put("final_summary", KeyStrategy.REPLACE);
     
     return strategies;
 };
 
-// 在构建 StateGraph 时传入
 StateGraph stateGraph = new StateGraph(keyStrategyFactory);
 ```
 
-> **最佳实践**:
-> - **显式定义**: 强烈建议为您工作流中的每一个重要键都显式定义一个 `KeyStrategy`，这能让状态行为清晰可预测。
-> - **`messages`**: 对话历史 `messages` 键，几乎总是应该使用 `AppendStrategy`。
-> - **配置/元数据**: `config`、`metadata` 等键，推荐使用 `MergeStrategy`，以逐步构建完整信息。
-> - **默认选择**: 对于不确定或临时使用的键，`ReplaceStrategy` 通常是最安全的选择。
+## 配置方式二（推荐）：高级 `KeyStrategyFactoryBuilder`
 
-## 高级配置：使用 `KeyStrategyFactoryBuilder`
+当工作流的 `KeyStrategy` 配置变得复杂时，手动管理 `Map` 会非常繁琐。为此，SAA Graph 提供了强大的 `KeyStrategyFactoryBuilder`。
 
-当工作流的 `KeyStrategy` 配置变得复杂时，手动管理一个巨大的 `Map` 会变得非常繁琐。为此，SAA Graph 提供了一个强大的构建器 `KeyStrategyFactoryBuilder`，支持**链式调用、默认策略、模式匹配、条件策略**等高级功能。
+> 对于任何正式项目，我们都**强烈推荐**使用 Builder 来管理您的策略，这会让配置更具结构性、可读性和可维护性。
 
-> **何时使用?** 对于任何非玩具项目，我们都**强烈推荐**使用 Builder 来管理您的策略，这会让配置更具结构性、可读性和可维护性。
-
-### 基础用法
+### 基础用法与默认策略
 
 ```java
 import com.alibaba.cloud.ai.graph.KeyStrategy;
 import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 
-// 使用 Builder 简化配置
 KeyStrategyFactory factory = KeyStrategy.builder()
     .addStrategy("messages", KeyStrategy.APPEND)
     .addStrategy("config", KeyStrategy.MERGE)
     .addStrategy("metadata", KeyStrategy.MERGE)
     .defaultStrategy(KeyStrategy.REPLACE) // ✨ 设置默认策略，无需为每个其他键单独配置
     .build();
-
-StateGraph graph = new StateGraph(factory);
 ```
 
-### 模式匹配策略
+### 模式匹配与条件策略
 
-您可以使用正则表达式或前缀/后缀匹配来批量配置策略：
+您可以使用正则表达式、前缀/后缀匹配或自定义逻辑来批量配置策略：
 
 ```java
 KeyStrategyFactory factory = KeyStrategy.builder()
-    // 所有以 "temp_" 开头的键都使用替换策略
-    .addPrefixStrategy("temp_", KeyStrategy.REPLACE)
-    
     // 所有以 "_history" 结尾的键都使用追加策略
     .addSuffixStrategy("_history", KeyStrategy.APPEND)
-    
-    // 包含 "config" 的键都使用合并策略
-    .addContainsStrategy("config", KeyStrategy.MERGE)
-    
     // 使用正则表达式：所有 "step_数字" 格式的键使用追加策略
     .addPatternStrategy("step_\\d+", KeyStrategy.APPEND)
-    
-    .defaultStrategy(KeyStrategy.REPLACE)
-    .build();
-```
-
-### 条件策略 (Predicate)
-
-基于键的名称或其他特征来动态决定策略：
-
-```java
-KeyStrategyFactory factory = KeyStrategy.builder()
-    // 长度超过10个字符的键使用合并策略
-    .addPredicateStrategy(key -> key.length() > 10, KeyStrategy.MERGE)
-    
-    // 包含特定关键词的键使用追加策略
+    // 基于键的名称特征来动态决定策略
     .addPredicateStrategy(key -> key.contains("log") || key.contains("trace"), KeyStrategy.APPEND)
-    
     .defaultStrategy(KeyStrategy.REPLACE)
     .build();
 ```
 
-### 复杂示例：智能 Agent 工作流配置
+## 便捷工具：`OverAllStateBuilder`
+
+`OverAllStateBuilder` 提供了一个**链式API**，让您可以更直观、更安全地构建初始状态对象，同时配置策略。
 
 ```java
-KeyStrategyFactory intelligentAgentFactory = KeyStrategy.builder()
-    // === 核心数据流 ===
-    .addStrategy("messages", KeyStrategy.APPEND)           // 对话历史记录
-    .addStrategy("conversation_context", KeyStrategy.APPEND) // 对话上下文信息
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.OverAllStateBuilder;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
 
-    // === 配置与元数据 (使用模式匹配) ===
-    .addSuffixStrategy("_config", KeyStrategy.MERGE)       // e.g., "llm_config", "tool_config"
-    .addSuffixStrategy("_metadata", KeyStrategy.MERGE)     // e.g., "user_metadata"
-    .addContainsStrategy("setting", KeyStrategy.MERGE)     // e.g., "api_settings"
-
-    // === 日志与追踪 (使用模式匹配) ===
-    .addPrefixStrategy("log_", KeyStrategy.APPEND)         // e.g., "log_info", "log_error"
-    .addPrefixStrategy("trace_", KeyStrategy.APPEND)       // e.g., "trace_agent_thought"
-    .addSuffixStrategy("_steps", KeyStrategy.APPEND)       // e.g., "execution_steps"
-
-    // === 临时与缓存数据 (使用模式匹配) ===
-    .addPrefixStrategy("temp_", KeyStrategy.REPLACE)       // e.g., "temp_variable"
-    .addPrefixStrategy("cache_", KeyStrategy.REPLACE)      // e.g., "cache_user_profile"
-
-    // === 更精细的规则 ===
-    .addPatternStrategy("step_\\d+_result", KeyStrategy.APPEND)  // e.g., "step_1_result"
-    .addPredicateStrategy(
-        key -> key.startsWith("parallel_") && key.endsWith("_results"), // e.g., "parallel_search_results"
-        KeyStrategy.APPEND
-    )
-    
-    // === 默认回退策略 ===
-    .defaultStrategy(KeyStrategy.REPLACE)
+// 使用建造者模式，链式创建状态对象
+OverAllState initialState = OverAllStateBuilder.builder()
+    .putData("user_id", "12345") // 设置单个数据
+    .putData("session_token", "abc-def-ghi")
+    .withKeyStrategy("messages", KeyStrategy.APPEND) // 配置单个策略
+    .withKeyStrategy("config", KeyStrategy.MERGE)
     .build();
 
-StateGraph smartGraph = new StateGraph(intelligentAgentFactory);
+// 您也可以批量设置数据和策略
+Map<String, Object> initialData = Map.of("task", "image_generation");
+Map<String, KeyStrategy> strategies = Map.of("image_params", KeyStrategy.MERGE);
+
+OverAllState stateWithBatchData = OverAllStateBuilder.builder()
+    .withData(initialData)
+    .withKeyStrategies(strategies)
+    .build();
 ```
 
-## 示例：策略如何影响最终状态
+## 终极武器：使用 `Channel` 系统进行精细化状态控制
 
-让我们看一个例子，来直观感受不同策略带来的差异。
+> **何时使用 Channel？** 当基础的 `KeyStrategy` 无法满足您的复杂状态管理需求时。例如：
+> - 需要从列表中**删除**特定元素。
+> - 需要比 `MergeStrategy` 更复杂的**自定义合并逻辑**。
+> - 需要为某个状态提供**动态的默认值**。
 
--   **`node_A` 输出**: `Map.of("data", List.of("A"), "log", "Step A.", "config", Map.of("timeout", 5000))`
--   **`node_B` 输出**: `Map.of("data", List.of("B"), "log", "Step B.", "config", Map.of("retries", 3))`
+`Channel` 是对 `KeyStrategy` 的高级抽象，它将状态的“合并逻辑”、“默认值”甚至“更新行为”都封装在了一起。
 
-#### 场景 1: 所有键都使用 `ReplaceStrategy`
+### `AppenderChannel`：智能列表管理
 
--   执行 `node_A` 后，`OverAllState` 为: `{ data: ["A"], log: "Step A.", config: {timeout: 5000} }`
--   执行 `node_B` 后，`node_B` 的输出会**完全覆盖** `node_A` 的输出。
--   **最终状态**: `{ data: ["B"], log: "Step B.", config: {retries: 3} }`
+`AppenderChannel` 是专门为列表管理设计的，它最强大的功能是支持**元素删除**。
 
-#### 场景 2: `data`/`log` 使用 `AppendStrategy`, `config` 使用 `ReplaceStrategy`
+```java
+import com.alibaba.cloud.ai.graph.state.AppenderChannel;
+import com.alibaba.cloud.ai.graph.state.RemoveByHash;
+import java.util.List;
 
--   执行 `node_A` 后，`OverAllState` 为: `{ data: ["A"], log: "Step A.", config: {timeout: 5000} }`
--   执行 `node_B` 后：
-    -   `data`: `["B"]` 追加到 `["A"]` -> `["A", "B"]`
-    -   `log`: `"Step B."` 拼接至 `"Step A."` -> `"Step A.Step B."`
-    -   `config`: `{retries: 3}` 替换 `{timeout: 5000}`
--   **最终状态**: `{ data: ["A", "B"], log: "Step A.Step B.", config: {retries: 3} }`
+// 创建一个智能列表 Channel
+AppenderChannel<String> messageChannel = AppenderChannel.of(ArrayList::new);
 
-#### 场景 3: `data`/`log` 使用 `AppendStrategy`, `config` 使用 `MergeStrategy`
+// 当前消息列表
+List<String> currentMessages = List.of("msg1", "msg2", "msg3", "msg2");
 
--   执行 `node_A` 后，`OverAllState` 为: `{ data: ["A"], log: "Step A.", config: {timeout: 5000} }`
--   执行 `node_B` 后：
-    -   `data`: 追加 -> `["A", "B"]`
-    -   `log`: 拼接 -> `"Step A.Step B."`
-    -   `config`: `{retries: 3}` 与 `{timeout: 5000}` 合并 -> `{timeout: 5000, retries: 3}`
--   **最终状态**: `{ data: ["A", "B"], log: "Step A.Step B.", config: {timeout: 5000, retries: 3} }`
+// ✨ 核心功能：使用 RemoveByHash 删除特定值的元素
+// 这会返回一个特殊的 RemoveIdentifier 对象
+var removeMsg2 = RemoveByHash.of("msg2");
+
+// 更新时，Channel 会识别这个特殊对象并执行删除逻辑
+Object result = messageChannel.update("messages", currentMessages, removeMsg2);
+// 结果: ["msg1", "msg3", "msg2"] (只删除第一个匹配的 "msg2")
+
+// 您甚至可以在一次更新中混合添加和删除操作
+List<Object> mixedOperations = List.of(
+    "new_message_1",
+    RemoveByHash.of("msg1"),  // 删除 "msg1"
+    "new_message_2"
+);
+Object mixedResult = messageChannel.update("messages", currentMessages, mixedOperations);
+// 结果: ["msg2", "msg3", "msg2", "new_message_1", "new_message_2"]
+```
+
+### 自定义 `Reducer`：定义你自己的合并逻辑
+
+`Reducer` 是 `Channel` 的核心，它就是一个函数 `(oldValue, newValue) -> mergedValue`，让您可以完全自定义合并行为。
+
+#### 示例：智能数值聚合
+
+假设您需要聚合统计数据，有的需要累加，有的需要取最大值。
+
+```java
+import com.alibaba.cloud.ai.graph.state.Channel;
+import com.alibaba.cloud.ai.graph.state.Reducer;
+
+// 1. 创建一个智能统计聚合器 Reducer
+Reducer<Map<String, Integer>> statsReducer = (oldStats, newStats) -> {
+    Map<String, Integer> merged = new HashMap<>(oldStats);
+    newStats.forEach((key, value) -> {
+        if (key.startsWith("count_")) { // 计数类指标：累加
+            merged.merge(key, value, Integer::sum);
+        } else if (key.startsWith("max_")) { // 最大值类指标：取最大
+            merged.merge(key, value, Integer::max);
+        } else { // 其他指标：直接替换
+            merged.put(key, value);
+        }
+    });
+    return merged;
+};
+
+// 2. 使用 Reducer 创建 Channel
+Channel<Map<String, Integer>> statsChannel = Channel.of(statsReducer);
+
+// 3. 将 Channel 包装成 KeyStrategy 在 StateGraph 中使用
+KeyStrategy statsStrategy = (oldValue, newValue) -> 
+    statsChannel.update("stats", oldValue, newValue);
+
+KeyStrategyFactory factory = KeyStrategy.builder()
+    .addStrategy("stats_data", statsStrategy)
+    .defaultStrategy(KeyStrategy.REPLACE)
+    .build();
+```
+
+通过 `Channel` 和 `Reducer`，您可以为工作流的状态管理实现任何复杂度的自定义逻辑，是构建高级 AI 应用的强大工具。
