@@ -91,23 +91,23 @@
 				"collapsed": false,
 				"items": [
 					{
-						"label": "ReAct Agent",
-						"translations": { "en": "ReAct Agent" },
+						"label": "ReAct 模式",
+						"translations": { "en": "ReAct Pattern" },
 						"link": "docs/1.0.0.3-dev/building/patterns/react"
 					},
 					{ 
-						"label": "人机交互的ReAct Agent",  
-						"translations": { "en": "ReAct With Human Agent" },
+						"label": "人机交互模式",  
+						"translations": { "en": "Human-in-the-Loop" },
 						"link": "docs/1.0.0.3-dev/building/patterns/react-with-human"
 					},
 					{
-						"label": "工作流智能体",
-						"translations": { "en": "Flow Agent" },
+						"label": "流程模式 (Flow)",
+						"translations": { "en": "Flow Pattern" },
 						"link": "docs/1.0.0.3-dev/building/patterns/flow"
 					},
 					{
-						"label": "反思智能体",
-						"translations": { "en": "Reflect Agent" },
+						"label": "反思模式 (Reflect)",
+						"translations": { "en": "Reflect Pattern" },
 						"link": "docs/1.0.0.3-dev/building/patterns/reflect"
 					},
 					{
@@ -136,6 +136,11 @@
 						"label": "边 (Edge) 与路由",
 						"translations": { "en": "Edge & Routing" },
 						"link": "docs/1.0.0.3-dev/building/stategraph/edges"
+					},
+					{
+						"label": "预定义节点",
+						"translations": { "en": "Predefined Nodes" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/predefined-nodes"
 					}
 				]
 			},
