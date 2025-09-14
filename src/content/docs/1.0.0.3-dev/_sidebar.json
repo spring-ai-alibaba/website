@@ -1,20 +1,13 @@
 [
 	{
-		"label": "概述",
-		"translations": { "en": "Overview" },
-		"collapsed": false,
-		"items": [
-			{
-				"label": "什么是 SAA?",
-				"translations": { "en": "What is SAA?" },
-				"link": "docs/1.0.0.3-dev/overview/what-is-saa"
-			},
-			{
-				"label": "SAA 与 Spring AI 的关系",
-				"translations": { "en": "SAA vs Spring AI" },
-				"link": "docs/1.0.0.3-dev/overview/saa-vs-spring-ai"
-			}
-		]
+		"label": "什么是 SAA?",
+		"translations": { "en": "What is SAA?" },
+		"link": "docs/1.0.0.3-dev/overview"
+	},
+	{
+		"label": "SAA 与 Spring AI 的关系",
+		"translations": { "en": "SAA vs Spring AI" },
+		"link": "docs/1.0.0.3-dev/saa-vs-spring-ai"
 	},
 	{
 		"label": "核心概念",
@@ -63,23 +56,28 @@
 			}
 		]
 	},
-	{
-		"label": "快速入门",
-		"translations": { "en": "Get Started" },
-		"collapsed": false,
-		"items": [
-			{
-				"label": "环境准备",
-				"translations": { "en": "Environment Setup" },
-				"link": "docs/1.0.0.3-dev/get-started/setup"
-			},
-			{
-				"label": "第一个智能体",
-				"translations": { "en": "Your First Agent" },
-				"link": "docs/1.0.0.3-dev/get-started/first-agent"
-			}
-		]
-	},
+		{
+			"label": "快速入门",
+			"translations": { "en": "Get Started" },
+			"collapsed": false,
+			"items": [
+				{
+					"label": "环境准备",
+					"translations": { "en": "Environment Setup" },
+					"link": "docs/1.0.0.3-dev/get-started/setup"
+				},
+				{
+					"label": "第一个智能体",
+					"translations": { "en": "Your First Agent" },
+					"link": "docs/1.0.0.3-dev/get-started/first-agent"
+				},
+				{
+					"label": "MCP 快速开始",
+					"translations": { "en": "MCP Quick Start" },
+					"link": "docs/1.0.0.3-dev/get-started/mcp-quickstart"
+				}
+			]
+		},
 	{
 		"label": "构建智能体",
 		"translations": { "en": "Building Agents" },
@@ -146,43 +144,65 @@
 						"label": "预定义节点",
 						"translations": { "en": "Predefined Nodes" },
 						"link": "docs/1.0.0.3-dev/building/stategraph/predefined-nodes"
+					},
+					{
+						"label": "高级特性",
+						"translations": { "en": "Advanced Features" },
+						"collapsed": true,
+						"items": [
+							{
+								"label": "持久化与恢复",
+								"translations": { "en": "Persistence & Resuming" },
+								"link": "docs/1.0.0.3-dev/building/advanced/persistence"
+							},
+							{
+								"label": "可观测性",
+								"translations": { "en": "Observability" },
+								"link": "docs/1.0.0.3-dev/building/advanced/observability"
+							},
+							{
+								"label": "子图 (SubGraphs)",
+								"translations": { "en": "SubGraphs" },
+								"link": "docs/1.0.0.3-dev/building/advanced/subgraphs"
+							},
+							{
+								"label": "流式响应",
+								"translations": { "en": "Streaming Response" },
+								"link": "docs/1.0.0.3-dev/building/advanced/streaming"
+							},
+							{
+								"label": "并行执行",
+								"translations": { "en": "Parallel Execution" },
+								"link": "docs/1.0.0.3-dev/building/advanced/parallel-execution"
+							},
+							{
+								"label": "图可视化",
+								"translations": { "en": "Graph Visualization" },
+								"link": "docs/1.0.0.3-dev/building/advanced/visualization"
+							}
+						]
 					}
 				]
 			},
 			{
-				"label": "高级特性",
-				"translations": { "en": "Advanced Features" },
+				"label": "工具调用",
+				"translations": { "en": "Tool Calling" },
+				"link": "docs/1.0.0.3-dev/building/tool-calling"
+			},
+			{
+				"label": "记忆管理",
+				"translations": { "en": "Memory Management" },
 				"collapsed": true,
 				"items": [
 					{
-						"label": "持久化与恢复",
-						"translations": { "en": "Persistence & Resuming" },
-						"link": "docs/1.0.0.3-dev/building/advanced/persistence"
+						"label": "Graph Memory（状态图记忆）",
+						"translations": { "en": "Graph Memory" },
+						"link": "docs/1.0.0.3-dev/building/memory/graph-memory"
 					},
 					{
-						"label": "可观测性",
-						"translations": { "en": "Observability" },
-						"link": "docs/1.0.0.3-dev/building/advanced/observability"
-					},
-					{
-						"label": "子图 (SubGraphs)",
-						"translations": { "en": "SubGraphs" },
-						"link": "docs/1.0.0.3-dev/building/advanced/subgraphs"
-					},
-					{
-						"label": "流式响应",
-						"translations": { "en": "Streaming Response" },
-						"link": "docs/1.0.0.3-dev/building/advanced/streaming"
-					},
-					{
-						"label": "并行执行",
-						"translations": { "en": "Parallel Execution" },
-						"link": "docs/1.0.0.3-dev/building/advanced/parallel-execution"
-					},
-					{
-						"label": "图可视化",
-						"translations": { "en": "Graph Visualization" },
-						"link": "docs/1.0.0.3-dev/building/advanced/visualization"
+						"label": "ChatClient Memory（高层记忆）",
+						"translations": { "en": "ChatClient Memory" },
+						"link": "docs/1.0.0.3-dev/building/memory/chatclient-memory"
 					}
 				]
 			}
@@ -253,11 +273,6 @@
 				"label": "调试与监控",
 				"translations": { "en": "Debugging & Monitoring" },
 				"link": "docs/1.0.0.3-dev/tools/debugging"
-			},
-			{
-				"label": "性能优化",
-				"translations": { "en": "Performance Tuning" },
-				"link": "docs/1.0.0.3-dev/tools/performance"
 			}
 		]
 	},
@@ -267,14 +282,34 @@
 		"collapsed": true,
 		"items": [
 			{
+				"label": "模型集成",
+				"translations": { "en": "Model Integration" },
+				"link": "docs/1.0.0.3-dev/integration/model-integration"
+			},
+			{
 				"label": "增强RAG",
 				"translations": { "en": "Enhanced RAG" },
 				"collapsed": true,
 				"items": [
 					{
-						"label": "文档处理",
-						"translations": { "en": "Document Processing" },
-						"link": "docs/1.0.0.3-dev/integration/rag/document-processing"
+						"label": "RAG 快速上手",
+						"translations": { "en": "RAG Quickstart" },
+						"link": "docs/1.0.0.3-dev/integration/rag/quickstart"
+					},
+					{
+						"label": "核心组件与架构",
+						"translations": { "en": "Core Components & Architecture" },
+						"link": "docs/1.0.0.3-dev/integration/rag/core-components"
+					},
+					{
+						"label": "文档读取器",
+						"translations": { "en": "Document Readers" },
+						"link": "docs/1.0.0.3-dev/integration/rag/document-readers"
+					},
+					{
+						"label": "向量存储",
+						"translations": { "en": "Vector Stores" },
+						"link": "docs/1.0.0.3-dev/integration/rag/vector-stores"
 					},
 					{
 						"label": "检索与重排",
@@ -282,31 +317,24 @@
 						"link": "docs/1.0.0.3-dev/integration/rag/retrieval-rerank"
 					},
 					{
+						"label": "文档转换器",
+						"translations": { "en": "Document Transformers" },
+						"link": "docs/1.0.0.3-dev/integration/rag/document-transformers"
+					},
+					{
+						"label": "高级Advisor组件",
+						"translations": { "en": "Advanced Advisors" },
+						"link": "docs/1.0.0.3-dev/integration/rag/advanced-advisors"
+					},
+					{
+						"label": "质量评估",
+						"translations": { "en": "Quality Evaluation" },
+						"link": "docs/1.0.0.3-dev/integration/rag/evaluation"
+					},
+					{
 						"label": "百炼RAG集成",
 						"translations": { "en": "Bailian RAG Integration" },
 						"link": "docs/1.0.0.3-dev/integration/rag/bailian"
-					}
-				]
-			},
-			{
-				"label": "Spring AI 基础能力参考",
-				"translations": { "en": "Spring AI Basics Reference" },
-				"collapsed": true,
-				"items": [
-					{
-						"label": "工具调用",
-						"translations": { "en": "Tool Calling" },
-						"link": "docs/1.0.0.3-dev/integration/spring-ai/tool-calling"
-					},
-					{
-						"label": "会话与记忆",
-						"translations": { "en": "Memory" },
-						"link": "docs/1.0.0.3-dev/integration/spring-ai/memory"
-					},
-					{
-						"label": "模型集成",
-						"translations": { "en": "LLM Integration" },
-						"link": "docs/1.0.0.3-dev/integration/spring-ai/llm-integration"
 					}
 				]
 			}
@@ -325,8 +353,8 @@
 		]
 	},
 	{
-		"label": "官方应用案例",
-		"translations": { "en": "Showcases" },
+		"label": "官方应用",
+		"translations": { "en": "Applications" },
 		"collapsed": true,
 		"items": [
 			{

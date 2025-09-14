@@ -112,7 +112,7 @@ SAA Graph 提供了两种方式来使用子图，以适应不同场景的需求�
 -   **方式**: 您可以先将子图独立编译，然后将得到的 `CompiledGraph` 对象作为节点添加到父图中。这对于性能优化和发布稳定的、可重用的工作流组件非常有用。
 -   **代码示例**:
     ```java
-    // ... (假设 textAnalysisSubGraph 的定义和之前一样)
+    // ... (假设 textAnalysisSubGraph 的定义和之前一样)-
 
     // 1. 独立编译子图，得到一个可执行的组件
     CompiledGraph compiledTextAnalysisSubGraph = textAnalysisSubGraph.compile();
