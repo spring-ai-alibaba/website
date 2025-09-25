@@ -10,9 +10,9 @@ description: "基于 Spring 生态系统中的可观察性功能构建，提供�
 
 ## 观测篇 - 快速上手
 
-> 为其核心组件提供指标和跟踪功能，包括：ChtClient、Advisor、ChatModel、EmbeddingModel、Tool、VectorStore 等
+> 为其核心组件提供指标和跟踪功能，包括：ChatClient、Advisor、ChatModel、EmbeddingModel、Tool、VectorStore 等
 
-以下实现了自定义的 ChtClient、ChatModel、Tool、EmbeddingModel 的观测处理器
+以下实现了自定义的 ChatClient、ChatModel、Tool、EmbeddingModel 的观测处理器
 
 实战代码可见：[https://github.com/GTyingzi/spring-ai-tutorial](https://github.com/GTyingzi/spring-ai-tutorial) 下的 Observability 模块
 
