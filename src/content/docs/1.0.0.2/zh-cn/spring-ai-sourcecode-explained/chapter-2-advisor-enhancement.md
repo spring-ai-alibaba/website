@@ -1763,7 +1763,7 @@ MessageChatMemoryAdvisor
 
 ### AdvisorChain
 
-接口类作用：组织和管理多个 Advsir
+接口类作用：组织和管理多个 Advisor
 
 ```java
 package org.springframework.ai.chat.client.advisor.api;
