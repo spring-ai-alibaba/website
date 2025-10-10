@@ -233,17 +233,13 @@ Spring AI Alibaba框架提供了几个内置的 advisors 来增强您的 AI 交�
 
 这些 advisors 在文档处理中管理有关文档的各种信息：
 
-- `RetrievalRerankAdvisor`
-
-  提供按照文档的相关性进行重新排序的方法
-
-- `RetrievalRerankAdvisor`
-
-  按照历史记录尝试生成答案。
-
 - `DashScopeDocumentRetrievalAdvisor`
 
-  您需要仅使用提供的搜索文档为给定问题写出高质量的答案，并正确引用它们。
+  通过向量化检索，返回原始文档相关的内容及元信息，完成初步的文档召回，为后续重排序提供候选集。
+
+- `RetrievalRerankAdvisor`
+
+  提供文档相关性重排序能力，对 DocumentRetrievalAdvisor 或DashScopeDocumentRetrievalAdvisor初步检索出的候选文档进行精细化排序。
 
 #### 流式与非流式
 
