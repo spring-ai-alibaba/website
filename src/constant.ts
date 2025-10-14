@@ -6,9 +6,9 @@ import { getEntries } from "astro:content";
 
 // 吊顶提示文案
 export const TOPBAR = {
-    "text": "Spring AI Alibaba 1.0 GA 版本正式发布，开启 Java 智能体开发新时代！",
-    "mobileText": "Spring AI Alibaba 1.0 GA 版本正式发布，开启 Java 智能体开发新时代！",
-    "link": "/blog/spring-ai-alibaba-10-ga-release/",
+    "text": "15位专家联名推荐，《AI 原生应用架构白皮书》免费下载！",
+    "mobileText": "15位专家联名推荐，《AI 原生应用架构白皮书》免费下载！",
+    "link": "https://developer.aliyun.com/ebook/8479",
     "target": "_blank",
     "display": true
 }
