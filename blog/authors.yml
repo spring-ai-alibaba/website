@@ -1,0 +1,11 @@
+your-name:
+  name: 您的姓名
+  title: 项目创建者
+  url: https://github.com/your-username
+  image_url: https://github.com/your-username.png
+
+contributor:
+  name: 贡献者姓名
+  title: 核心贡献者
+  url: https://github.com/contributor-username
+  image_url: https://github.com/contributor-username.png

@@ -1,0 +1,17 @@
+your-name:
+  name: Your Name
+  title: Project Creator
+  url: https://github.com/your-username
+  image_url: https://github.com/your-username.png
+
+admin:
+  name: Admin
+  title: Project Admin
+  url: https://github.com/your-username
+  image_url: https://github.com/your-username.png
+
+contributor:
+  name: Contributor Name  
+  title: Core Contributor
+  url: https://github.com/contributor-username
+  image_url: https://github.com/contributor-username.png

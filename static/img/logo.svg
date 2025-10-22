@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light theme logo -->
+  <rect width="64" height="64" rx="16" fill="#2563eb"/>
+  <rect x="8" y="8" width="48" height="48" rx="12" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <path d="M20 24L32 36L44 24" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="32" cy="20" r="3" fill="#ffffff"/>
+  <circle cx="20" cy="44" r="2" fill="#60a5fa"/>
+  <circle cx="32" cy="44" r="2" fill="#60a5fa"/>
+  <circle cx="44" cy="44" r="2" fill="#60a5fa"/>
+</svg>

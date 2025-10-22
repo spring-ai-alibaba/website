@@ -1,0 +1,42 @@
+{
+  "link.title.文档": {
+    "message": "Docs",
+    "description": "The title of the footer links column with title=Docs in the footer"
+  },
+  "link.title.社区": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.更多": {
+    "message": "More",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.快速开始": {
+    "message": "Quick Start",
+    "description": "The label of footer link with label=Quick Start linking to /docs/intro"
+  },
+  "link.item.label.API 参考": {
+    "message": "API Reference",
+    "description": "The label of footer link with label=API Reference linking to /docs/api/overview"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/your-username/your-repo-name"
+  },
+  "link.item.label.讨论": {
+    "message": "Discussions",
+    "description": "The label of footer link with label=Discussions linking to https://github.com/your-username/your-repo-name/discussions"
+  },
+  "link.item.label.许可证": {
+    "message": "License",
+    "description": "The label of footer link with label=License linking to https://github.com/your-username/your-repo-name/blob/main/LICENSE"
+  },
+  "link.item.label.贡献": {
+    "message": "Contributing",
+    "description": "The label of footer link with label=Contributing linking to https://github.com/your-username/your-repo-name/blob/main/CONTRIBUTING.md"
+  },
+  "copyright": {
+    "message": "Copyright © 2025 Your Project Team. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}

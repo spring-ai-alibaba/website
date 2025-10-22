@@ -1,0 +1,46 @@
+{
+  "title": {
+    "message": "Project Name",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Project Name Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.文档": {
+    "message": "文档",
+    "description": "Navbar item with label 文档"
+  },
+  "item.label.博客": {
+    "message": "博客",
+    "description": "Navbar item with label 博客"
+  },
+  "item.label.社区": {
+    "message": "社区",
+    "description": "Navbar item with label 社区"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  },
+  "item.label.团队": {
+    "message": "团队",
+    "description": "Navbar item with label 团队"
+  },
+  "item.label.贡献指南": {
+    "message": "贡献指南",
+    "description": "Navbar item with label 贡献指南"
+  },
+  "item.label.行为准则": {
+    "message": "行为准则",
+    "description": "Navbar item with label 行为准则"
+  },
+  "item.label.GitHub 讨论": {
+    "message": "GitHub 讨论",
+    "description": "Navbar item with label GitHub 讨论"
+  },
+  "item.label.GitHub 问题": {
+    "message": "GitHub 问题",
+    "description": "Navbar item with label GitHub 问题"
+  }
+}

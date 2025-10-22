@@ -1,0 +1,220 @@
+/* Contributing Page Styles */
+.contributingPage {
+  padding: 3rem 0;
+  min-height: 80vh;
+}
+
+/* Ensure consistent starry background in dark mode */
+[data-theme='dark'] .contributingPage {
+  background: var(--space-black) !important;
+}
+
+.contributingHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.contributingTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contributingDescription {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.contributingContent {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.sectionContent {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.stepsList {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  padding-left: 1.5rem;
+}
+
+.stepsList li {
+  margin-bottom: 0.8rem;
+}
+
+.stepsList code {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9em;
+  color: var(--ifm-color-primary);
+}
+
+.contributionTypes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.typeCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.typeCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--ifm-color-primary);
+}
+
+.typeIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.typeCard h3 {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.typeCard p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.codeBlock {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+.codeBlock pre {
+  background: transparent;
+  margin: 0;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.codeBlock code {
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.helpLinks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.helpLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.helpLink:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: white;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contributingPage {
+    padding: 2rem 0;
+  }
+
+  .contributingTitle {
+    font-size: 2rem;
+  }
+
+  .contributingDescription {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+    margin: 0 1rem 1.5rem;
+  }
+
+  .contributionTypes {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .typeCard {
+    padding: 1.2rem;
+  }
+
+  .helpLinks {
+    grid-template-columns: 1fr;
+  }
+
+  .codeBlock pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+}

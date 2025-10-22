@@ -1,0 +1,553 @@
+{
+  "theme.ErrorPageContent.title": {
+    "message": "This page crashed.",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.blog.archive.title": {
+    "message": "Blog Archive",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.archive.description": {
+    "message": "Blog Archive",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Blog list page navigation",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Newer Entries",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Older Entries",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "Scroll back to top",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Blog post page navigation",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Newer Post",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Older Post",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "View All Tags",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "System mode",
+    "description": "The name for the system color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "Light mode",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "Dark mode",
+    "description": "The name for the dark color mode"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Breadcrumbs",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.DocCard.categoryDescription": {
+    "message": "{count, plural, one {# item} other {# items}}",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Docs pages navigation",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Previous",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Next",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "One doc tagged|{count} docs tagged",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged} with \"{tagName}\"",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "Version: {versionLabel}"
+  },
+  "theme.common.editThisPage": {
+    "message": "Edit this page",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Direct link to heading",
+    "description": "Title for link to heading"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " on {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " by {user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Last updated{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.navbar.mobileVersions": {
+    "message": "Versions",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "Languages",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "On this page",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Read More",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "Read more about {title}",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "One min read|{readingTime} min read",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Home page",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Collapse sidebar",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Collapse sidebar",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← Back to main menu",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Close navigation bar",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.navbar.mobileSidebarPrimaryMenu.backButtonLabel": {
+    "message": "← Back to main menu",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar primary menu"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Toggle navigation bar",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Expand sidebar",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Expand sidebar",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "homepage.quickStart": {
+    "message": "Quick Start",
+    "description": "Quick Start button text"
+  },
+  "homepage.viewOnGithub": {
+    "message": "View on GitHub",
+    "description": "View on GitHub button text"
+  },
+  "homepage.codeTitle": {
+    "message": "quickstart.ts",
+    "description": "Code title"
+  },
+  "homepage.description": {
+    "message": "A dual-theme documentation website template built with Docusaurus 3",
+    "description": "The homepage description"
+  },
+  "homepage.title": {
+    "message": "Welcome to Project Name",
+    "description": "The homepage title"
+  },
+  "homepage.features.docs.title": {
+    "message": "📚 Rich Documentation",
+    "description": "Feature title for rich documentation"
+  },
+  "homepage.features.docs.description": {
+    "message": "Comprehensive documentation with examples, tutorials, and API references. Everything you need to get started and master your project.",
+    "description": "Feature description for rich documentation"
+  },
+  "homepage.features.theme.title": {
+    "message": "🎨 Beautiful Themes",
+    "description": "Feature title for beautiful themes"
+  },
+  "homepage.features.theme.description": {
+    "message": "Dual theme support with elegant cream light theme and stunning starry dark theme. Seamlessly switch between themes.",
+    "description": "Feature description for beautiful themes"
+  },
+  "homepage.features.fast.title": {
+    "message": "⚡ Fast & Modern",
+    "description": "Feature title for fast and modern"
+  },
+  "homepage.features.fast.description": {
+    "message": "Built with modern technologies for lightning-fast performance. Responsive design that works perfectly on all devices.",
+    "description": "Feature description for fast and modern"
+  },
+  "homepage.features.customizable.title": {
+    "message": "🔧 Easy to Customize",
+    "description": "Feature title for easy customization"
+  },
+  "homepage.features.customizable.description": {
+    "message": "Highly customizable components and themes. Easy to modify colors, fonts, layouts, and add your own branding elements.",
+    "description": "Feature description for easy customization"
+  },
+  "homepage.features.mobile.title": {
+    "message": "📱 Mobile First",
+    "description": "Feature title for mobile first"
+  },
+  "homepage.features.mobile.description": {
+    "message": "Responsive design that looks great on phones, tablets, and desktop devices. Touch-friendly navigation and interactions.",
+    "description": "Feature description for mobile first"
+  },
+  "homepage.features.search.title": {
+    "message": "🔍 Search Functionality",
+    "description": "Feature title for search functionality"
+  },
+  "homepage.features.search.description": {
+    "message": "Built-in search functionality to help users find content quickly. Smart search with autocomplete and suggestions.",
+    "description": "Feature description for search functionality"
+  },
+  "homepage.features.title": {
+    "message": "✨ Powerful Features",
+    "description": "Features section title"
+  },
+  "homepage.features.subtitle": {
+    "message": "Everything you need to create beautiful documentation websites",
+    "description": "Features section subtitle"
+  },
+  "codeOfConduct.title": {
+    "message": "Code of Conduct",
+    "description": "The page title for code of conduct"
+  },
+  "codeOfConduct.description": {
+    "message": "Our community guidelines and values",
+    "description": "The page description for code of conduct"
+  },
+  "codeOfConduct.pageTitle": {
+    "message": "Contributor Code of Conduct",
+    "description": "Code of conduct page title"
+  },
+  "codeOfConduct.pageDescription": {
+    "message": "We are committed to providing a friendly, safe and welcoming environment for all, regardless of gender, sexual orientation, disability, ethnicity, religion, or other personal characteristics.",
+    "description": "Code of conduct page description"
+  },
+  "codeOfConduct.ourCommitment": {
+    "message": "Our Pledge",
+    "description": "Our commitment section title"
+  },
+  "codeOfConduct.commitmentText": {
+    "message": "In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to make participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.",
+    "description": "Our commitment text"
+  },
+  "codeOfConduct.ourStandards": {
+    "message": "Our Standards",
+    "description": "Our standards section title"
+  },
+  "codeOfConduct.positiveBehavior": {
+    "message": "Examples of positive behavior include:",
+    "description": "Positive behavior title"
+  },
+  "codeOfConduct.welcomingLanguage": {
+    "message": "Using welcoming and inclusive language",
+    "description": "Using welcoming language"
+  },
+  "codeOfConduct.respectingViewpoints": {
+    "message": "Being respectful of differing viewpoints and experiences",
+    "description": "Respecting differing viewpoints"
+  },
+  "codeOfConduct.acceptingCriticism": {
+    "message": "Gracefully accepting constructive criticism",
+    "description": "Gracefully accepting criticism"
+  },
+  "codeOfConduct.focusingCommunity": {
+    "message": "Focusing on what is best for the community",
+    "description": "Focusing on community"
+  },
+  "codeOfConduct.showingEmpathy": {
+    "message": "Showing empathy towards other community members",
+    "description": "Showing empathy"
+  },
+  "codeOfConduct.unacceptableBehavior": {
+    "message": "Examples of unacceptable behavior include:",
+    "description": "Unacceptable behavior title"
+  },
+  "codeOfConduct.sexualizedLanguage": {
+    "message": "The use of sexualized language or imagery",
+    "description": "Using sexualized language"
+  },
+  "codeOfConduct.trollingInsults": {
+    "message": "Trolling, insulting or derogatory comments, and personal attacks",
+    "description": "Trolling and insulting comments"
+  },
+  "codeOfConduct.harassment": {
+    "message": "Public or private harassment",
+    "description": "Public or private harassment"
+  },
+  "codeOfConduct.publishingInfo": {
+    "message": "Publishing others' private information without permission",
+    "description": "Publishing private information"
+  },
+  "codeOfConduct.otherConduct": {
+    "message": "Other conduct which could reasonably be considered inappropriate",
+    "description": "Other inappropriate conduct"
+  },
+  "codeOfConduct.enforcement": {
+    "message": "Enforcement Responsibilities",
+    "description": "Enforcement section title"
+  },
+  "codeOfConduct.enforcementText": {
+    "message": "Project maintainers are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.",
+    "description": "Enforcement responsibility text"
+  },
+  "codeOfConduct.reporting": {
+    "message": "Reporting",
+    "description": "Reporting section title"
+  },
+  "codeOfConduct.howToReport": {
+    "message": "How to Report Inappropriate Behavior",
+    "description": "How to report title"
+  },
+  "codeOfConduct.reportingInstructions": {
+    "message": "If you encounter or witness inappropriate behavior, please contact the project team:",
+    "description": "Reporting instructions"
+  },
+  "codeOfConduct.confidentiality": {
+    "message": "All complaints will be reviewed and investigated promptly and fairly. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.",
+    "description": "Confidentiality note"
+  },
+  "codeOfConduct.enforcementTitle": {
+    "message": "Enforcement",
+    "description": "Enforcement title"
+  },
+  "codeOfConduct.consequences": {
+    "message": "Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.",
+    "description": "Enforcement consequences"
+  },
+  "codeOfConduct.attribution": {
+    "message": "This Code of Conduct is adapted from the",
+    "description": "Code of conduct attribution"
+  },
+  "codeOfConduct.contributorCovenant": {
+    "message": "Contributor Covenant",
+    "description": "Contributor Covenant link text"
+  },
+  "codeOfConduct.version": {
+    "message": ", version 2.0, available at",
+    "description": "Version info"
+  },
+  "codeOfConduct.available": {
+    "message": ".",
+    "description": "Available text"
+  },
+  "contributing.title": {
+    "message": "Contributing Guide",
+    "description": "The page title for contributing guide"
+  },
+  "contributing.description": {
+    "message": "Learn how to contribute to the project",
+    "description": "The page description for contributing guide"
+  },
+  "contributing.pageTitle": {
+    "message": "Contributing Guide",
+    "description": "Contributing page title"
+  },
+  "contributing.pageDescription": {
+    "message": "Thank you for considering contributing to our project! Every contribution is valuable, big or small, and we appreciate them all.",
+    "description": "Contributing page description"
+  },
+  "contributing.quickStart": {
+    "message": "Quick Start",
+    "description": "Quick start section title"
+  },
+  "contributing.step1": {
+    "message": "Fork the project repository",
+    "description": "Fork repository step"
+  },
+  "contributing.step2": {
+    "message": "Create a feature branch",
+    "description": "Create branch step"
+  },
+  "contributing.step3": {
+    "message": "Commit your changes",
+    "description": "Commit changes step"
+  },
+  "contributing.step4": {
+    "message": "Push to the branch",
+    "description": "Push branch step"
+  },
+  "contributing.step5": {
+    "message": "Open a Pull Request",
+    "description": "Open PR step"
+  },
+  "contributing.contributionTypes": {
+    "message": "Types of Contributions",
+    "description": "Contribution types section title"
+  },
+  "contributing.bugFixes": {
+    "message": "Bug Fixes",
+    "description": "Bug fixes card title"
+  },
+  "contributing.bugFixesDesc": {
+    "message": "Help fix bugs and issues in the project",
+    "description": "Bug fixes description"
+  },
+  "contributing.newFeatures": {
+    "message": "New Features",
+    "description": "New features card title"
+  },
+  "contributing.newFeaturesDesc": {
+    "message": "Add new features or improve existing ones",
+    "description": "New features description"
+  },
+  "contributing.documentation": {
+    "message": "Documentation",
+    "description": "Documentation card title"
+  },
+  "contributing.documentationDesc": {
+    "message": "Improve documentation, tutorials, and examples",
+    "description": "Documentation description"
+  },
+  "contributing.design": {
+    "message": "Design",
+    "description": "Design card title"
+  },
+  "contributing.designDesc": {
+    "message": "Improve user interface and user experience",
+    "description": "Design description"
+  },
+  "contributing.developmentSetup": {
+    "message": "Development Setup",
+    "description": "Development setup section title"
+  },
+  "contributing.cloneRepo": {
+    "message": "Clone the repository",
+    "description": "Clone repository comment"
+  },
+  "contributing.enterDirectory": {
+    "message": "Enter the project directory",
+    "description": "Enter directory comment"
+  },
+  "contributing.installDeps": {
+    "message": "Install dependencies",
+    "description": "Install dependencies comment"
+  },
+  "contributing.startDev": {
+    "message": "Start the development server",
+    "description": "Start development server comment"
+  },
+  "contributing.codeOfConduct": {
+    "message": "Code of Conduct",
+    "description": "Code of conduct section title"
+  },
+  "contributing.codeOfConductText": {
+    "message": "By participating in this project, you agree to abide by our",
+    "description": "Code of conduct reference text"
+  },
+  "contributing.codeOfConductLink": {
+    "message": "Code of Conduct",
+    "description": "Code of conduct link text"
+  },
+  "contributing.friendlyInteraction": {
+    "message": ". Please ensure interactions remain friendly, respectful, and inclusive.",
+    "description": "Friendly interaction reminder"
+  },
+  "contributing.needHelp": {
+    "message": "Need Help?",
+    "description": "Need help section title"
+  },
+  "contributing.githubDiscussions": {
+    "message": "GitHub Discussions",
+    "description": "GitHub discussions link"
+  },
+  "contributing.reportIssue": {
+    "message": "Report an Issue",
+    "description": "Report issue link"
+  },
+  "contributing.contactTeam": {
+    "message": "Contact Team",
+    "description": "Contact team link"
+  },
+  "team.title": {
+    "message": "Our Team",
+    "description": "The page title for team page"
+  },
+  "team.description": {
+    "message": "Meet the amazing people behind this project",
+    "description": "The page description for team page"
+  },
+  "team.pageTitle": {
+    "message": "Meet Our Team",
+    "description": "Team page title"
+  },
+  "team.pageDescription": {
+    "message": "We are a passionate group of developers, designers, and open source enthusiasts committed to building excellent tools for the community.",
+    "description": "Team page description"
+  },
+  "team.yourName": {
+    "message": "Your Name",
+    "description": "Your name placeholder"
+  },
+  "team.creatorRole": {
+    "message": "Project Creator & Lead Developer",
+    "description": "Creator and main developer role"
+  },
+  "team.creatorBio": {
+    "message": "Passionate about creating beautiful documentation and developer experiences.",
+    "description": "Creator bio"
+  },
+  "team.contributorName": {
+    "message": "Contributor Name",
+    "description": "Contributor name placeholder"
+  },
+  "team.contributorRole": {
+    "message": "Core Contributor",
+    "description": "Core contributor role"
+  },
+  "team.contributorBio": {
+    "message": "Loves building tools that help developers be more productive.",
+    "description": "Contributor bio"
+  },
+  "team.joinUs": {
+    "message": "Want to Join Us?",
+    "description": "Join us title"
+  },
+  "team.joinDescription": {
+    "message": "We're always looking for passionate contributors to help improve this project. Whether you're a developer, designer, writer, or just someone who loves open source, there's a place for you on our team!",
+    "description": "Join team description"
+  },
+  "team.contributingGuide": {
+    "message": "Contributing Guide",
+    "description": "Contributing guide button"
+  },
+  "team.viewIssues": {
+    "message": "View Issues",
+    "description": "View issues button"
+  }
+}
