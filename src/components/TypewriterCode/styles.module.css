@@ -1,0 +1,267 @@
+.codePreview {
+  width: 100%;
+  max-width: 750px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', monospace;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .codePreview {
+  background: rgba(31, 41, 55, 0.95);
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+}
+
+.codePreview:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .codePreview:hover {
+  box-shadow: 0 24px 80px rgba(96, 165, 250, 0.2);
+}
+
+.codeHeader {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .codeHeader {
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+}
+
+.codeDots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+}
+
+.dotRed {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.dotYellow {
+  background: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.dotGreen {
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.codeTitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex: 1;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.codeLang {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+
+.codeContent {
+  padding: 1.5rem;
+  background: transparent;
+  overflow-x: auto;
+  max-height: 450px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.codeContent::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.codeContent::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.codeContent::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.3);
+  border-radius: 4px;
+}
+
+.codeContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.5);
+}
+
+[data-theme='dark'] .codeContent::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .codeContent::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme='dark'] .codeContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.5);
+}
+
+.codeBlock {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: #1f2937;
+}
+
+[data-theme='dark'] .codeBlock {
+  color: #e5e7eb;
+}
+
+.codeLine {
+  display: block;
+  margin: 0;
+  padding: 0.1rem 0;
+  position: relative;
+  white-space: pre;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: #2563eb;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+}
+
+[data-theme='dark'] .cursor {
+  background-color: #60a5fa;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* 语法高亮样式 */
+.codeKeyword {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .codeKeyword {
+  color: #a78bfa;
+}
+
+.codeString {
+  color: #059669;
+}
+
+[data-theme='dark'] .codeString {
+  color: #34d399;
+}
+
+.codeComment {
+  color: #6b7280;
+  font-style: italic;
+}
+
+[data-theme='dark'] .codeComment {
+  color: #9ca3af;
+}
+
+.codeAnnotation {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .codeAnnotation {
+  color: #fbbf24;
+}
+
+.codeVariable {
+  color: #dc2626;
+}
+
+[data-theme='dark'] .codeVariable {
+  color: #f87171;
+}
+
+.codeClass {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .codeClass {
+  color: #60a5fa;
+}
+
+.codeMethod {
+  color: #7c3aed;
+  font-weight: 500;
+}
+
+[data-theme='dark'] .codeMethod {
+  color: #c084fc;
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 996px) {
+  .codePreview {
+    max-width: 100%;
+  }
+
+  .codeBlock {
+    font-size: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .codeContent {
+    padding: 1rem;
+    max-height: 400px;
+  }
+
+  .codeBlock {
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .codeTitle {
+    font-size: 0.8rem;
+  }
+}

@@ -433,6 +433,106 @@
     "message": "创建精美文档网站所需的一切功能",
     "description": "Features section subtitle"
   },
+  "ecosystem.title": {
+    "message": "Spring AI Alibaba 生态系统",
+    "description": "Ecosystem section title"
+  },
+  "ecosystem.subtitle": {
+    "message": "构建智能应用程序的完整生态系统",
+    "description": "Ecosystem section subtitle"
+  },
+  "ecosystem.framework.title": {
+    "message": "核心框架",
+    "description": "Framework section title"
+  },
+  "ecosystem.framework.description": {
+    "message": "构建 AI 应用程序的基础框架",
+    "description": "Framework section description"
+  },
+  "ecosystem.product.title": {
+    "message": "基于 Spring AI Alibaba 构建",
+    "description": "Product section title"
+  },
+  "ecosystem.product.description": {
+    "message": "由我们的框架支持的生产级应用程序",
+    "description": "Product section description"
+  },
+  "ecosystem.viewOnGithub": {
+    "message": "在 GitHub 查看",
+    "description": "View on GitHub link text"
+  },
+  "ecosystem.framework.agent.name": {
+    "message": "Spring AI Alibaba Agent Framework",
+    "description": "Agent framework name"
+  },
+  "ecosystem.framework.agent.description": {
+    "message": "用于构建 Agent 和多 Agent 应用程序的框架，内置上下文工程支持。",
+    "description": "Agent framework description"
+  },
+  "ecosystem.framework.graph.name": {
+    "message": "Spring AI Alibaba Graph",
+    "description": "Graph framework name"
+  },
+  "ecosystem.framework.graph.description": {
+    "message": "用于构建、管理和部署长期运行的有状态 Agent 的低级编排框架和运行时。",
+    "description": "Graph framework description"
+  },
+  "ecosystem.framework.graphCommunity.name": {
+    "message": "Spring AI Alibaba Graph Community",
+    "description": "Graph Community name"
+  },
+  "ecosystem.framework.graphCommunity.description": {
+    "message": "Spring AI Alibaba Graph 社区版。",
+    "description": "Graph Community description"
+  },
+  "ecosystem.framework.admin.name": {
+    "message": "Spring AI Alibaba Admin",
+    "description": "Admin tool name"
+  },
+  "ecosystem.framework.admin.description": {
+    "message": "用于开发 Agent 应用程序的本地可视化工具包，支持项目管理、运行时可视化、追踪和 Agent 评估。",
+    "description": "Admin tool description"
+  },
+  "ecosystem.framework.extensions.name": {
+    "message": "Spring AI Extensions",
+    "description": "Extensions name"
+  },
+  "ecosystem.framework.extensions.description": {
+    "message": "Spring AI 核心概念的扩展实现，包括 DashScopeChatModel、MCP 注册表等。",
+    "description": "Extensions description"
+  },
+  "ecosystem.product.examples.name": {
+    "message": "Spring AI Alibaba Examples",
+    "description": "Examples name"
+  },
+  "ecosystem.product.examples.description": {
+    "message": "Spring AI Alibaba 示例项目集合。",
+    "description": "Examples description"
+  },
+  "ecosystem.product.jmanus.name": {
+    "message": "JManus",
+    "description": "JManus name"
+  },
+  "ecosystem.product.jmanus.description": {
+    "message": "基于 Spring AI Alibaba 构建的 Manus 的 Java 实现，目前在阿里巴巴集团的许多应用中使用。",
+    "description": "JManus description"
+  },
+  "ecosystem.product.dataagent.name": {
+    "message": "DataAgent",
+    "description": "DataAgent name"
+  },
+  "ecosystem.product.dataagent.description": {
+    "message": "基于 Spring AI Alibaba 的自然语言转 SQL 项目，让您可以直接使用自然语言查询数据库，无需编写复杂的 SQL。",
+    "description": "DataAgent description"
+  },
+  "ecosystem.product.deepresearch.name": {
+    "message": "DeepResearch",
+    "description": "DeepResearch name"
+  },
+  "ecosystem.product.deepresearch.description": {
+    "message": "基于 spring-ai-alibaba-graph 实现的深度研究工具。",
+    "description": "DeepResearch description"
+  },
   "codeOfConduct.title": {
     "message": "行为准则",
     "description": "The page title for code of conduct"

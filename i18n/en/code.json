@@ -242,6 +242,106 @@
     "message": "Everything you need to create beautiful documentation websites",
     "description": "Features section subtitle"
   },
+  "ecosystem.title": {
+    "message": "Spring AI Alibaba's Ecosystem",
+    "description": "Ecosystem section title"
+  },
+  "ecosystem.subtitle": {
+    "message": "A comprehensive ecosystem for building intelligent applications",
+    "description": "Ecosystem section subtitle"
+  },
+  "ecosystem.framework.title": {
+    "message": "Core Framework",
+    "description": "Framework section title"
+  },
+  "ecosystem.framework.description": {
+    "message": "Foundation frameworks for building AI-powered applications",
+    "description": "Framework section description"
+  },
+  "ecosystem.product.title": {
+    "message": "Built with Spring AI Alibaba",
+    "description": "Product section title"
+  },
+  "ecosystem.product.description": {
+    "message": "Production-ready applications powered by our framework",
+    "description": "Product section description"
+  },
+  "ecosystem.viewOnGithub": {
+    "message": "View on GitHub",
+    "description": "View on GitHub link text"
+  },
+  "ecosystem.framework.agent.name": {
+    "message": "Spring AI Alibaba Agent Framework",
+    "description": "Agent framework name"
+  },
+  "ecosystem.framework.agent.description": {
+    "message": "Framework for building agent and multi-agent applications, with embedded context engineering support.",
+    "description": "Agent framework description"
+  },
+  "ecosystem.framework.graph.name": {
+    "message": "Spring AI Alibaba Graph",
+    "description": "Graph framework name"
+  },
+  "ecosystem.framework.graph.description": {
+    "message": "A low-level orchestration framework and runtime for building, managing, and deploying long-running, stateful agents.",
+    "description": "Graph framework description"
+  },
+  "ecosystem.framework.graphCommunity.name": {
+    "message": "Spring AI Alibaba Graph Community",
+    "description": "Graph Community name"
+  },
+  "ecosystem.framework.graphCommunity.description": {
+    "message": "Spring AI Alibaba Graph Community.",
+    "description": "Graph Community description"
+  },
+  "ecosystem.framework.admin.name": {
+    "message": "Spring AI Alibaba Admin",
+    "description": "Admin tool name"
+  },
+  "ecosystem.framework.admin.description": {
+    "message": "Local visualization toolkit for the development of agent applications, supporting project management, runtime visualization, tracing, and agent evaluation.",
+    "description": "Admin tool description"
+  },
+  "ecosystem.framework.extensions.name": {
+    "message": "Spring AI Extensions",
+    "description": "Extensions name"
+  },
+  "ecosystem.framework.extensions.description": {
+    "message": "Extended implementations for Spring AI core concepts, including DashScopeChatModel, MCP registry, etc.",
+    "description": "Extensions description"
+  },
+  "ecosystem.product.examples.name": {
+    "message": "Spring AI Alibaba Examples",
+    "description": "Examples name"
+  },
+  "ecosystem.product.examples.description": {
+    "message": "Spring AI Alibaba Examples.",
+    "description": "Examples description"
+  },
+  "ecosystem.product.jmanus.name": {
+    "message": "JManus",
+    "description": "JManus name"
+  },
+  "ecosystem.product.jmanus.description": {
+    "message": "A Java implementation of Manus built with Spring AI Alibaba, currently used in many applications within Alibaba Group.",
+    "description": "JManus description"
+  },
+  "ecosystem.product.dataagent.name": {
+    "message": "DataAgent",
+    "description": "DataAgent name"
+  },
+  "ecosystem.product.dataagent.description": {
+    "message": "A natural language to SQL project based on Spring AI Alibaba, enabling you to query databases directly with natural language without writing complex SQL.",
+    "description": "DataAgent description"
+  },
+  "ecosystem.product.deepresearch.name": {
+    "message": "DeepResearch",
+    "description": "DeepResearch name"
+  },
+  "ecosystem.product.deepresearch.description": {
+    "message": "Deep Research implemented based on spring-ai-alibaba-graph.",
+    "description": "DeepResearch description"
+  },
   "codeOfConduct.title": {
     "message": "Code of Conduct",
     "description": "The page title for code of conduct"
