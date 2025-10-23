@@ -12,44 +12,104 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
  */
 
 const sidebars: SidebarsConfig = {
-  tutorialSidebar: [
+  docsSidebar: [
     'intro',
     {
       type: 'category',
-      label: '快速开始',
+      label: '开发框架',
       items: [
-        'getting-started/installation',
-        'getting-started/quickstart',
-        'getting-started/configuration',
+        {
+          type: 'category',
+          label: 'Agent Framework',
+          items: [
+            'frameworks/agent-framework/quick-start',
+            'frameworks/agent-framework/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Graph Core',
+          items: [
+            'frameworks/graph-core/quick-start',
+            'frameworks/graph-core/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Admin',
+          items: [
+            'frameworks/admin/quick-start',
+            'frameworks/admin/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Extensions',
+          items: [
+            'frameworks/extensions/quick-start',
+            'frameworks/extensions/troubleshooting',
+          ],
+        },
       ],
     },
     {
       type: 'category',
-      label: 'API 参考',
+      label: '智能体',
       items: [
-        'api/overview',
-        'api/authentication',
-      ],
-    },
-    {
-      type: 'category',
-      label: '使用示例',
-      items: [
-        'examples/basic-usage',
-      ],
-    },
-    {
-      type: 'category',
-      label: '参与贡献',
-      items: [
-        'contributing/how-to-contribute',
-      ],
-    },
-    {
-      type: 'category',
-      label: '问题排查',
-      items: [
-        'troubleshooting/common-issues',
+        {
+          type: 'category',
+          label: 'DataAgent',
+          items: [
+            'agents/dataagent/quick-start',
+            {
+              type: 'category',
+              label: '部署',
+              items: [
+                'agents/dataagent/deployment/local',
+                'agents/dataagent/deployment/docker',
+                'agents/dataagent/deployment/kubernetes',
+              ],
+            },
+            'agents/dataagent/user-guide',
+            'agents/dataagent/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'JManus',
+          items: [
+            'agents/jmanus/quick-start',
+            {
+              type: 'category',
+              label: '部署',
+              items: [
+                'agents/jmanus/deployment/local',
+                'agents/jmanus/deployment/docker',
+                'agents/jmanus/deployment/kubernetes',
+              ],
+            },
+            'agents/jmanus/user-guide',
+            'agents/jmanus/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'DeepResearch',
+          items: [
+            'agents/deepresearch/quick-start',
+            {
+              type: 'category',
+              label: '部署',
+              items: [
+                'agents/deepresearch/deployment/local',
+                'agents/deepresearch/deployment/docker',
+                'agents/deepresearch/deployment/kubernetes',
+              ],
+            },
+            'agents/deepresearch/user-guide',
+            'agents/deepresearch/troubleshooting',
+          ],
+        },
       ],
     },
   ],

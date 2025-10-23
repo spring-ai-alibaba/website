@@ -100,7 +100,7 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'docsSidebar',
           position: 'left',
           label: '文档',
         },
@@ -161,9 +161,43 @@ const config: Config = {
               label: '快速开始',
               to: '/docs/intro',
             },
+          ],
+        },
+        {
+          title: '开发框架',
+          items: [
             {
-              label: 'API 参考',
-              to: '/docs/api/overview',
+              label: 'Agent Framework',
+              to: '/docs/frameworks/agent-framework/quick-start',
+            },
+            {
+              label: 'Graph Core',
+              to: '/docs/frameworks/graph-core/quick-start',
+            },
+            {
+              label: 'Admin',
+              to: '/docs/frameworks/admin/quick-start',
+            },
+            {
+              label: 'Extensions',
+              to: '/docs/frameworks/extensions/quick-start',
+            },
+          ],
+        },
+        {
+          title: '智能体',
+          items: [
+            {
+              label: 'DataAgent',
+              to: '/docs/agents/dataagent/quick-start',
+            },
+            {
+              label: 'JManus',
+              to: '/docs/agents/jmanus/quick-start',
+            },
+            {
+              label: 'DeepResearch',
+              to: '/docs/agents/deepresearch/quick-start',
             },
           ],
         },
@@ -178,6 +212,10 @@ const config: Config = {
               label: '讨论',
               href: githubUrls.discussions,
             },
+            {
+              label: '贡献',
+              href: githubUrls.contributing,
+            },
           ],
         },
         {
@@ -188,8 +226,12 @@ const config: Config = {
               href: githubUrls.license,
             },
             {
-              label: '贡献',
-              href: githubUrls.contributing,
+              label: '博客',
+              to: '/blog',
+            },
+            {
+              label: '团队',
+              to: '/community/team',
             },
           ],
         },

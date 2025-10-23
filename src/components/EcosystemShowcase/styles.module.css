@@ -201,12 +201,21 @@
 
 .cardFooter {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 1.5rem;
   border-top: 1px solid rgba(37, 99, 235, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 [data-theme='dark'] .cardFooter {
   border-top-color: rgba(96, 165, 250, 0.2);
+}
+
+.cardLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .cardLink {
@@ -218,23 +227,35 @@
   font-size: 0.9rem;
   text-decoration: none;
   transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.1);
 }
 
 [data-theme='dark'] .cardLink {
   color: #60a5fa;
+  background: rgba(96, 165, 250, 0.05);
+  border-color: rgba(96, 165, 250, 0.15);
 }
 
 .cardLink:hover {
   color: #1d4ed8;
   gap: 0.75rem;
   text-decoration: none;
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.2);
+  transform: translateX(4px);
 }
 
 [data-theme='dark'] .cardLink:hover {
   color: #93c5fd;
+  background: rgba(96, 165, 250, 0.1);
+  border-color: rgba(96, 165, 250, 0.25);
 }
 
-.githubIcon {
+.githubIcon,
+.docIcon {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
@@ -244,6 +265,7 @@
   font-size: 1.2rem;
   font-weight: bold;
   transition: transform 0.2s ease;
+  margin-left: auto;
 }
 
 .cardLink:hover .externalIcon {

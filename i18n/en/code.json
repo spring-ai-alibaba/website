@@ -270,6 +270,10 @@
     "message": "View on GitHub",
     "description": "View on GitHub link text"
   },
+  "ecosystem.viewDocs": {
+    "message": "View Docs",
+    "description": "View documentation link text"
+  },
   "ecosystem.framework.agent.name": {
     "message": "Spring AI Alibaba Agent Framework",
     "description": "Agent framework name"

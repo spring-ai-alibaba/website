@@ -461,6 +461,10 @@
     "message": "在 GitHub 查看",
     "description": "View on GitHub link text"
   },
+  "ecosystem.viewDocs": {
+    "message": "查看文档",
+    "description": "View documentation link text"
+  },
   "ecosystem.framework.agent.name": {
     "message": "Spring AI Alibaba Agent Framework",
     "description": "Agent framework name"
