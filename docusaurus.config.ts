@@ -194,7 +194,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `版权所有 © ${new Date().getFullYear()} 您的项目团队。使用 Docusaurus 构建。`,
+      copyright: `版权所有 © ${new Date().getFullYear()} ${projectConfig.author.name}。使用 Docusaurus 构建。`,
     },
     prism: {
       theme: lightCodeTheme,

@@ -11,7 +11,7 @@ import Translate, {translate} from '@docusaurus/Translate';
 import styles from './index.module.css';
 import projectConfig, { getGitHubUrls } from '../../project.config';
 
-// Generate GitHub links from project configuration  
+// Generate GitHub links from project configuration
 const githubUrls = getGitHubUrls(projectConfig);
 
 function HomepageHeader() {
@@ -23,8 +23,8 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
             <div className={styles.titleRow}>
-              <img 
-                src="img/logo.svg" 
+              <img
+                src="img/logo.svg"
                 alt={siteConfig.title}
                 className={styles.heroLogo}
               />
@@ -35,24 +35,25 @@ function HomepageHeader() {
             <p className={clsx('hero__subtitle', styles.heroSubtitle)}>
               {siteConfig.tagline}
             </p>
-            
+
             <div className={styles.heroLabels}>
-              <span className={styles.label}>React</span>
-              <span className={styles.label}>Docs</span>
-              <span className={styles.label}>AI</span>
-              <span className={styles.label}>Docusaurus</span>
+              <span className={styles.label}>☕ Java</span>
+              <span className={styles.label}>🤖 Artificial Intelligence</span>
+              <span className={styles.label}>🍃 Spring AI</span>
+              <span className={styles.label}>🎯 Agent</span>
+              <span className={styles.label}>✨ AI-Native</span>
             </div>
-            
+
             <div className={styles.heroButtons}>
               <Link
                 className={clsx('button button--primary button--lg', styles.heroButton)}
                 to="/docs/intro">
-                📚 <Translate id="homepage.quickStart" description="Quick Start button text">快速开始</Translate>
+                <Translate id="homepage.quickStart" description="Quick Start button text">快速开始</Translate>
               </Link>
               <Link
                 className={clsx('button button--primary button--lg', styles.heroButton)}
                 to={githubUrls.repo}>
-                ⭐ <Translate id="homepage.viewOnGithub" description="View on GitHub button text">在 GitHub 查看</Translate>
+                <Translate id="homepage.viewOnGithub" description="View on GitHub button text">在 GitHub 查看</Translate>
               </Link>
             </div>
           </div>
@@ -64,51 +65,82 @@ function HomepageHeader() {
                   <div className={styles.dot}></div>
                   <div className={styles.dot}></div>
                 </div>
-                <div className={styles.codeTitle}>HelloWorld.java</div>
+                <div className={styles.codeTitle}>AIChatApplication.java</div>
               </div>
               <div className={styles.codeContent}>
+
+                 <div className={styles.codeLine}>
+                  <span className={styles.codeAnnotation}>@</span><span className={styles.codeClass}>RestController</span>
+                </div>
+                <div className={styles.codeLine}>
+                  <span className={styles.codeAnnotation}>@</span><span className={styles.codeClass}>RequestMapping</span>
+                </div>
+                <div className={styles.codeLine}>
+                  <span className={styles.codeAnnotation}>@</span><span className={styles.codeClass}>SpringBootApplication</span>{' '}
+                </div>
                 <div className={styles.codeLine}>
                   <span className={styles.codeKeyword}>public</span>{' '}
                   <span className={styles.codeKeyword}>class</span>{' '}
-                  <span className={styles.codeClass}>HelloWorld</span>{' '}
+                  <span className={styles.codeClass}>AIChatApplication</span>{' '}
                   <span className={styles.codeOperator}>{'{'}</span>
                 </div>
                 <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeComment}>// Main method - entry point</span>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeKeyword}>private</span>{' '}
+                  <span className={styles.codeKeyword}>final</span>{' '}
+                  <span className={styles.codeClass}>ChatModel</span>{' '}
+                  <span className={styles.codeVariable}>dashScopeChatModel</span><span className={styles.codeOperator}>;</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div className={styles.codeLine}>
                   &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeKeyword}>public</span>{' '}
-                  <span className={styles.codeKeyword}>static</span>{' '}
-                  <span className={styles.codeKeyword}>void</span>{' '}
-                  <span className={styles.codeMethod}>main</span><span className={styles.codeOperator}>(</span><span className={styles.codeClass}>String</span><span className={styles.codeOperator}>[]</span>{' '}
-                  <span className={styles.codeVariable}>args</span><span className={styles.codeOperator}>)</span>{' '}
+                  <span className={styles.codeMethod}>AIChatApplication</span><span className={styles.codeOperator}>(</span><span className={styles.codeClass}>ChatModel</span>{' '}
+                  <span className={styles.codeVariable}>chatModel</span><span className={styles.codeOperator}>)</span>{' '}
                   <span className={styles.codeOperator}>{'{'}</span>
                 </div>
                 <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeComment}>// Print welcome message</span>
-                </div>
-                <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeClass}>System</span><span className={styles.codeOperator}>.</span><span className={styles.codeVariable}>out</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>println</span><span className={styles.codeOperator}>(</span><span className={styles.codeString}>"🚀 Hello, World!"</span><span className={styles.codeOperator}>);</span>
-                </div>
-                <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeClass}>System</span><span className={styles.codeOperator}>.</span><span className={styles.codeVariable}>out</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>println</span><span className={styles.codeOperator}>(</span><span className={styles.codeString}>"✨ Welcome to Java!"</span><span className={styles.codeOperator}>);</span>
-                </div>
-                <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeComment}>// Display current time</span>
-                </div>
-                <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeClass}>LocalDateTime</span>{' '}
-                  <span className={styles.codeVariable}>now</span>{' '}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeKeyword}>this</span><span className={styles.codeOperator}>.</span><span className={styles.codeVariable}>dashScopeChatModel</span>{' '}
                   <span className={styles.codeOperator}>=</span>{' '}
-                  <span className={styles.codeClass}>LocalDateTime</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>now</span><span className={styles.codeOperator}>();</span>
+                  <span className={styles.codeVariable}>chatModel</span><span className={styles.codeOperator}>;</span>
                 </div>
                 <div className={styles.codeLine}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeClass}>System</span><span className={styles.codeOperator}>.</span><span className={styles.codeVariable}>out</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>println</span><span className={styles.codeOperator}>(</span><span className={styles.codeString}>"⏰ Current time: "</span>{' '}
-                  <span className={styles.codeOperator}>+</span>{' '}
-                  <span className={styles.codeVariable}>now</span><span className={styles.codeOperator}>);</span>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeOperator}>{'}'}</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeAnnotation}>@</span><span className={styles.codeClass}>GetMapping</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeKeyword}>public</span>{' '}
+                  <span className={styles.codeClass}>String</span>{' '}
+                  <span className={styles.codeMethod}>chat</span><span className={styles.codeOperator}>()</span>{' '}
+                  <span className={styles.codeOperator}>{'{'}</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeKeyword}>return</span>{' '}
+                  <span className={styles.codeVariable}>dashScopeChatModel</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>call</span><span className={styles.codeOperator}>(</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeKeyword}>new</span>{' '}
+                  <span className={styles.codeClass}>Prompt</span><span className={styles.codeOperator}>(</span><span className={styles.codeVariable}>DEFAULT_PROMPT</span><span className={styles.codeOperator}>,</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeClass}>DashScopeChatOptions</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>builder</span><span className={styles.codeOperator}>()</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>withModel</span><span className={styles.codeOperator}>(</span><span className={styles.codeClass}>DashScopeApi</span><span className={styles.codeOperator}>.</span><span className={styles.codeClass}>ChatModel</span><span className={styles.codeOperator}>.</span><span className={styles.codeVariable}>QWEN_PLUS</span><span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>getValue</span><span className={styles.codeOperator}>())</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>build</span><span className={styles.codeOperator}>()))</span>
+                </div>
+                <div className={styles.codeLine}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeOperator}>.</span><span className={styles.codeMethod}>getResult</span><span className={styles.codeOperator}>().</span><span className={styles.codeMethod}>getOutput</span><span className={styles.codeOperator}>().</span><span className={styles.codeMethod}>getText</span><span className={styles.codeOperator}>();</span>
                 </div>
                 <div className={styles.codeLine}>
                   &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.codeOperator}>{'}'}</span>
@@ -125,23 +157,40 @@ function HomepageHeader() {
   );
 }
 
+function ArchitectureSection() {
+  return (
+    <section className={styles.architectureSection}>
+      <div className="container">
+        <div className={styles.architectureContent}>
+          <h2 className={styles.architectureTitle}>
+            <Translate id="homepage.architecture.title" description="Architecture section title">
+              帮助 Java 开发者步入 AI Native 时代
+            </Translate>
+          </h2>
+
+          <div className={styles.architectureImageWrapper}>
+            <img
+              src="/img/index/index.webp"
+              alt="Spring AI Alibaba Architecture"
+              className={styles.architectureImage}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={translate({
-        id: 'homepage.title',
-        message: '欢迎使用项目名称',
-        description: 'The homepage title'
-      })}
-      description={translate({
-        id: 'homepage.description', 
-        message: "基于 Docusaurus 3 构建的双主题文档网站模板",
-        description: 'The homepage description'
-      })}>
+      title={`${siteConfig.title}`}
+      description={siteConfig.tagline}>
       <MeteorShower />
       <HomepageHeader />
       <main>
+        <ArchitectureSection />
         <HomepageFeatures />
       </main>
     </Layout>
