@@ -127,7 +127,7 @@ public class CustomerServiceWorkflow {
 
 ## 2. 核心架构与设计理念
 ### 2.1 整体数据流转架构
-Spring AI Alibaba Graph采用工作流模型，整个框架的数据流转遵循**"构建→编译→执行"**的三阶段模式：
+Spring AI Alibaba Graph采用工作流模型，整个框架的数据流转遵循 **"构建→编译→执行"** 的三阶段模式：
 
 #### 2.1.1 完整数据流转图
 ```mermaid
@@ -220,7 +220,7 @@ sequenceDiagram
 #### 2.1.3 关键数据结构流转
 **StateGraph → CompiledGraph转换**：
 
-![](https://intranetproxy.alipay.com/skylark/lark/__mermaid_v3/979bf52eab8822fff807e7a5503daaab.svg)
+![](https://img.alicdn.com/imgextra/i3/O1CN01HzwSUg24TaojHgPX8_!!6000000007392-2-tps-1165-355.png)
 
 **AsyncNodeGenerator执行机制**：
 
@@ -1931,7 +1931,7 @@ public CompiledGraph compiledGraph(StateGraph observabilityGraph,
 #### 5.1.3 详细文档
 关于Spring AI Alibaba Graph观测性的完整架构设计、实现原理、配置方式、最佳实践等详细内容，请参考官方观测性文档：
 
-**Graph观测性完整指南** ：[Spring AI Alibaba Graph观测性设计与实现](https://www.yuque.com/disaster-4qc4i/xhs01z/qrh6lv7m3sexgvr4)
+**Graph观测性完整指南**：[Spring AI Alibaba Graph观测性设计与实现](https://www.yuque.com/disaster-4qc4i/xhs01z/qrh6lv7m3sexgvr4)
 
 该文档涵盖：
 
@@ -2434,7 +2434,7 @@ public class SubGraphAction implements AsyncNodeActionWithConfig {
 **中断与恢复机制是工作流的容错保障**，它让工作流能够在遇到需要人工干预或外部条件不满足时优雅地暂停执行，并在条件满足后无缝恢复。这种机制对于构建可靠的企业级AI应用至关重要。
 
 #### 5.4.1 中断机制原理
-![](https://intranetproxy.alipay.com/skylark/lark/__mermaid_v3/907d68f2b8ff7922dc636cd4ba166fee.svg)
+![](https://img.alicdn.com/imgextra/i2/O1CN01VjN49r1RkIFDsWAR6_!!6000000002149-2-tps-498-660.png)
 
 #### 5.4.2 中断条件配置
 **InterruptBefore - 节点执行前中断**：
