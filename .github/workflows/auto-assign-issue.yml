@@ -1,0 +1,75 @@
+name: Auto Assign Issue to Team Member
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  assign-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install PyYAML requests
+
+      - name: Randomly assign team member
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python - <<'EOF'
+          import yaml
+          import random
+          import os
+          import requests
+
+          # Read team members from YAML file
+          with open('tools/github-actions/team/spring-ai-alibaba-team.yml', 'r', encoding='utf-8') as f:
+              team_data = yaml.safe_load(f)
+
+          members = team_data['members']
+
+          # Randomly select a team member
+          selected_member = random.choice(members)
+
+          # Get environment variables
+          github_token = os.environ['GITHUB_TOKEN']
+          issue_number = os.environ['ISSUE_NUMBER']
+          repository = os.environ['REPOSITORY']
+
+          # Create comment mentioning the selected team member
+          comment_body = f"👋 Hello! Thank you for submitting this issue.\n\n@{selected_member} has been randomly assigned to help with this issue.\n\nOther team members may also provide assistance if needed. Thank you for your contribution to Spring AI Alibaba!"
+
+          # Post comment via GitHub API
+          url = f"https://api.github.com/repos/{repository}/issues/{issue_number}/comments"
+          headers = {
+              'Authorization': f'token {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+          data = {
+              'body': comment_body
+          }
+
+          response = requests.post(url, headers=headers, json=data)
+
+          if response.status_code == 201:
+              print(f"✅ Successfully assigned issue to @{selected_member}")
+          else:
+              print(f"❌ Failed to post comment: {response.status_code}")
+              print(response.text)
+              exit(1)
+
+          EOF

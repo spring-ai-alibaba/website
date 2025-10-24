@@ -1,0 +1,182 @@
+name: Auto Assign PR Reviewers
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  assign-reviewers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install PyGithub
+
+      - name: Assign reviewers based on OWNERS
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPOSITORY: ${{ github.repository }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          python - <<'EOF'
+          import os
+          import sys
+          from pathlib import Path
+          from github import Github
+          import re
+
+          def find_owners_file(file_path):
+              """
+              Find the nearest OWNERS file for a given file path.
+              Searches from the file's directory up to the root.
+              """
+              path = Path(file_path)
+
+              # Start from the file's directory and work up to root
+              current_dir = path.parent if path.is_file() else path
+
+              while True:
+                  owners_file = current_dir / 'OWNERS'
+                  if owners_file.exists():
+                      return owners_file
+
+                  # If we've reached the root, stop
+                  if current_dir == current_dir.parent:
+                      break
+
+                  current_dir = current_dir.parent
+
+              return None
+
+          def parse_owners_file(owners_file_path):
+              """
+              Parse OWNERS file and extract GitHub usernames.
+              Supports both @username and username formats.
+              """
+              owners = set()
+
+              try:
+                  with open(owners_file_path, 'r', encoding='utf-8') as f:
+                      for line in f:
+                          line = line.strip()
+                          # Skip comments and empty lines
+                          if not line or line.startswith('#'):
+                              continue
+
+                          # Extract GitHub usernames (with or without @)
+                          matches = re.findall(r'@([a-zA-Z0-9_-]+)', line)
+                          owners.update(matches)
+
+                          # Also support lines without @ prefix
+                          if not matches and line and not line.startswith('#'):
+                              # Remove any leading @ if present
+                              username = line.lstrip('@').strip()
+                              if username:
+                                  owners.add(username)
+
+              except Exception as e:
+                  print(f"Error reading OWNERS file {owners_file_path}: {e}")
+
+              return owners
+
+          def main():
+              # Get environment variables
+              github_token = os.environ['GITHUB_TOKEN']
+              pr_number = int(os.environ['PR_NUMBER'])
+              repository = os.environ['REPOSITORY']
+
+              # Initialize GitHub client
+              g = Github(github_token)
+              repo = g.get_repo(repository)
+              pr = repo.get_pull(pr_number)
+
+              # Get the list of changed files in the PR
+              changed_files = pr.get_files()
+
+              # Collect all owners for changed files
+              all_owners = set()
+              file_owner_map = {}
+
+              for file in changed_files:
+                  file_path = file.filename
+                  owners_file = find_owners_file(Path(file_path))
+
+                  if owners_file:
+                      owners = parse_owners_file(owners_file)
+                      if owners:
+                          all_owners.update(owners)
+                          file_owner_map[file_path] = {
+                              'owners_file': str(owners_file),
+                              'owners': list(owners)
+                          }
+                          print(f"📄 {file_path}")
+                          print(f"   → OWNERS file: {owners_file}")
+                          print(f"   → Owners: {', '.join(f'@{o}' for o in owners)}")
+
+              if not all_owners:
+                  print("ℹ️ No OWNERS files found for changed files.")
+                  return
+
+              # Remove the PR author from the owners list
+              pr_author = pr.user.login
+              all_owners.discard(pr_author)
+
+              if not all_owners:
+                  print("ℹ️ No reviewers to assign (PR author is the only owner).")
+                  return
+
+              # Create a comment mentioning the owners
+              owners_mentions = ' '.join(f'@{owner}' for owner in sorted(all_owners))
+
+              # Build a detailed message
+              comment_lines = [
+                  "👋 Hello! Thank you for submitting this PR.",
+                  "",
+                  f"According to the OWNERS files, the following users have been assigned to review this PR:",
+                  f"{owners_mentions}",
+                  "",
+                  "📋 **Changed Files and Their Reviewers:**"
+              ]
+
+              # Group files by owners
+              for file_path, info in sorted(file_owner_map.items()):
+                  owners_str = ', '.join(f'@{o}' for o in info['owners'])
+                  comment_lines.append(f"- `{file_path}` → {owners_str}")
+
+              comment_lines.extend([
+                  "",
+                  "Thank you for your contribution to Spring AI Alibaba! 🎉"
+              ])
+
+              comment_body = '\n'.join(comment_lines)
+
+              # Post comment
+              pr.create_issue_comment(comment_body)
+              print(f"\n✅ Successfully assigned reviewers: {owners_mentions}")
+
+              # Try to request reviews (this may fail if users don't have permission)
+              try:
+                  pr.create_review_request(reviewers=list(all_owners))
+                  print("✅ Review requests sent successfully")
+              except Exception as e:
+                  print(f"⚠️ Could not send review requests: {e}")
+                  print("   (Comment was still posted successfully)")
+
+          if __name__ == '__main__':
+              main()
+          EOF
