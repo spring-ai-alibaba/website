@@ -842,7 +842,7 @@
     "description": "Contributing guide button"
   },
   "team.viewIssues": {
-    "message": "查看问题",
+    "message": "查看社区 Issue",
     "description": "View issues button"
   }
 }

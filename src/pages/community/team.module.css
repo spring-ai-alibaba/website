@@ -466,13 +466,19 @@
   background: var(--card-bg);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border-light);
-  border-radius: 24px;
-  padding: 3rem;
+  border-radius: 20px;
+  padding: 2.5rem;
   box-shadow: var(--card-shadow);
   text-align: center;
-  max-width: 600px;
+  width: 100%;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.joinCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .joinCard::before {
@@ -590,6 +596,221 @@
   }
 }
 
+/* Member Tables */
+.memberTable {
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.teamTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-light);
+}
+
+.teamTable th,
+.teamTable td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.teamTable th {
+  background: var(--ifm-color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.teamTable tr:last-child td {
+  border-bottom: none;
+}
+
+.teamTable tr:hover {
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.teamTable img {
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+}
+
+.teamTable a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.teamTable a:hover {
+  text-decoration: underline;
+}
+
+/* Section styles from code of conduct */
+.section {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.sectionContent {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.standards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.standardsColumn {
+  background: rgba(37, 99, 235, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+[data-theme='dark'] .standardsColumn {
+  background: rgba(96, 165, 250, 0.08);
+}
+
+.standardsTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.standardsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.standardsList li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 2rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.standardsList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  color: var(--ifm-color-primary);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Member table styles */
+.memberTable {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.tableCell {
+  display: flex;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.memberItem:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.memberAvatarSmall {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ifm-color-primary);
+  flex-shrink: 0;
+}
+
+.memberInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.memberInfo h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.memberOrg {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.profileLink {
+  font-size: 0.9rem;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.profileLink:hover {
+  color: var(--ifm-color-primary-dark);
+  text-decoration: underline;
+}
+
+.termStart {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
 /* Animation on scroll */
 @keyframes fadeInUp {
   from {
@@ -625,4 +846,77 @@
 .joinCard {
   animation: fadeInUp 0.8s ease forwards;
   animation-delay: 0.5s;
+}
+
+/* Responsive design for member table */
+@media screen and (max-width: 768px) {
+  .tableRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .memberItem {
+    padding: 1rem;
+  }
+  
+  .memberAvatarSmall {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .memberInfo h4 {
+    font-size: 1rem;
+  }
+  
+  .memberOrg,
+  .profileLink,
+  .termStart {
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive design for standards grid */
+@media screen and (max-width: 768px) {
+  .section {
+    padding: 1.5rem;
+    margin: 0 1rem 1.5rem;
+  }
+  
+  .standards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .standardsColumn {
+    padding: 1rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+  
+  .sectionContent {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive table */
+@media screen and (max-width: 768px) {
+  .memberTable {
+    margin: 1rem 0;
+  }
+  
+  .teamTable {
+    font-size: 0.9rem;
+  }
+  
+  .teamTable th,
+  .teamTable td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .teamTable img {
+    width: 25px;
+    height: 25px;
+  }
 }
