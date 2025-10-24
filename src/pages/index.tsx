@@ -27,7 +27,7 @@ public class AIChatApplication {
     @GetMapping
     public String chat() {
         return dashScopeChatModel.call(
-            new Prompt(DEFAULT_PROMPT,
+            new Prompt("hi, llms",
                 DashScopeChatOptions.builder()
                     .withModel(DashScopeApi.ChatModel.QWEN_PLUS.getValue())
                     .build()))
@@ -119,7 +119,11 @@ function NeuralNetwork() {
 }
 
 // Feature Card Component
-function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+function FeatureCard({ icon, title, description }: {
+  icon: string;
+  title: React.ReactNode;
+  description: React.ReactNode;
+}) {
   return (
     <div className={styles.featureCard}>
       <div className={styles.featureIcon}>{icon}</div>
@@ -242,46 +246,82 @@ function ArchitectureSection() {
   );
 }
 
-function FeaturesSection() {
+function AcknowledgmentsSection() {
   return (
     <section className={styles.featuresSection}>
       <div className="container">
         <h2 className={styles.sectionTitle}>
-          <Translate id="homepage.features.title" description="Features section title">
-            核心特性
+          <Translate id="homepage.acknowledgments.title" description="Acknowledgments section title">
+            致谢
           </Translate>
         </h2>
-        <div className={styles.featuresGrid}>
-          <FeatureCard
-            icon="🍃"
-            title="Spring 生态无缝集成"
-            description="基于 Spring AI 构建，完美融入 Spring Boot 生态系统，开箱即用"
-          />
-          <FeatureCard
-            icon="🤖"
-            title="通义大模型支持"
-            description="深度集成阿里云通义千问系列模型，提供强大的 AI 能力"
-          />
-          <FeatureCard
-            icon="⚡"
-            title="高性能异步处理"
-            description="支持流式响应和异步调用，满足高并发场景需求"
-          />
-          <FeatureCard
-            icon="🔧"
-            title="灵活的配置选项"
-            description="丰富的配置项和扩展点，满足不同业务场景的定制需求"
-          />
-          <FeatureCard
-            icon="🌐"
-            title="多模态 AI 能力"
-            description="支持文本、图像、语音等多种模态的 AI 处理能力"
-          />
-          <FeatureCard
-            icon="📊"
-            title="可观测性支持"
-            description="内置监控指标和追踪能力，轻松掌握 AI 应用运行状态"
-          />
+        <p className={styles.sectionSubtitle}>
+          <Translate id="homepage.acknowledgments.subtitle" description="Acknowledgments section subtitle">
+            Spring AI Alibaba 的成功离不开开源社区和合作伙伴的支持
+          </Translate>
+        </p>
+        <div className={styles.acknowledgmentsGrid}>
+          <div className={styles.acknowledgmentCard}>
+            <div className={styles.acknowledgmentIcon}>
+              <img
+                src="https://docs.spring.io/spring-ai/reference/_images/spring_ai_logo_with_text.svg"
+                alt="Spring AI Logo"
+                style={{ width: '100%', height: 'auto', maxWidth: '120px' }}
+              />
+            </div>
+            <h3 className={styles.acknowledgmentTitle}>Spring AI</h3>
+            <p className={styles.acknowledgmentDescription}>
+              <Translate id="homepage.acknowledgments.springai.description" description="Spring AI acknowledgment">
+                感谢 Spring AI 团队提供的优秀框架，为 AI 应用开发提供了坚实的基础
+              </Translate>
+            </p>
+            <a
+              href="https://github.com/spring-projects/spring-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.acknowledgmentLink}
+            >
+              <Translate id="homepage.acknowledgments.viewOnGithub" description="View on GitHub">
+                访问 GitHub
+              </Translate>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.707 9.293a1 1 0 01-1.414 1.414L9 9.414V13a1 1 0 11-2 0V9.414L5.707 10.707a1 1 0 01-1.414-1.414l3-3a1 1 0 011.414 0l3 3z"/>
+              </svg>
+            </a>
+          </div>
+
+          <div className={styles.acknowledgmentCard}>
+            <div className={styles.acknowledgmentIcon}>
+              <img
+                src="https://img.alicdn.com/imgextra/i1/O1CN01p9GgeC2AENLT5qzaQ_!!6000000008171-2-tps-162-162.png"
+                alt="Bailian Logo"
+                style={{ width: '100%', height: 'auto', maxWidth: '120px' }}
+              />
+            </div>
+            <h3 className={styles.acknowledgmentTitle}>
+              <Translate id="homepage.acknowledgments.bailian.name" description="Bailian name">
+                阿里云百炼大模型服务平台
+              </Translate>
+            </h3>
+            <p className={styles.acknowledgmentDescription}>
+              <Translate id="homepage.acknowledgments.bailian.description" description="Bailian acknowledgment">
+                感谢阿里云百炼平台提供强大的大模型能力和完善的服务支持
+              </Translate>
+            </p>
+            <a
+              href="https://www.aliyun.com/product/bailian"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.acknowledgmentLink}
+            >
+              <Translate id="homepage.acknowledgments.learnMore" description="Learn more">
+                了解更多
+              </Translate>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.707 9.293a1 1 0 01-1.414 1.414L9 9.414V13a1 1 0 11-2 0V9.414L5.707 10.707a1 1 0 01-1.414-1.414l3-3a1 1 0 011.414 0l3 3z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -298,8 +338,8 @@ export default function Home() {
       <HomepageHeader />
       <main>
         <ArchitectureSection />
-        <FeaturesSection />
         <EcosystemShowcase />
+        <AcknowledgmentsSection />
       </main>
     </Layout>
   );

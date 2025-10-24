@@ -433,6 +433,86 @@
     "message": "创建精美文档网站所需的一切功能",
     "description": "Features section subtitle"
   },
+  "homepage.architecture.title": {
+    "message": "帮助 Java 开发者步入 AI Native 时代",
+    "description": "Architecture section title"
+  },
+  "homepage.features.springIntegration.title": {
+    "message": "Spring 生态无缝集成",
+    "description": "Spring integration feature title"
+  },
+  "homepage.features.springIntegration.description": {
+    "message": "基于 Spring AI 构建，完美融入 Spring Boot 生态系统，开箱即用",
+    "description": "Spring integration feature description"
+  },
+  "homepage.features.tongyi.title": {
+    "message": "通义大模型支持",
+    "description": "Tongyi model feature title"
+  },
+  "homepage.features.tongyi.description": {
+    "message": "深度集成阿里云通义千问系列模型，提供强大的 AI 能力",
+    "description": "Tongyi model feature description"
+  },
+  "homepage.features.performance.title": {
+    "message": "高性能异步处理",
+    "description": "Performance feature title"
+  },
+  "homepage.features.performance.description": {
+    "message": "支持流式响应和异步调用，满足高并发场景需求",
+    "description": "Performance feature description"
+  },
+  "homepage.features.configuration.title": {
+    "message": "灵活的配置选项",
+    "description": "Configuration feature title"
+  },
+  "homepage.features.configuration.description": {
+    "message": "丰富的配置项和扩展点，满足不同业务场景的定制需求",
+    "description": "Configuration feature description"
+  },
+  "homepage.features.multimodal.title": {
+    "message": "多模态 AI 能力",
+    "description": "Multimodal feature title"
+  },
+  "homepage.features.multimodal.description": {
+    "message": "支持文本、图像、语音等多种模态的 AI 处理能力",
+    "description": "Multimodal feature description"
+  },
+  "homepage.features.observability.title": {
+    "message": "可观测性支持",
+    "description": "Observability feature title"
+  },
+  "homepage.features.observability.description": {
+    "message": "内置监控指标和追踪能力，轻松掌握 AI 应用运行状态",
+    "description": "Observability feature description"
+  },
+  "homepage.acknowledgments.title": {
+    "message": "致谢",
+    "description": "Acknowledgments section title"
+  },
+  "homepage.acknowledgments.subtitle": {
+    "message": "Spring AI Alibaba 的成功离不开开源社区和合作伙伴的支持",
+    "description": "Acknowledgments section subtitle"
+  },
+  "homepage.acknowledgments.springai.description": {
+    "message": "感谢 Spring AI 团队提供的优秀框架，为 AI 应用开发提供了坚实的基础",
+    "description": "Spring AI acknowledgment"
+  },
+  "homepage.acknowledgments.bailian.name": {
+    "message": "阿里云百炼大模型服务平台",
+    "description": "Bailian name"
+  },
+  "homepage.acknowledgments.bailian.description": {
+    "message": "感谢阿里云百炼平台提供强大的大模型能力和完善的服务支持",
+    "description": "Bailian acknowledgment"
+  },
+  "homepage.acknowledgments.viewOnGithub": {
+    "message": "访问 GitHub",
+    "description": "View on GitHub"
+  },
+  "homepage.acknowledgments.learnMore": {
+    "message": "了解更多",
+    "description": "Learn more"
+  },
   "ecosystem.title": {
     "message": "Spring AI Alibaba 生态系统",
     "description": "Ecosystem section title"
