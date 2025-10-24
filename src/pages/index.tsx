@@ -235,7 +235,7 @@ function ArchitectureSection() {
 
           <div className={styles.architectureImageWrapper}>
             <img
-              src="/img/index/index.webp"
+              src="/img/index/index.png"
               alt="Spring AI Alibaba Architecture"
               className={styles.architectureImage}
             />
