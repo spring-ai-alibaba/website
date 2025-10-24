@@ -940,5 +940,237 @@
   "theme.tags.tagsPageTitle": {
     "message": "Tags",
     "description": "The title of the tag list page"
+  },
+  "team.rolesSection": {
+    "message": "Community Contributor Roles",
+    "description": "Roles section title"
+  },
+  "team.rolesSectionDescription": {
+    "message": "Spring AI Alibaba community adopts a hierarchical role system, each role has clear responsibilities and promotion standards",
+    "description": "Roles section description"
+  },
+  "team.pmc.title": {
+    "message": "Project Management Committee",
+    "description": "PMC section title"
+  },
+  "team.pmc.intro": {
+    "message": "Project Management serves as the project management committee for Spring AI Alibaba project. Its members are individuals who have made significant contributions to the evolution and development of the Spring AI Alibaba project, including the following standards:",
+    "description": "PMC introduction"
+  },
+  "team.pmc.coreDevTitle": {
+    "message": "Core Development Capability",
+    "description": "PMC core development title"
+  },
+  "team.pmc.coreDev1": {
+    "message": "Complete design and development of multiple key modules or projects",
+    "description": "PMC core development requirement 1"
+  },
+  "team.pmc.coreDev2": {
+    "message": "Core developer of the project",
+    "description": "PMC core development requirement 2"
+  },
+  "team.pmc.commitmentTitle": {
+    "message": "Continuous Commitment",
+    "description": "PMC commitment title"
+  },
+  "team.pmc.commitment1": {
+    "message": "Sustained commitment and passion",
+    "description": "PMC commitment requirement 1"
+  },
+  "team.pmc.commitment2": {
+    "message": "Actively participate in community, website, Issue, PR and other project maintenance",
+    "description": "PMC commitment requirement 2"
+  },
+  "team.pmc.influenceTitle": {
+    "message": "Community Influence",
+    "description": "PMC influence title"
+  },
+  "team.pmc.influence1": {
+    "message": "Has visible influence in the community",
+    "description": "PMC influence requirement 1"
+  },
+  "team.pmc.influence2": {
+    "message": "Can represent Spring AI Alibaba to participate in important conferences and events",
+    "description": "PMC influence requirement 2"
+  },
+  "team.pmc.mentoringTitle": {
+    "message": "Talent Development",
+    "description": "PMC mentoring title"
+  },
+  "team.pmc.mentoring1": {
+    "message": "Awareness of cultivating Committers and Contributors",
+    "description": "PMC mentoring requirement 1"
+  },
+  "team.pmc.mentoring2": {
+    "message": "Ability to develop talent",
+    "description": "PMC mentoring requirement 2"
+  },
+  "team.pmc.election": {
+    "message": "Project Management Members are selected from senior Committers, discussed and voted on by all Project Management members, and require more than half of the total votes to be elected.",
+    "description": "PMC election process"
+  },
+  "team.committer.title": {
+    "message": "Committer",
+    "description": "Committer section title"
+  },
+  "team.committer.intro": {
+    "message": "Committers are individuals with repository write permissions, including the following standards:",
+    "description": "Committer introduction"
+  },
+  "team.committer.contributionTitle": {
+    "message": "Continuous Contribution",
+    "description": "Committer contribution title"
+  },
+  "team.committer.contribution1": {
+    "message": "Able to make continuous contributions over a long period",
+    "description": "Committer contribution requirement 1"
+  },
+  "team.committer.contribution2": {
+    "message": "Individuals who continuously contribute Issues and PRs",
+    "description": "Committer contribution requirement 2"
+  },
+  "team.committer.featureTitle": {
+    "message": "Important Feature Contributions",
+    "description": "Committer feature title"
+  },
+  "team.committer.feature1": {
+    "message": "Made important feature contributions to the community",
+    "description": "Committer feature requirement"
+  },
+  "team.committer.participationTitle": {
+    "message": "Community Participation",
+    "description": "Committer participation title"
+  },
+  "team.committer.participation1": {
+    "message": "Participate in Issue list maintenance",
+    "description": "Committer participation requirement 1"
+  },
+  "team.committer.participation2": {
+    "message": "Important feature discussions",
+    "description": "Committer participation requirement 2"
+  },
+  "team.committer.participation3": {
+    "message": "Host community weekly meetings and participate in sharing",
+    "description": "Committer participation requirement 3"
+  },
+  "team.committer.quarterlyTitle": {
+    "message": "Quarterly Plan Participation",
+    "description": "Committer quarterly title"
+  },
+  "team.committer.quarterly1": {
+    "message": "Participated in at least 1 community quarterly active contributor plan",
+    "description": "Committer quarterly requirement"
+  },
+  "team.committer.reviewTitle": {
+    "message": "Code Review",
+    "description": "Committer review title"
+  },
+  "team.committer.review1": {
+    "message": "Participate in code review",
+    "description": "Committer review requirement"
+  },
+  "team.committer.election": {
+    "message": "Committers are nominated and voted by Steering Committee members, requiring at least 3 affirmative votes to be elected.",
+    "description": "Committer election process"
+  },
+  "team.contributor.title": {
+    "message": "Contributor",
+    "description": "Contributor section title"
+  },
+  "team.contributor.intro": {
+    "message": "Contributors are individuals who have contributed to the project. The standard is: submitted a PR and it was merged.",
+    "description": "Contributor introduction"
+  },
+  "team.governanceSection": {
+    "message": "Project Governance Team",
+    "description": "Governance section title"
+  },
+  "team.governanceSectionDescription": {
+    "message": "The following are the governance team members of the Spring AI Alibaba project, who are responsible for the daily operations and important decisions of the project",
+    "description": "Governance section description"
+  },
+  "team.pmcMembersTitle": {
+    "message": "Project Management Committee (PMC) Members",
+    "description": "PMC members title"
+  },
+  "team.committersTitle": {
+    "message": "Committers",
+    "description": "Committers title"
+  },
+  "team.organization": {
+    "message": "Organization",
+    "description": "Organization label"
+  },
+  "team.termStart": {
+    "message": "Term Start",
+    "description": "Term start label"
+  },
+  "contributing.welcomeTitle": {
+    "message": "Welcome to Contribute",
+    "description": "Welcome contribution title"
+  },
+  "contributing.contributionTypesTitle": {
+    "message": "Contribution Types",
+    "description": "Contribution types title"
+  },
+  "contributing.codeDevelopment": {
+    "message": "Code Development",
+    "description": "Code development title"
+  },
+  "contributing.codeDevelopmentText": {
+    "message": "Develop your own features. After development, it is recommended to use the mvn clean package command to ensure that the modified code can be compiled locally. This command also automatically formats the code in the Spring way. Then submit the code. Before submitting code, please note to create a new branch related to this feature for code submission.",
+    "description": "Code development description"
+  },
+  "contributing.qualityCheck": {
+    "message": "Code Quality Check",
+    "description": "Quality check title"
+  },
+  "contributing.qualityCheckText": {
+    "message": "After completing local BOE environment development, it is strongly recommended to execute the make command provided by the project tools/make for local continuous integration (CI) checks before submitting a PR to ensure that the code meets the project's standards and specifications. If you have any questions about local CI, you can type make help in the console to learn specific information.",
+    "description": "Quality check description"
+  },
+  "contributing.codeStandards": {
+    "message": "Code Standards",
+    "description": "Code standards title"
+  },
+  "contributing.codeStandardsText": {
+    "message": "To reduce some unnecessary code style issues, Spring AI Alibaba provides local Checkstyle check functionality. You can execute the mvn checkstyle:check command in the project root directory to check whether the code style meets the specifications.",
+    "description": "Code standards description"
+  },
+  "contributing.codeCleaning": {
+    "message": "Code Cleaning",
+    "description": "Code cleaning title"
+  },
+  "contributing.codeCleaningText": {
+    "message": "To ensure code cleanliness, please delete unused imports in Java files. You can automatically delete unused imports by executing the mvn spotless:apply command.",
+    "description": "Code cleaning description"
+  },
+  "contributing.codeCommit": {
+    "message": "Code Commit",
+    "description": "Code commit title"
+  },
+  "contributing.codeCommitText": {
+    "message": "After coding is completed, you need to format & check the commit information based on the PR specification [lint-pr-title.yml](.github/workflows/lint-pr-title.yml) to ensure that the commit information meets the specifications.",
+    "description": "Code commit description"
+  },
+  "contributing.commitFormat": {
+    "message": "Commit format: git commit -m \"type(module): space compliant commit message\", for example: feat(docs): contribute-zh update",
+    "description": "Commit format example"
+  },
+  "contributing.prSubmission": {
+    "message": "PR Submission",
+    "description": "PR submission title"
+  },
+  "contributing.prSubmissionText": {
+    "message": "Submit a PR, write down the modifications and implemented functions according to the Pull request template, wait for code review and merge, become a Spring AI Alibaba Contributor, and contribute to better Spring AI Alibaba.",
+    "description": "PR submission description"
+  },
+  "contributing.codeMerge": {
+    "message": "Code Merge",
+    "description": "Code merge title"
+  },
+  "contributing.codeOfConductTitle": {
+    "message": "Code of Conduct",
+    "description": "Code of conduct title"
   }
 }

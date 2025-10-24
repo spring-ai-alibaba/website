@@ -1,12 +1,13 @@
 .teamPage {
-  padding: 2rem 0 4rem;
-  background: var(--ifm-background-color);
+  padding: 4rem 0 6rem;
+  background: transparent;
   min-height: 80vh;
+  position: relative;
 }
 
 /* Ensure consistent starry background in dark mode */
 [data-theme='dark'] .teamPage {
-  background: var(--space-black) !important;
+  background: transparent !important;
 }
 
 /* Common styles */
@@ -310,27 +311,163 @@
 
 .teamHeader {
   text-align: center;
-  margin-bottom: 3rem;
-  max-width: 800px;
+  margin-bottom: 4rem;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(30px);
+  border-radius: 30px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .teamHeader {
+  background: rgba(31, 41, 55, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* 分区样式 */
+.rolesSection {
+  margin-bottom: 6rem;
+  position: relative;
+  padding: 3rem 0;
+}
+
+.rolesSection::before {
+  content: '';
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+  border-radius: 2px;
+}
+
+.governanceSection {
+  margin-bottom: 4rem;
+  position: relative;
+  padding: 3rem 0;
+}
+
+.governanceSection::before {
+  content: '';
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #ec4899, #f59e0b, transparent);
+  border-radius: 2px;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.mainSectionTitle {
+  font-size: 2.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 1.5rem;
+}
+
+.mainSectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, #ec4899, transparent);
+  border-radius: 2px;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.rolesSection .mainSectionTitle {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rolesSection .mainSectionTitle::after {
+  background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+}
+
+.governanceSection .mainSectionTitle {
+  background: linear-gradient(135deg, #ec4899, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.governanceSection .mainSectionTitle::after {
+  background: linear-gradient(90deg, transparent, #ec4899, #f59e0b, transparent);
+}
+
+.mainSectionDescription {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 1.5rem auto 0;
+  font-weight: 500;
+}
+
+/* 分隔线 */
+.rolesSection::after {
+  content: '';
+  position: absolute;
+  bottom: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
 }
 
 .teamTitle {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light), #7c3aed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
 }
 
 .teamDescription {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.8;
   margin: 0;
+  font-weight: 500;
 }
 
 .teamGrid {
@@ -463,22 +600,23 @@
 }
 
 .joinCard {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: var(--card-shadow);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+  backdrop-filter: blur(30px);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 30px;
+  padding: 4rem 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.joinCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow-hover);
+[data-theme='dark'] .joinCard {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(167, 139, 250, 0.15));
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .joinCard::before {
@@ -487,22 +625,58 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-light), var(--ifm-color-primary-lightest));
+  height: 5px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+  border-radius: 30px 30px 0 0;
+}
+
+.joinCard::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 30px;
+  padding: 2px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.joinCard:hover::after {
+  opacity: 1;
+}
+
+.joinCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 80px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme='dark'] .joinCard:hover {
+  box-shadow: 0 30px 80px rgba(96, 165, 250, 0.3);
 }
 
 .joinTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--ifm-color-primary), #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
 }
 
 .joinDescription {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .joinButtons {
@@ -544,53 +718,53 @@
   .teamPage {
     padding: 1rem 0 2rem;
   }
-  
+
   .teamTitle {
     font-size: 2rem;
   }
-  
+
   .teamDescription {
     font-size: 1.1rem;
   }
-  
+
   .teamGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     margin-bottom: 2rem;
   }
-  
+
   .memberCard {
     margin: 0 1rem;
     padding: 1.5rem;
   }
-  
+
   .memberAvatar {
     width: 100px;
     height: 100px;
     margin-bottom: 1rem;
   }
-  
+
   .memberName {
     font-size: 1.3rem;
   }
-  
+
   .joinCard {
     margin: 0 1rem;
     padding: 2rem 1.5rem;
   }
-  
+
   .joinTitle {
     font-size: 1.5rem;
   }
-  
+
   .joinDescription {
     font-size: 1rem;
   }
-  
+
   .joinButtons {
     flex-direction: column;
   }
-  
+
   .joinButtons .button {
     width: 100%;
   }
@@ -651,56 +825,116 @@
 
 /* Section styles from code of conduct */
 .section {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px);
   border: 1px solid var(--border-light);
-  border-radius: 20px;
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--card-shadow);
-  transition: all 0.3s ease;
+  border-radius: 24px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .section {
+  background: rgba(31, 41, 55, 0.7);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  border-radius: 24px 24px 0 0;
 }
 
 .section:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15);
+}
+
+[data-theme='dark'] .section:hover {
+  box-shadow: 0 20px 60px rgba(96, 165, 250, 0.2);
 }
 
 .sectionTitle {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--ifm-color-primary);
-  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--ifm-color-primary), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
 }
 
 .sectionContent {
   color: var(--text-secondary);
   font-size: 1.1rem;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .standards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .standardsColumn {
-  background: rgba(37, 99, 235, 0.05);
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.standardsColumn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+}
+
+.standardsColumn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 [data-theme='dark'] .standardsColumn {
-  background: rgba(96, 165, 250, 0.08);
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(167, 139, 250, 0.1));
+  border-color: rgba(96, 165, 250, 0.2);
+}
+
+[data-theme='dark'] .standardsColumn:hover {
+  box-shadow: 0 10px 30px rgba(96, 165, 250, 0.2);
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .standardsTitle {
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.standardsTitle::before {
+  content: '⭐';
+  font-size: 1.2rem;
 }
 
 .standardsList {
@@ -711,19 +945,32 @@
 
 .standardsList li {
   position: relative;
-  padding: 0.5rem 0 0.5rem 2rem;
+  padding: 0.8rem 0 0.8rem 2.5rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
+  transition: all 0.2s ease;
+}
+
+.standardsList li:hover {
+  color: var(--text-primary);
+  transform: translateX(4px);
 }
 
 .standardsList li::before {
   content: '✓';
   position: absolute;
   left: 0;
-  top: 0.5rem;
+  top: 0.8rem;
   color: var(--ifm-color-primary);
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  width: 24px;
+  height: 24px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Member table styles */
@@ -747,30 +994,65 @@
 .memberItem {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(25px);
   border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--card-shadow);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .memberItem {
+  background: rgba(31, 41, 55, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.memberItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #3b82f6, #8b5cf6, #ec4899);
+  transform: translateX(-4px);
+  transition: transform 0.4s ease;
+}
+
+.memberItem:hover::before {
+  transform: translateX(0);
 }
 
 .memberItem:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--card-shadow-hover);
-  border-color: rgba(37, 99, 235, 0.3);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme='dark'] .memberItem:hover {
+  box-shadow: 0 12px 40px rgba(96, 165, 250, 0.2);
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .memberAvatarSmall {
-  width: 60px;
-  height: 60px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--ifm-color-primary);
+  border: 3px solid var(--ifm-color-primary);
   flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+}
+
+.memberItem:hover .memberAvatarSmall {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
 }
 
 .memberInfo {
@@ -848,30 +1130,154 @@
   animation-delay: 0.5s;
 }
 
+/* Animation on scroll */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.teamHeader {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.section {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.section:nth-child(even) {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.section:nth-child(odd) {
+  animation: slideInRight 0.8s ease-out;
+}
+
+.memberItem {
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.tableRow:nth-child(1) .memberItem:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.tableRow:nth-child(1) .memberItem:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.tableRow:nth-child(2) .memberItem:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.tableRow:nth-child(2) .memberItem:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.tableRow:nth-child(3) .memberItem:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.tableRow:nth-child(3) .memberItem:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.joinCard {
+  animation: fadeInUp 1s ease-out;
+}
+
 /* Responsive design for member table */
 @media screen and (max-width: 768px) {
   .tableRow {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .memberItem {
-    padding: 1rem;
+    padding: 1.5rem;
   }
-  
+
   .memberAvatarSmall {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
-  
+
   .memberInfo h4 {
     font-size: 1rem;
   }
-  
+
   .memberOrg,
   .profileLink,
   .termStart {
     font-size: 0.85rem;
+  }
+
+  .teamHeader {
+    padding: 2rem 1.5rem;
+  }
+
+  .teamTitle {
+    font-size: 2.5rem;
+  }
+
+  .section {
+    padding: 2rem;
+  }
+
+  .rolesSection {
+    margin-bottom: 4rem;
+  }
+
+  .governanceSection {
+    margin-bottom: 3rem;
+  }
+
+  .sectionHeader {
+    margin-bottom: 2rem;
+  }
+
+  .mainSectionTitle {
+    font-size: 2rem;
+  }
+
+  .mainSectionTitle::after {
+    width: 80%;
+  }
+
+  .mainSectionDescription {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  .rolesSection::after {
+    width: 90%;
+    bottom: -2rem;
   }
 }
 
@@ -881,20 +1287,20 @@
     padding: 1.5rem;
     margin: 0 1rem 1.5rem;
   }
-  
+
   .standards {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .standardsColumn {
     padding: 1rem;
   }
-  
+
   .sectionTitle {
     font-size: 1.5rem;
   }
-  
+
   .sectionContent {
     font-size: 1rem;
   }
@@ -905,16 +1311,16 @@
   .memberTable {
     margin: 1rem 0;
   }
-  
+
   .teamTable {
     font-size: 0.9rem;
   }
-  
+
   .teamTable th,
   .teamTable td {
     padding: 0.75rem 0.5rem;
   }
-  
+
   .teamTable img {
     width: 25px;
     height: 25px;
