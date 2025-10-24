@@ -245,11 +245,11 @@ export default function Team(): React.JSX.Element {
         <div className="container">
           <div className={styles.teamHeader}>
             <h1 className={styles.teamTitle}>
-              👥 <Translate id="team.pageTitle" description="Team page title">Spring AI Alibaba 社区角色介绍</Translate>
+              👥 <Translate id="team.pageTitle" description="Team page title">Spring AI Alibaba 团队</Translate>
             </h1>
             <p className={styles.teamDescription}>
-              <Translate 
-                id="team.pageDescription" 
+              <Translate
+                id="team.pageDescription"
                 description="Team page description"
               >
                 了解 Spring AI Alibaba 社区中不同角色的职责和标准，以及我们的团队成员。
@@ -257,117 +257,154 @@ export default function Team(): React.JSX.Element {
             </p>
           </div>
 
-          {/* 所有角色介绍放在 PMC 成员列表上方 */}
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Project Management Committee</h2>
+          {/* 第一部分：社区贡献者角色关系 */}
+          <div className={styles.rolesSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.mainSectionTitle}>
+                🎯 <Translate id="team.rolesSection" description="Roles section title">社区贡献者角色</Translate>
+              </h2>
+              <p className={styles.mainSectionDescription}>
+                <Translate id="team.rolesSectionDescription" description="Roles section description">
+                  Spring AI Alibaba 社区采用分层的角色体系，每个角色都有明确的职责和晋升标准
+                </Translate>
+              </p>
+            </div>
+
+            {/* PMC 角色介绍 */}
+            <div className={styles.section}>
+            <h2 className={styles.sectionTitle}><Translate id="team.pmc.title" description="PMC section title">Project Management Committee</Translate></h2>
             <div className={styles.sectionContent}>
               <p>
-                Project Management 作为 Spring AI Alibaba 项目的项目管理委员会，其成员是对 Spring AI Alibaba 项目的演进和发展做出显著贡献的个人，包含以下的标准：
+                <Translate id="team.pmc.intro" description="PMC introduction">
+                  Project Management 作为 Spring AI Alibaba 项目的项目管理委员会，其成员是对 Spring AI Alibaba 项目的演进和发展做出显著贡献的个人，包含以下的标准：
+                </Translate>
               </p>
               <div className={styles.standards}>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>核心开发能力</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.pmc.coreDevTitle" description="PMC core development title">核心开发能力</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>完成多个关键模块或者工程的设计与开发</li>
-                    <li>是项目的核心开发人员</li>
+                    <li><Translate id="team.pmc.coreDev1" description="PMC core development requirement 1">完成多个关键模块或者工程的设计与开发</Translate></li>
+                    <li><Translate id="team.pmc.coreDev2" description="PMC core development requirement 2">是项目的核心开发人员</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>持续投入</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.pmc.commitmentTitle" description="PMC commitment title">持续投入</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>持续的投入和激情</li>
-                    <li>积极参与社区、官网、Issue、PR等项目维护</li>
+                    <li><Translate id="team.pmc.commitment1" description="PMC commitment requirement 1">持续的投入和激情</Translate></li>
+                    <li><Translate id="team.pmc.commitment2" description="PMC commitment requirement 2">积极参与社区、官网、Issue、PR等项目维护</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>社区影响力</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.pmc.influenceTitle" description="PMC influence title">社区影响力</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>在社区中具有有目共睹的影响力</li>
-                    <li>能够代表 Spring AI Alibaba 参加重要会议和活动</li>
+                    <li><Translate id="team.pmc.influence1" description="PMC influence requirement 1">在社区中具有有目共睹的影响力</Translate></li>
+                    <li><Translate id="team.pmc.influence2" description="PMC influence requirement 2">能够代表 Spring AI Alibaba 参加重要会议和活动</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>人才培养</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.pmc.mentoringTitle" description="PMC mentoring title">人才培养</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>具有培养 Committer 和 Contributor 的意识</li>
-                    <li>具备培养人才的能力</li>
+                    <li><Translate id="team.pmc.mentoring1" description="PMC mentoring requirement 1">具有培养 Committer 和 Contributor 的意识</Translate></li>
+                    <li><Translate id="team.pmc.mentoring2" description="PMC mentoring requirement 2">具备培养人才的能力</Translate></li>
                   </ul>
                 </div>
               </div>
               <p>
-                Project Management Member 在资深 Committer 中产生，由 Project Management 所有成员讨论以及投票产生，需要获得总人数的半数票以上才能当选。
+                <Translate id="team.pmc.election" description="PMC election process">
+                  Project Management Member 在资深 Committer 中产生，由 Project Management 所有成员讨论以及投票产生，需要获得总人数的半数票以上才能当选。
+                </Translate>
               </p>
             </div>
           </div>
 
           <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Committer</h2>
+            <h2 className={styles.sectionTitle}><Translate id="team.committer.title" description="Committer section title">Committer</Translate></h2>
             <div className={styles.sectionContent}>
               <p>
-                Committer 是具有仓库写权限的个人，包含以下的标准：
+                <Translate id="team.committer.intro" description="Committer introduction">
+                  Committer 是具有仓库写权限的个人，包含以下的标准：
+                </Translate>
               </p>
               <div className={styles.standards}>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>持续贡献</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.committer.contributionTitle" description="Committer contribution title">持续贡献</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>能够在长时间内做持续贡献</li>
-                    <li>持续贡献 Issue、PR 的个人</li>
+                    <li><Translate id="team.committer.contribution1" description="Committer contribution requirement 1">能够在长时间内做持续贡献</Translate></li>
+                    <li><Translate id="team.committer.contribution2" description="Committer contribution requirement 2">持续贡献 Issue、PR 的个人</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>重要功能贡献</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.committer.featureTitle" description="Committer feature title">重要功能贡献</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>对社区做出了重要 Feature 贡献</li>
+                    <li><Translate id="team.committer.feature1" description="Committer feature requirement">对社区做出了重要 Feature 贡献</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>社区参与</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.committer.participationTitle" description="Committer participation title">社区参与</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>参与 Issue 列表的维护</li>
-                    <li>重要 Feature 的讨论</li>
-                    <li>社区周会主持与参与社区周会分享</li>
+                    <li><Translate id="team.committer.participation1" description="Committer participation requirement 1">参与 Issue 列表的维护</Translate></li>
+                    <li><Translate id="team.committer.participation2" description="Committer participation requirement 2">重要 Feature 的讨论</Translate></li>
+                    <li><Translate id="team.committer.participation3" description="Committer participation requirement 3">社区周会主持与参与社区周会分享</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>季度计划参与</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.committer.quarterlyTitle" description="Committer quarterly title">季度计划参与</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>参加过至少 1 次的社区季度活跃贡献者计划</li>
+                    <li><Translate id="team.committer.quarterly1" description="Committer quarterly requirement">参加过至少 1 次的社区季度活跃贡献者计划</Translate></li>
                   </ul>
                 </div>
                 <div className={styles.standardsColumn}>
-                  <h3 className={styles.standardsTitle}>代码审查</h3>
+                  <h3 className={styles.standardsTitle}><Translate id="team.committer.reviewTitle" description="Committer review title">代码审查</Translate></h3>
                   <ul className={styles.standardsList}>
-                    <li>参与 code review</li>
+                    <li><Translate id="team.committer.review1" description="Committer review requirement">参与 code review</Translate></li>
                   </ul>
                 </div>
               </div>
               <p>
-                Committer 由 Steering Committee 成员提名投票产生，至少获得 3 票同意才能当选。
+                <Translate id="team.committer.election" description="Committer election process">
+                  Committer 由 Steering Committee 成员提名投票产生，至少获得 3 票同意才能当选。
+                </Translate>
               </p>
             </div>
           </div>
 
           <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Contributor</h2>
+            <h2 className={styles.sectionTitle}><Translate id="team.contributor.title" description="Contributor section title">Contributor</Translate></h2>
             <div className={styles.sectionContent}>
               <p>
-                Contributor 是对项目有贡献的个人，标准为：提交过 PR 并被合并。
+                <Translate id="team.contributor.intro" description="Contributor introduction">
+                  Contributor 是对项目有贡献的个人，标准为：提交过 PR 并被合并。
+                </Translate>
               </p>
             </div>
           </div>
+          </div>
 
-          {/* PMC 成员列表 */}
-          <div className={styles.section}>
-            <h2>Project Management Committee (PMC) Members</h2>
+          {/* 第二部分：项目治理人员名单 */}
+          <div className={styles.governanceSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.mainSectionTitle}>
+                👨‍💼 <Translate id="team.governanceSection" description="Governance section title">项目治理人员</Translate>
+              </h2>
+              <p className={styles.mainSectionDescription}>
+                <Translate id="team.governanceSectionDescription" description="Governance section description">
+                  以下是 Spring AI Alibaba 项目的治理团队成员，他们负责项目的日常运营和重要决策
+                </Translate>
+              </p>
+            </div>
+
+            {/* PMC 成员列表 */}
+            <div className={styles.section}>
+              <h2><Translate id="team.pmcMembersTitle" description="PMC members title">Project Management Committee (PMC) Members</Translate></h2>
             <div className={styles.memberTable}>
               {pmcChunks.map((chunk, chunkIndex) => (
                 <div key={chunkIndex} className={styles.tableRow}>
                   {chunk.map((member, index) => (
                     <div key={index} className={styles.tableCell}>
                       <div className={styles.memberItem}>
-                        <img 
-                          src={member.avatar} 
-                          alt={`${member.name} avatar`} 
+                        <img
+                          src={member.avatar}
+                          alt={`${member.name} avatar`}
                           className={styles.memberAvatarSmall}
                         />
                         <div className={styles.memberInfo}>
@@ -376,7 +413,7 @@ export default function Team(): React.JSX.Element {
                           <a href={member.profile} className={styles.profileLink} target="_blank" rel="noopener noreferrer">
                             {member.profile.replace('https://github.com/', '@')}
                           </a>
-                          <p className={styles.termStart}>Term Start: {member.termStart}</p>
+                          <p className={styles.termStart}><Translate id="team.termStart" description="Term start label">Term Start</Translate>: {member.termStart}</p>
                         </div>
                       </div>
                     </div>
@@ -388,16 +425,16 @@ export default function Team(): React.JSX.Element {
 
           {/* Committer 成员列表 */}
           <div className={styles.section}>
-            <h2>Committers</h2>
+            <h2><Translate id="team.committersTitle" description="Committers title">Committers</Translate></h2>
             <div className={styles.memberTable}>
               {committerChunks.map((chunk, chunkIndex) => (
                 <div key={chunkIndex} className={styles.tableRow}>
                   {chunk.map((member, index) => (
                     <div key={index} className={styles.tableCell}>
                       <div className={styles.memberItem}>
-                        <img 
-                          src={member.avatar} 
-                          alt={`${member.name} avatar`} 
+                        <img
+                          src={member.avatar}
+                          alt={`${member.name} avatar`}
                           className={styles.memberAvatarSmall}
                         />
                         <div className={styles.memberInfo}>
@@ -405,7 +442,7 @@ export default function Team(): React.JSX.Element {
                           <a href={member.profile} className={styles.profileLink} target="_blank" rel="noopener noreferrer">
                             {member.profile.replace('https://github.com/', '@')}
                           </a>
-                          <p className={styles.termStart}>Term Start: {member.termStart}</p>
+                          <p className={styles.termStart}><Translate id="team.termStart" description="Term start label">Term Start</Translate>: {member.termStart}</p>
                         </div>
                       </div>
                     </div>
@@ -413,6 +450,7 @@ export default function Team(): React.JSX.Element {
                 </div>
               ))}
             </div>
+          </div>
           </div>
 
           {/* 加入团队部分 */}
@@ -422,22 +460,22 @@ export default function Team(): React.JSX.Element {
                 🚀 <Translate id="team.joinUs" description="Join us title">想要加入我们吗？</Translate>
               </h2>
               <p className={styles.joinDescription}>
-                <Translate 
-                  id="team.joinDescription" 
+                <Translate
+                  id="team.joinDescription"
                   description="Join team description"
                 >
                   我们一直在寻找充满激情的贡献者来帮助改进这个项目。无论您是开发者、设计师、作者，还是只是热爱开源的人，我们的团队都有您的位置！
                 </Translate>
               </p>
               <div className={styles.joinButtons}>
-                <a 
-                  href="/community/contributing" 
+                <a
+                  href="/community/contributing"
                   className="button button--primary button--lg"
                 >
                   📖 <Translate id="team.contributingGuide" description="Contributing guide button">贡献指南</Translate>
                 </a>
-                <a 
-                  href="https://github.com/alibaba/spring-ai-alibaba/issues" 
+                <a
+                  href="https://github.com/alibaba/spring-ai-alibaba/issues"
                   className="button button--secondary button--lg"
                 >
                   🐛 <Translate id="team.viewIssues" description="View issues button">查看社区 Issue</Translate>

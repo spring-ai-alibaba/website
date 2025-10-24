@@ -1,0 +1,62 @@
+.neuralBackgroundContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.neuralCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.gradientOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(250, 248, 245, 0) 0%,
+    rgba(250, 248, 245, 0.2) 50%,
+    rgba(250, 248, 245, 0.4) 100%
+  );
+  pointer-events: none;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .neuralCanvas {
+  opacity: 0.6;
+}
+
+[data-theme='dark'] .gradientOverlay {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(10, 13, 26, 0) 0%,
+    rgba(10, 13, 26, 0.2) 50%,
+    rgba(10, 13, 26, 0.4) 100%
+  );
+}
+
+/* Reduce animation on mobile for performance */
+@media (max-width: 768px) {
+  .neuralCanvas {
+    opacity: 0.3;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .neuralCanvas {
+    display: none;
+  }
+}

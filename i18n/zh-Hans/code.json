@@ -433,6 +433,86 @@
     "message": "创建精美文档网站所需的一切功能",
     "description": "Features section subtitle"
   },
+  "homepage.architecture.title": {
+    "message": "帮助 Java 开发者步入 AI Native 时代",
+    "description": "Architecture section title"
+  },
+  "homepage.features.springIntegration.title": {
+    "message": "Spring 生态无缝集成",
+    "description": "Spring integration feature title"
+  },
+  "homepage.features.springIntegration.description": {
+    "message": "基于 Spring AI 构建，完美融入 Spring Boot 生态系统，开箱即用",
+    "description": "Spring integration feature description"
+  },
+  "homepage.features.tongyi.title": {
+    "message": "通义大模型支持",
+    "description": "Tongyi model feature title"
+  },
+  "homepage.features.tongyi.description": {
+    "message": "深度集成阿里云通义千问系列模型，提供强大的 AI 能力",
+    "description": "Tongyi model feature description"
+  },
+  "homepage.features.performance.title": {
+    "message": "高性能异步处理",
+    "description": "Performance feature title"
+  },
+  "homepage.features.performance.description": {
+    "message": "支持流式响应和异步调用，满足高并发场景需求",
+    "description": "Performance feature description"
+  },
+  "homepage.features.configuration.title": {
+    "message": "灵活的配置选项",
+    "description": "Configuration feature title"
+  },
+  "homepage.features.configuration.description": {
+    "message": "丰富的配置项和扩展点，满足不同业务场景的定制需求",
+    "description": "Configuration feature description"
+  },
+  "homepage.features.multimodal.title": {
+    "message": "多模态 AI 能力",
+    "description": "Multimodal feature title"
+  },
+  "homepage.features.multimodal.description": {
+    "message": "支持文本、图像、语音等多种模态的 AI 处理能力",
+    "description": "Multimodal feature description"
+  },
+  "homepage.features.observability.title": {
+    "message": "可观测性支持",
+    "description": "Observability feature title"
+  },
+  "homepage.features.observability.description": {
+    "message": "内置监控指标和追踪能力，轻松掌握 AI 应用运行状态",
+    "description": "Observability feature description"
+  },
+  "homepage.acknowledgments.title": {
+    "message": "致谢",
+    "description": "Acknowledgments section title"
+  },
+  "homepage.acknowledgments.subtitle": {
+    "message": "Spring AI Alibaba 的成功离不开开源社区和合作伙伴的支持",
+    "description": "Acknowledgments section subtitle"
+  },
+  "homepage.acknowledgments.springai.description": {
+    "message": "感谢 Spring AI 团队提供的优秀框架，为 AI 应用开发提供了坚实的基础",
+    "description": "Spring AI acknowledgment"
+  },
+  "homepage.acknowledgments.bailian.name": {
+    "message": "阿里云百炼大模型服务平台",
+    "description": "Bailian name"
+  },
+  "homepage.acknowledgments.bailian.description": {
+    "message": "感谢阿里云百炼平台提供强大的大模型能力和完善的服务支持",
+    "description": "Bailian acknowledgment"
+  },
+  "homepage.acknowledgments.viewOnGithub": {
+    "message": "访问 GitHub",
+    "description": "View on GitHub"
+  },
+  "homepage.acknowledgments.learnMore": {
+    "message": "了解更多",
+    "description": "Learn more"
+  },
   "ecosystem.title": {
     "message": "Spring AI Alibaba 生态系统",
     "description": "Ecosystem section title"
@@ -844,5 +924,237 @@
   "team.viewIssues": {
     "message": "查看社区 Issue",
     "description": "View issues button"
+  },
+  "team.rolesSection": {
+    "message": "社区贡献者角色",
+    "description": "Roles section title"
+  },
+  "team.rolesSectionDescription": {
+    "message": "Spring AI Alibaba 社区采用分层的角色体系，每个角色都有明确的职责和晋升标准",
+    "description": "Roles section description"
+  },
+  "team.pmc.title": {
+    "message": "Project Management Committee",
+    "description": "PMC section title"
+  },
+  "team.pmc.intro": {
+    "message": "Project Management 作为 Spring AI Alibaba 项目的项目管理委员会，其成员是对 Spring AI Alibaba 项目的演进和发展做出显著贡献的个人，包含以下的标准：",
+    "description": "PMC introduction"
+  },
+  "team.pmc.coreDevTitle": {
+    "message": "核心开发能力",
+    "description": "PMC core development title"
+  },
+  "team.pmc.coreDev1": {
+    "message": "完成多个关键模块或者工程的设计与开发",
+    "description": "PMC core development requirement 1"
+  },
+  "team.pmc.coreDev2": {
+    "message": "是项目的核心开发人员",
+    "description": "PMC core development requirement 2"
+  },
+  "team.pmc.commitmentTitle": {
+    "message": "持续投入",
+    "description": "PMC commitment title"
+  },
+  "team.pmc.commitment1": {
+    "message": "持续的投入和激情",
+    "description": "PMC commitment requirement 1"
+  },
+  "team.pmc.commitment2": {
+    "message": "积极参与社区、官网、Issue、PR等项目维护",
+    "description": "PMC commitment requirement 2"
+  },
+  "team.pmc.influenceTitle": {
+    "message": "社区影响力",
+    "description": "PMC influence title"
+  },
+  "team.pmc.influence1": {
+    "message": "在社区中具有有目共睹的影响力",
+    "description": "PMC influence requirement 1"
+  },
+  "team.pmc.influence2": {
+    "message": "能够代表 Spring AI Alibaba 参加重要会议和活动",
+    "description": "PMC influence requirement 2"
+  },
+  "team.pmc.mentoringTitle": {
+    "message": "人才培养",
+    "description": "PMC mentoring title"
+  },
+  "team.pmc.mentoring1": {
+    "message": "具有培养 Committer 和 Contributor 的意识",
+    "description": "PMC mentoring requirement 1"
+  },
+  "team.pmc.mentoring2": {
+    "message": "具备培养人才的能力",
+    "description": "PMC mentoring requirement 2"
+  },
+  "team.pmc.election": {
+    "message": "Project Management Member 在资深 Committer 中产生，由 Project Management 所有成员讨论以及投票产生，需要获得总人数的半数票以上才能当选。",
+    "description": "PMC election process"
+  },
+  "team.committer.title": {
+    "message": "Committer",
+    "description": "Committer section title"
+  },
+  "team.committer.intro": {
+    "message": "Committer 是具有仓库写权限的个人，包含以下的标准：",
+    "description": "Committer introduction"
+  },
+  "team.committer.contributionTitle": {
+    "message": "持续贡献",
+    "description": "Committer contribution title"
+  },
+  "team.committer.contribution1": {
+    "message": "能够在长时间内做持续贡献",
+    "description": "Committer contribution requirement 1"
+  },
+  "team.committer.contribution2": {
+    "message": "持续贡献 Issue、PR 的个人",
+    "description": "Committer contribution requirement 2"
+  },
+  "team.committer.featureTitle": {
+    "message": "重要功能贡献",
+    "description": "Committer feature title"
+  },
+  "team.committer.feature1": {
+    "message": "对社区做出了重要 Feature 贡献",
+    "description": "Committer feature requirement"
+  },
+  "team.committer.participationTitle": {
+    "message": "社区参与",
+    "description": "Committer participation title"
+  },
+  "team.committer.participation1": {
+    "message": "参与 Issue 列表的维护",
+    "description": "Committer participation requirement 1"
+  },
+  "team.committer.participation2": {
+    "message": "重要 Feature 的讨论",
+    "description": "Committer participation requirement 2"
+  },
+  "team.committer.participation3": {
+    "message": "社区周会主持与参与社区周会分享",
+    "description": "Committer participation requirement 3"
+  },
+  "team.committer.quarterlyTitle": {
+    "message": "季度计划参与",
+    "description": "Committer quarterly title"
+  },
+  "team.committer.quarterly1": {
+    "message": "参加过至少 1 次的社区季度活跃贡献者计划",
+    "description": "Committer quarterly requirement"
+  },
+  "team.committer.reviewTitle": {
+    "message": "代码审查",
+    "description": "Committer review title"
+  },
+  "team.committer.review1": {
+    "message": "参与 code review",
+    "description": "Committer review requirement"
+  },
+  "team.committer.election": {
+    "message": "Committer 由 Steering Committee 成员提名投票产生，至少获得 3 票同意才能当选。",
+    "description": "Committer election process"
+  },
+  "team.contributor.title": {
+    "message": "Contributor",
+    "description": "Contributor section title"
+  },
+  "team.contributor.intro": {
+    "message": "Contributor 是对项目有贡献的个人，标准为：提交过 PR 并被合并。",
+    "description": "Contributor introduction"
+  },
+  "team.governanceSection": {
+    "message": "项目治理人员",
+    "description": "Governance section title"
+  },
+  "team.governanceSectionDescription": {
+    "message": "以下是 Spring AI Alibaba 项目的治理团队成员，他们负责项目的日常运营和重要决策",
+    "description": "Governance section description"
+  },
+  "team.pmcMembersTitle": {
+    "message": "Project Management Committee (PMC) Members",
+    "description": "PMC members title"
+  },
+  "team.committersTitle": {
+    "message": "Committers",
+    "description": "Committers title"
+  },
+  "team.organization": {
+    "message": "所属组织",
+    "description": "Organization label"
+  },
+  "team.termStart": {
+    "message": "任期开始",
+    "description": "Term start label"
+  },
+  "contributing.welcomeTitle": {
+    "message": "欢迎贡献",
+    "description": "Welcome contribution title"
+  },
+  "contributing.contributionTypesTitle": {
+    "message": "贡献类型",
+    "description": "Contribution types title"
+  },
+  "contributing.codeDevelopment": {
+    "message": "代码开发",
+    "description": "Code development title"
+  },
+  "contributing.codeDevelopmentText": {
+    "message": "开发自己的功能，开发完毕后建议使用 mvn clean package 命令确保能修改后的代码能在本地编译通过。执行该命令的同时还能以 spring 的方式自动格式化代码。然后再提交代码，提交代码之前请注意创建一个新的有关本特性的分支，用该分支进行代码提交。",
+    "description": "Code development description"
+  },
+  "contributing.qualityCheck": {
+    "message": "代码质量检查",
+    "description": "Quality check title"
+  },
+  "contributing.qualityCheckText": {
+    "message": "本地 boe 环境开发完成后，强烈建议在提交 PR 之前执行项目 tools/make 提供的 make 命令进行本地持续集成（CI）检查，以确保代码符合项目的标准和规范。如果对于本地CI有任何疑问，可以在控制台输入 make help 了解具体信息。",
+    "description": "Quality check description"
+  },
+  "contributing.codeStandards": {
+    "message": "代码规范",
+    "description": "Code standards title"
+  },
+  "contributing.codeStandardsText": {
+    "message": "为了减少一些不必要的代码风格问题，Spring AI Alibaba 提供了本地 Checkstyle 检查功能。可以在项目根目录下执行 mvn checkstyle:check 命令来检查代码风格是否符合规范。",
+    "description": "Code standards description"
+  },
+  "contributing.codeCleaning": {
+    "message": "代码清理",
+    "description": "Code cleaning title"
+  },
+  "contributing.codeCleaningText": {
+    "message": "为了确保代码的整洁，请删除 Java 文件中未使用的导入。可以通过执行 mvn spotless:apply 命令来自动删除未使用的导入。",
+    "description": "Code cleaning description"
+  },
+  "contributing.codeCommit": {
+    "message": "代码提交",
+    "description": "Code commit title"
+  },
+  "contributing.codeCommitText": {
+    "message": "在编码完成之后，需要基于 pr 规范 [lint-pr-title.yml](.github/workflows/lint-pr-title.yml) 对提交信息进行 format & check，确保提交信息符合规范。",
+    "description": "Code commit description"
+  },
+  "contributing.commitFormat": {
+    "message": "Commit 规范: git commit -m \"类型(模块): 空格 符合规范的提交信息\"，例如 feat(docs): contribute-zh 更新",
+    "description": "Commit format example"
+  },
+  "contributing.prSubmission": {
+    "message": "PR 提交",
+    "description": "PR submission title"
+  },
+  "contributing.prSubmissionText": {
+    "message": "提交 PR，根据 Pull request template 写明修改点和实现的功能，等待 code review 和 合并，成为 Spring AI Alibaba Contributor，为更好用的 Spring AI Alibaba 做出贡献。",
+    "description": "PR submission description"
+  },
+  "contributing.codeMerge": {
+    "message": "代码合并",
+    "description": "Code merge title"
+  },
+  "contributing.codeOfConductTitle": {
+    "message": "行为准则",
+    "description": "Code of conduct title"
   }
 }

@@ -1361,7 +1361,7 @@
 
 /* Features Section */
 .featuresSection {
-  padding: 5rem 0;
+  padding: 3rem 0;
   background: linear-gradient(180deg,
     var(--ifm-background-color) 0%,
     rgba(109, 179, 63, 0.03) 50%,
@@ -1378,10 +1378,10 @@
 }
 
 .sectionTitle {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   background: linear-gradient(135deg,
     #6db33f 0%,
     #2563eb 50%,
@@ -1513,6 +1513,159 @@
   margin: 0;
 }
 
+/* Acknowledgments Section */
+.sectionSubtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.acknowledgmentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.acknowledgmentCard {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--border-light);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.acknowledgmentCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6db33f 0%, #2563eb 50%, #7c3aed 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.acknowledgmentCard:hover::before {
+  opacity: 1;
+}
+
+.acknowledgmentCard:hover {
+  transform: translateY(-12px) scale(1.02);
+  border-color: rgba(96, 165, 250, 0.4);
+  box-shadow:
+    0 25px 70px rgba(37, 99, 235, 0.2),
+    0 0 50px rgba(109, 179, 63, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+[data-theme='dark'] .acknowledgmentCard:hover {
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(96, 165, 250, 0.25),
+    0 0 0 1px rgba(96, 165, 250, 0.2) inset;
+}
+
+.acknowledgmentIcon {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(109, 179, 63, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+  border-radius: 14px;
+  color: #6db33f;
+  transition: all 0.3s ease;
+}
+
+.acknowledgmentIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.acknowledgmentIcon img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+[data-theme='dark'] .acknowledgmentIcon {
+  background: linear-gradient(135deg, rgba(109, 179, 63, 0.15) 0%, rgba(96, 165, 250, 0.15) 100%);
+  color: #60a5fa;
+}
+
+.acknowledgmentCard:hover .acknowledgmentIcon {
+  transform: scale(1.08) rotate(3deg);
+  background: linear-gradient(135deg, rgba(109, 179, 63, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+}
+
+[data-theme='dark'] .acknowledgmentCard:hover .acknowledgmentIcon {
+  background: linear-gradient(135deg, rgba(109, 179, 63, 0.25) 0%, rgba(96, 165, 250, 0.25) 100%);
+}
+
+.acknowledgmentTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.acknowledgmentDescription {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.acknowledgmentLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #6db33f 0%, #2563eb 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 12px rgba(109, 179, 63, 0.25);
+}
+
+.acknowledgmentLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(109, 179, 63, 0.35);
+  color: white;
+  text-decoration: none;
+}
+
+.acknowledgmentLink svg {
+  transition: transform 0.3s ease;
+}
+
+.acknowledgmentLink:hover svg {
+  transform: translateX(4px);
+}
+
 /* Responsive */
 @media screen and (max-width: 996px) {
   .architectureTitle {
@@ -1578,6 +1731,49 @@
 
   .featureTitle {
     font-size: 1.2rem;
+  }
+
+  .acknowledgmentsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .acknowledgmentCard {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .acknowledgmentIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .acknowledgmentIcon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .acknowledgmentTitle {
+    font-size: 1.05rem;
+  }
+
+  .acknowledgmentDescription {
+    font-size: 0.85rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .featuresSection {
+    padding: 2rem 0;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .springLeaves {

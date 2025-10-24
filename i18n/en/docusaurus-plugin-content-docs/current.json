@@ -22,5 +22,45 @@
   "sidebar.tutorialSidebar.category.问题排查": {
     "message": "Troubleshooting",
     "description": "The label for category Troubleshooting in sidebar tutorialSidebar"
+  },
+  "sidebar.docsSidebar.category.开发框架": {
+    "message": "Frameworks",
+    "description": "The label for category 开发框架 in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Agent Framework": {
+    "message": "Agent Framework",
+    "description": "The label for category Agent Framework in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Graph Core": {
+    "message": "Graph Core",
+    "description": "The label for category Graph Core in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Admin": {
+    "message": "Admin",
+    "description": "The label for category Admin in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Extensions": {
+    "message": "Extensions",
+    "description": "The label for category Extensions in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.智能体": {
+    "message": "Agents",
+    "description": "The label for category 智能体 in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.DataAgent": {
+    "message": "DataAgent",
+    "description": "The label for category DataAgent in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.部署": {
+    "message": "Deployment",
+    "description": "The label for category 部署 in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.JManus": {
+    "message": "JManus",
+    "description": "The label for category JManus in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.DeepResearch": {
+    "message": "DeepResearch",
+    "description": "The label for category DeepResearch in sidebar docsSidebar"
   }
 }

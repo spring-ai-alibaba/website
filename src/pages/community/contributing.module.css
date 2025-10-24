@@ -1,36 +1,66 @@
 /* Contributing Page Styles */
 .contributingPage {
-  padding: 3rem 0;
+  padding: 4rem 0 6rem;
   min-height: 80vh;
+  background: transparent;
+  position: relative;
 }
 
 /* Ensure consistent starry background in dark mode */
 [data-theme='dark'] .contributingPage {
-  background: var(--space-black) !important;
+  background: transparent !important;
 }
 
 .contributingHeader {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(30px);
+  border-radius: 30px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+[data-theme='dark'] .contributingHeader {
+  background: rgba(31, 41, 55, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.contributingHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+  border-radius: 30px 30px 0 0;
 }
 
 .contributingTitle {
-  font-size: 2.5rem;
-  font-weight: 800;
+  font-size: 3.5rem;
+  font-weight: 900;
   color: var(--text-primary);
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary), #8b5cf6, #ec4899);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 .contributingDescription {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--text-secondary);
   max-width: 800px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.8;
+  font-weight: 500;
 }
 
 .contributingContent {
@@ -57,61 +87,111 @@
 }
 
 .gridCard {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px);
   border: 1px solid var(--border-light);
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: var(--card-shadow);
-  transition: all 0.3s ease;
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .gridCard {
+  background: rgba(31, 41, 55, 0.7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.gridCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.gridCard:hover::before {
+  transform: scaleX(1);
 }
 
 .gridCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--card-shadow-hover);
-  border-color: var(--ifm-color-primary);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme='dark'] .gridCard:hover {
+  box-shadow: 0 16px 48px rgba(96, 165, 250, 0.2);
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .cardIcon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
+  filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.gridCard:hover .cardIcon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .cardTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--ifm-color-primary);
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--ifm-color-primary), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 1.5rem;
   text-align: center;
+  letter-spacing: -0.01em;
 }
 
 .cardContent {
   color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  line-height: 1.7;
   flex: 1;
 }
 
 .cardContent p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .cardContent code {
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  border-radius: 4px;
-  padding: 0.2rem 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
   font-size: 0.9em;
   color: var(--ifm-color-primary);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.cardContent code:hover {
+  background: rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .cardContent code {
+  background: rgba(96, 165, 250, 0.12);
+  border-color: rgba(96, 165, 250, 0.25);
 }
 
 .cardContent strong {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .stepsList {
@@ -227,14 +307,86 @@
   box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
 }
 
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.contributingHeader {
+  animation: scaleIn 0.8s ease-out;
+}
+
+.gridCard {
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.gridRow:nth-child(1) .gridCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.gridRow:nth-child(1) .gridCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.gridRow:nth-child(2) .gridCard:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.gridRow:nth-child(2) .gridCard:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.gridRow:nth-child(3) .gridCard:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.gridRow:nth-child(3) .gridCard:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.gridRow:nth-child(4) .gridCard:nth-child(1) {
+  animation-delay: 0.7s;
+}
+
+.gridRow:nth-child(4) .gridCard:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.gridSection .gridCard {
+  animation: fadeInUp 0.8s ease-out;
+  animation-delay: 0.2s;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .contributingPage {
     padding: 2rem 0;
   }
 
+  .contributingHeader {
+    padding: 2rem 1.5rem;
+  }
+
   .contributingTitle {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .contributingDescription {
@@ -257,22 +409,22 @@
   }
 
   .gridCard {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
     margin: 0 1rem;
   }
 
   .cardIcon {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
   }
 
   .cardTitle {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
   }
 
   .cardContent {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .section {
