@@ -1,11 +1,65 @@
-your-name:
-  name: 您的姓名
-  title: 项目创建者
-  url: https://github.com/your-username
-  image_url: https://github.com/your-username.png
+spring-ai-alibaba-team:
+  name: Spring AI Alibaba 团队
+  title: 开发团队
+  url: https://github.com/spring-ai-alibaba
+  image_url: https://github.com/spring-ai-alibaba.png
 
-contributor:
-  name: 贡献者姓名
-  title: 核心贡献者
-  url: https://github.com/contributor-username
-  image_url: https://github.com/contributor-username.png
+chickenlj:
+  name: 刘军
+  title: 社区开发者
+  url: https://github.com/chickenlj
+  image_url: https://github.com/chickenlj.png
+
+shown:
+  name: 牧生
+  title: 社区开发者
+  url: https://github.com/yuluo-yx
+  image_url: https://github.com/yuluo-yx.png
+
+Aias00:
+  name: 刘宏宇
+  title: 社区开发者
+  url: https://github.com/Aias00
+  image_url: https://github.com/Aias00.png
+
+GTyingzi:
+  name: 影子
+  title: 社区开发者
+  url: https://github.com/GTyingzi
+  image_url: https://github.com/GTyingzi.png
+
+brianxiadong:
+  name: 夏冬
+  title: 社区开发者
+  url: https://github.com/brianxiadong
+  image_url: https://github.com/brianxiadong.png
+
+PolarishT:
+  name: 张震霆
+  title: 社区开发者
+  url: https://github.com/PolarishT
+  image_url: https://github.com/PolarishT.png
+
+sincerity-being:
+  name: 张震霆
+  title: 社区开发者
+  url: https://github.com/sincerity-being
+  image_url: https://github.com/sincerity-being.png
+
+Cirilla-zmh:
+  name: 希铭
+  title: 社区开发者
+  url: https://github.com/Cirilla-zmh
+  image_url: https://github.com/Cirilla-zmh.png
+
+flystar32:
+  name: 望宸
+  title: 社区开发者
+  url: https://github.com/flystar32
+  image_url: https://github.com/flystar32.png
+
+CZJCC:
+  name: 聪言
+  title: 社区开发者
+  url: https://github.com/CZJCC
+  image_url: https://github.com/CZJCC.png
