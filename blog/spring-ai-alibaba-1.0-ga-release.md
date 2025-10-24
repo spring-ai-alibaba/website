@@ -10,21 +10,26 @@ category: article
 
 2025 年是 AI 智能体快速爆发的一年，从单智能体、多智能体到通用智能体的多种不同构建模式持续涌现出来，智能体开发也逐步从概念、Demo 开始走向生产落地，应用范围也从编程助手等几个少数领域，逐步拓展到企业内部业务、生活工作助手等多个领域。
 
+<!-- truncate -->
+
 随着智能体开始在企业内部业务落地，Java 智能体的构建需求也呈现出爆发式增长的趋势，在智能体编程语言及平台领域，Python、Typescript 一直走在探索前沿，相对来说，Java 领域框架、平台及整体解决方案欠缺，Spring AI Alibaba 1.0 的发布，让 Java 智能体开发迎来一款生产可用的企业级框架与解决方案，助力企业智能体开发进入一个新阶段。
 
 上半年，以 Manus 为代表的通用智能体的火爆，让具备自主规划能力的通用智能体进入大众视线，另一方面，MCP 则将模型或智能体外部数据、外部系统的交互方式做了统一。结合这些技术趋势，在探索 Spring AI Alibaba 框架、Manus 通用智能体的过程中，我们正逐步构建起一套零代码快速构建垂直领域智能体的方案（JManus），我们相信它能弥补低代码、高代码框架的开发复杂度问题，同时又能解决通用智能体效果难以满足企业级生产要求的弊端。
 
 
 ## 什么是 Spring AI Alibaba
-<font style="color:rgb(53, 56, 65);">Spring AI Alibaba 是一款以 Spring AI 为基础，深度集成百炼平台，支持 ChatBot、工作流、多智能体应用开发模式的 AI 框架。</font>
+
+Spring AI Alibaba 是一款以 Spring AI 为基础，深度集成百炼平台，支持 ChatBot、工作流、多智能体应用开发模式的 AI 框架。
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img.png)
 
-<font style="color:rgb(53, 56, 65);">在 1.0 版本中，</font><font style="color:#080808;background-color:#ffffff;">Spring AI Alibaba 提供以下核心能力，让开发者可以快速构建自己的 Agent、Workflow 或 Multi-agent 应用。</font>
+在 1.0 版本中，Spring AI Alibaba 提供以下核心能力，让开发者可以快速构建自己的 Agent、Workflow 或 Multi-agent 应用。
 
-1. **<font style="color:rgb(23, 26, 29);">Graph 多智能体框架。</font>**<font style="color:rgb(23, 26, 29);">基于 Spring AI Alibaba Graph，开发者可快速构建工作流、多智能体应用，无需关心流程编排、上下文记忆管理等底层实现。通过 Graph 与低代码、自规划智能体结合，为开发者提供从低代码、高代码到零代码构建智能体的更灵活选择。</font>
-2. **<font style="color:rgb(23, 26, 29);">通过 AI 生态集成，解决企业智能体落地过程中关心的痛点问题。</font>**<font style="color:rgb(23, 26, 29);">Spring AI Alibaba 支持与百炼平台深度集成，提供模型接入、RAG 知识库解决方案；支持 ARMS、Langfuse 等可观测产品无缝接入；支持企业级的 MCP 集成，包括 Nacos MCP Registry 分布式注册与发现、自动 Router 路由等。</font>
-3. **<font style="color:rgb(53, 56, 65);">探索具备自主规划能力的通用智能体产品与平台。</font>**<font style="color:rgb(53, 56, 65);">社区发布了基于 Spring AI Alibaba 框架实现的 JManus 智能体，除了对标 Manus 的通用智能体能力外，我们的目标是基于 JManus 探索自主规划在智能体开发方向的应用，</font><font style="color:rgb(23, 26, 29);">为开发者提供从低代码、高代码到零代码构建智能体的更灵活选择</font><font style="color:rgb(23, 26, 29);">。</font>
+1. **Graph 多智能体框架。** 基于 Spring AI Alibaba Graph，开发者可快速构建工作流、多智能体应用，无需关心流程编排、上下文记忆管理等底层实现。通过 Graph 与低代码、自规划智能体结合，为开发者提供从低代码、高代码到零代码构建智能体的更灵活选择。
+
+2. **通过 AI 生态集成，解决企业智能体落地过程中关心的痛点问题。** Spring AI Alibaba 支持与百炼平台深度集成，提供模型接入、RAG 知识库解决方案；支持 ARMS、Langfuse 等可观测产品无缝接入；支持企业级的 MCP 集成，包括 Nacos MCP Registry 分布式注册与发现、自动 Router 路由等。
+
+3. **探索具备自主规划能力的通用智能体产品与平台。** 社区发布了基于 Spring AI Alibaba 框架实现的 JManus 智能体，除了对标 Manus 的通用智能体能力外，我们的目标是基于 JManus 探索自主规划在智能体开发方向的应用，为开发者提供从低代码、高代码到零代码构建智能体的更灵活选择。
 
 ## 快速开始
 ### 开发第一个 Spring AI Alibaba 应用
@@ -135,7 +140,7 @@ Spring AI Alibaba MCP 通过集成 Nacos MCP Registry，支持 MCP Server 分布
 
 **a. 百炼 RAG 知识库**
 
-<font style="color:rgb(53, 56, 65);">百炼是一款可视化 AI 智能体应用开发平台，它提供 RAG 知识库管理能力。简单来讲，您可以将私有数据上传到百炼平台，借助百炼平台数据解析、切片、向量化等能力实现数据向量化预处理，处理后的数据可用于后续 Spring AI Alibaba 智能体应用检索，借用百炼平台强大的数据处理效果。</font>
+百炼是一款可视化 AI 智能体应用开发平台，它提供 RAG 知识库管理能力。简单来讲，您可以将私有数据上传到百炼平台，借助百炼平台数据解析、切片、向量化等能力实现数据向量化预处理，处理后的数据可用于后续 Spring AI Alibaba 智能体应用检索，借用百炼平台强大的数据处理效果。
 
 **b. 百炼析言 ChatBI，从自然语言到 SQL 自动生成**
 
@@ -151,12 +156,9 @@ AI 应用开发不只是无状态大模型的 API 调用过程，由于大模型
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_3.png)
 
-> 此图出自 Anthropic《Building Effective AI Agents》文章
->
+此图出自 Anthropic《Building Effective AI Agents》文章
 
 ChatClient 是 Spring AI 中最核心的组件，开发者可以使用 ChatClient 开发自己的聊天机器人或智能体应用，ChatClient 支持模型增强模式，为模型调用挂载 Retrieval、Tools、Memory 等外部数据与服务。
-
-
 
 ```java
 Flux<String> response = chatClient.prompt(query)
@@ -166,26 +168,17 @@ Flux<String> response = chatClient.prompt(query)
         .content();
 ```
 
-
-
-<font style="color:rgb(38, 38, 38);">我们这里把 ChatClient 开发的 AI 应用称为单智能体应用，这可能是我们最理想的智能体开发模式，它足够简单直接，即把所有的工具、上下文信息等给到模型，由模型持续决策、迭代直到最终完成任务解答。然而，事情远没有那么简单，模型的能力还远未达到我们想要的效果，当我们给模型的上下文、工具过多时，整体效果就会变差，有时事情的走向会严重偏离我们的预期。因此，我们考虑把复杂的问题拆解开来，当前有两种常用模式：</font>**<font style="color:rgb(38, 38, 38);">工作流和多智能体</font>**<font style="color:rgb(38, 38, 38);">。</font>
+我们这里把 ChatClient 开发的 AI 应用称为单智能体应用，这可能是我们最理想的智能体开发模式，它足够简单直接，即把所有的工具、上下文信息等给到模型，由模型持续决策、迭代直到最终完成任务解答。然而，事情远没有那么简单，模型的能力还远未达到我们想要的效果，当我们给模型的上下文、工具过多时，整体效果就会变差，有时事情的走向会严重偏离我们的预期。因此，我们考虑把复杂的问题拆解开来，当前有两种常用模式：**工作流和多智能体**。
 
 ### 工作流（Workflow）
-**<font style="color:rgb(38, 38, 38);">工作流</font>**<font style="color:rgb(38, 38, 38);">是以相对固化的模式来人为地拆解任务</font>，将一个大任务拆解为包含多个分支的固化流程<font style="color:rgb(38, 38, 38);">。工作流的优势是确定性强，模型作为流程中的一个节点起到的更多是一个分类决策的职责，因此它更适合意图识别等类别属性强的应用场景。工作流也有明显的劣势，它要求开发人员对业务流程有深刻的理解，整个流程是由人绘制的，模型在其中更多的只是内容生成、总结、分类识别的作用，并不能最大化利用模型的推理能力，因此很多人诟病这种模式是不够智能的。</font>
 
-<font style="color:rgb(38, 38, 38);"></font>
+**工作流**是以相对固化的模式来人为地拆解任务，将一个大任务拆解为包含多个分支的固化流程。工作流的优势是确定性强，模型作为流程中的一个节点起到的更多是一个分类决策的职责，因此它更适合意图识别等类别属性强的应用场景。工作流也有明显的劣势，它要求开发人员对业务流程有深刻的理解，整个流程是由人绘制的，模型在其中更多的只是内容生成、总结、分类识别的作用，并不能最大化利用模型的推理能力，因此很多人诟病这种模式是不够智能的。
 
-<font style="color:rgb(38, 38, 38);">应用 Spring AI Alibaba Graph 可以轻松开发工作流，声明不同的节点，并将节点串联成一个流程图。</font>
-
-
+应用 Spring AI Alibaba Graph 可以轻松开发工作流，声明不同的节点，并将节点串联成一个流程图。
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_4.png)
 
-
-
-<font style="color:rgb(38, 38, 38);">值得注意的是，Spring AI Alibaba Graph 中提供大量预置节点，这些节点可以对标到市面上主流的如 Dify、百炼等低代码平台，典型节点包括 LlmNode（大模型节点）、QuestionClassifierNode（问题分类节点）、ToolNode（工具节点）等，为用户免去重复开发、定义的负担，只需要专注流程串联。</font>
-
-<font style="color:rgb(38, 38, 38);"></font>
+值得注意的是，Spring AI Alibaba Graph 中提供大量预置节点，这些节点可以对标到市面上主流的如 Dify、百炼等低代码平台，典型节点包括 LlmNode（大模型节点）、QuestionClassifierNode（问题分类节点）、ToolNode（工具节点）等，为用户免去重复开发、定义的负担，只需要专注流程串联。
 
 以上是一个可视化绘制的“用户评价分类系统”工作流，对应 Spring AI Alibaba Graph 代码如下所示：
 
@@ -228,34 +221,40 @@ Spring AI Alibaba 定位为以 `ChatClient`、`Graph` 抽象为核心的智能�
 
 当前，JManus 具备以下核心能力：
 
-+ **<font style="color:#3b3b3b;background-color:#f8f8f8;">完整实现了 Manus 多智能体产品</font>**<font style="color:#3b3b3b;background-color:#f8f8f8;">
-</font><font style="color:#3b3b3b;background-color:#f8f8f8;">JManus 完整实现了 Manus 产品能力，用户可以基于 UI 界面使用产品功能，JManus 可以基于自动规划模式帮助用户完成问题解答。</font>
-+ **<font style="color:#3b3b3b;background-color:#f8f8f8;">无缝支持 MCP（Model Context Protocol）工具集成</font>**<font style="color:#3b3b3b;background-color:#f8f8f8;">
-</font><font style="color:#3b3b3b;background-color:#f8f8f8;">这意味着 Agent 不仅可以调用本地或云端的大语言模型，还能与各类外部服务、API、数据库等进行深度交互，极大拓展了应用场景和能力边界。</font>
-+ **<font style="color:#3b3b3b;background-color:#f8f8f8;">原生支持 PLAN-ACT 模式</font>**<font style="color:#3b3b3b;background-color:#f8f8f8;">
-</font><font style="color:#3b3b3b;background-color:#f8f8f8;">能够让 Agent 具备复杂推理、分步执行和动态调整的能力，适用于多轮对话、复杂决策、自动化流程等高阶 AI 应用场景。</font>
-+ **<font style="color:#3b3b3b;background-color:#f8f8f8;">支持通过 UI 界面配置 Agent</font>**<font style="color:#3b3b3b;background-color:#f8f8f8;">
-</font><font style="color:#3b3b3b;background-color:#f8f8f8;">开发者和运维人员无需修改底层代码，只需在直观的Web管理界面上进行简单操作，就能灵活调整Agent的参数、模型和工具，还可以调整任务规划，大大提升了易用性和运维效率。</font>
-+ **<font style="color:#3b3b3b;background-color:#f8f8f8;">自动生成基于 SAA 的智能体工程</font>**
++ **完整实现了 Manus 多智能体产品**
 
-<font style="color:#3b3b3b;background-color:#f8f8f8;">用户通过自然语言与 JManus 交互，生成规划并沉淀为特定垂直方向的固化解决方案。如果您不想将运行态限定在平台之上，我们正在探索与低代码平台、框架脚手架的深度整合，支持规划转换为具备对等能力的 Spring AI Alibaba 工程。</font>
+JManus 完整实现了 Manus 产品能力，用户可以基于 UI 界面使用产品功能，JManus 可以基于自动规划模式帮助用户完成问题解答。
 
-<font style="color:#3b3b3b;background-color:#f8f8f8;"></font>
++ **无缝支持 MCP（Model Context Protocol）工具集成**
 
-<font style="background-color:#f8f8f8;">JManus 智能体平台还在持续开发建设中，请关注</font>[<font style="background-color:#f8f8f8;"> 官方仓库源码</font>](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-jmanus/)<font style="background-color:#f8f8f8;"> 及后续发布动态。</font>
+这意味着 Agent 不仅可以调用本地或云端的大语言模型，还能与各类外部服务、API、数据库等进行深度交互，极大拓展了应用场景和能力边界。
+
++ **原生支持 PLAN-ACT 模式**
+
+能够让 Agent 具备复杂推理、分步执行和动态调整的能力，适用于多轮对话、复杂决策、自动化流程等高阶 AI 应用场景。
+
++ **支持通过 UI 界面配置 Agent**
+
+开发者和运维人员无需修改底层代码，只需在直观的Web管理界面上进行简单操作，就能灵活调整Agent的参数、模型和工具，还可以调整任务规划，大大提升了易用性和运维效率。
+
++ **自动生成基于 SAA 的智能体工程**
+
+用户通过自然语言与 JManus 交互，生成规划并沉淀为特定垂直方向的固化解决方案。如果您不想将运行态限定在平台之上，我们正在探索与低代码平台、框架脚手架的深度整合，支持规划转换为具备对等能力的 Spring AI Alibaba 工程。
+
+JManus 智能体平台还在持续开发建设中，请关注[官方仓库源码](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-jmanus/)及后续发布动态。
 
 ### DeepResearch 智能体
-<font style="color:rgb(31, 35, 40);">DeepResearch 是一款基于 Spring AI Alibaba Graph 开发的 Deep Research 智能体，包含完整的前端 Web UI（开发中） 和后端实现，DeepResearch 支持一系列精心设计的工具如 Web Search（网络查询）、Crawling（爬虫）、Python 脚本引擎等，可以借助大模型与工具能力，帮助用户完成各类深度调研报告。</font>
 
-<font style="color:rgb(31, 35, 40);"></font>
+DeepResearch 是一款基于 Spring AI Alibaba Graph 开发的 Deep Research 智能体，包含完整的前端 Web UI（开发中） 和后端实现，DeepResearch 支持一系列精心设计的工具如 Web Search（网络查询）、Crawling（爬虫）、Python 脚本引擎等，可以借助大模型与工具能力，帮助用户完成各类深度调研报告。
 
-<font style="color:rgb(31, 35, 40);">以下是 DeepResearch 多智能体应用架构：</font>
+以下是 DeepResearch 多智能体应用架构：
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_7.png)
 
-<font style="background-color:#f8f8f8;">DeepResearch 智能体还在持续开发建设中，请关注</font>[<font style="background-color:#f8f8f8;"> 官方仓库源码</font>](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-deepresearch)<font style="background-color:#f8f8f8;"> 及后续发布动态。</font>
+DeepResearch 智能体还在持续开发建设中，请关注[官方仓库源码](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-deepresearch)及后续发布动态。
 
-## <font style="color:rgb(53, 56, 65);">近期规划</font>
+## 近期规划
+
 + 框架自身的持续迭代优化，如基于 Spring AI 最新设计升级内部实现，优化性能和稳定性，提供更丰富的智能体开发工具与组件。
 + 可观测与评估平台。目前 Spring AI Alibaba 支持通过 OpenTelemetry 接入市面上主流的可观测产品，但我们将加强与阿里云 ARMS、百炼模型评测系统的集成，提供更完善的监控与效果评估能力。
 + 本地项目构建与调试工具。提升 Agent、Graph 研发效率，支持本地化可视化调试。
@@ -267,7 +266,7 @@ Spring AI Alibaba 定位为以 `ChatClient`、`Graph` 抽象为核心的智能�
 ### 与 Spring AI 联系和区别
 Spring AI 是 Spring 官方社区维护的开源框架，最初于 2024 年 5 月发布首个 Milestone 版本，在 2025 年 5 月正式发布首个 1.0 GA 版本。Spring AI 侧重 AI 能力构建的底层原子能力抽象以及与 Spring Boot 生态的无缝集成，如模型通信（ChatModel）、提示词（Prompt）、检索增强生成（RAG）、记忆（ChatMemory）、工具（Tool）、模型上下文协议（MCP）等，帮助 Java 开发者快速构建 AI 应用。
 
-<font style="color:rgb(53, 56, 65);">自 2024 年 9 月正式开源以来，Spring AI Alibaba 一直与 Spring AI 社区有深度沟通合作，期间发布了多个 Milestone 版本并与很多企业客户建立了深度合作关系。在交流过程中，我们看到了低代码开发模式的优势与限制，随着业务复杂度提升客户从聊天机器人、单智能体到对多智能体架构方案的诉求，也看到了智能体开发从简单 Demo 走向生产上线过程中遇到的困难。Spring AI Alibaba 孵化自企业智能体构建过程，目标是为企业提供开箱即用的企业级解决方案，包括多智能体搭建与编排的 Graph 框架、低代码框架集成、企业数据与工具集成、效果评估、通用智能体产品与平台构建等。</font>
+自 2024 年 9 月正式开源以来，Spring AI Alibaba 一直与 Spring AI 社区有深度沟通合作，期间发布了多个 Milestone 版本并与很多企业客户建立了深度合作关系。在交流过程中，我们看到了低代码开发模式的优势与限制，随着业务复杂度提升客户从聊天机器人、单智能体到对多智能体架构方案的诉求，也看到了智能体开发从简单 Demo 走向生产上线过程中遇到的困难。Spring AI Alibaba 孵化自企业智能体构建过程，目标是为企业提供开箱即用的企业级解决方案，包括多智能体搭建与编排的 Graph 框架、低代码框架集成、企业数据与工具集成、效果评估、通用智能体产品与平台构建等。
 
 ### 相关链接
 + Spring AI Alibaba 官网：[https://java2ai.com](https://java2ai.com)
@@ -280,8 +279,3 @@ Spring AI 是 Spring 官方社区维护的开源框架，最初于 2024 年 5 �
 Spring AI Alibaba 目前已经有接近 100 位贡献者，持续为仓库提交代码、使用反馈等，非常感谢各位开源贡献者的付出，使得 Spring AI Alibaba 1.0 得以正式发布。
 
 感谢 Spring AI、Langchain 等 AI 社区及开源项目为开源做出的卓越贡献，不断地给 AI Agent 开发带来新思路与产品。
-
-
-
-
-

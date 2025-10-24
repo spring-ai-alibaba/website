@@ -11,6 +11,8 @@ category: article
 ## MCP 简介
 [模型上下文协议（即 Model Context Protocol，MCP）](https://modelcontextprotocol.io)是一个开放协议，它规范了应用程序如何向大型语言模型（LLM）提供上下文。MCP 提供了一种统一的方式将 AI 模型连接到不同的数据源和工具，它定义了统一的集成方式。在开发智能体（Agent）的过程中，我们经常需要将将智能体与数据和工具集成，MCP 以标准的方式规范了智能体与数据及工具的集成方式，可以帮助您在LLM之上构建智能体（Agent）和复杂的工作流。目前已经有大量的服务接入并提供了 MCP server 实现，当前这个生态正在以非常快的速度不断的丰富中，具体可参见：[https://github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)。
 
+<!-- truncate -->
+
 ## Spring AI MCP
 Spring AI MCP 为模型上下文协议提供 Java 和 Spring 框架集成。它使 Spring AI 应用程序能够通过标准化的接口与不同的数据源和工具进行交互，支持同步和异步通信模式。
 

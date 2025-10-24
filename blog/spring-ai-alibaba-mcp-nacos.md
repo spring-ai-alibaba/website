@@ -10,6 +10,8 @@ category: article
 
 Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以非常方便的开发自己的 MCP 服务，把自己企业内部的业务系统通过标准 MCP 形式发布为 AI Agent 能够接入的工具；另一方面，开发者也可以使用 Spring AI 开发自己的 AI Agent，去接入提供各种能力的 MCP 服务。
 
+<!-- truncate -->
+
 在企业级 AI Agent 的应用与落地场景，只是能发布或者调通 MCP 服务是远远不够的，其中一个非常重要的原因就是企业级的系统部署往往都是分布式的，不论是 Agent 还是 MCP Server，作为企业内部的一个个应用，它们都是要部署在多个机器上，要支持分布式的调用（这包括流量的负载均衡、节点变更动态感知等）。这么分析起来，Agent 与 MCP 需要的分布式能力与我们熟知微服务架构基本是一致的，Spring AI MCP 只是解决了 Agent 与 MCP 服务的编码与通信协议问题，我们还需要为 MCP 服务构建起一套地址自动发现、负载均衡调用的体系，这就是 Spring AI Alibaba MCP 整体方案解决的问题，接下来我们将在这篇文章中详细展开。
 
 ## 企业级 MCP 部署需要的分布式能力
@@ -296,27 +298,13 @@ MCP Client 注入
 
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/img_5.png)
 
-
-
 ToolCallbackProvider 注入
 
-
-
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/img_6.png)
-
-
 
 ## 总结
 Spring AI Alibaba MCP 联合 Nacos，解决了企业级 AI Agent 的应用与落地场景中 MCP 分布式部署与动态更新的关键问题，其中包括流量的负载均衡、节点变更动态感知等关键解决方案。
 
-
-
 1. 查看完整示例源码：[spring-ai-alibaba-mcp-example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example)
 2. Github 项目仓库：[https://github.com/alibaba/spring-ai-alibaba](https://github.com/alibaba/spring-ai-alibaba)
-
-
-
-
-
-
 

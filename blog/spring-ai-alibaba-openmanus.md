@@ -8,14 +8,16 @@ slug: spring-ai-alibaba-openmanus
 category: article
 ---
 
-此次官方发布的 [Spring AI Alibaba OpenManus](https://github.com/alibaba/spring-ai-alibaba/tree/main/community/openmanus) 实现，包含完整的多智能体任务规划、思考与执行流程，可以让开发者体验 Java 版本的多智能体效果。它<font style="color:rgb(0, 0, 0);">能够根据用户的问题进行分析，操作浏览器，执行代码等来完成复杂任务等。</font>
+此次官方发布的 [Spring AI Alibaba OpenManus](https://github.com/alibaba/spring-ai-alibaba/tree/main/community/openmanus) 实现，包含完整的多智能体任务规划、思考与执行流程，可以让开发者体验 Java 版本的多智能体效果。它能够根据用户的问题进行分析，操作浏览器，执行代码等来完成复杂任务等。
+
+<!-- truncate -->
 
 **项目源码及体验地址：**[**spring-ai-alibaba-openmanus**](https://github.com/alibaba/spring-ai-alibaba/tree/main/community/openmanus)
 
 ## 效果展示
 话不多说，先看运行效果，以下是我们通过几个实际问答记录展示的 Spring AI Alibaba OpenManus 实际使用效果。
 
-1. **<font style="color:rgb(0, 0, 0);">打开百度浏览器，在搜索框输入：阿里巴巴最最近一周股价，根据搜索到的信息绘制最近一周的股价趋势图并保存到本地目录。</font>**
+1. **打开百度浏览器，在搜索框输入：阿里巴巴最最近一周股价，根据搜索到的信息绘制最近一周的股价趋势图并保存到本地目录。**
 
 ![spring ai alibaba openmanus](/img/blog/manus/case1.png)
 
@@ -31,11 +33,11 @@ category: article
 ![spring ai alibaba openmanus](/img/blog/manus/case3.png)
 
 ## 总体架构与原理
-<font style="color:rgb(0, 0, 0);">Spring AI Alibaba Openmanus 与 Python 版本 OpenManus 设计理念相似，其总体架构如下图所示。</font>
+Spring AI Alibaba Openmanus 与 Python 版本 OpenManus 设计理念相似，其总体架构如下图所示。
 
 ![spring ai alibaba openmanus architecture](/img/blog/manus/arch.png)
 
-<font style="color:rgb(0, 0, 0);">分析上图架构，我们可以把它看作是一款多 Agent 智能自动协作实现，其中：</font>
+分析上图架构，我们可以把它看作是一款多 Agent 智能自动协作实现，其中：
 
 + Planning Agent 负责任务的分解与规划，将用户问题拆解成几个可顺序执行的 step。planning agent 调用 planning tool 动态生成一个串行的 Manus Agent 子工作流。
 + 多个 Manus Agent 组成一个链式、可顺序依次执行的子工作流。子工作流中的每个 agent 对应上述规划的一个 step，每个 agent 都是一个 ReAct 架构设计，即通过多轮 Tool 调用完成具体子任务。

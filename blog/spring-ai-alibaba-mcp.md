@@ -8,9 +8,7 @@ slug: spring-ai-alibaba-mcp
 category: article
 ---
 
-<font style="color:rgb(53, 56, 65);">本文作者：夏冬，Spring AI Alibaba Contributor。</font>
-
-<font style="color:rgb(53, 56, 65);"></font>
+本文作者：夏冬，Spring AI Alibaba Contributor。
 
 # 0、文章摘要
 
@@ -25,6 +23,7 @@ category: article
 	* 配置并调用 SSE 模式的 MCP Server
 4. 如何在 Spring AI Alibaba OpemManus 实现中使用 MCP 服务。
 
+<!-- truncate -->
 
 # 1、模型上下文协议（Model Context Protocol）入门
 

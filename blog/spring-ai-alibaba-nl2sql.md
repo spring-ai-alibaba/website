@@ -10,6 +10,8 @@ category: article
 ## 开源 NL2SQL 智能体框架简介
 随着大模型技术的快速发展，自然语言到 SQL（NL2SQL）能力在数据分析领域的落地日益广泛。然而，传统 NL2SQL 方案存在Schema 理解偏差、复杂查询生成效率低、执行结果不可控等问题，导致业务场景中频繁出现“答非所问”或“生成失败”的窘境。为了让更多开发者能够便捷地使用这一能力，我们决定将阿里云析言GBI中“Schema 召回 + SQL 生成 + SQL 执行”的核心链路模块化、组件化，并以开源的形式回馈社区。
 
+<!-- truncate -->
+
 官方仓库地址：[https://github.com/alibaba/spring-ai-alibaba](https://github.com/alibaba/spring-ai-alibaba)
 
 ### 析言云服务

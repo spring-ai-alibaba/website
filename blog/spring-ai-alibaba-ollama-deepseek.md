@@ -10,12 +10,13 @@ category: article
 
 今年的春节注定不寻常，开源大模型领域的“国货之光”们接连发布新版本，多项指标对标 OpenAI 的正式版（收费服务）。
 
-+ 1月20日，DeepSeek R1 发布，<font style="color:rgb(0, 0, 0);">在数学、代码、自然语言推理等任务上，性能比肩 OpenAI o1 正式版。[1]</font>
-+ 1月27日，Qwen2.5-1M：<font style="color:rgb(0, 0, 0);">支持 </font><font style="color:rgb(30, 30, 30);">100万 Tok</font>en 上下文，其中 14B 的杯型在短文本任务上实现了和 GPT-4o-mini 相近的性能，同时上下文长度是 GPT-4o-mini 的八倍；长上下文任务在多个数据集上稳定超越 GPT-4o-mini。<font style="color:rgb(0, 0, 0);">[2]</font>
-+ 1月27日，DeepSeek Janus-Pro 发布，多模态理解和生成模型，<font style="color:rgb(0, 0, 0);">其中 7B 的杯型在 GenEval 和 DPG-Bench 基准测试中超过 OpenAI 的 DALL-E 3 和 Stable Diffusion。[3]</font>
-+ <font style="color:rgb(0, 0, 0);">1月28日，Qwen2.5-VL 发布，视觉语言模型，在文档理解、视觉问答、视频理解和视觉 Agent 等维度的多项指标超过 GPT-4o。[4]</font>
-+ <font style="color:rgb(0, 0, 0);">1月29日，Qwen2.5-Max 发布，在 Arena-Hard、LiveBench、LiveCodeBench 和 GPQA-Diamond 等基准测试中，超越了 DeepSeek V3 和 GPT-4o。[5]</font>
++ 1月20日，DeepSeek R1 发布，在数学、代码、自然语言推理等任务上，性能比肩 OpenAI o1 正式版。[1]
++ 1月27日，Qwen2.5-1M：支持 100万 Token 上下文，其中 14B 的杯型在短文本任务上实现了和 GPT-4o-mini 相近的性能，同时上下文长度是 GPT-4o-mini 的八倍；长上下文任务在多个数据集上稳定超越 GPT-4o-mini。[2]
++ 1月27日，DeepSeek Janus-Pro 发布，多模态理解和生成模型，其中 7B 的杯型在 GenEval 和 DPG-Bench 基准测试中超过 OpenAI 的 DALL-E 3 和 Stable Diffusion。[3]
++ 1月28日，Qwen2.5-VL 发布，视觉语言模型，在文档理解、视觉问答、视频理解和视觉 Agent 等维度的多项指标超过 GPT-4o。[4]
++ 1月29日，Qwen2.5-Max 发布，在 Arena-Hard、LiveBench、LiveCodeBench 和 GPQA-Diamond 等基准测试中，超越了 DeepSeek V3 和 GPT-4o。[5]
 
+<!-- truncate -->
 
 业内开始出现一种声音，开源 LLM 不再仅仅是闭源模型的追随者，而是开始主导 AI 发展的方向，而 DeepSeek 和 Qwen 是目前领跑的开源项目。本文将介绍如何基于开源工具部署大模型、构建测试应用、调用大模型能力的完整链路。
 
@@ -135,18 +136,18 @@ public class ChatController {
 ## 总结
 以上是本地部署 DeepSeek 本地模型的实践，如果您希望通过云端方式进行部署，可以参考 [魔搭+函数计算 FC](https://mp.weixin.qq.com/s/yk5t0oIv7XQR0ky6phiq6g)。
 
-<font style="color:rgb(0, 0, 0);"></font>
-
-<font style="color:rgb(0, 0, 0);">Spring AI Alibaba 钉群群号：105120009405</font>
 
 
+Spring AI Alibaba 钉群群号：105120009405
 
-<font style="color:rgb(0, 0, 0);">[1] </font>[https://github.com/deepseek-ai/DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1)
 
-<font style="color:rgb(0, 0, 0);">[2] </font>[https://qwenlm.github.io/blog/qwen2.5-vl/](https://qwenlm.github.io/blog/qwen2.5-vl/)
 
-<font style="color:rgb(0, 0, 0);">[3] </font>[https://github.com/deepseek-ai/Janus?tab=readme-ov-file](https://github.com/deepseek-ai/Janus?tab=readme-ov-file)
+[1] [https://github.com/deepseek-ai/DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1)
 
-<font style="color:rgb(0, 0, 0);">[4] </font>[https://qwenlm.github.io/blog/qwen2.5-1m](https://qwenlm.github.io/blog/qwen2.5-1m/)
+[2] [https://qwenlm.github.io/blog/qwen2.5-vl/](https://qwenlm.github.io/blog/qwen2.5-vl/)
 
-<font style="color:rgb(0, 0, 0);">[5] </font>[https://qwenlm.github.io/zh/blog/qwen2.5-max/](https://qwenlm.github.io/zh/blog/qwen2.5-max/)
+[3] [https://github.com/deepseek-ai/Janus?tab=readme-ov-file](https://github.com/deepseek-ai/Janus?tab=readme-ov-file)
+
+[4] [https://qwenlm.github.io/blog/qwen2.5-1m](https://qwenlm.github.io/blog/qwen2.5-1m/)
+
+[5] [https://qwenlm.github.io/zh/blog/qwen2.5-max/](https://qwenlm.github.io/zh/blog/qwen2.5-max/)

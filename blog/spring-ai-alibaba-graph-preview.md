@@ -10,6 +10,8 @@ category: article
 
 Spring AI Alibaba Graph 的核心内容开发已基本就绪，将在近期发布正式版本，基于 Spring AI Alibaba Graph 开发者可以轻松开发工作流、不同模式的智能体&多智能体等系统，在 Spring AI ChatClient 基础上给开发者带来灵活的选择与更丰富的功能。
 
+<!-- truncate -->
+
 跟着这篇文章，我们将以三个示例形式为大家展示如何使用 Spring AI Alibaba 开发工作流、智能体应用，几行代码即可实现智能体编排：
 
 1. 示例一：一个客户评价处理系统（基于工作流编排实现）
@@ -106,14 +108,12 @@ Spring AI Alibaba 曾发布了业界首个 OpenManus 的 Java 版本实现方案
 
 
 
-<font style="color:rgb(53, 56, 65);">原 OpenManus 的实现并没有使用 Spring AI Alibaba Graph，因此我们花费了大量时间在编写流程控制逻辑。在之前版本的 OpenManus 实现解读中，我们总结了以下相关实现问题：</font>
+原 OpenManus 的实现并没有使用 Spring AI Alibaba Graph，因此我们花费了大量时间在编写流程控制逻辑。在之前版本的 OpenManus 实现解读中，我们总结了以下相关实现问题：
 
-+ <font style="color:rgb(53, 56, 65);">仓库中 80% 代码都在解决流程编排问题，入串联 manus agent 子流程、做消息记忆、转发工具调用、全局状态修改等，这部分工作可以交给高度抽象的 agent 框架实现，以简化开发复杂度。</font>
-+ <font style="color:rgb(53, 56, 65);">工具的覆盖度与执行效果一般，如浏览器使用、脚本执行工具等。</font>
-+ <font style="color:rgb(53, 56, 65);">规划及工作流程中无法人为介入进行 review、动态修改、回退等动作。</font>
-+ <font style="color:rgb(53, 56, 65);">当前 OpenManus 实现的效果调试相对比较困难。</font>
-
-
++ 仓库中 80% 代码都在解决流程编排问题，入串联 manus agent 子流程、做消息记忆、转发工具调用、全局状态修改等，这部分工作可以交给高度抽象的 agent 框架实现，以简化开发复杂度。
++ 工具的覆盖度与执行效果一般，如浏览器使用、脚本执行工具等。
++ 规划及工作流程中无法人为介入进行 review、动态修改、回退等动作。
++ 当前 OpenManus 实现的效果调试相对比较困难。
 
 如今在 Spring AI Alibaba Graph 的帮助下，我们这次可以低于之前 80% 的代码量实现同样的 OpenManus 系统，以下是 OpenManus 实现的架构图：
 

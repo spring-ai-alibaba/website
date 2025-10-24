@@ -7,7 +7,10 @@ date: "2025-05-21"
 slug: spring-ai-100-ga-released
 category: article
 ---
+
 北京时间 2025 年 5 月 20 日，Spring AI 官方团队宣布 1.0 GA 版本正式发布。在过去的近一年时间，Spring AI Alibaba 一直与 Spring AI 社区有深度沟通与合作，期间发布了多个 Milestone 版本，并在此基础上构建了以 agent、multi-agent、企业级生态（如阿里云百炼集成、可观测集成、分布式MCP、Nacos、Higress）、通用智能体（如JManus、DeepResearch）等为特色的框架与解决方案。
+
+<!-- truncate -->
 
 在 Spring AI 1.0 GA 版本开发期间，Spring AI Alibaba 就在积极的参与讨论、贡献与适配，目前 Spring AI Alibaba 1.0 GA 版本相关开发工作也已经基本就绪，支持从聊天机器人、工作流到多智能体的 AI 应用开发，预计将于本周内正式发布。
 

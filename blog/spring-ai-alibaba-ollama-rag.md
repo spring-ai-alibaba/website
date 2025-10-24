@@ -10,6 +10,8 @@ category: article
 
 Spring AI Alibaba RAG Example 示例项目源码地址：https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-rag-example
 
+<!-- truncate -->
+
 ## RAG 应用架构概述
 
 ### 1.1 核心组件

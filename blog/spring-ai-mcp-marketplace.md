@@ -12,6 +12,8 @@ Spring AI Alibaba 正式上线 MCP 市场：[**https://java2ai.com/mcp/**](https
 
 开发者可以在这里搜索市面上可用的 MCP Server 服务，了解每个服务的实现与接入方法。
 
+<!-- truncate -->
+
 ![](/img/blog/mcp-marketplace/marketplace-screenshot.png)
 
 ## MCP 市场是做什么的？
@@ -26,7 +28,7 @@ Spring AI Alibaba MCP 当前主要提供 MCP Server 的查看与浏览能力，�
 MCP 解决了人工智能系统和数据源之间零散集成的问题。它解决了人工智能模型与数据隔离并被困在信息孤岛后面的挑战，用一个通用协议取代了多个自定义实现。
 
 ## MCP 的有哪些应用案例？
-<font style="color:rgb(2, 8, 23);">MCP 可用于各种场景，包括：构建 Claude、Client 等智能体 IDE、增强聊天界面、创建自定义 AI 工作流、将 AI 应用与外部数据源连接等。</font>
+MCP 可用于各种场景，包括：构建 Claude、Client 等智能体 IDE、增强聊天界面、创建自定义 AI 工作流、将 AI 应用与外部数据源连接等。
 
 ## 如何使用 Java 开发应用并发布为 MCP Server？
 Spring AI Alibaba 支持将 Java 应用发布为标准的 MCP Server，开发者只需要按照约定的步骤配置应用即可发布自己的 MCP 服务。可查看官方发布的 [博客](https://java2ai.com/blog/spring-ai-alibaba-mcp/#22-%E4%BD%BF%E7%94%A8-spring-ai-mcp-%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA-mcp-server)。

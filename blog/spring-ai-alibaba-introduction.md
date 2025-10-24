@@ -8,17 +8,13 @@ slug: spring-ai-alibaba-introduction
 category: article
 ---
 
-<font style="color:rgb(53, 56, 65);">本文作者：刘军，Spring AI Alibaba 发起人，Apache Member。</font>
+本文作者：刘军，Spring AI Alibaba 发起人，Apache Member。
 
-<font style="color:rgb(53, 56, 65);"></font>
+编者按：6年前，2018年10月，阿里巴巴开源 Spring Cloud Alibaba，旨在帮助 Java 开发者通过 Spring Cloud 编程模型轻松开发微服务应用。6年后，大模型和 AI 正在深刻改变我们工作和生活的方方面面，不再是移动屏幕端，而是整个物理世界。恰逢其时，阿里云开源 Spring AI Alibaba，旨在帮助 Java 开发者快速构建 AI 应用，共同构建物理新世界，欢迎您加入社区，一起参与这件激动人心的事情。
 
-<font style="color:rgb(53, 56, 65);">编者按：6年前，2018年10月，阿里巴巴开源 Spring Cloud Alibaba，旨在帮助 Java 开发者通过 Spring Cloud 编程模型轻松开发微服务应用。6年后，大模型和 AI 正在深刻改变我们工作和生活的方方面面，不再是移动屏幕端，而是整个物理世界。恰逢其时，阿里云开源 Spring AI Alibaba，旨在帮助 Java 开发者快速构建 AI 应用，共同构建物理新世界，欢迎您加入社区，一起参与这件激动人心的事情。</font>
+<!-- truncate -->
 
-<font style="color:rgb(53, 56, 65);"></font>
-
-<font style="color:rgb(53, 56, 65);">近期，阿里云重磅发布了首款面向 Java 开发者的开源 AI 应用开发框架：Spring AI Alibaba（项目 Github 仓库地址 alibaba/spring-ai-alibaba），Spring AI Alibaba 项目基于 Spring AI 构建，是阿里云通义系列模型及服务在 Java AI 应用开发领域的最佳实践，提供高层次的 AI API 抽象与云原生基础设施集成方案，帮助开发者快速构建 AI 应用。本文将详细介绍 Spring AI Alibaba 的核心特性，并通过「智能机票助手」的示例直观的展示 Spring AI Alibaba 开发 AI 应用的便利性。示例源代码已上传至 GitHub 仓库和官网(</font>[https://sca.aliyun.com/ai/](https://sca.aliyun.com/ai/)<font style="color:rgb(53, 56, 65);">)。</font>
-
-<font style="color:rgb(53, 56, 65);"></font>
+近期，阿里云重磅发布了首款面向 Java 开发者的开源 AI 应用开发框架：Spring AI Alibaba（项目 Github 仓库地址 alibaba/spring-ai-alibaba），Spring AI Alibaba 项目基于 Spring AI 构建，是阿里云通义系列模型及服务在 Java AI 应用开发领域的最佳实践，提供高层次的 AI API 抽象与云原生基础设施集成方案，帮助开发者快速构建 AI 应用。本文将详细介绍 Spring AI Alibaba 的核心特性，并通过「智能机票助手」的示例直观的展示 Spring AI Alibaba 开发 AI 应用的便利性。示例源代码已上传至 GitHub 仓库和官网([https://sca.aliyun.com/ai/](https://sca.aliyun.com/ai/)。
 
 ## 项目简介
 ![spring-ai-alibaba-introduction](/img/blog/intro/spring-ai-alibaba-introduction-1.png)
@@ -124,7 +120,7 @@ Spring AI 提供了从离线数据加载、分析到向量化存储的抽象，�
 
 ## 示例实践
 ### Hello World 示例
-> 可参考 [官网文档快速开始](/docs/dev/get-started/) 详细了解如何使用 Spring AI Alibaba 快速开发生成式 AI 应用。
+> 可参考官网文档快速开始详细了解如何使用 Spring AI Alibaba 快速开发生成式 AI 应用。
 >
 
 使用 Spring AI Alibaba 开发应用与使用普通 Spring Boot 没有什么区别，只需要增加 `spring-ai-alibaba-starter` 依赖，将 `ChatClient` Bean 注入就可以实现与模型聊天了。
@@ -202,23 +198,23 @@ public class ChatController {
 ### 智能机票助手
 接下来，我们通过一个更贴近实际使用场景的示例，来展示 Spring AIAlibaba 在构建智能体应用方面的强大能力。
 
-示例目标是使用 Spring AI Alibaba 框架开发一个智能机票助手，它可以帮助消费者完成<font style="color:#5e5e5e;">机票预定、问题解答、机票改签、取消等动作，具体要求为：</font>
+示例目标是使用 Spring AI Alibaba 框架开发一个智能机票助手，它可以帮助消费者完成机票预定、问题解答、机票改签、取消等动作，具体要求为：
 
-+ <font style="color:#5e5e5e;">基于 AI 大模型</font>与用户对话，理解用户自然语言表达的需求
-+ <font style="color:#5e5e5e;">支持多轮连续对话，能在上下文中理解用户意图</font>
-+ <font style="color:#5e5e5e;">理解机票操作相关的术语与规范并严格遵守，如航空法规、退改签规则等</font>
-+ 在必要时可<font style="color:#5e5e5e;">调用工具辅助完成任务</font>
++ 基于 AI 大模型与用户对话，理解用户自然语言表达的需求
++ 支持多轮连续对话，能在上下文中理解用户意图
++ 理解机票操作相关的术语与规范并严格遵守，如航空法规、退改签规则等
++ 调用工具辅助完成任务
 
 #### 完整架构图
-<font style="color:#5e5e5e;">基于这样一个</font>智能机票助手目标，我们绘制了一个如下图所示的架构图：
+基于这样一个智能机票助手目标，我们绘制了一个如下图所示的架构图：
 
 ![spring-ai-alibaba-introduction](/img/blog/intro/spring-ai-alibaba-introduction-13.png)
 
 
-#### **<font style="color:rgb(0, 0, 0);">使用 ChatClient 完成编码</font>**
-<font style="color:rgb(0, 0, 0);">Spring AI Alibaba 不止提供了以上原子能力抽象，还提供了高阶 “智能体” API 抽象 `ChatClient`，让我们可以非常方便的使用流式 Fluent API 把多个组件组装起来，成为一个智能体 Agent。</font>
+#### **使用 ChatClient 完成编码**
+Spring AI Alibaba 不止提供了以上原子能力抽象，还提供了高阶 “智能体” API 抽象 `ChatClient`，让我们可以非常方便的使用流式 Fluent API 把多个组件组装起来，成为一个智能体 Agent。
 
-<font style="color:rgb(0, 0, 0);">对于智能机票助手与 AI 模型交互的所有能力（Prompt、RAG、Chat Memory、Function Calling 等），我们可以直接使用</font><font style="color:rgb(0, 0, 0);background-color:#f7f7f7;">ChatClient</font><font style="color:rgb(0, 0, 0);"> 进行声明，最终实例化一个可以智能体代理对象。示例代码如下：</font>
+对于智能机票助手与 AI 模型交互的所有能力（Prompt、RAG、Chat Memory、Function Calling 等），我们可以直接使用`ChatClient`进行声明，最终实例化一个可以智能体代理对象。示例代码如下：
 
 ```java
 this.chatClient = modelBuilder
@@ -245,15 +241,11 @@ this.chatClient = modelBuilder
 				.build();
 ```
 
-<font style="color:#5e5e5e;">这样，</font>`<font style="color:#5e5e5e;">ChatClient</font>`<font style="color:#5e5e5e;">就为我们屏蔽了所有与大模型交互的细节，只需要把 </font>`<font style="color:#5e5e5e;">ChatClient</font>`<font style="color:#5e5e5e;">注入常规的 Spring Bean 就可以为我们的机票应用加入智能化能力了。</font>
+这样，`ChatClient`就为我们屏蔽了所有与大模型交互的细节，只需要把 `ChatClient`注入常规的 Spring Bean 就可以为我们的机票应用加入智能化能力了。
 
 最终，我们开发的示例运行效果如下所示：
 
-
-
 ![spring-ai-alibaba-introduction](/img/blog/intro/spring-ai-alibaba-introduction-14.png)
-
-<font style="color:#5e5e5e;"></font>
 
 > 本示例项目的源码请参见文章最后 Github 仓库地址。
 >
@@ -273,8 +265,8 @@ Spring AI Alibaba 的目标是提供 AI 开源框架以及与阿里巴巴整体�
 
 
 ## 联系社区
-+ <font style="color:rgba(0, 0, 0, 0.65);">项目官网：https://sca.aliyun.com/ai</font>
-+ <font style="color:rgba(0, 0, 0, 0.65);">Github源码与示例：https://github.com/alibaba/spring-ai-alibaba</font>
++ 项目官网：https://sca.aliyun.com/ai
++ Github源码与示例：https://github.com/alibaba/spring-ai-alibaba
 + 钉钉群：请通过群号 `64485010179` 搜索入群
 + 微信群：请扫描下图加入
 

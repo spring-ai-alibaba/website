@@ -14,6 +14,7 @@ Spring AI 实现了模块化 RAG 架构，架构的灵感来自于论文“[模�
 
 本文介绍如何使用 Spring AI Alibaba 构建大模型联网搜索应用结合模块化 RAG（Module RAG）和信息检索服务（IQS）赋能大模型。
 
+<!-- truncate -->
 
 ## Spring AI 模块化 RAG 体系
 

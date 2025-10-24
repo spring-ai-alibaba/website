@@ -11,6 +11,7 @@ category: article
 ## Spring AI Alibaba MCP Gateway 简介
 Spring AI Alibaba MCP Gateway 基于 Nacos 提供的 MCP server registry 实现，为普通应用建立一个中间代理层 Java MCP 应用。一方面将 Nacos 中注册的服务信息转换成 MCP 协议的服务器信息，以便 MCP 客户端可以无缝调用这些服务；另一方面可以实现协议转化，将 MCP 协议转换为对后端 HTTP、Dubbo 等服务的调用。基于 Spring AI Alibaba MCP Gateway，您无需对原有业务代码进行改造，新增或者删除 MCP 服务（在Nacos中）无需重启代理应用。
 
+<!-- truncate -->
 
 ## 业务背景
 现存业务代码，对外仅提供 http、dubbo 等接口供外部调用。在 AI 智能化改造期间，如果要对这类服务进行改造，涉及到开发、测试、版本发布等一系列流程，改造工作量不容小觑。

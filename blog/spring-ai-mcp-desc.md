@@ -14,6 +14,8 @@ java版的MCP源码：https://github.com/modelcontextprotocol/java-sdk
 
 - 本版源码解析，取自[mcp/java-sdk（20250322）](https://github.com/modelcontextprotocol/java-sdk)，等正式发版后会再度更新
 
+<!-- truncate -->
+
 ## 理论部分
 
 ![](/img/blog/mcp-desc/overall.PNG)

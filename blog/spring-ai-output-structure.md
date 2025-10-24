@@ -10,6 +10,7 @@ category: article
 
 详情可见 [spring-ai-alibaba-examples](https://github.com/springaialibaba/spring-ai-alibaba-examples) 项目下的 spring-ai-alibaba-structured-example 模块
 
+<!-- truncate -->
 
 ## 理论部分
 
