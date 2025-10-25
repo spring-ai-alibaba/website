@@ -35,7 +35,7 @@ preview:
 
 	@if [ -d "node_modules" ]; then \
 		echo "Starting Docusaurus server..."; \
-		pnpm start; \
+		npm start; \
 	else \
 		echo "node_modules directory does not exist. Please run 'make install' to install dependencies."; \
 	fi
@@ -90,17 +90,17 @@ checklinks: ## Check for broken links in the docs
 	@$(LOG_TARGET)
 	linkinator build -r --concurrency 25 --skip $(LINKINATOR_IGNORE)
 
-.PHONY: pnpm-lint
-pnpm-lint: ## Lint Check the pnpm files.
-pnpm-lint:
+.PHONY: -lint
+npm-lint: ## Lint Check the npm files.
+npm-lint:
 	@$(LOG_TARGET)
-	pnpm lint
+	npm lint
 
-.PHONY: pnpm-lint-fix
-pnpm-lint-fix: ## Lint Check the pnpm files and fix them.
-pnpm-lint-fix:
+.PHONY: npm-lint-fix
+npm-lint-fix: ## Lint Check the npm files and fix them.
+npm-lint-fix:
 	@$(LOG_TARGET)
-	pnpm lint --fix
+	npm lint --fix
 
 ## help: Show this help info.
 .PHONY: help
