@@ -139,7 +139,9 @@ jobs:
         run: make install-tools
 
       - name: Run npm Lint
-        run: make npm-lint
+        run: |
+          make install
+          make npm-lint
 
       - name: Run Markdown Lint
         run: make markdown
