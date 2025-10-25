@@ -1912,7 +1912,7 @@ pom 引入对应依赖
 <tr>
 <td>observationRegistry<br/></td><td>ObservationRegistry<br/></td><td>用于注册和记录观测日志，便于监控和分析调用过程<br/></td></tr>
 <tr>
-<td>toolCallingManager<br/></td><td>ToolCallingManager<br/></td><td>工具调用管理器，用于解析并执行工具调<br/></td></tr>
+<td>toolCallingManager<br/></td><td>ToolCallingManager<br/></td><td>工具调用管理器，用于解析并执行工具调用<br/></td></tr>
 <tr>
 <td>toolExecutionEligibilityPredicate<br/></td><td>ToolExecutionEligibilityPredicate<br/></td><td>判断是否需要执行工具调用的断言函数<br/></td></tr>
 <tr>
