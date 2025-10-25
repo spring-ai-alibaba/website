@@ -12,7 +12,7 @@ Nacos: 具备配置中心能力的 Nacos，本例中使用 Nacos 2.3.0。最新�
 
 ## AI 工程创建
 
-Example 工程地址：https://github.com/springaialibaba/spring-ai-alibaba-nacos-prompt-example
+Example 工程地址：[https://github.com/springaialibaba/spring-ai-alibaba-nacos-prompt-example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-nacos-prompt-example)
 
 ### Pom.xml
 
