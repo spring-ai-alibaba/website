@@ -1585,7 +1585,7 @@ public class ElasticsearchVectorStoreProperties extends CommonVectorStorePropert
 1. 自动装配条件：仅在类路径中存在 ElasticsearchVectorStore、EmbeddingModel 和 RestClient 时生效，且 spring.ai.vectorstore.type 属性判断是否启用 Elasticsearch 类型的向量存储（默认启用）
 2. 配置属性支持：启用 ElasticsearchVectorStoreProperties，允许通过配置文件自定义 Elasticsearch 向量存储的相关参数
 3. 批处理策略 Bean：如果没有自定义的 BatchingStrategy，则自动注入默认的 TokenCountBatchingStrategy
-4. ElasticsearchVectorStore Bean：自动创建并配置 ElasticsearchVectorStore，包括连接 设置索引、纬度、相似度、批处理策略、初始化 schema、观测注册等
+4. ElasticsearchVectorStore Bean：自动创建并配置 ElasticsearchVectorStore，包括连接 设置索引、维度、相似度、批处理策略、初始化 schema、观测注册等
 
 ```java
 package org.springframework.ai.vectorstore.elasticsearch.autoconfigure;
