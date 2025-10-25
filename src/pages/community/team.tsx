@@ -107,7 +107,7 @@ function TeamMemberComponent({ name, role, avatar, bio, github, twitter, website
   )
 }
 
-// PMC 成员数据
+// PMC member data
 const pmcMembers = [
   {
     avatar: 'https://github.com/chickenlj.png',
@@ -148,7 +148,7 @@ const pmcMembers = [
   }
 ]
 
-// Committer 成员数据
+// Committer member data
 const committerMembers = [
   {
     avatar: 'https://github.com/sincerity-being.png',
@@ -219,7 +219,7 @@ const committerMembers = [
   }
 ]
 
-// 将数组分成每两个一组
+// Split array into chunks of specified size
 function chunkArray<T>(array: T[], chunkSize: number): T[][] {
   const chunks: T[][] = []
   for (let i = 0; i < array.length; i += chunkSize) {
@@ -260,7 +260,7 @@ export default function Team(): React.JSX.Element {
             </p>
           </div>
 
-          {/* 第一部分：社区贡献者角色关系 */}
+          {/* Part 1: Community contributor roles and relationships */}
           <div className={styles.rolesSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.mainSectionTitle}>
@@ -273,7 +273,7 @@ export default function Team(): React.JSX.Element {
               </p>
             </div>
 
-            {/* PMC 角色介绍 */}
+            {/* PMC role introduction */}
             <div className={styles.section}>
             <h2 className={styles.sectionTitle}><Translate id="team.pmc.title" description="PMC section title">Project Management Committee</Translate></h2>
             <div className={styles.sectionContent}>
@@ -383,7 +383,7 @@ export default function Team(): React.JSX.Element {
           </div>
           </div>
 
-          {/* 第二部分：项目治理人员名单 */}
+          {/* Part 2: Project governance members list */}
           <div className={styles.governanceSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.mainSectionTitle}>
@@ -396,7 +396,7 @@ export default function Team(): React.JSX.Element {
               </p>
             </div>
 
-            {/* PMC 成员列表 */}
+            {/* PMC members list */}
             <div className={styles.section}>
               <h2><Translate id="team.pmcMembersTitle" description="PMC members title">Project Management Committee (PMC) Members</Translate></h2>
             <div className={styles.memberTable}>
@@ -429,7 +429,7 @@ export default function Team(): React.JSX.Element {
             </div>
           </div>
 
-          {/* Committer 成员列表 */}
+          {/* Committer members list */}
           <div className={styles.section}>
             <h2><Translate id="team.committersTitle" description="Committers title">Committers</Translate></h2>
             <div className={styles.memberTable}>
@@ -462,7 +462,7 @@ export default function Team(): React.JSX.Element {
           </div>
           </div>
 
-          {/* 加入团队部分 */}
+          {/* Join team section */}
           <div className={styles.joinTeam}>
             <div className={styles.joinCard}>
               <h2 className={styles.joinTitle}>

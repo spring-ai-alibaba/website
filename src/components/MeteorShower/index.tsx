@@ -18,59 +18,59 @@ const MeteorShower: React.FC = () => {
   const animationRef = useRef<number | undefined>(undefined);
 
   const meteorColors = [
-    '#ff6b9d', // 粉色
-    '#60a5fa', // 蓝色
-    '#fbbf24', // 金色
-    '#34d399', // 绿色
-    '#a78bfa', // 紫色
-    '#f97316', // 橙色
-    '#fde047', // 黄色
-    '#94a3b8', // 灰色
+    '#ff6b9d', // Pink
+    '#60a5fa', // Blue
+    '#fbbf24', // Gold
+    '#34d399', // Green
+    '#a78bfa', // Purple
+    '#f97316', // Orange
+    '#fde047', // Yellow
+    '#94a3b8', // Gray
   ];
 
   const createMeteor = (): Meteor => {
-    // 从页面任意位置随机开始
-    const startX = Math.random() * window.innerWidth; // 整个屏幕宽度随机
-    const startY = Math.random() * window.innerHeight; // 整个屏幕高度随机
+    // Start randomly from anywhere on the page
+    const startX = Math.random() * window.innerWidth; // Random across screen width
+    const startY = Math.random() * window.innerHeight; // Random across screen height
     
-    // 随机角度，让流星朝不同方向运动
+    // Random angle to make meteors move in different directions
     const angles = [
-      Math.PI / 6,    // 30度
-      Math.PI / 4,    // 45度
-      Math.PI / 3,    // 60度
-      -Math.PI / 6,   // -30度
-      -Math.PI / 4,   // -45度
-      -Math.PI / 3,   // -60度
+      Math.PI / 6,    // 30 degrees
+      Math.PI / 4,    // 45 degrees
+      Math.PI / 3,    // 60 degrees
+      -Math.PI / 6,   // -30 degrees
+      -Math.PI / 4,   // -45 degrees
+      -Math.PI / 3,   // -60 degrees
     ];
     const randomAngle = angles[Math.floor(Math.random() * angles.length)];
     
     return {
       x: startX,
       y: startY,
-      length: Math.random() * 80 + 60, // 60-140px长度
-      speed: Math.random() * 2 + 2, // 速度：2-4像素每帧
+      length: Math.random() * 80 + 60, // 60-140px length
+      speed: Math.random() * 2 + 2, // Speed: 2-4 pixels per frame
       color: meteorColors[Math.floor(Math.random() * meteorColors.length)],
       opacity: 1,
-      angle: randomAngle, // 随机角度
+      angle: randomAngle, // Random angle
       tail: []
     };
   };
 
   const updateMeteor = (meteor: Meteor, canvas: HTMLCanvasElement): boolean => {
-    // 更新位置 - 沿45度角运动
+    // Update position - move at 45 degree angle
     const dx = Math.cos(meteor.angle) * meteor.speed;
     const dy = Math.sin(meteor.angle) * meteor.speed;
     
-    // 记录尾巴轨迹 - 增加尾巴长度
+    // Record tail trajectory - increase tail length
     meteor.tail.unshift({ x: meteor.x, y: meteor.y, opacity: meteor.opacity });
-    if (meteor.tail.length > 40) {  // 增加尾巴长度从20到40
+    if (meteor.tail.length > 40) {  // Increase tail length from 20 to 40
       meteor.tail.pop();
     }
     
     meteor.x += dx;
     meteor.y += dy;
     
-    // 如果流星完全离开屏幕，返回false
+    // If meteor completely leaves the screen, return false
     return meteor.x < canvas.width + 200 && meteor.y < canvas.height + 200;
   };
 

@@ -16,15 +16,15 @@ const PineconeFloatingSearch: React.FC = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
-  
+
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  
+
   const searchConfig = getSearchConfig(projectConfig);
   const isPineconeConfigured = searchConfig.isVectorSearchConfigured;
 
-  // 执行搜索 - 简化版本，返回演示结果
+  // Perform search - simplified version, returns demo results
   const performSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setResults([]);
@@ -32,11 +32,11 @@ const PineconeFloatingSearch: React.FC = () => {
     }
 
     setLoading(true);
-    
-    // 模拟 API 延迟
+
+    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Mock 演示搜索结果
+
+    // Mock demo search results
     const demoResults: SearchResult[] = [
       {
         id: 'demo-1',
@@ -61,8 +61,8 @@ const PineconeFloatingSearch: React.FC = () => {
       }
     ];
 
-    // 根据查询过滤结果
-    const filteredResults = demoResults.filter(result => 
+    // Filter results based on query
+    const filteredResults = demoResults.filter(result =>
       result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       result.content.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -71,7 +71,7 @@ const PineconeFloatingSearch: React.FC = () => {
     setLoading(false);
   };
 
-  // 防抖搜索
+  // Debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       performSearch(query);
@@ -79,7 +79,7 @@ const PineconeFloatingSearch: React.FC = () => {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  // 键盘事件处理
+  // Keyboard event handling
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -89,7 +89,7 @@ const PineconeFloatingSearch: React.FC = () => {
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        searchRef.current && 
+        searchRef.current &&
         !searchRef.current.contains(event.target as Node) &&
         buttonRef.current &&
         !buttonRef.current.contains(event.target as Node)
@@ -130,7 +130,7 @@ const PineconeFloatingSearch: React.FC = () => {
     <div className={styles.floatingSearchContainer}>
       <button
         ref={buttonRef}
-        className={clsx(styles.floatingButton, { 
+        className={clsx(styles.floatingButton, {
           [styles.floatingButtonActive]: isOpen
         })}
         onClick={handleToggleSearch}

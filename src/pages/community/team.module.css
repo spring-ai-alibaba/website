@@ -329,7 +329,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-/* 分区样式 */
+/* Section styles */
 .rolesSection {
   margin-bottom: 6rem;
   position: relative;
@@ -439,7 +439,7 @@
   font-weight: 500;
 }
 
-/* 分隔线 */
+/* Separator line */
 .rolesSection::after {
   content: '';
   position: absolute;

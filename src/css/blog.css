@@ -1,12 +1,12 @@
 /* ============================================
    Blog Page Style Optimization
-   优化博客页面样式，覆盖 Docusaurus 默认样式
-   仅作用于博客页面，不影响其他页面布局
+   Optimize blog page styles, override Docusaurus default styles
+   Only applied to blog pages, does not affect other page layouts
    ============================================ */
 
-/* ===== 博客列表页样式 ===== */
+/* ===== Blog List Page Styles ===== */
 
-/* 博客容器优化 - 仅限博客页面 */
+/* Blog container optimization - blog pages only */
 .theme-blog-list-page .blog-wrapper,
 .theme-blog-list-page main > .container {
   max-width: 1400px;
@@ -14,7 +14,7 @@
   padding: 2rem 1rem;
 }
 
-/* 博客标题尺寸优化 - 解决标题太大的问题 - 仅限博客页面 */
+/* Blog title size optimization - fix oversized title issue - blog pages only */
 .theme-blog-list-page .blog-post-title,
 .theme-blog-list-page .markdown h1[class*='title'],
 .theme-blog-post-page .blog-post-title,
@@ -25,7 +25,7 @@
   font-weight: 700 !important;
 }
 
-/* 博客列表页的博客项标题 - 仅限博客列表页 */
+/* Blog list page post title - blog list page only */
 .theme-blog-list-page article.blog-post-item h2 a,
 .theme-blog-list-page article.blog-post-item h2,
 .theme-blog-list-page article h2 a,
@@ -36,7 +36,7 @@
   font-weight: 700 !important;
 }
 
-/* 博客详情页主标题 - 仅限博客详情页 */
+/* Blog detail page main title - blog detail page only */
 .theme-blog-post-page article header h1,
 .theme-blog-post-page .markdown > h1:first-child {
   font-size: 1.75rem !important;
@@ -45,7 +45,7 @@
   font-weight: 700 !important;
 }
 
-/* 博客元信息样式优化 - 仅限博客页面 */
+/* Blog metadata style optimization - blog pages only */
 .theme-blog-list-page .blog-post-item__footer,
 .theme-blog-list-page .blog-post-item__meta,
 .theme-blog-list-page .theme-blog-post-item header,
@@ -65,7 +65,7 @@
   border-top: 1px solid var(--border-light);
 }
 
-/* 博客摘要优化 - 仅限博客列表页 */
+/* Blog excerpt optimization - blog list page only */
 .theme-blog-list-page .blog-post-item__description,
 .theme-blog-list-page .theme-blog-post-item-preview {
   font-size: 1rem;
@@ -74,7 +74,7 @@
   margin: 1rem 0 1.5rem 0;
 }
 
-/* 阅读更多按钮优化 - 仅限博客列表页 */
+/* Read more button optimization - blog list page only */
 .theme-blog-list-page .theme-blog-post-item footer a,
 .theme-blog-list-page a[class*='readMore'] {
   font-size: 0.95rem !important;
@@ -96,15 +96,15 @@
   transform: translateX(4px);
 }
 
-/* ===== 博客详情页样式优化 ===== */
+/* ===== Blog Detail Page Style Optimization ===== */
 
-/* 博客详情页布局优化 - 解决右侧目录太窄的问题 - 仅限博客详情页 */
+/* Blog detail page layout optimization - fix narrow sidebar issue - blog detail page only */
 .theme-blog-post-page .theme-doc-markdown,
 .theme-blog-post-page .col {
   max-width: 100% !important;
 }
 
-/* 主内容区域宽度优化 - 仅限博客详情页 */
+/* Main content area width optimization - blog detail page only */
 .theme-blog-post-page .container {
   max-width: 1400px !important;
 }
@@ -114,7 +114,7 @@
   gap: 2rem;
 }
 
-/* 博客内容主体宽度 - 仅限博客详情页 */
+/* Blog content main body width - blog detail page only */
 .theme-blog-post-page .col--8,
 .theme-blog-post-page main > .container > .row > .col:first-child,
 .theme-blog-post-page .row > div[class*='col--']:first-child {
@@ -123,7 +123,7 @@
   width: 60% !important;
 }
 
-/* 右侧栏（目录）宽度优化 - 从默认的窄宽度改为更宽 - 仅限博客详情页 */
+/* Sidebar (TOC) width optimization - from default narrow width to wider - blog detail page only */
 .theme-blog-post-page .col--4,
 .theme-blog-post-page aside,
 .theme-blog-post-page .col.col--3,
@@ -135,7 +135,7 @@
   width: 38% !important;
 }
 
-/* 目录容器样式优化 */
+/* TOC container style optimization */
 .theme-blog-post-page .table-of-contents,
 .theme-doc-toc-desktop {
   background: var(--card-bg);
@@ -150,7 +150,7 @@
   overflow-y: auto;
 }
 
-/* 目录标题 */
+/* TOC title */
 .table-of-contents::before,
 .theme-doc-toc-desktop > .table-of-contents::before {
   content: '目录';
@@ -163,7 +163,7 @@
   border-bottom: 2px solid var(--border-medium);
 }
 
-/* 目录链接样式 */
+/* TOC link styles */
 .table-of-contents li,
 .theme-doc-toc-desktop li {
   margin: 0.5rem 0;
@@ -203,7 +203,7 @@
   font-weight: 600;
 }
 
-/* 嵌套目录缩进 */
+/* Nested TOC indentation */
 .table-of-contents ul,
 .theme-doc-toc-desktop ul {
   padding-left: 0;
@@ -216,7 +216,7 @@
   margin-top: 0.25rem;
 }
 
-/* 博客内容区域样式 */
+/* Blog content area styles */
 .theme-blog-post-page article {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
@@ -231,7 +231,7 @@
   background: rgba(31, 41, 55, 0.9);
 }
 
-/* 博客内容内的标题优化 */
+/* Blog content heading optimization */
 .theme-blog-post-page article h2 {
   font-size: 1.35rem !important;
   margin-top: 2rem !important;
@@ -253,14 +253,14 @@
   margin-bottom: 0.5rem !important;
 }
 
-/* 博客内容段落间距 */
+/* Blog content paragraph spacing */
 .theme-blog-post-page article p {
   margin-bottom: 1.25rem;
   line-height: 1.8;
   font-size: 1rem;
 }
 
-/* 博客标签样式 */
+/* Blog tag styles */
 .theme-blog-post-page .tags,
 .blog-tags {
   display: flex;
@@ -292,7 +292,7 @@
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-/* 博客作者信息 */
+/* Blog author info */
 .theme-blog-post-page .avatar {
   display: flex;
   align-items: center;
@@ -322,7 +322,7 @@
   color: var(--text-secondary);
 }
 
-/* ===== 博客分页样式 ===== */
+/* ===== Blog Pagination Styles ===== */
 .theme-blog-list-page nav.pagination {
   margin-top: 3rem;
   padding-top: 2rem;
@@ -355,7 +355,7 @@
   border-color: var(--ifm-color-primary);
 }
 
-/* ===== 博客侧边栏样式（如果有的话）===== */
+/* ===== Blog Sidebar Styles (if any) ===== */
 .theme-blog-sidebar {
   background: var(--card-bg);
   backdrop-filter: blur(10px);
@@ -374,9 +374,9 @@
   font-weight: 700;
 }
 
-/* ===== 响应式设计 ===== */
+/* ===== Responsive Design ===== */
 @media (max-width: 996px) {
-  /* 平板和小屏幕设备 */
+  /* Tablet and small screen devices */
   .theme-blog-post-page .col--8,
   .theme-blog-post-page .col--4,
   .theme-blog-post-page main > .container > .row > .col {
@@ -388,7 +388,7 @@
     flex-direction: column;
   }
 
-  /* 目录移到内容下方 */
+  /* TOC moved below content */
   .theme-blog-post-page .table-of-contents,
   .theme-doc-toc-desktop {
     position: static;
@@ -396,13 +396,13 @@
     max-height: none;
   }
 
-  /* 博客列表页标题尺寸 */
+  /* Blog list page title size */
   .theme-blog-list-page article.blog-post-item h2 a,
   .theme-blog-list-page article.blog-post-item h2 {
     font-size: 1.4rem !important;
   }
 
-  /* 博客详情页标题尺寸 */
+  /* Blog detail page title size */
   .theme-blog-post-page article header h1 {
     font-size: 1.75rem !important;
   }
@@ -413,7 +413,7 @@
 }
 
 @media (max-width: 768px) {
-  /* 手机设备 */
+  /* Mobile devices */
   .theme-blog-list-page .blog-wrapper,
   .theme-blog-list-page main > .container {
     padding: 1rem 0.5rem;
@@ -454,7 +454,7 @@
   }
 }
 
-/* ===== 博客搜索框样式（如果有）===== 仅限博客页面 */
+/* ===== Blog Search Box Styles (if any) ===== - blog pages only */
 .theme-blog-list-page .blog-search,
 .theme-blog-post-page .blog-search {
   margin-bottom: 2rem;
@@ -479,7 +479,7 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* ===== 博客卡片布局优化（列表页）===== 仅限博客列表页 */
+/* ===== Blog Card Layout Optimization (list page) ===== - blog list page only */
 .theme-blog-list-page .blog-post-item,
 .theme-blog-list-page article {
   margin-bottom: 2rem;
@@ -505,7 +505,7 @@
   border-color: var(--ifm-color-primary);
 }
 
-/* 博客列表日期显示 - 仅限博客页面 */
+/* Blog list date display - blog pages only */
 .theme-blog-list-page .blog-post-item time,
 .theme-blog-list-page .theme-blog-post-item time,
 .theme-blog-post-page .blog-post-item time,
@@ -515,12 +515,12 @@
   font-weight: 500;
 }
 
-/* 修复代码块在博客中的显示 */
+/* Fix code block display in blog */
 .theme-blog-post-page pre {
   margin: 1.5rem 0;
 }
 
-/* 博客图片样式 */
+/* Blog image styles */
 .theme-blog-post-page article img {
   border-radius: 12px;
   box-shadow: var(--card-shadow);
@@ -529,7 +529,7 @@
   height: auto;
 }
 
-/* 引用块样式 */
+/* Blockquote styles */
 .theme-blog-post-page article blockquote {
   background: rgba(37, 99, 235, 0.05);
   border-left: 4px solid var(--ifm-color-primary);
@@ -540,7 +540,7 @@
   color: var(--text-secondary);
 }
 
-/* 列表样式优化 */
+/* List style optimization */
 .theme-blog-post-page article ul,
 .theme-blog-post-page article ol {
   padding-left: 2rem;
@@ -552,14 +552,14 @@
   line-height: 1.7;
 }
 
-/* 水平分割线 */
+/* Horizontal divider */
 .theme-blog-post-page article hr {
   margin: 2rem 0;
   border: none;
   border-top: 1px solid var(--border-medium);
 }
 
-/* 博客归档页面优化 */
+/* Blog archive page optimization */
 .theme-blog-archive-page .archive-list {
   list-style: none;
   padding: 0;
@@ -576,7 +576,7 @@
   transform: translateX(8px);
 }
 
-/* 确保目录滚动条样式 */
+/* Ensure TOC scrollbar styles */
 .table-of-contents::-webkit-scrollbar,
 .theme-doc-toc-desktop::-webkit-scrollbar {
   width: 6px;
@@ -598,8 +598,8 @@
   background: var(--ifm-color-primary);
 }
 
-/* ===== 强制覆盖博客页面目录宽度 ===== */
-/* 使用更高优先级的选择器确保宽度生效 */
+/* ===== Force override blog page TOC width ===== */
+/* Use higher priority selectors to ensure width takes effect */
 .theme-blog-post-page .container .row > .col:last-child,
 .theme-blog-post-page .container > .row > aside,
 .theme-blog-post-page div[class*='col']:last-child,
@@ -610,7 +610,7 @@
   width: 38% !important;
 }
 
-/* 主内容区强制宽度 */
+/* Main content area forced width */
 .theme-blog-post-page .container .row > .col:first-child,
 .theme-blog-post-page .container > .row > main,
 .theme-blog-post-page div[class*='col']:first-child {
@@ -619,7 +619,7 @@
   width: 60% !important;
 }
 
-/* 目录容器本身的宽度 */
+/* TOC container itself width */
 .theme-blog-post-page .table-of-contents,
 .theme-blog-post-page .theme-doc-toc-desktop,
 .theme-blog-post-page aside .table-of-contents {
@@ -627,7 +627,7 @@
   max-width: 100% !important;
 }
 
-/* 针对所有可能的目录侧边栏类名 */
+/* For all possible TOC sidebar class names */
 .theme-blog-post-page div[class*='tocCollapsible'],
 .theme-blog-post-page div[class*='tableOfContents'],
 .theme-blog-post-page aside[class*='sidebar'] {
@@ -637,8 +637,8 @@
   width: 38% !important;
 }
 
-/* ===== 强制覆盖博客标题大小 - 最高优先级 ===== */
-/* 博客列表页标题强制覆盖 */
+/* ===== Force override blog title size - highest priority ===== */
+/* Blog list page title forced override */
 body .theme-blog-list-page article h2,
 body .theme-blog-list-page article h2 a,
 body .theme-blog-list-page .blog-post-item h2,
@@ -648,7 +648,7 @@ body .theme-blog-list-page .blog-post-item h2 a {
   font-weight: 700 !important;
 }
 
-/* 博客详情页主标题强制覆盖 */
+/* Blog detail page main title forced override */
 body .theme-blog-post-page article header h1,
 body .theme-blog-post-page header h1,
 body .theme-blog-post-page h1 {
@@ -657,7 +657,7 @@ body .theme-blog-post-page h1 {
   font-weight: 700 !important;
 }
 
-/* 博客文章内容标题强制覆盖 */
+/* Blog article content headings forced override */
 body .theme-blog-post-page article h2,
 body .theme-blog-post-page .markdown h2 {
   font-size: 1.35rem !important;

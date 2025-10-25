@@ -4,10 +4,10 @@ import styles from './styles.module.css';
 export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
-  // 监听滚动事件
+  // Listen for scroll events
   useEffect(() => {
     const toggleVisibility = () => {
-      // 当页面滚动超过 300px 时显示按钮
+      // Show button when page is scrolled more than 300px
       if (window.pageYOffset > 300) {
         setIsVisible(true);
       } else {
@@ -22,7 +22,7 @@ export default function BackToTop() {
     };
   }, []);
 
-  // 回到顶部的函数
+  // Function to scroll to top
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

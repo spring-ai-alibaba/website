@@ -1,4 +1,4 @@
-/* 搜索按钮 */
+/* Search button */
 .searchButton {
   display: flex;
   align-items: center;
@@ -41,7 +41,7 @@
   flex-shrink: 0;
 }
 
-/* 搜索模态框背景 */
+/* Search modal backdrop */
 .searchBackdrop {
   position: fixed;
   top: 0;
@@ -57,7 +57,7 @@
   padding-top: 10vh;
 }
 
-/* 搜索模态框 */
+/* Search modal */
 .searchModal {
   width: 90%;
   max-width: 600px;
@@ -71,7 +71,7 @@
   border: 1px solid var(--ifm-color-emphasis-200);
 }
 
-/* 搜索输入区域 */
+/* Search input area */
 .searchInputContainer {
   display: flex;
   align-items: center;
@@ -129,14 +129,14 @@
   padding: 0;
 }
 
-/* 搜索结果区域 */
+/* Search results area */
 .searchResults {
   flex: 1;
   overflow-y: auto;
   max-height: 400px;
 }
 
-/* 空状态 */
+/* Empty state */
 .searchEmptyState {
   padding: 40px 20px;
   text-align: center;
@@ -171,7 +171,7 @@
   font-size: 14px;
 }
 
-/* 无结果状态 */
+/* No results state */
 .searchNoResults {
   padding: 40px 20px;
   text-align: center;
@@ -188,7 +188,7 @@
   margin-top: 8px;
 }
 
-/* 搜索结果列表 */
+/* Search results list */
 .searchResultsList {
   padding: 8px 0;
 }
@@ -203,7 +203,7 @@
   margin-bottom: 8px;
 }
 
-/* 搜索结果项 */
+/* Search result item */
 .searchResultItem {
   padding: 0.75rem;
   border-radius: 0.5rem;
@@ -223,7 +223,7 @@
   border-color: var(--ifm-color-primary);
 }
 
-/* 暗色主题下的选中状态 */
+/* Selected state in dark theme */
 [data-theme='dark'] .searchResultItemSelected {
   background: var(--ifm-color-primary-darkest);
   border-color: var(--ifm-color-primary);
@@ -297,7 +297,7 @@
   border-radius: 2px;
 }
 
-/* 搜索底部 */
+/* Search footer */
 .searchFooter {
   display: flex;
   align-items: center;
@@ -339,31 +339,31 @@
   text-decoration: underline;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .searchButton {
     min-width: auto;
     padding: 8px;
   }
-  
+
   .searchButtonText {
     display: none;
   }
-  
+
   .searchShortcut {
     display: none;
   }
-  
+
   .searchModal {
     width: 95%;
     margin: 0 auto;
     max-height: 85vh;
   }
-  
+
   .searchBackdrop {
     padding-top: 5vh;
   }
-  
+
   .searchNavHint {
     display: none;
   }

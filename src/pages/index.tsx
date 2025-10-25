@@ -15,7 +15,7 @@ import projectConfig, { getGitHubUrls } from '../../project.config';
 // Generate GitHub links from project configuration
 const githubUrls = getGitHubUrls(projectConfig);
 
-// 示例代码字符串
+// Sample code string
 const sampleCode = `@RestController
 @RequestMapping
 @SpringBootApplication

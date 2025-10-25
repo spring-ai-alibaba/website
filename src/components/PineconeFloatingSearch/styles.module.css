@@ -292,7 +292,7 @@
   font-weight: bold;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .floatingSearchContainer {
     bottom: 100px;
@@ -327,7 +327,7 @@
 
   .searchInput {
     padding: 10px 12px;
-    font-size: 16px; /* 防止 iOS Safari 缩放 */
+    font-size: 16px; /* Prevent iOS Safari zooming */
   }
 
   .closeButton {
@@ -337,7 +337,7 @@
   }
 }
 
-/* 深色模式优化 */
+/* Dark mode optimization */
 [data-theme='dark'] .floatingButton {
   box-shadow: 0 4px 12px rgba(var(--ifm-color-primary-rgb), 0.2);
 }

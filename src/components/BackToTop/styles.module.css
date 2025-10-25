@@ -41,7 +41,7 @@
   transform: translateY(-2px);
 }
 
-/* 深色模式优化 */
+/* Dark mode optimization */
 [data-theme='dark'] .backToTop {
   background: var(--ifm-color-primary);
   box-shadow: 0 4px 16px rgba(96, 165, 250, 0.4);
@@ -52,7 +52,7 @@
   box-shadow: 0 8px 24px rgba(96, 165, 250, 0.5);
 }
 
-/* 添加脉冲效果 */
+/* Add pulse effect */
 .backToTop::before {
   content: '';
   position: absolute;
@@ -77,7 +77,7 @@
   }
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .backToTop {
     width: 44px;
@@ -96,7 +96,7 @@
   }
 }
 
-/* 博客页面的目录在右侧，需要调整按钮位置避免遮挡 */
+/* Adjust button position to avoid blocking TOC on blog page which is on the right side */
 @media (min-width: 997px) {
   .theme-blog-post-page .backToTop {
     right: 2rem;
@@ -104,7 +104,7 @@
   }
 }
 
-/* 确保不会遮挡其他固定元素 */
+/* Ensure it doesn't block other fixed elements */
 .backToTop {
   pointer-events: auto;
 }

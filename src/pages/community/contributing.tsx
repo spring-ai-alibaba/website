@@ -33,7 +33,7 @@ export default function Contributing(): React.JSX.Element {
           </div>
 
           <div className={styles.contributingContent}>
-            {/* 合并的分组：感谢和如何贡献 */}
+            {/* Merged group: Thanks and How to Contribute */}
             <div className={styles.gridSection}>
               <div className={styles.gridCard}>
                 <div className={styles.cardIcon}>🚀</div>
@@ -67,11 +67,11 @@ export default function Contributing(): React.JSX.Element {
               </div>
             </div>
 
-            {/* 4方格布局 */}
+            {/* 4-column grid layout */}
             <div className={styles.gridContainer}>
-              {/* 第一行 */}
+              {/* First row */}
               <div className={styles.gridRow}>
-                {/* 贡献类型 */}
+                {/* Contribution types */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>💡</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.contributionTypesTitle" description="Contribution types title">贡献类型</Translate></h3>
@@ -95,7 +95,7 @@ export default function Contributing(): React.JSX.Element {
                   </div>
                 </div>
 
-                {/* 代码开发 */}
+                {/* Code development */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>💻</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.codeDevelopment" description="Code development title">代码开发</Translate></h3>
@@ -107,9 +107,9 @@ export default function Contributing(): React.JSX.Element {
                     </p>
                   </div>
                 </div>
-              </div>              {/* 第二行 */}
+              </div>              {/* Second row */}
               <div className={styles.gridRow}>
-                {/* 代码质量检查 */}
+                {/* Code quality check */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>✅</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.qualityCheck" description="Quality check title">代码质量检查</Translate></h3>
@@ -122,7 +122,7 @@ export default function Contributing(): React.JSX.Element {
                   </div>
                 </div>
 
-                {/* 代码规范 */}
+                {/* Code standards */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>🔍</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.codeStandards" description="Code standards title">代码规范</Translate></h3>
@@ -136,9 +136,9 @@ export default function Contributing(): React.JSX.Element {
                 </div>
               </div>
 
-              {/* 第三行 */}
+              {/* Third row */}
               <div className={styles.gridRow}>
-                {/* 代码清理 */}
+                {/* Code cleanup */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>🧹</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.codeCleaning" description="Code cleaning title">代码清理</Translate></h3>
@@ -151,7 +151,7 @@ export default function Contributing(): React.JSX.Element {
                   </div>
                 </div>
 
-                {/* 代码提交 */}
+                {/* Code commit */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>📝</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.codeCommit" description="Code commit title">代码提交</Translate></h3>
@@ -170,9 +170,9 @@ export default function Contributing(): React.JSX.Element {
                 </div>
               </div>
 
-              {/* 第四行 */}
+              {/* Fourth row */}
               <div className={styles.gridRow}>
-                {/* PR 提交 */}
+                {/* PR submission */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>🎉</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.prSubmission" description="PR submission title">PR 提交</Translate></h3>
@@ -185,7 +185,7 @@ export default function Contributing(): React.JSX.Element {
                   </div>
                 </div>
 
-                {/* 代码合并 */}
+                {/* Code merge */}
                 <div className={styles.gridCard}>
                   <div className={styles.cardIcon}>🔄</div>
                   <h3 className={styles.cardTitle}><Translate id="contributing.codeMerge" description="Code merge title">代码合并</Translate></h3>
@@ -211,7 +211,7 @@ export default function Contributing(): React.JSX.Element {
               </div>
             </div>
 
-            {/* 行为准则 */}
+            {/* Code of Conduct */}
             <div className={styles.gridSection}>
               <div className={styles.gridCard}>
                 <div className={styles.cardIcon}>📜</div>

@@ -90,7 +90,7 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/social-card.jpg',
-    // 禁用搜索功能
+    // Disable search functionality
     algolia: undefined,
     navbar: {
       title: projectConfig.title,

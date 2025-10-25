@@ -177,7 +177,7 @@
   }
 }
 
-/* 语法高亮样式 */
+/* Syntax highlighting styles */
 .codeKeyword {
   color: #8b5cf6;
   font-weight: 600;
@@ -239,7 +239,7 @@
   color: #c084fc;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media screen and (max-width: 996px) {
   .codePreview {
     max-width: 100%;

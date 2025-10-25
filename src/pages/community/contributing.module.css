@@ -68,7 +68,7 @@
   margin: 0 auto;
 }
 
-/* 4方格布局样式 */
+/* 4-column grid layout styles */
 .gridContainer {
   display: flex;
   flex-direction: column;
