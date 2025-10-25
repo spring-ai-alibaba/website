@@ -193,7 +193,7 @@ docker run -d \
 #### application.yml
 
 ```yml
-Redis
+# Redis
 server:
   port: 8080
 
