@@ -2301,7 +2301,7 @@ public final class JsoupDocumentReaderConfig {
 
 DocumentVisitor 作为内部静态类，继承自 CommonMark 的 AbstractVisitor，用于遍历和解析 Markdown 的语法树节点，将其内容按配置分组、提取为结构化的 Document 对象
 
-1. 历 Markdown 解析后的节点树，根据配置（如是否按水平线分组、是否包含代码块/引用等）将内容分组
+1. 遍历 Markdown 解析后的节点树，根据配置（如是否按水平线分组、是否包含代码块/引用等）将内容分组
 2. 识别标题、段落、代码块、引用等不同类型节点，提取文本和元数据，构建 Document
 3. 支持为不同类型内容（如标题、代码块、引用）添加分类、标题、语言等元数据，便于后续 AI 处理。
 
