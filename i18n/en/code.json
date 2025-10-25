@@ -809,137 +809,73 @@
     "message": "Tags:",
     "description": "The label alongside a tag list"
   },
-  "theme.AnnouncementBar.closeButtonAriaLabel": {
-    "message": "Close",
-    "description": "The ARIA label for close button of announcement bar"
+  "contributing.welcomeTitle": {
+    "message": "Welcome to Contribute",
+    "description": "Welcome contribution title"
   },
-  "theme.admonition.caution": {
-    "message": "caution",
-    "description": "The default label used for the Caution admonition (:::caution)"
+  "contributing.contributionTypesTitle": {
+    "message": "Contribution Types",
+    "description": "Contribution types title"
   },
-  "theme.admonition.danger": {
-    "message": "danger",
-    "description": "The default label used for the Danger admonition (:::danger)"
+  "contributing.codeDevelopment": {
+    "message": "Code Development",
+    "description": "Code development title"
   },
-  "theme.admonition.info": {
-    "message": "info",
-    "description": "The default label used for the Info admonition (:::info)"
+  "contributing.codeDevelopmentText": {
+    "message": "Develop your own features. After development, it is recommended to use the mvn clean package command to ensure that the modified code can be compiled locally. This command also automatically formats the code in the Spring way. Then submit the code. Before submitting code, please note to create a new branch related to this feature for code submission.",
+    "description": "Code development description"
   },
-  "theme.admonition.note": {
-    "message": "note",
-    "description": "The default label used for the Note admonition (:::note)"
+  "contributing.qualityCheck": {
+    "message": "Code Quality Check",
+    "description": "Quality check title"
   },
-  "theme.admonition.tip": {
-    "message": "tip",
-    "description": "The default label used for the Tip admonition (:::tip)"
+  "contributing.qualityCheckText": {
+    "message": "After completing local BOE environment development, it is strongly recommended to execute the make command provided by the project tools/make for local continuous integration (CI) checks before submitting a PR to ensure that the code meets the project's standards and specifications. If you have any questions about local CI, you can type make help in the console to learn specific information.",
+    "description": "Quality check description"
   },
-  "theme.admonition.warning": {
-    "message": "warning",
-    "description": "The default label used for the Warning admonition (:::warning)"
+  "contributing.codeStandards": {
+    "message": "Code Standards",
+    "description": "Code standards title"
   },
-  "theme.blog.sidebar.navAriaLabel": {
-    "message": "Blog recent posts navigation",
-    "description": "The ARIA label for recent posts in the blog sidebar"
+  "contributing.codeStandardsText": {
+    "message": "To reduce some unnecessary code style issues, Spring AI Alibaba provides local Checkstyle check functionality. You can execute the mvn checkstyle:check command in the project root directory to check whether the code style meets the specifications.",
+    "description": "Code standards description"
   },
-  "theme.DocSidebarItem.expandCategoryAriaLabel": {
-    "message": "Expand sidebar category '{label}'",
-    "description": "The ARIA label to expand the sidebar category"
+  "contributing.codeCleaning": {
+    "message": "Code Cleaning",
+    "description": "Code cleaning title"
   },
-  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
-    "message": "Collapse sidebar category '{label}'",
-    "description": "The ARIA label to collapse the sidebar category"
+  "contributing.codeCleaningText": {
+    "message": "To ensure code cleanliness, please delete unused imports in Java files. You can automatically delete unused imports by executing the mvn spotless:apply command.",
+    "description": "Code cleaning description"
   },
-  "theme.NotFound.p1": {
-    "message": "We could not find what you were looking for.",
-    "description": "The first paragraph of the 404 page"
+  "contributing.codeCommit": {
+    "message": "Code Commit",
+    "description": "Code commit title"
   },
-  "theme.NotFound.p2": {
-    "message": "Please contact the owner of the site that linked you to the original URL and let them know their link is broken.",
-    "description": "The 2nd paragraph of the 404 page"
+  "contributing.codeCommitText": {
+    "message": "After coding is completed, you need to format & check the commit information based on the PR specification [lint-pr-title.yml](.github/workflows/lint-pr-title.yml) to ensure that the commit information meets the specifications.",
+    "description": "Code commit description"
   },
-  "theme.NavBar.navAriaLabel": {
-    "message": "Main",
-    "description": "The ARIA label for the main navigation"
+  "contributing.commitFormat": {
+    "message": "Commit format: git commit -m \"type(module): space compliant commit message\", for example: feat(docs): contribute-zh update",
+    "description": "Commit format example"
   },
-  "theme.CodeBlock.copy": {
-    "message": "Copy",
-    "description": "The copy button label on code blocks"
+  "contributing.prSubmission": {
+    "message": "PR Submission",
+    "description": "PR submission title"
   },
-  "theme.CodeBlock.copied": {
-    "message": "Copied",
-    "description": "The copied button label on code blocks"
+  "contributing.prSubmissionText": {
+    "message": "Submit a PR, write down the modifications and implemented functions according to the Pull request template, wait for code review and merge, become a Spring AI Alibaba Contributor, and contribute to better Spring AI Alibaba.",
+    "description": "PR submission description"
   },
-  "theme.CodeBlock.copyButtonAriaLabel": {
-    "message": "Copy code to clipboard",
-    "description": "The ARIA label for copy code blocks button"
+  "contributing.codeMerge": {
+    "message": "Code Merge",
+    "description": "Code merge title"
   },
-  "theme.CodeBlock.wordWrapToggle": {
-    "message": "Toggle word wrap",
-    "description": "The title attribute for toggle word wrapping button of code block lines"
-  },
-  "theme.docs.sidebar.navAriaLabel": {
-    "message": "Docs sidebar",
-    "description": "The ARIA label for the sidebar navigation"
-  },
-  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
-    "message": "Expand the dropdown",
-    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
-  },
-  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
-    "message": "Collapse the dropdown",
-    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
-  },
-  "theme.blog.post.plurals": {
-    "message": "One post|{count} posts",
-    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
-  },
-  "theme.blog.tagTitle": {
-    "message": "{nPosts} tagged with \"{tagName}\"",
-    "description": "The title of the page for a blog tag"
-  },
-  "theme.blog.author.pageTitle": {
-    "message": "{authorName} - {nPosts}",
-    "description": "The title of the page for a blog author"
-  },
-  "theme.blog.authorsList.pageTitle": {
-    "message": "Authors",
-    "description": "The title of the authors page"
-  },
-  "theme.blog.authorsList.viewAll": {
-    "message": "View all authors",
-    "description": "The label of the link targeting the blog authors page"
-  },
-  "theme.blog.author.noPosts": {
-    "message": "This author has not written any posts yet.",
-    "description": "The text for authors with 0 blog post"
-  },
-  "theme.contentVisibility.unlistedBanner.title": {
-    "message": "Unlisted page",
-    "description": "The unlisted content banner title"
-  },
-  "theme.contentVisibility.unlistedBanner.message": {
-    "message": "This page is unlisted. Search engines will not index it, and only users having a direct link can access it.",
-    "description": "The unlisted content banner message"
-  },
-  "theme.contentVisibility.draftBanner.title": {
-    "message": "Draft page",
-    "description": "The draft content banner title"
-  },
-  "theme.contentVisibility.draftBanner.message": {
-    "message": "This page is a draft. It will only be visible in dev and be excluded from the production build.",
-    "description": "The draft content banner message"
-  },
-  "theme.ErrorPageContent.tryAgain": {
-    "message": "Try again",
-    "description": "The label of the button to try again rendering when the React error boundary captures an error"
-  },
-  "theme.common.skipToMainContent": {
-    "message": "Skip to main content",
-    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
-  },
-  "theme.tags.tagsPageTitle": {
-    "message": "Tags",
-    "description": "The title of the tag list page"
+  "contributing.codeOfConductTitle": {
+    "message": "Code of Conduct",
+    "description": "Code of conduct title"
   },
   "team.rolesSection": {
     "message": "Community Contributor Roles",
@@ -1104,73 +1040,5 @@
   "team.termStart": {
     "message": "Term Start",
     "description": "Term start label"
-  },
-  "contributing.welcomeTitle": {
-    "message": "Welcome to Contribute",
-    "description": "Welcome contribution title"
-  },
-  "contributing.contributionTypesTitle": {
-    "message": "Contribution Types",
-    "description": "Contribution types title"
-  },
-  "contributing.codeDevelopment": {
-    "message": "Code Development",
-    "description": "Code development title"
-  },
-  "contributing.codeDevelopmentText": {
-    "message": "Develop your own features. After development, it is recommended to use the mvn clean package command to ensure that the modified code can be compiled locally. This command also automatically formats the code in the Spring way. Then submit the code. Before submitting code, please note to create a new branch related to this feature for code submission.",
-    "description": "Code development description"
-  },
-  "contributing.qualityCheck": {
-    "message": "Code Quality Check",
-    "description": "Quality check title"
-  },
-  "contributing.qualityCheckText": {
-    "message": "After completing local BOE environment development, it is strongly recommended to execute the make command provided by the project tools/make for local continuous integration (CI) checks before submitting a PR to ensure that the code meets the project's standards and specifications. If you have any questions about local CI, you can type make help in the console to learn specific information.",
-    "description": "Quality check description"
-  },
-  "contributing.codeStandards": {
-    "message": "Code Standards",
-    "description": "Code standards title"
-  },
-  "contributing.codeStandardsText": {
-    "message": "To reduce some unnecessary code style issues, Spring AI Alibaba provides local Checkstyle check functionality. You can execute the mvn checkstyle:check command in the project root directory to check whether the code style meets the specifications.",
-    "description": "Code standards description"
-  },
-  "contributing.codeCleaning": {
-    "message": "Code Cleaning",
-    "description": "Code cleaning title"
-  },
-  "contributing.codeCleaningText": {
-    "message": "To ensure code cleanliness, please delete unused imports in Java files. You can automatically delete unused imports by executing the mvn spotless:apply command.",
-    "description": "Code cleaning description"
-  },
-  "contributing.codeCommit": {
-    "message": "Code Commit",
-    "description": "Code commit title"
-  },
-  "contributing.codeCommitText": {
-    "message": "After coding is completed, you need to format & check the commit information based on the PR specification [lint-pr-title.yml](.github/workflows/lint-pr-title.yml) to ensure that the commit information meets the specifications.",
-    "description": "Code commit description"
-  },
-  "contributing.commitFormat": {
-    "message": "Commit format: git commit -m \"type(module): space compliant commit message\", for example: feat(docs): contribute-zh update",
-    "description": "Commit format example"
-  },
-  "contributing.prSubmission": {
-    "message": "PR Submission",
-    "description": "PR submission title"
-  },
-  "contributing.prSubmissionText": {
-    "message": "Submit a PR, write down the modifications and implemented functions according to the Pull request template, wait for code review and merge, become a Spring AI Alibaba Contributor, and contribute to better Spring AI Alibaba.",
-    "description": "PR submission description"
-  },
-  "contributing.codeMerge": {
-    "message": "Code Merge",
-    "description": "Code merge title"
-  },
-  "contributing.codeOfConductTitle": {
-    "message": "Code of Conduct",
-    "description": "Code of conduct title"
   }
 }
