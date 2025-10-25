@@ -128,14 +128,16 @@ const pmcMembers = [
     name: 'Jianchuan Zhang',
     organization: 'Alibaba',
     profile: 'https://github.com/CZJCC',
-    termStart: '16th Dec 2024'
+    termStart: '16th Dec 2024',
+    retired: true
   },
   {
     avatar: 'https://github.com/robinyeeh.png',
     name: 'Tianbing Ye',
     organization: 'Alibaba',
     profile: 'https://github.com/robinyeeh',
-    termStart: '9th Apr 2025'
+    termStart: '9th Apr 2025',
+    retired: true
   },
   {
     avatar: 'https://github.com/yuluo-yx.png',
@@ -170,7 +172,8 @@ const committerMembers = [
     avatar: 'https://github.com/brianxiadong.png',
     name: 'Dong Xia',
     profile: 'https://github.com/brianxiadong',
-    termStart: '9th Apr 2025'
+    termStart: '9th Apr 2025',
+    retired: true
   },
   {
     avatar: 'https://github.com/disaster1-tesk.png',
@@ -408,7 +411,10 @@ export default function Team(): React.JSX.Element {
                           className={styles.memberAvatarSmall}
                         />
                         <div className={styles.memberInfo}>
-                          <h4 className={styles.memberName}>{member.name}</h4>
+                          <h4 className={styles.memberName}>
+                            {member.name}
+                            {member.retired && <span className={styles.retiredBadge}> (Retired)</span>}
+                          </h4>
                           <p className={styles.memberOrg}>{member.organization}</p>
                           <a href={member.profile} className={styles.profileLink} target="_blank" rel="noopener noreferrer">
                             {member.profile.replace('https://github.com/', '@')}
@@ -438,7 +444,10 @@ export default function Team(): React.JSX.Element {
                           className={styles.memberAvatarSmall}
                         />
                         <div className={styles.memberInfo}>
-                          <h4 className={styles.memberName}>{member.name}</h4>
+                          <h4 className={styles.memberName}>
+                            {member.name}
+                            {member.retired && <span className={styles.retiredBadge}> (Retired)</span>}
+                          </h4>
                           <a href={member.profile} className={styles.profileLink} target="_blank" rel="noopener noreferrer">
                             {member.profile.replace('https://github.com/', '@')}
                           </a>

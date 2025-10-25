@@ -81,7 +81,7 @@ const config: Config = {
           editUrl: githubUrls.editBlog,
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: ['./src/css/custom.css', './src/css/blog.css'],
         },
       } satisfies PresetClassicOptions,
     ],

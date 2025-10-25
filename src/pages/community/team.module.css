@@ -1001,7 +1001,9 @@
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   position: relative;
   overflow: hidden;
@@ -1020,18 +1022,21 @@
   width: 4px;
   height: 100%;
   background: linear-gradient(180deg, #3b82f6, #8b5cf6, #ec4899);
-  transform: translateX(-4px);
-  transition: transform 0.4s ease;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: none;
+  will-change: opacity;
 }
 
 .memberItem:hover::before {
-  transform: translateX(0);
+  opacity: 1;
 }
 
 .memberItem:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateX(8px);
   box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
   border-color: rgba(59, 130, 246, 0.3);
+  z-index: 10;
 }
 
 [data-theme='dark'] .memberItem:hover {
@@ -1067,6 +1072,30 @@
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.retiredBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  background: rgba(107, 114, 128, 0.1);
+  border: 1px solid rgba(107, 114, 128, 0.2);
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+[data-theme='dark'] .retiredBadge {
+  color: #9ca3af;
+  background: rgba(156, 163, 175, 0.15);
+  border-color: rgba(156, 163, 175, 0.25);
 }
 
 .memberOrg {

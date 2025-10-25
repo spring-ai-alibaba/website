@@ -1,340 +1,688 @@
-/* 博客页面样式优化 */
+/* ============================================
+   Blog Page Style Optimization
+   优化博客页面样式，覆盖 Docusaurus 默认样式
+   仅作用于博客页面，不影响其他页面布局
+   ============================================ */
 
-/* ========================================
-   1. 博客列表页面样式优化
-   ======================================== */
+/* ===== 博客列表页样式 ===== */
 
-/* 优化博客列表页标题大小 - 减小标题，使其更协调 */
-.blog-list-page h1,
-.blog-wrapper h1.margin-bottom--lg {
-  font-size: 2rem !important;
-  margin-bottom: 1rem !important;
+/* 博客容器优化 - 仅限博客页面 */
+.theme-blog-list-page .blog-wrapper,
+.theme-blog-list-page main > .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
-/* 博客卡片标题大小优化 */
-.blog-list-page article h2,
-.blog-wrapper article h2 {
-  font-size: 1.5rem !important;
+/* 博客标题尺寸优化 - 解决标题太大的问题 - 仅限博客页面 */
+.theme-blog-list-page .blog-post-title,
+.theme-blog-list-page .markdown h1[class*='title'],
+.theme-blog-post-page .blog-post-title,
+.theme-blog-post-page .markdown h1[class*='title'] {
+  font-size: 1.1rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0.75rem !important;
+  font-weight: 700 !important;
 }
 
-/* 博客列表页面描述文字优化 */
-.blog-list-page .margin-vert--lg,
-.blog-wrapper .margin-vert--lg {
-  font-size: 1rem;
-  color: var(--text-secondary);
+/* 博客列表页的博客项标题 - 仅限博客列表页 */
+.theme-blog-list-page article.blog-post-item h2 a,
+.theme-blog-list-page article.blog-post-item h2,
+.theme-blog-list-page article h2 a,
+.theme-blog-list-page article h2 {
+  font-size: 1.4rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0.75rem !important;
+  font-weight: 700 !important;
 }
 
-/* ========================================
-   2. 博客内容页面宽度优化
-   ======================================== */
-
-/* 博客文章页面容器 - 使用与 docs 页面相同的宽度 */
-.theme-blog-post-page main.container {
-  max-width: 1140px !important;
-  width: 100% !important;
-  padding: 0 1rem !important;
-}
-
-/* 博客文章主内容区域 - 居中并使用标准宽度 */
-.theme-blog-post-page .row {
-  max-width: 100% !important;
-  margin: 0 auto !important;
-  display: flex;
-  justify-content: center;
-}
-
-/* 确保内容列占据全宽 */
-.theme-blog-post-page .col {
-  max-width: 100% !important;
-  flex: 1 1 100% !important;
-}
-
-/* 博客文章内容 */
-.theme-blog-post-page article {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-/* ========================================
-   3. 右侧目录侧边栏（TOC）优化
-   ======================================== */
-
-/* 右侧目录容器 */
-.theme-blog-post-page .col--3 {
-  position: fixed !important;
-  right: max(2rem, calc((100vw - 1140px) / 2)) !important; /* 根据容器宽度自适应右侧位置 */
-  top: calc(var(--ifm-navbar-height) + 2rem) !important;
-  width: 280px !important; /* 固定宽度 */
-  min-width: 280px !important;
-  max-width: 280px !important;
-  height: fit-content !important;
-  max-height: calc(100vh - var(--ifm-navbar-height) - 4rem) !important;
-  overflow-y: auto !important;
-  padding-right: 1rem !important;
-  padding-left: 1rem !important;
-}
-
-/* 目录标题优化 */
-.table-of-contents__left-border {
-  border-left: 3px solid var(--ifm-color-primary) !important;
-  padding-left: 1.2rem !important;
-}
-
-/* 目录链接样式优化 */
-.table-of-contents li {
-  margin: 0.4rem 0 !important;
-}
-
-.table-of-contents__link {
-  font-size: 0.95rem !important; /* 稍微增大字体 */
-  line-height: 1.5 !important; /* 增加行高 */
-  display: block !important;
-  padding: 0.5rem 1rem !important; /* 增加内边距 */
-  border-radius: 8px !important;
-  white-space: normal !important; /* 允许文字换行 */
-  word-wrap: break-word !important; /* 长单词换行 */
-  overflow-wrap: break-word !important;
-}
-
-.table-of-contents__link:hover {
-  background-color: rgba(37, 99, 235, 0.08) !important;
-}
-
-.table-of-contents__link--active {
-  background-color: rgba(37, 99, 235, 0.12) !important;
-  font-weight: 600 !important;
-}
-
-/* 目录嵌套层级缩进 */
-.table-of-contents ul {
-  padding-left: 1rem !important; /* 增加缩进 */
-}
-
-/* ========================================
-   4. 响应式设计
-   ======================================== */
-
-/* 超大屏幕 (1400px 以上) - 目录样式优化 */
-@media (min-width: 1400px) {
-  .theme-blog-post-page .col--3 {
-    width: 300px !important;
-    max-width: 300px !important;
-    right: max(2rem, calc((100vw - 1140px) / 2)) !important;
-  }
-
-  .table-of-contents__link {
-    font-size: 1rem !important;
-    padding: 0.6rem 1.2rem !important;
-  }
-}
-
-/* 平板设备 (768px - 1200px) */
-@media (max-width: 1200px) {
-  .theme-blog-post-page .row {
-    max-width: 100% !important;
-  }
-
-  .theme-blog-post-page .col--3 {
-    right: 1rem !important;
-    width: 260px !important;
-    min-width: 260px !important;
-    max-width: 260px !important;
-  }
-
-  /* 在较小屏幕上也确保文字不被压缩 */
-  .table-of-contents__link {
-    font-size: 0.9rem !important;
-    padding: 0.45rem 0.9rem !important;
-  }
-}
-
-/* 中等屏幕 (996px 以下) - 隐藏侧边栏 */
-@media (max-width: 996px) {
-  .theme-blog-post-page .row {
-    max-width: 100% !important;
-  }
-
-  .theme-blog-post-page .col--3 {
-    display: none !important;
-  }
-
-  .theme-blog-post-page .col {
-    max-width: 100% !important;
-  }
-}
-
-/* 小屏幕 (768px 以下) */
-@media (max-width: 768px) {
-  .theme-blog-post-page .row {
-    max-width: 100% !important;
-    padding: 0 1rem !important;
-  }
-
-  .blog-list-page h1,
-  .blog-wrapper h1.margin-bottom--lg {
-    font-size: 1.75rem !important;
-  }
-
-  .blog-list-page article h2,
-  .blog-wrapper article h2 {
-    font-size: 1.25rem !important;
-  }
-}
-
-/* 超小屏幕 (576px 以下) */
-@media (max-width: 576px) {
-  .blog-list-page h1,
-  .blog-wrapper h1.margin-bottom--lg {
-    font-size: 1.5rem !important;
-  }
-
-  .blog-list-page article h2,
-  .blog-wrapper article h2 {
-    font-size: 1.15rem !important;
-  }
-
-  .theme-blog-post-page .row {
-    padding: 0 0.5rem !important;
-  }
-}
-
-/* ========================================
-   5. 博客文章标题优化
-   ======================================== */
-
-/* 博客文章页面标题 */
-.theme-blog-post-page article header h1 {
-  font-size: 2.25rem !important;
+/* 博客详情页主标题 - 仅限博客详情页 */
+.theme-blog-post-page article header h1,
+.theme-blog-post-page .markdown > h1:first-child {
+  font-size: 1.75rem !important;
   line-height: 1.3 !important;
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  font-weight: 700 !important;
 }
 
-.theme-blog-post-page article header {
-  margin-bottom: 2rem !important;
-}
-
-/* 作者信息和日期 */
-.theme-blog-post-page .avatar {
+/* 博客元信息样式优化 - 仅限博客页面 */
+.theme-blog-list-page .blog-post-item__footer,
+.theme-blog-list-page .blog-post-item__meta,
+.theme-blog-list-page .theme-blog-post-item header,
+.theme-blog-post-page .blog-post-item__footer,
+.theme-blog-post-page .blog-post-item__meta,
+.theme-blog-post-page .theme-blog-post-item header {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
 }
 
-.theme-blog-post-page .avatar__subtitle {
+.theme-blog-list-page .theme-blog-post-item footer,
+.theme-blog-post-page .theme-blog-post-item footer {
   font-size: 0.9rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+}
+
+/* 博客摘要优化 - 仅限博客列表页 */
+.theme-blog-list-page .blog-post-item__description,
+.theme-blog-list-page .theme-blog-post-item-preview {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 1rem 0 1.5rem 0;
+}
+
+/* 阅读更多按钮优化 - 仅限博客列表页 */
+.theme-blog-list-page .theme-blog-post-item footer a,
+.theme-blog-list-page a[class*='readMore'] {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: var(--ifm-color-primary) !important;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.08);
+  transition: all 0.3s ease;
+}
+
+.theme-blog-list-page .theme-blog-post-item footer a:hover,
+.theme-blog-list-page a[class*='readMore']:hover {
+  background: var(--ifm-color-primary);
+  color: white !important;
+  transform: translateX(4px);
+}
+
+/* ===== 博客详情页样式优化 ===== */
+
+/* 博客详情页布局优化 - 解决右侧目录太窄的问题 - 仅限博客详情页 */
+.theme-blog-post-page .theme-doc-markdown,
+.theme-blog-post-page .col {
+  max-width: 100% !important;
+}
+
+/* 主内容区域宽度优化 - 仅限博客详情页 */
+.theme-blog-post-page .container {
+  max-width: 1400px !important;
+}
+
+.theme-blog-post-page .row {
+  display: flex;
+  gap: 2rem;
+}
+
+/* 博客内容主体宽度 - 仅限博客详情页 */
+.theme-blog-post-page .col--8,
+.theme-blog-post-page main > .container > .row > .col:first-child,
+.theme-blog-post-page .row > div[class*='col--']:first-child {
+  flex: 0 0 60% !important;
+  max-width: 60% !important;
+  width: 60% !important;
+}
+
+/* 右侧栏（目录）宽度优化 - 从默认的窄宽度改为更宽 - 仅限博客详情页 */
+.theme-blog-post-page .col--4,
+.theme-blog-post-page aside,
+.theme-blog-post-page .col.col--3,
+.theme-blog-post-page main > .container > .row > .col:last-child,
+.theme-blog-post-page .row > div[class*='col--']:last-child {
+  flex: 0 0 38% !important;
+  max-width: 38% !important;
+  min-width: 320px !important;
+  width: 38% !important;
+}
+
+/* 目录容器样式优化 */
+.theme-blog-post-page .table-of-contents,
+.theme-doc-toc-desktop {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 2rem);
+  max-height: calc(100vh - var(--ifm-navbar-height) - 4rem);
+  overflow-y: auto;
+}
+
+/* 目录标题 */
+.table-of-contents::before,
+.theme-doc-toc-desktop > .table-of-contents::before {
+  content: '目录';
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-medium);
+}
+
+/* 目录链接样式 */
+.table-of-contents li,
+.theme-doc-toc-desktop li {
+  margin: 0.5rem 0;
+  list-style: none;
+}
+
+.title_f1Hy {
+  font-size: 2rem !important;
+}
+
+.table-of-contents a,
+.theme-doc-toc-desktop a {
+  font-size: 0.9rem !important;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: block;
+  padding: 0.4rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.table-of-contents a:hover,
+.theme-doc-toc-desktop a:hover {
+  color: var(--ifm-color-primary);
+  background: rgba(37, 99, 235, 0.05);
+  border-left-color: var(--ifm-color-primary);
+  transform: translateX(4px);
+}
+
+.table-of-contents a.table-of-contents__link--active,
+.theme-doc-toc-desktop a[class*='active'] {
+  color: var(--ifm-color-primary);
+  background: rgba(37, 99, 235, 0.1);
+  border-left-color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* 嵌套目录缩进 */
+.table-of-contents ul,
+.theme-doc-toc-desktop ul {
+  padding-left: 0;
+  margin: 0;
+}
+
+.table-of-contents ul ul,
+.theme-doc-toc-desktop ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+/* 博客内容区域样式 */
+.theme-blog-post-page article {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  padding: 2.5rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+}
+
+[data-theme='dark'] .theme-blog-post-page article {
+  background: rgba(31, 41, 55, 0.9);
+}
+
+/* 博客内容内的标题优化 */
+.theme-blog-post-page article h2 {
+  font-size: 1.35rem !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 2px solid var(--border-medium) !important;
+}
+
+.theme-blog-post-page article h3 {
+  font-size: 1.15rem !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+  color: var(--ifm-color-primary) !important;
+}
+
+.theme-blog-post-page article h4 {
+  font-size: 1.05rem !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* 博客内容段落间距 */
+.theme-blog-post-page article p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* 博客标签样式 */
+.theme-blog-post-page .tags,
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.theme-blog-post-page .tag,
+.blog-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.85rem;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--ifm-color-primary);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.theme-blog-post-page .tag:hover,
+.blog-tag:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* 博客作者信息 */
+.theme-blog-post-page .avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.theme-blog-post-page .avatar__photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.theme-blog-post-page .avatar__intro {
+  flex: 1;
+}
+
+.theme-blog-post-page .avatar__name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.theme-blog-post-page .avatar__subtitle {
+  font-size: 0.875rem;
   color: var(--text-secondary);
 }
 
-/* ========================================
-   6. 博客内容排版优化
-   ======================================== */
-
-/* 段落间距 */
-.theme-blog-post-page article p {
-  margin-bottom: 1.2rem;
-  line-height: 1.8;
+/* ===== 博客分页样式 ===== */
+.theme-blog-list-page nav.pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-light);
 }
 
-/* 列表样式 */
-.theme-blog-post-page article ul,
-.theme-blog-post-page article ol {
-  margin-bottom: 1.5rem;
-  padding-left: 2rem;
+.pagination__item {
+  margin: 0 0.25rem;
 }
 
-.theme-blog-post-page article li {
-  margin-bottom: 0.5rem;
-  line-height: 1.7;
+.pagination__link {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-/* 图片样式 */
+.pagination__link:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+}
+
+.pagination__link--active {
+  background: var(--ifm-color-primary);
+  color: white;
+  border-color: var(--ifm-color-primary);
+}
+
+/* ===== 博客侧边栏样式（如果有的话）===== */
+.theme-blog-sidebar {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 2rem);
+}
+
+.theme-blog-sidebar h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 996px) {
+  /* 平板和小屏幕设备 */
+  .theme-blog-post-page .col--8,
+  .theme-blog-post-page .col--4,
+  .theme-blog-post-page main > .container > .row > .col {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  .theme-blog-post-page .row {
+    flex-direction: column;
+  }
+
+  /* 目录移到内容下方 */
+  .theme-blog-post-page .table-of-contents,
+  .theme-doc-toc-desktop {
+    position: static;
+    margin-top: 2rem;
+    max-height: none;
+  }
+
+  /* 博客列表页标题尺寸 */
+  .theme-blog-list-page article.blog-post-item h2 a,
+  .theme-blog-list-page article.blog-post-item h2 {
+    font-size: 1.4rem !important;
+  }
+
+  /* 博客详情页标题尺寸 */
+  .theme-blog-post-page article header h1 {
+    font-size: 1.75rem !important;
+  }
+
+  .theme-blog-post-page article {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* 手机设备 */
+  .theme-blog-list-page .blog-wrapper,
+  .theme-blog-list-page main > .container {
+    padding: 1rem 0.5rem;
+  }
+
+  .theme-blog-list-page .blog-post-title,
+  .theme-blog-list-page .markdown h1[class*='title'],
+  .theme-blog-post-page .blog-post-title,
+  .theme-blog-post-page .markdown h1[class*='title'] {
+    font-size: 1.5rem !important;
+  }
+
+  .theme-blog-list-page article.blog-post-item h2 a,
+  .theme-blog-list-page article.blog-post-item h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .theme-blog-post-page article header h1 {
+    font-size: 1.6rem !important;
+  }
+
+  .theme-blog-post-page article {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .theme-blog-post-page article h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .theme-blog-post-page article h3 {
+    font-size: 1.15rem !important;
+  }
+
+  .table-of-contents,
+  .theme-doc-toc-desktop {
+    padding: 1rem;
+  }
+}
+
+/* ===== 博客搜索框样式（如果有）===== 仅限博客页面 */
+.theme-blog-list-page .blog-search,
+.theme-blog-post-page .blog-search {
+  margin-bottom: 2rem;
+}
+
+.theme-blog-list-page .blog-search input,
+.theme-blog-post-page .blog-search input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.theme-blog-list-page .blog-search input:focus,
+.theme-blog-post-page .blog-search input:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ===== 博客卡片布局优化（列表页）===== 仅限博客列表页 */
+.theme-blog-list-page .blog-post-item,
+.theme-blog-list-page article {
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .theme-blog-list-page .blog-post-item,
+[data-theme='dark'] .theme-blog-list-page .blog-post-item,
+[data-theme='dark'] .theme-blog-list-page article {
+  background: rgba(31, 41, 55, 0.9);
+}
+
+.theme-blog-list-page .blog-post-item:hover,
+.theme-blog-list-page article:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--ifm-color-primary);
+}
+
+/* 博客列表日期显示 - 仅限博客页面 */
+.theme-blog-list-page .blog-post-item time,
+.theme-blog-list-page .theme-blog-post-item time,
+.theme-blog-post-page .blog-post-item time,
+.theme-blog-post-page .theme-blog-post-item time {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+/* 修复代码块在博客中的显示 */
+.theme-blog-post-page pre {
+  margin: 1.5rem 0;
+}
+
+/* 博客图片样式 */
 .theme-blog-post-page article img {
   border-radius: 12px;
   box-shadow: var(--card-shadow);
   margin: 1.5rem 0;
+  max-width: 100%;
+  height: auto;
 }
 
-/* 引用样式 */
+/* 引用块样式 */
 .theme-blog-post-page article blockquote {
+  background: rgba(37, 99, 235, 0.05);
   border-left: 4px solid var(--ifm-color-primary);
-  background: var(--card-bg);
+  border-radius: 0 8px 8px 0;
   padding: 1rem 1.5rem;
   margin: 1.5rem 0;
-  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--text-secondary);
 }
 
-/* ========================================
-   7. 博客元数据（标签、阅读时间等）
-   ======================================== */
-
-/* 标签样式 */
-.theme-blog-post-page .badge {
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
+/* 列表样式优化 */
+.theme-blog-post-page article ul,
+.theme-blog-post-page article ol {
+  padding-left: 2rem;
+  margin: 1rem 0;
 }
 
-/* 阅读时间 */
-.theme-blog-post-page .avatar__subtitle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.theme-blog-post-page article li {
+  margin: 0.5rem 0;
+  line-height: 1.7;
 }
 
-/* ========================================
-   8. 分页导航优化
-   ======================================== */
-
-.theme-blog-post-page .pagination-nav {
-  margin-top: 3rem;
-  border-top: 2px solid var(--border-light);
-  padding-top: 2rem;
+/* 水平分割线 */
+.theme-blog-post-page article hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid var(--border-medium);
 }
 
-.theme-blog-post-page .pagination-nav__link {
-  padding: 1.5rem;
-  border-radius: 12px;
+/* 博客归档页面优化 */
+.theme-blog-archive-page .archive-list {
+  list-style: none;
+  padding: 0;
 }
 
-.theme-blog-post-page .pagination-nav__label {
-  font-size: 1.1rem;
-  font-weight: 600;
+.theme-blog-archive-page .archive-item {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-light);
+  transition: all 0.3s ease;
 }
 
-/* ========================================
-   9. 深色模式优化
-   ======================================== */
-
-[data-theme='dark'] .table-of-contents__link:hover {
-  background-color: rgba(96, 165, 250, 0.1) !important;
+.theme-blog-archive-page .archive-item:hover {
+  background: rgba(37, 99, 235, 0.05);
+  transform: translateX(8px);
 }
 
-[data-theme='dark'] .table-of-contents__link--active {
-  background-color: rgba(96, 165, 250, 0.15) !important;
-}
-
-[data-theme='dark'] .theme-blog-post-page article blockquote {
-  background: rgba(31, 41, 55, 0.5);
-}
-
-/* ========================================
-   10. 滚动条优化（仅目录区域）
-   ======================================== */
-
-.table-of-contents::-webkit-scrollbar {
+/* 确保目录滚动条样式 */
+.table-of-contents::-webkit-scrollbar,
+.theme-doc-toc-desktop::-webkit-scrollbar {
   width: 6px;
 }
 
-.table-of-contents::-webkit-scrollbar-track {
+.table-of-contents::-webkit-scrollbar-track,
+.theme-doc-toc-desktop::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.table-of-contents::-webkit-scrollbar-thumb {
+.table-of-contents::-webkit-scrollbar-thumb,
+.theme-doc-toc-desktop::-webkit-scrollbar-thumb {
   background: var(--border-medium);
   border-radius: 3px;
 }
 
-.table-of-contents::-webkit-scrollbar-thumb:hover {
+.table-of-contents::-webkit-scrollbar-thumb:hover,
+.theme-doc-toc-desktop::-webkit-scrollbar-thumb:hover {
   background: var(--ifm-color-primary);
+}
+
+/* ===== 强制覆盖博客页面目录宽度 ===== */
+/* 使用更高优先级的选择器确保宽度生效 */
+.theme-blog-post-page .container .row > .col:last-child,
+.theme-blog-post-page .container > .row > aside,
+.theme-blog-post-page div[class*='col']:last-child,
+.theme-blog-post-page aside[class*='col'] {
+  flex: 0 0 38% !important;
+  max-width: 38% !important;
+  min-width: 320px !important;
+  width: 38% !important;
+}
+
+/* 主内容区强制宽度 */
+.theme-blog-post-page .container .row > .col:first-child,
+.theme-blog-post-page .container > .row > main,
+.theme-blog-post-page div[class*='col']:first-child {
+  flex: 0 0 60% !important;
+  max-width: 60% !important;
+  width: 60% !important;
+}
+
+/* 目录容器本身的宽度 */
+.theme-blog-post-page .table-of-contents,
+.theme-blog-post-page .theme-doc-toc-desktop,
+.theme-blog-post-page aside .table-of-contents {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 针对所有可能的目录侧边栏类名 */
+.theme-blog-post-page div[class*='tocCollapsible'],
+.theme-blog-post-page div[class*='tableOfContents'],
+.theme-blog-post-page aside[class*='sidebar'] {
+  flex: 0 0 38% !important;
+  max-width: 38% !important;
+  min-width: 320px !important;
+  width: 38% !important;
+}
+
+/* ===== 强制覆盖博客标题大小 - 最高优先级 ===== */
+/* 博客列表页标题强制覆盖 */
+body .theme-blog-list-page article h2,
+body .theme-blog-list-page article h2 a,
+body .theme-blog-list-page .blog-post-item h2,
+body .theme-blog-list-page .blog-post-item h2 a {
+  font-size: 1.4rem !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+}
+
+/* 博客详情页主标题强制覆盖 */
+body .theme-blog-post-page article header h1,
+body .theme-blog-post-page header h1,
+body .theme-blog-post-page h1 {
+  font-size: 1.75rem !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+/* 博客文章内容标题强制覆盖 */
+body .theme-blog-post-page article h2,
+body .theme-blog-post-page .markdown h2 {
+  font-size: 1.35rem !important;
+  line-height: 1.4 !important;
+}
+
+body .theme-blog-post-page article h3,
+body .theme-blog-post-page .markdown h3 {
+  font-size: 1.15rem !important;
+  line-height: 1.4 !important;
+}
+
+body .theme-blog-post-page article h4,
+body .theme-blog-post-page .markdown h4 {
+  font-size: 1.05rem !important;
+  line-height: 1.4 !important;
+}
+
+body .theme-blog-post-page article h5,
+body .theme-blog-post-page .markdown h5 {
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+
+/* blogs content right width override */
+.tableOfContents_bqdL {
+  width: 300px !important;
 }
