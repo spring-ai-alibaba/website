@@ -318,6 +318,13 @@
 						"link": "docs/1.0.0.2/practices/integrations/tool-calling"
 					},
 					{
+						"label": "Chat Memory",
+						"translations": {
+							"en": "Chat Memory"
+						},
+						"link": "docs/1.0.0.2/practices/integrations/memory"
+					},
+					{
 						"label": "Document Reader",
 						"translations": {
 							"en": "Document Reader"
