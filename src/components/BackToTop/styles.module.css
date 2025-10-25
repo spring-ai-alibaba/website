@@ -1,0 +1,110 @@
+.backToTop {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  background: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.backToTop:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+
+.backToTop:active {
+  transform: translateY(-2px);
+}
+
+/* 深色模式优化 */
+[data-theme='dark'] .backToTop {
+  background: var(--ifm-color-primary);
+  box-shadow: 0 4px 16px rgba(96, 165, 250, 0.4);
+}
+
+[data-theme='dark'] .backToTop:hover {
+  background: var(--ifm-color-primary-light);
+  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.5);
+}
+
+/* 添加脉冲效果 */
+.backToTop::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  opacity: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.2;
+    transform: scale(1.2);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .backToTop {
+    width: 44px;
+    height: 44px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .backToTop {
+    width: 40px;
+    height: 40px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+/* 博客页面的目录在右侧，需要调整按钮位置避免遮挡 */
+@media (min-width: 997px) {
+  .theme-blog-post-page .backToTop {
+    right: 2rem;
+    bottom: 2rem;
+  }
+}
+
+/* 确保不会遮挡其他固定元素 */
+.backToTop {
+  pointer-events: auto;
+}

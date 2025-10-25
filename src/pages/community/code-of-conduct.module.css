@@ -2,11 +2,13 @@
 .codePage {
   padding: 3rem 0;
   min-height: 80vh;
+  background: transparent;
+  position: relative;
 }
 
 /* Ensure consistent starry background in dark mode */
 [data-theme='dark'] .codePage {
-  background: var(--space-black) !important;
+  background: transparent !important;
 }
 
 .codeHeader {
@@ -47,6 +49,8 @@
   margin-bottom: 2rem;
   box-shadow: var(--card-shadow);
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .section:hover {

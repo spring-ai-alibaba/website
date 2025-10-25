@@ -1,6 +1,9 @@
 /* Import fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* Import blog styles */
+@import './blog.css';
+
 /* Light Theme - Paper Cream Theme */
 :root {
   /* Primary colors - elegant blue */
@@ -272,7 +275,8 @@ body {
   border-bottom: 1px solid var(--border-light);
   box-shadow: var(--card-shadow);
   transition: all 0.3s ease;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 100;
 }
 
