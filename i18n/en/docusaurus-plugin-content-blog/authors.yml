@@ -1,48 +1,48 @@
 spring-ai-alibaba-team:
   name: Spring AI Alibaba 团队
-  title: 开发团队
+  title: Spring AI Alibaba Team
   url: https://github.com/spring-ai-alibaba
   image_url: https://github.com/spring-ai-alibaba.png
 
 chickenlj:
   name: 刘军
-  title: 社区开发者
+  title: PMC Member
   url: https://github.com/chickenlj
   image_url: https://github.com/chickenlj.png
 
 shown:
   name: 牧生
-  title: 社区开发者
+  title: PMC Member
   url: https://github.com/yuluo-yx
   image_url: https://github.com/yuluo-yx.png
 
 Aias00:
   name: 刘宏宇
-  title: 社区开发者
+  title: Committer
   url: https://github.com/Aias00
   image_url: https://github.com/Aias00.png
 
 GTyingzi:
   name: 影子
-  title: 社区开发者
+  title: Committer
   url: https://github.com/GTyingzi
   image_url: https://github.com/GTyingzi.png
 
 brianxiadong:
   name: 夏冬
-  title: 社区开发者
+  title: Committer
   url: https://github.com/brianxiadong
   image_url: https://github.com/brianxiadong.png
 
 PolarishT:
   name: 张震霆
-  title: 社区开发者
+  title: Committer
   url: https://github.com/PolarishT
   image_url: https://github.com/PolarishT.png
 
 sincerity-being:
-  name: 张震霆
-  title: 社区开发者
+  name: 何裕强
+  title: Committer
   url: https://github.com/sincerity-being
   image_url: https://github.com/sincerity-being.png
 
@@ -60,6 +60,6 @@ flystar32:
 
 CZJCC:
   name: 聪言
-  title: 社区开发者
+  title: PMC Member
   url: https://github.com/CZJCC
   image_url: https://github.com/CZJCC.png
