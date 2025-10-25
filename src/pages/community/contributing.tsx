@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '@theme/Layout'
-import Translate, {translate} from '@docusaurus/Translate'
+import Translate, { translate } from '@docusaurus/Translate'
 import styles from './contributing.module.css'
 
 export default function Contributing(): React.JSX.Element {
@@ -9,12 +9,12 @@ export default function Contributing(): React.JSX.Element {
       title={translate({
         id: 'contributing.title',
         message: '贡献指南',
-        description: 'The page title for contributing guide'
+        description: 'The page title for contributing guide',
       })}
       description={translate({
         id: 'contributing.description',
         message: '了解如何为项目做贡献',
-        description: 'The page description for contributing guide'
+        description: 'The page description for contributing guide',
       })}>
       <div className={styles.contributingPage}>
         <div className="container">

@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './styles.module.css';
+import React from 'react'
+import styles from './styles.module.css'
 
 const FloatingClouds: React.FC = () => {
   return (
@@ -37,7 +37,7 @@ const FloatingClouds: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FloatingClouds;
+export default FloatingClouds

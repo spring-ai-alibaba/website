@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '@theme/Layout'
-import Translate, {translate} from '@docusaurus/Translate'
+import Translate, { translate } from '@docusaurus/Translate'
 import styles from './team.module.css'
 
 interface TeamMember {
@@ -18,18 +18,18 @@ const TeamMembers: TeamMember[] = [
     name: translate({
       id: 'team.yourName',
       message: '您的姓名',
-      description: 'Your name placeholder'
+      description: 'Your name placeholder',
     }),
     role: translate({
       id: 'team.creatorRole',
       message: '项目创建者 & 主要开发者',
-      description: 'Creator and main developer role'
+      description: 'Creator and main developer role',
     }),
     avatar: '/img/team/avatar-placeholder.svg',
     bio: translate({
       id: 'team.creatorBio',
       message: '热衷于创建精美的文档和开发者体验。',
-      description: 'Creator bio'
+      description: 'Creator bio',
     }),
     github: 'https://github.com/your-username',
     twitter: 'https://twitter.com/your-handle',
@@ -39,18 +39,18 @@ const TeamMembers: TeamMember[] = [
     name: translate({
       id: 'team.contributorName',
       message: '贡献者姓名',
-      description: 'Contributor name placeholder'
+      description: 'Contributor name placeholder',
     }),
     role: translate({
       id: 'team.contributorRole',
       message: '核心贡献者',
-      description: 'Core contributor role'
+      description: 'Core contributor role',
     }),
     avatar: '/img/team/avatar-placeholder.svg',
     bio: translate({
       id: 'team.contributorBio',
       message: '喜欢构建能帮助开发者提高效率的工具。',
-      description: 'Contributor bio'
+      description: 'Contributor bio',
     }),
     github: 'https://github.com/contributor-username',
   },
@@ -114,14 +114,14 @@ const pmcMembers = [
     name: 'Jun Liu',
     organization: 'Alibaba',
     profile: 'https://github.com/chickenlj',
-    termStart: '23rd Sep 2024'
+    termStart: '23rd Sep 2024',
   },
   {
     avatar: 'https://github.com/Cirilla-zmh.png',
     name: 'Minghui Zhang',
     organization: 'Alibaba',
     profile: 'https://github.com/Cirilla-zmh',
-    termStart: '16th Dec 2024'
+    termStart: '16th Dec 2024',
   },
   {
     avatar: 'https://github.com/CZJCC.png',
@@ -129,7 +129,7 @@ const pmcMembers = [
     organization: 'Alibaba',
     profile: 'https://github.com/CZJCC',
     termStart: '16th Dec 2024',
-    retired: true
+    retired: true,
   },
   {
     avatar: 'https://github.com/robinyeeh.png',
@@ -137,15 +137,15 @@ const pmcMembers = [
     organization: 'Alibaba',
     profile: 'https://github.com/robinyeeh',
     termStart: '9th Apr 2025',
-    retired: true
+    retired: true,
   },
   {
     avatar: 'https://github.com/yuluo-yx.png',
     name: 'Shown Ji',
     organization: '~',
     profile: 'https://github.com/yuluo-yx',
-    termStart: '9th Apr 2025'
-  }
+    termStart: '9th Apr 2025',
+  },
 ]
 
 // Committer member data
@@ -154,69 +154,69 @@ const committerMembers = [
     avatar: 'https://github.com/sincerity-being.png',
     name: 'Yuqiang He',
     profile: 'https://github.com/sincerity-being',
-    termStart: '19th Feb 2025'
+    termStart: '19th Feb 2025',
   },
   {
     avatar: 'https://github.com/PolarishT.png',
     name: 'Zhenting Zhang',
     profile: 'https://github.com/PolarishT',
-    termStart: '19th Feb 2025'
+    termStart: '19th Feb 2025',
   },
   {
     avatar: 'https://github.com/robocanic.png',
     name: 'Cai Chen',
     profile: 'https://github.com/robocanic',
-    termStart: '19th Feb 2025'
+    termStart: '19th Feb 2025',
   },
   {
     avatar: 'https://github.com/brianxiadong.png',
     name: 'Dong Xia',
     profile: 'https://github.com/brianxiadong',
     termStart: '9th Apr 2025',
-    retired: true
+    retired: true,
   },
   {
     avatar: 'https://github.com/disaster1-tesk.png',
     name: 'Wei Wang',
     profile: 'https://github.com/disaster1-tesk',
-    termStart: '9th Apr 2025'
+    termStart: '9th Apr 2025',
   },
   {
     avatar: 'https://github.com/CoderSerio.png',
     name: 'Yuyou Shen',
     profile: 'https://github.com/CoderSerio',
-    termStart: '9th Apr 2025'
+    termStart: '9th Apr 2025',
   },
   {
     avatar: 'https://github.com/Aias00.png',
     name: 'Hongyu Liu',
     profile: 'https://github.com/Aias00',
-    termStart: '9th Apr 2025'
+    termStart: '9th Apr 2025',
   },
   {
     avatar: 'https://github.com/zhangshenghang.png',
     name: 'Shanghang Zhang',
     profile: 'https://github.com/zhangshenghang',
-    termStart: '24th May 2025'
+    termStart: '24th May 2025',
   },
   {
     avatar: 'https://github.com/GTyingzi.png',
     name: 'Ying Zi',
     profile: 'https://github.com/GTyingzi',
-    termStart: '24th May 2025'
+    termStart: '24th May 2025',
   },
   {
     avatar: 'https://github.com/HY-love-sleep.png',
     name: 'Hong Yan',
     profile: 'https://github.com/HY-love-sleep',
-    termStart: '26th June 2025'
+    termStart: '26th June 2025',
   },
   {
     avatar: 'https://github.com/VLSMB.png',
     name: 'VLSMB',
     profile: 'https://github.com/VLSMB',
-    termStart: '25th July 2025'
-  }
+    termStart: '25th July 2025',
+  },
 ]
 
 // Split array into chunks of specified size
@@ -237,12 +237,12 @@ export default function Team(): React.JSX.Element {
       title={translate({
         id: 'team.title',
         message: 'Spring AI Alibaba 社区角色介绍',
-        description: 'The page title for team page'
+        description: 'The page title for team page',
       })}
       description={translate({
         id: 'team.description',
         message: '了解 Spring AI Alibaba 社区的角色和成员',
-        description: 'The page description for team page'
+        description: 'The page description for team page',
       })}>
       <div className={styles.teamPage}>
         <div className="container">

@@ -1,10 +1,10 @@
-import React from 'react';
-import Footer from '@theme-original/Footer';
-import type FooterType from '@theme/Footer';
-import type {WrapperProps} from '@docusaurus/types';
-import projectConfig from '../../../project.config';
+import React from 'react'
+import Footer from '@theme-original/Footer'
+import type FooterType from '@theme/Footer'
+import type { WrapperProps } from '@docusaurus/types'
+import projectConfig from '../../../project.config'
 
-type Props = WrapperProps<typeof FooterType>;
+type Props = WrapperProps<typeof FooterType>
 
 export default function FooterWrapper(props: Props): JSX.Element {
   return (
@@ -33,5 +33,5 @@ export default function FooterWrapper(props: Props): JSX.Element {
         </div>
       </div>
     </>
-  );
+  )
 }

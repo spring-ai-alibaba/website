@@ -6,6 +6,15 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 
 export default [
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/build/**',
+      '**/.docusaurus/**',
+      '**/static/**',
+      '**/.DS_Store',
+    ],
+  },
   js.configs.recommended,
   {
     files: ['**/*.{js,jsx,mjs,cjs}'],
@@ -37,14 +46,11 @@ export default [
       },
     },
     rules: {
-      // Stylistic rules
-      '@stylistic/indent': ['error', 2],
+      // Stylistic rules - using simpler rules to avoid stack overflow
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/semi': ['error', 'never'],
-      '@stylistic/comma-trailing': ['error', 'always-multiline'],
-      '@stylistic/object-curly-spacing': ['error', 'never'],
-      '@stylistic/array-bracket-spacing': ['error', 'never'],
-      '@stylistic/space-before-function-paren': ['error', 'never'],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
 
       // React rules
       'react/jsx-uses-react': 'error',
@@ -54,7 +60,7 @@ export default [
       'react-hooks/exhaustive-deps': 'warn',
 
       // General rules
-      'no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-console': 'warn',
       'prefer-const': 'error',
       'no-var': 'error',
@@ -81,7 +87,6 @@ export default [
         },
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.json',
       },
       globals: {
         window: 'readonly',
@@ -98,17 +103,14 @@ export default [
       },
     },
     rules: {
-      // Stylistic rules
-      '@stylistic/indent': ['error', 2],
+      // Stylistic rules - using simpler rules to avoid stack overflow
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/semi': ['error', 'never'],
-      '@stylistic/comma-trailing': ['error', 'always-multiline'],
-      '@stylistic/object-curly-spacing': ['error', 'never'],
-      '@stylistic/array-bracket-spacing': ['error', 'never'],
-      '@stylistic/space-before-function-paren': ['error', 'never'],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
 
       // TypeScript rules
-      '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',

@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import Translate, {translate} from '@docusaurus/Translate'
+import Translate, { translate } from '@docusaurus/Translate'
 import styles from './styles.module.css'
 
 interface FeatureItem {
@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
     title: translate({
       id: 'homepage.features.docs.title',
       message: '📚 丰富文档',
-      description: 'Feature title for rich documentation'
+      description: 'Feature title for rich documentation',
     }),
     icon: '📖',
     description: (
@@ -30,7 +30,7 @@ const FeatureList: FeatureItem[] = [
     title: translate({
       id: 'homepage.features.theme.title',
       message: '🎨 精美主题',
-      description: 'Feature title for beautiful themes'
+      description: 'Feature title for beautiful themes',
     }),
     icon: '🌓',
     description: (
@@ -46,7 +46,7 @@ const FeatureList: FeatureItem[] = [
     title: translate({
       id: 'homepage.features.fast.title',
       message: '⚡ 快速现代',
-      description: 'Feature title for fast and modern'
+      description: 'Feature title for fast and modern',
     }),
     icon: '🚀',
     description: (
@@ -62,7 +62,7 @@ const FeatureList: FeatureItem[] = [
     title: translate({
       id: 'homepage.features.customizable.title',
       message: '🔧 易于定制',
-      description: 'Feature title for easy customization'
+      description: 'Feature title for easy customization',
     }),
     icon: '⚙️',
     description: (
@@ -78,7 +78,7 @@ const FeatureList: FeatureItem[] = [
     title: translate({
       id: 'homepage.features.mobile.title',
       message: '📱 移动优先',
-      description: 'Feature title for mobile first'
+      description: 'Feature title for mobile first',
     }),
     icon: '📱',
     description: (
@@ -94,7 +94,7 @@ const FeatureList: FeatureItem[] = [
     title: translate({
       id: 'homepage.features.search.title',
       message: '🔍 搜索功能',
-      description: 'Feature title for search functionality'
+      description: 'Feature title for search functionality',
     }),
     icon: '🔎',
     description: (

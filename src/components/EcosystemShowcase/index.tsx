@@ -1,8 +1,8 @@
-import React from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import Translate, { translate } from '@docusaurus/Translate';
-import styles from './styles.module.css';
+import React from 'react'
+import clsx from 'clsx'
+import Link from '@docusaurus/Link'
+import Translate, { translate } from '@docusaurus/Translate'
+import styles from './styles.module.css'
 
 interface EcosystemItem {
   name: string;
@@ -65,7 +65,7 @@ const frameworkItems: EcosystemItem[] = [
     docUrl: '/docs/frameworks/extensions/quick-start',
     stars: 'spring-ai-extensions',
   },
-];
+]
 
 const productItems: EcosystemItem[] = [
   {
@@ -98,7 +98,7 @@ const productItems: EcosystemItem[] = [
     docUrl: '/docs/agents/deepresearch/quick-start',
     stars: 'deep-research',
   },
-];
+]
 
 interface EcosystemCardProps {
   item: EcosystemItem;
@@ -146,13 +146,13 @@ function EcosystemCard({ item }: EcosystemCardProps): React.JSX.Element {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default function EcosystemShowcase(): React.JSX.Element {
   // Split framework items: first 2 and last 3
-  const topFrameworkItems = frameworkItems.slice(0, 2);
-  const bottomFrameworkItems = frameworkItems.slice(2);
+  const topFrameworkItems = frameworkItems.slice(0, 2)
+  const bottomFrameworkItems = frameworkItems.slice(2)
 
   return (
     <section className={styles.ecosystem}>
@@ -216,5 +216,5 @@ export default function EcosystemShowcase(): React.JSX.Element {
         </div>
       </div>
     </section>
-  );
+  )
 }

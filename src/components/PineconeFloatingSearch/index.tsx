@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import clsx from 'clsx';
-import projectConfig, { getSearchConfig } from '../../../project.config';
-import styles from './styles.module.css';
+import React, { useState, useEffect, useRef } from 'react'
+import clsx from 'clsx'
+import projectConfig, { getSearchConfig } from '../../../project.config'
+import styles from './styles.module.css'
 
 interface SearchResult {
   id: string;
@@ -12,29 +12,29 @@ interface SearchResult {
 }
 
 const PineconeFloatingSearch: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<SearchResult[]>([])
+  const [loading, setLoading] = useState(false)
 
-  const searchRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const searchConfig = getSearchConfig(projectConfig);
-  const isPineconeConfigured = searchConfig.isVectorSearchConfigured;
+  const searchConfig = getSearchConfig(projectConfig)
+  const isPineconeConfigured = searchConfig.isVectorSearchConfigured
 
   // Perform search - simplified version, returns demo results
   const performSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
-      setResults([]);
-      return;
+      setResults([])
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise(resolve => setTimeout(resolve, 800))
 
     // Mock demo search results
     const demoResults: SearchResult[] = [
@@ -58,34 +58,34 @@ const PineconeFloatingSearch: React.FC = () => {
         content: '如何配置项目以满足您的特定需求和使用场景。',
         url: '/docs/getting-started/configuration',
         score: 0.82,
-      }
-    ];
+      },
+    ]
 
     // Filter results based on query
     const filteredResults = demoResults.filter(result =>
       result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      result.content.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+      result.content.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
 
-    setResults(filteredResults.length > 0 ? filteredResults : demoResults);
-    setLoading(false);
-  };
+    setResults(filteredResults.length > 0 ? filteredResults : demoResults)
+    setLoading(false)
+  }
 
   // Debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      performSearch(query);
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+      performSearch(query)
+    }, 500)
+    return () => clearTimeout(timeoutId)
+  }, [query])
 
   // Keyboard event handling
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -94,44 +94,44 @@ const PineconeFloatingSearch: React.FC = () => {
         buttonRef.current &&
         !buttonRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside)
     }
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen]);
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen])
 
   const handleResultSelect = (result: SearchResult) => {
     if (typeof window !== 'undefined') {
-      window.location.href = result.url;
+      window.location.href = result.url
     }
-    setIsOpen(false);
-    setQuery('');
-  };
+    setIsOpen(false)
+    setQuery('')
+  }
 
   const handleToggleSearch = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(!isOpen)
     if (!isOpen) {
       setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
+        inputRef.current?.focus()
+      }, 100)
     }
-  };
+  }
 
   return (
     <div className={styles.floatingSearchContainer}>
       <button
         ref={buttonRef}
         className={clsx(styles.floatingButton, {
-          [styles.floatingButtonActive]: isOpen
+          [styles.floatingButtonActive]: isOpen,
         })}
         onClick={handleToggleSearch}
         aria-label="AI 向量搜索"
@@ -215,7 +215,7 @@ const PineconeFloatingSearch: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PineconeFloatingSearch;
+export default PineconeFloatingSearch

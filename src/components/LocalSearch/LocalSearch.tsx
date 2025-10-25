@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import clsx from 'clsx';
-import { translate } from '@docusaurus/Translate';
-import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
-import styles from './LocalSearch.module.css';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import clsx from 'clsx'
+import { translate } from '@docusaurus/Translate'
+import Fuse, { IFuseOptions, FuseResult } from 'fuse.js'
+import styles from './LocalSearch.module.css'
 
 // ============= Type Definitions =============
 interface SearchItem {
@@ -33,7 +33,7 @@ const staticSearchData: SearchItem[] = [
     content: '欢迎来到优秀项目的精美文档模板！此模板为提供了一个双主题文档网站，具有优雅的纸张米白色和绚丽的星空夜色主题。',
     url: '/docs/intro',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'api-overview',
@@ -41,7 +41,7 @@ const staticSearchData: SearchItem[] = [
     content: '欢迎来到 API 文档！本节提供有关项目的所有可用 API、端点和集成方法的全面信息。',
     url: '/docs/api/overview',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'authentication',
@@ -49,7 +49,7 @@ const staticSearchData: SearchItem[] = [
     content: '了解如何通过我们的 API 进行身份验证以访问受保护的资源。',
     url: '/docs/api/authentication',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   // English content
   {
@@ -58,7 +58,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Welcome to the beautiful documentation template for excellent projects! This template provides a dual-theme documentation website with elegant paper beige and gorgeous starry night themes.',
     url: '/en/docs/intro',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'api-overview-en',
@@ -66,7 +66,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Welcome to the API documentation! This section provides comprehensive information about all available APIs, endpoints, and integration methods for the project.',
     url: '/en/docs/api/overview',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'authentication-en',
@@ -74,7 +74,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Learn how to authenticate with our API to access protected resources.',
     url: '/en/docs/api/authentication',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'installation',
@@ -82,7 +82,7 @@ const staticSearchData: SearchItem[] = [
     content: '本指南将帮助安装和设置项目文档网站。',
     url: '/docs/getting-started/installation',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'installation-en',
@@ -90,7 +90,7 @@ const staticSearchData: SearchItem[] = [
     content: 'This guide will help you install and set up the project documentation website.',
     url: '/en/docs/getting-started/installation',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'quickstart',
@@ -98,7 +98,7 @@ const staticSearchData: SearchItem[] = [
     content: '几分钟内启动并运行项目！本指南将引导完成有效使用项目的基本步骤。',
     url: '/docs/getting-started/quickstart',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'quickstart-en',
@@ -106,7 +106,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Get the project up and running in minutes! This guide will walk you through the basic steps to effectively use the project.',
     url: '/en/docs/getting-started/quickstart',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'configuration',
@@ -114,7 +114,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Learn how to configure the application for your specific needs.',
     url: '/docs/getting-started/configuration',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'configuration-en',
@@ -122,7 +122,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Learn how to configure the application for your specific needs.',
     url: '/en/docs/getting-started/configuration',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'basic-usage',
@@ -130,7 +130,7 @@ const staticSearchData: SearchItem[] = [
     content: '通过这些基础使用示例快速开始。',
     url: '/docs/examples/basic-usage',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'basic-usage-en',
@@ -138,7 +138,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Get started quickly with these basic usage examples.',
     url: '/en/docs/examples/basic-usage',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'how-to-contribute',
@@ -146,7 +146,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Welcome to our contribution guide! We\'re excited that you\'re interested in contributing to this project.',
     url: '/docs/contributing/how-to-contribute',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'how-to-contribute-en',
@@ -154,7 +154,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Welcome to our contribution guide! We\'re excited that you\'re interested in contributing to this project.',
     url: '/en/docs/contributing/how-to-contribute',
     type: 'doc',
-    locale: 'en'
+    locale: 'en',
   },
   {
     id: 'common-issues',
@@ -162,7 +162,7 @@ const staticSearchData: SearchItem[] = [
     content: 'Solutions to frequently encountered problems.',
     url: '/docs/troubleshooting/common-issues',
     type: 'doc',
-    locale: 'zh-Hans'
+    locale: 'zh-Hans',
   },
   {
     id: 'common-issues-en',
@@ -170,9 +170,9 @@ const staticSearchData: SearchItem[] = [
     content: 'Solutions to frequently encountered problems.',
     url: '/en/docs/troubleshooting/common-issues',
     type: 'doc',
-    locale: 'en'
-  }
-];
+    locale: 'en',
+  },
+]
 
 // Function to fetch full content for comprehensive search
 async function fetchFullContent(url: string): Promise<{ fullText: string; headings: string[] }> {
@@ -182,74 +182,74 @@ async function fetchFullContent(url: string): Promise<{ fullText: string; headin
     const sampleContent: Record<string, { fullText: string; headings: string[] }> = {
       '/docs/intro': {
         fullText: '欢迎来到项目！这是一个优秀的文档模板项目。本项目提供了完整的文档网站解决方案，包括双主题支持、多语言、搜索功能等。您可以快速构建自己的文档网站。项目特性包括响应式设计、现代化UI、SEO优化等。技术栈包括React、TypeScript、Docusaurus等现代技术。',
-        headings: ['欢迎', '项目特性', '快速开始', '技术栈']
+        headings: ['欢迎', '项目特性', '快速开始', '技术栈'],
       },
       '/en/docs/intro': {
         fullText: 'Welcome to the project! This is an excellent documentation template project. This project provides a complete documentation website solution, including dual theme support, multi-language, search functionality, and more. You can quickly build your own documentation website. Project features include responsive design, modern UI, SEO optimization, etc. Tech stack includes React, TypeScript, Docusaurus and other modern technologies.',
-        headings: ['Welcome', 'Project Features', 'Quick Start', 'Tech Stack']
+        headings: ['Welcome', 'Project Features', 'Quick Start', 'Tech Stack'],
       },
       '/docs/api/overview': {
         fullText: 'API 概述文档。本节介绍了项目的主要API接口。包括RESTful API设计原则、认证机制、错误处理、数据格式等内容。我们遵循RESTful设计规范，使用JSON作为数据交换格式。所有API都需要进行身份验证。支持OAuth2.0和JWT token认证方式。',
-        headings: ['API概述', 'RESTful设计', '认证机制', '数据格式', '错误处理']
+        headings: ['API概述', 'RESTful设计', '认证机制', '数据格式', '错误处理'],
       },
       '/en/docs/api/overview': {
         fullText: 'API Overview documentation. This section introduces the main API interfaces of the project. Including RESTful API design principles, authentication mechanisms, error handling, data formats, etc. We follow RESTful design specifications and use JSON as the data exchange format. All APIs require authentication. Support OAuth2.0 and JWT token authentication methods.',
-        headings: ['API Overview', 'RESTful Design', 'Authentication', 'Data Format', 'Error Handling']
+        headings: ['API Overview', 'RESTful Design', 'Authentication', 'Data Format', 'Error Handling'],
       },
       '/docs/getting-started/installation': {
         fullText: '安装指南。本指南将帮助您安装和配置项目。首先确保您的系统满足最低要求：Node.js 16+、npm 7+。然后按照步骤安装：克隆项目代码，安装依赖包。配置环境变量，启动开发服务器。如果遇到问题，请查看故障排除部分。支持Windows、macOS、Linux系统。',
-        headings: ['系统要求', '安装步骤', '环境配置', '启动服务', '故障排除']
+        headings: ['系统要求', '安装步骤', '环境配置', '启动服务', '故障排除'],
       },
       '/en/docs/getting-started/installation': {
         fullText: 'Installation Guide. This guide will help you install and configure the project. First ensure your system meets the minimum requirements: Node.js 16+, npm 7+. Then follow the installation steps: clone project code, install dependencies. Configure environment variables and start development server. If you encounter issues, please check troubleshooting section. Support Windows, macOS, Linux systems.',
-        headings: ['System Requirements', 'Installation Steps', 'Environment Setup', 'Start Service', 'Troubleshooting']
+        headings: ['System Requirements', 'Installation Steps', 'Environment Setup', 'Start Service', 'Troubleshooting'],
       },
       '/docs/getting-started/quickstart': {
         fullText: '快速开始指南。几分钟内启动并运行项目！首先克隆代码仓库 git clone，安装项目依赖 npm install。配置必要的环境变量 .env文件。运行开发命令 npm start 启动本地服务器。打开浏览器访问 localhost:3000 查看效果。修改配置文件自定义您的网站。添加您的文档内容到docs目录。',
-        headings: ['克隆项目', '安装依赖', '环境配置', '启动服务', '自定义配置', '添加内容']
+        headings: ['克隆项目', '安装依赖', '环境配置', '启动服务', '自定义配置', '添加内容'],
       },
       '/en/docs/getting-started/quickstart': {
         fullText: 'Quick Start Guide. Get the project up and running in minutes! First clone code repository with git clone, install project dependencies with npm install. Configure necessary environment variables in .env file. Run development command npm start to start local server. Open browser and visit localhost:3000 to view results. Modify configuration files to customize your website. Add your documentation content to docs directory.',
-        headings: ['Clone Project', 'Install Dependencies', 'Environment Setup', 'Start Service', 'Custom Configuration', 'Add Content']
-      }
-    };
+        headings: ['Clone Project', 'Install Dependencies', 'Environment Setup', 'Start Service', 'Custom Configuration', 'Add Content'],
+      },
+    }
     
-    return sampleContent[url] || { fullText: '', headings: [] };
+    return sampleContent[url] || { fullText: '', headings: [] }
   } catch (error) {
-    console.warn(`Failed to fetch content for ${url}:`, error);
-    return { fullText: '', headings: [] };
+    console.warn(`Failed to fetch content for ${url}:`, error)
+    return { fullText: '', headings: [] }
   }
 }
 
 // Generate search data dynamically from Docusaurus with full text support
 async function generateSearchData(): Promise<SearchItem[]> {
-  const searchData: SearchItem[] = [];
+  const searchData: SearchItem[] = []
   
   if (typeof window !== 'undefined' && (window as any).__DOCUSAURUS_DATA__) {
-    const docusaurusData = (window as any).__DOCUSAURUS_DATA__;
+    const docusaurusData = (window as any).__DOCUSAURUS_DATA__
     
     // Get current locale
-    const currentLocale = docusaurusData?.docusaurus?.siteMetadata?.locale || 'zh-Hans';
+    const currentLocale = docusaurusData?.docusaurus?.siteMetadata?.locale || 'zh-Hans'
     
     // Process all locales data
-    const globalData = docusaurusData?.docusaurus?.globalData;
+    const globalData = docusaurusData?.docusaurus?.globalData
     
     // Process docs for all locales
     Object.keys(globalData || {}).forEach(pluginName => {
       if (pluginName.startsWith('docusaurus-plugin-content-docs')) {
-        const pluginData = globalData[pluginName];
+        const pluginData = globalData[pluginName]
         Object.keys(pluginData || {}).forEach(instanceName => {
-          const instance = pluginData[instanceName];
+          const instance = pluginData[instanceName]
           if (instance?.docs) {
             Object.values(instance.docs).forEach(async (doc: any) => {
               // Determine locale from URL pattern
-              let locale = 'zh-Hans'; // default
+              let locale = 'zh-Hans' // default
               if (doc.permalink && doc.permalink.startsWith('/en/')) {
-                locale = 'en';
+                locale = 'en'
               }
               
               // Fetch full content for this document
-              const { fullText, headings } = await fetchFullContent(doc.permalink);
+              const { fullText, headings } = await fetchFullContent(doc.permalink)
               
               searchData.push({
                 id: doc.id,
@@ -260,28 +260,28 @@ async function generateSearchData(): Promise<SearchItem[]> {
                 locale: locale,
                 tags: doc.tags?.map((tag: any) => tag.label) || [],
                 fullText: fullText,
-                headings: headings
-              });
-            });
+                headings: headings,
+              })
+            })
           }
-        });
+        })
       }
       
       // Process blog posts for all locales
       if (pluginName.startsWith('docusaurus-plugin-content-blog')) {
-        const pluginData = globalData[pluginName];
+        const pluginData = globalData[pluginName]
         Object.keys(pluginData || {}).forEach(instanceName => {
-          const instance = pluginData[instanceName];
+          const instance = pluginData[instanceName]
           if (instance?.blogPosts) {
             instance.blogPosts.forEach(async (post: any) => {
               // Determine locale from URL pattern
-              let locale = 'zh-Hans'; // default
+              let locale = 'zh-Hans' // default
               if (post.permalink && post.permalink.startsWith('/en/')) {
-                locale = 'en';
+                locale = 'en'
               }
               
               // For blog posts, we can use the excerpt or content if available
-              const { fullText, headings } = await fetchFullContent(post.permalink);
+              const { fullText, headings } = await fetchFullContent(post.permalink)
               
               searchData.push({
                 id: post.id,
@@ -292,16 +292,16 @@ async function generateSearchData(): Promise<SearchItem[]> {
                 locale: locale,
                 tags: post.tags?.map((tag: any) => tag.label) || [],
                 fullText: fullText,
-                headings: headings
-              });
-            });
+                headings: headings,
+              })
+            })
           }
-        });
+        })
       }
-    });
+    })
   }
   
-  return searchData;
+  return searchData
 }
 
 // ============= Fuse.js Configuration =============
@@ -311,7 +311,7 @@ const fuseOptions: IFuseOptions<SearchItem> = {
     { name: 'content', weight: 0.2 },
     { name: 'fullText', weight: 0.3 }, // Add full text search with significant weight
     { name: 'headings', weight: 0.2 }, // Add headings search
-    { name: 'tags', weight: 0.1 }
+    { name: 'tags', weight: 0.1 },
   ],
   threshold: 0.4, // Slightly higher threshold for better precision with full text
   distance: 200, // Increase distance for longer texts
@@ -320,106 +320,106 @@ const fuseOptions: IFuseOptions<SearchItem> = {
   ignoreLocation: true,
   minMatchCharLength: 2,
   shouldSort: true,
-  findAllMatches: true
-};
+  findAllMatches: true,
+}
 
 // ============= Search Hook =============
 function useLocalSearch() {
-  const [searchData, setSearchData] = useState<SearchItem[]>([]);
-  const [query, setQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [searchData, setSearchData] = useState<SearchItem[]>([])
+  const [query, setQuery] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(-1)
   
   // Initialize search data with full text content
   useEffect(() => {
     const initializeSearchData = async () => {
       try {
-        const data = await generateSearchData();
+        const data = await generateSearchData()
         
         // Enhance static data with full text content
         const enhancedStaticData = await Promise.all(
           staticSearchData.map(async item => {
-            const { fullText, headings } = await fetchFullContent(item.url);
+            const { fullText, headings } = await fetchFullContent(item.url)
             return {
               ...item,
               fullText,
-              headings
-            };
-          })
-        );
+              headings,
+            }
+          }),
+        )
         
-        setSearchData(data.length > 0 ? data : enhancedStaticData);
+        setSearchData(data.length > 0 ? data : enhancedStaticData)
       } catch (error) {
-        console.warn('Failed to initialize search data:', error);
+        console.warn('Failed to initialize search data:', error)
         // Fallback to static data without full text
-        setSearchData(staticSearchData);
+        setSearchData(staticSearchData)
       }
-    };
+    }
     
-    initializeSearchData();
-  }, []);
+    initializeSearchData()
+  }, [])
   
   // Create Fuse instance
   const fuse = useMemo(() => {
-    return new Fuse(searchData, fuseOptions);
-  }, [searchData]);
+    return new Fuse(searchData, fuseOptions)
+  }, [searchData])
   
   // Perform search
   const searchResults = useMemo(() => {
     if (!query.trim() || query.length < 2) {
-      return [];
+      return []
     }
     
-    const results = fuse.search(query);
+    const results = fuse.search(query)
     return results.slice(0, 10).map(result => ({
       item: result.item,
       score: result.score,
-      matches: result.matches
-    }));
-  }, [fuse, query]);
+      matches: result.matches,
+    }))
+  }, [fuse, query])
   
   // Reset selected index when search results change
   useEffect(() => {
-    setSelectedIndex(-1);
-  }, [searchResults]);
+    setSelectedIndex(-1)
+  }, [searchResults])
   
   // Search-related methods
   const handleSearch = useCallback((searchQuery: string) => {
-    setQuery(searchQuery);
-  }, []);
+    setQuery(searchQuery)
+  }, [])
   
   const openSearch = useCallback(() => {
-    setIsOpen(true);
-    setSelectedIndex(-1);
-  }, []);
+    setIsOpen(true)
+    setSelectedIndex(-1)
+  }, [])
   
   const closeSearch = useCallback(() => {
-    setIsOpen(false);
-    setQuery('');
-    setSelectedIndex(-1);
-  }, []);
+    setIsOpen(false)
+    setQuery('')
+    setSelectedIndex(-1)
+  }, [])
   
   const clearSearch = useCallback(() => {
-    setQuery('');
-    setSelectedIndex(-1);
-  }, []);
+    setQuery('')
+    setSelectedIndex(-1)
+  }, [])
   
   const selectNext = useCallback(() => {
     setSelectedIndex(prev => 
-      prev < searchResults.length - 1 ? prev + 1 : prev
-    );
-  }, [searchResults.length]);
+      prev < searchResults.length - 1 ? prev + 1 : prev,
+    )
+  }, [searchResults.length])
   
   const selectPrevious = useCallback(() => {
-    setSelectedIndex(prev => prev > -1 ? prev - 1 : -1);
-  }, []);
+    setSelectedIndex(prev => prev > -1 ? prev - 1 : -1)
+  }, [])
   
   const selectCurrent = useCallback(() => {
     if (selectedIndex >= 0 && selectedIndex < searchResults.length) {
-      return searchResults[selectedIndex].item.url;
+      return searchResults[selectedIndex].item.url
     }
-    return null;
-  }, [selectedIndex, searchResults]);
+    return null
+  }, [selectedIndex, searchResults])
   
   return {
     query,
@@ -435,8 +435,8 @@ function useLocalSearch() {
     selectCurrent,
     hasResults: searchResults.length > 0,
     isEmpty: !query.trim(),
-    isSearching: query.trim().length >= 2
-  };
+    isSearching: query.trim().length >= 2,
+  }
 }
 
 // ============= Search Result Item Component =============
@@ -449,99 +449,99 @@ interface SearchResultItemProps {
 }
 
 function SearchResultItem({ result, index, isSelected, onSelect, onMouseEnter }: SearchResultItemProps) {
-  const { item, matches } = result;
-  const itemRef = useRef<HTMLDivElement>(null);
+  const { item, matches } = result
+  const itemRef = useRef<HTMLDivElement>(null)
   
   // Scroll to selected item
   useEffect(() => {
     if (isSelected && itemRef.current) {
       itemRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'nearest'
-      });
+        block: 'nearest',
+      })
     }
-  }, [isSelected]);
+  }, [isSelected])
   
   // Highlight matched text with improved logic for full text search
   const highlightText = (text: string, matches?: SearchResult['matches']) => {
     if (!matches || !matches.length) {
-      return text;
+      return text
     }
     
     // Enhanced highlight logic for full text content
-    let highlightedText = text;
+    let highlightedText = text
     
     matches.forEach(match => {
       if ((match.key === 'title' || match.key === 'fullText' || match.key === 'headings') && match.indices) {
         match.indices.forEach(([start, end]) => {
           if (start < text.length && end < text.length) {
-            const before = text.slice(0, start);
-            const highlighted = text.slice(start, end + 1);
-            const after = text.slice(end + 1);
-            highlightedText = `${before}<mark>${highlighted}</mark>${after}`;
+            const before = text.slice(0, start)
+            const highlighted = text.slice(start, end + 1)
+            const after = text.slice(end + 1)
+            highlightedText = `${before}<mark>${highlighted}</mark>${after}`
           }
-        });
+        })
       }
-    });
+    })
     
-    return highlightedText;
-  };
+    return highlightedText
+  }
 
   // Extract and highlight relevant text snippet from full content
   const getRelevantSnippet = (item: SearchItem, matches?: SearchResult['matches']) => {
     if (!matches || !item.fullText) {
-      return item.content;
+      return item.content
     }
     
     // Find matches in fullText
-    const fullTextMatches = matches.filter(match => match.key === 'fullText');
+    const fullTextMatches = matches.filter(match => match.key === 'fullText')
     if (fullTextMatches.length === 0) {
-      return item.content;
+      return item.content
     }
     
-    const match = fullTextMatches[0];
+    const match = fullTextMatches[0]
     if (!match.indices || match.indices.length === 0) {
-      return item.content;
+      return item.content
     }
     
-    const [start, end] = match.indices[0];
-    const fullText = item.fullText;
+    const [start, end] = match.indices[0]
+    const fullText = item.fullText
     
     // Extract context around the match (about 100 characters)
-    const contextStart = Math.max(0, start - 50);
-    const contextEnd = Math.min(fullText.length, end + 50);
+    const contextStart = Math.max(0, start - 50)
+    const contextEnd = Math.min(fullText.length, end + 50)
     
-    let snippet = fullText.slice(contextStart, contextEnd);
+    let snippet = fullText.slice(contextStart, contextEnd)
     
     // Add ellipsis if we truncated
-    if (contextStart > 0) snippet = '...' + snippet;
-    if (contextEnd < fullText.length) snippet = snippet + '...';
+    if (contextStart > 0) snippet = '...' + snippet
+    if (contextEnd < fullText.length) snippet = snippet + '...'
     
-    return snippet;
-  };
+    return snippet
+  }
   
   const getTypeLabel = (type: string) => {
     switch (type) {
       case 'doc':
-        return '文档';
+        return '文档'
       case 'blog':
-        return '博客';
+        return '博客'
       case 'page':
-        return '页面';
+        return '页面'
       default:
-        return type;
+        return type
     }
-  };
+  }
   
   // Get the best content to display (either snippet from fullText or regular content)
-  const displayContent = getRelevantSnippet(item, matches);
+  const displayContent = getRelevantSnippet(item, matches)
   
   return (
     <div 
       ref={itemRef}
       className={clsx(
         styles.searchResultItem,
-        isSelected && styles.searchResultItemSelected
+        isSelected && styles.searchResultItemSelected,
       )} 
       onClick={onSelect}
       onMouseEnter={onMouseEnter}
@@ -550,7 +550,7 @@ function SearchResultItem({ result, index, isSelected, onSelect, onMouseEnter }:
         <span 
           className={styles.searchResultTitle}
           dangerouslySetInnerHTML={{
-            __html: highlightText(item.title, matches)
+            __html: highlightText(item.title, matches),
           }}
         />
         <span className={clsx(styles.searchResultType, styles[`type-${item.type}`])}>
@@ -575,7 +575,7 @@ function SearchResultItem({ result, index, isSelected, onSelect, onMouseEnter }:
         </div>
       )}
     </div>
-  );
+  )
 }
 
 // ============= Main Component =============
@@ -594,10 +594,10 @@ export default function LocalSearch() {
     selectCurrent,
     hasResults,
     isEmpty,
-    isSearching
-  } = useLocalSearch();
+    isSearching,
+  } = useLocalSearch()
   
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
   
   // Keyboard event handling
   useEffect(() => {
@@ -605,64 +605,65 @@ export default function LocalSearch() {
       if (!isOpen) {
         // Open search shortcut
         if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
-          event.preventDefault();
-          openSearch();
+          event.preventDefault()
+          openSearch()
         }
-        return;
+        return
       }
       
       switch (event.key) {
         case 'Escape':
-          event.preventDefault();
-          closeSearch();
-          break;
+          event.preventDefault()
+          closeSearch()
+          break
           
         case 'ArrowDown':
-          event.preventDefault();
-          selectNext();
-          break;
+          event.preventDefault()
+          selectNext()
+          break
           
         case 'ArrowUp':
-          event.preventDefault();
-          selectPrevious();
-          break;
+          event.preventDefault()
+          selectPrevious()
+          break
           
-        case 'Enter':
-          event.preventDefault();
-          const selectedUrl = selectCurrent();
+        case 'Enter': {
+          event.preventDefault()
+          const selectedUrl = selectCurrent()
           if (selectedUrl) {
-            closeSearch();
-            window.location.href = selectedUrl;
+            closeSearch()
+            window.location.href = selectedUrl
           }
-          break;
+          break
+        }
       }
-    };
+    }
     
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, openSearch, closeSearch, selectNext, selectPrevious, selectCurrent]);
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, openSearch, closeSearch, selectNext, selectPrevious, selectCurrent])
   
   // Focus input field
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  }, [isOpen]);
+  }, [isOpen])
   
   const handleResultSelect = (url: string) => {
-    closeSearch();
-    window.location.href = url;
-  };
+    closeSearch()
+    window.location.href = url
+  }
   
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      closeSearch();
+      closeSearch()
     }
-  };
+  }
   
   const handleMouseEnterResult = (index: number) => {
     // Only update selected index on mouse hover to avoid conflicts with keyboard navigation
-  };
+  }
   
   return (
     <>
@@ -674,11 +675,11 @@ export default function LocalSearch() {
         title={translate({
           id: 'theme.SearchBar.label',
           message: 'Search',
-          description: 'The ARIA label for search button'
+          description: 'The ARIA label for search button',
         })}
         aria-label={translate({
           id: 'theme.SearchBar.label', 
-          message: 'Search'
+          message: 'Search',
         })}
       >
         <svg 
@@ -833,5 +834,5 @@ export default function LocalSearch() {
         </div>
       )}
     </>
-  );
+  )
 }

@@ -1,19 +1,19 @@
-import React, { useEffect, useRef } from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import Layout from '@theme/Layout';
-import EcosystemShowcase from '@site/src/components/EcosystemShowcase';
-import MeteorShower from '@site/src/components/MeteorShower';
-import FloatingClouds from '../components/FloatingClouds';
-import TypewriterCode from '@site/src/components/TypewriterCode';
-import Translate, {translate} from '@docusaurus/Translate';
+import React, { useEffect, useRef } from 'react'
+import clsx from 'clsx'
+import Link from '@docusaurus/Link'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+import Layout from '@theme/Layout'
+import EcosystemShowcase from '@site/src/components/EcosystemShowcase'
+import MeteorShower from '@site/src/components/MeteorShower'
+import FloatingClouds from '../components/FloatingClouds'
+import TypewriterCode from '@site/src/components/TypewriterCode'
+import Translate, { translate } from '@docusaurus/Translate'
 
-import styles from './index.module.css';
-import projectConfig, { getGitHubUrls } from '../../project.config';
+import styles from './index.module.css'
+import projectConfig, { getGitHubUrls } from '../../project.config'
 
 // Generate GitHub links from project configuration
-const githubUrls = getGitHubUrls(projectConfig);
+const githubUrls = getGitHubUrls(projectConfig)
 
 // Sample code string
 const sampleCode = `@RestController
@@ -33,24 +33,24 @@ public class AIChatApplication {
                     .build()))
             .getResult().getOutput().getText();
     }
-}`;
+}`
 
 // Neural Network Animation Component
 function NeuralNetwork() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
 
-    const nodes: Array<{x: number; y: number; vx: number; vy: number}> = [];
-    const nodeCount = 30;
+    const nodes: Array<{ x: number; y: number; vx: number; vy: number }> = []
+    const nodeCount = 30
 
     // Initialize nodes
     for (let i = 0; i < nodeCount; i++) {
@@ -59,63 +59,63 @@ function NeuralNetwork() {
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
-      });
+      })
     }
 
     function animate() {
-      if (!ctx || !canvas) return;
+      if (!ctx || !canvas) return
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       // Update and draw nodes
       nodes.forEach((node, i) => {
-        node.x += node.vx;
-        node.y += node.vy;
+        node.x += node.vx
+        node.y += node.vy
 
         // Bounce off edges
-        if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
-        if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+        if (node.x < 0 || node.x > canvas.width) node.vx *= -1
+        if (node.y < 0 || node.y > canvas.height) node.vy *= -1
 
         // Draw node
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(96, 165, 250, 0.6)';
-        ctx.fill();
+        ctx.beginPath()
+        ctx.arc(node.x, node.y, 3, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(96, 165, 250, 0.6)'
+        ctx.fill()
 
         // Draw connections
         nodes.forEach((otherNode, j) => {
-          if (i === j) return;
+          if (i === j) return
 
-          const dx = node.x - otherNode.x;
-          const dy = node.y - otherNode.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx = node.x - otherNode.x
+          const dy = node.y - otherNode.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
 
           if (distance < 120) {
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(otherNode.x, otherNode.y);
-            ctx.strokeStyle = `rgba(96, 165, 250, ${0.3 * (1 - distance / 120)})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            ctx.beginPath()
+            ctx.moveTo(node.x, node.y)
+            ctx.lineTo(otherNode.x, otherNode.y)
+            ctx.strokeStyle = `rgba(96, 165, 250, ${0.3 * (1 - distance / 120)})`
+            ctx.lineWidth = 1
+            ctx.stroke()
           }
-        });
-      });
+        })
+      })
 
-      requestAnimationFrame(animate);
+      requestAnimationFrame(animate)
     }
 
-    animate();
+    animate()
 
     const handleResize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
-  return <canvas ref={canvasRef} className={styles.neuralNetwork} />;
+  return <canvas ref={canvasRef} className={styles.neuralNetwork} />
 }
 
 // Feature Card Component
@@ -130,11 +130,11 @@ function FeatureCard({ icon, title, description }: {
       <h3 className={styles.featureTitle}>{title}</h3>
       <p className={styles.featureDescription}>{description}</p>
     </div>
-  );
+  )
 }
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext()
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <FloatingClouds />
@@ -219,7 +219,7 @@ function HomepageHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }
 
 function ArchitectureSection() {
@@ -243,7 +243,7 @@ function ArchitectureSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function AcknowledgmentsSection() {
@@ -325,11 +325,11 @@ function AcknowledgmentsSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 export default function Home() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
       title={`${siteConfig.title}`}
@@ -342,5 +342,5 @@ export default function Home() {
         <AcknowledgmentsSection />
       </main>
     </Layout>
-  );
+  )
 }

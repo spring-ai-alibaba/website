@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '@theme/Layout'
-import Translate, {translate} from '@docusaurus/Translate'
+import Translate, { translate } from '@docusaurus/Translate'
 import styles from './code-of-conduct.module.css'
 
 export default function CodeOfConduct(): React.JSX.Element {
@@ -9,12 +9,12 @@ export default function CodeOfConduct(): React.JSX.Element {
       title={translate({
         id: 'codeOfConduct.title',
         message: '行为准则',
-        description: 'The page title for code of conduct'
+        description: 'The page title for code of conduct',
       })}
       description={translate({
         id: 'codeOfConduct.description',
         message: '我们社区的行为准则和价值观',
-        description: 'The page description for code of conduct'
+        description: 'The page description for code of conduct',
       })}>
       <div className={styles.codePage}>
         <div className="container">
