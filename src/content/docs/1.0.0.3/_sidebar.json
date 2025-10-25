@@ -1,0 +1,391 @@
+[
+    {
+        "label": "介绍",
+        "translations": {
+            "en": "Introduction"
+        },
+        "collapsed": false,
+        "items": [
+            {
+                "label": "什么是 Spring AI Alibaba",
+                "translations": {
+                    "en": "What is Spring AI Alibaba?"
+                },
+                "link": "docs/1.0.0.3/introduction/what-is-spring-ai-alibaba"
+            },
+            {
+                "label": "您的第一个智能体 (Your First Agent)",
+                "translations": {
+                    "en": "Your first Agent"
+                },
+                "link": "docs/1.0.0.3/introduction/your-first-agent"
+            },
+            {
+                "label": "多智能体系统 (Multi-Agent Systems)",
+                "translations": {
+                    "en": "Multi Agent Systems"
+                },
+                "link": "docs/1.0.0.3/introduction/multi-agent-systems"
+            },
+            {
+                "label": "Playground",
+                "translations": {
+                    "en": "Playground"
+                },
+                "link": "docs/1.0.0.3/introduction/playground"
+            },
+            {
+                "label": "监控与调试 (Monitoring & Debugging)",
+                "translations": {
+                    "en": "Monitoring & Debugging"
+                },
+                "link": "docs/1.0.0.3/introduction/monitoring-debugging"
+            },
+            {
+                "label": "社区 (Community)",
+                "translations": {
+                    "en": "Community"
+                },
+                "link": "docs/1.0.0.3/introduction/community"
+            }
+        ]
+    },
+    {
+        "label": "单智能体指南",
+        "translations": {
+            "en": "Single-Agent Guides"
+        },
+        "collapsed": true,
+        "items": [
+            {
+                "label": "Chat Client",
+                "translations": {
+                    "en": "Chat Client"
+                },
+                "collapsed": true,
+                "items": [
+                    {
+                        "label": "Chat Client API",
+                        "translations": {
+                            "en": "Chat Client API"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/chat-client"
+                    },
+                    {
+                        "label": "提示词 (Prompts)",
+                        "translations": {
+                            "en": "Prompts"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/prompts"
+                    },
+                    {
+                        "label": "结构化输出 (Structured Output)",
+                        "translations": {
+                            "en": "Structured Output"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/structured-output"
+                    },
+                    {
+                        "label": "Advisors",
+                        "translations": {
+                            "en": "Advisors"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/advisors"
+                    },
+                    {
+                        "label": "Streaming",
+                        "translations": {
+                            "en": "Streaming"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/streaming"
+                    },
+                    {
+                        "label": "默认配置 (Defaults and Configuration)",
+                        "translations": {
+                            "en": "Defaults and Configuration"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/defaults-configuration"
+                    },
+                    {
+                        "label": "模型 (Models)",
+                        "translations": {
+                            "en": "Models"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/models"
+                    },
+                    {
+                        "label": "聊天记忆 (Chat Memory)",
+                        "translations": {
+                            "en": "Chat Memory"
+                        },
+                        "link": "docs/1.0.0.3/single-agent/chat-memory"
+                    }
+                ]
+            },
+            {
+                "label": "多模态 (Multimodality)",
+                "translations": {
+                    "en": "Multimodality"
+                },
+                "link": "docs/1.0.0.3/single-agent/multimodality"
+            },
+            {
+                "label": "工具调用 (Tool Calling)",
+                "translations": {
+                    "en": "Tool Calling"
+                },
+                "link": "docs/1.0.0.3/single-agent/tool-calling"
+            },
+            {
+                "label": "模型上下文协议 (MCP)",
+                "translations": {
+                    "en": "Model Context Protocol (MCP)"
+                },
+                "link": "docs/1.0.0.3/single-agent/mcp"
+            },
+            {
+                "label": "检索增强生成 (RAG)",
+                "translations": {
+                    "en": "Retrieval Augmented Generation (RAG)"
+                },
+                "link": "docs/1.0.0.3/single-agent/rag"
+            },
+            {
+                "label": "模型评估 (Model Evaluation)",
+                "translations": {
+                    "en": "Model Evaluation"
+                },
+                "link": "docs/1.0.0.3/single-agent/model-evaluation"
+            },
+            {
+                "label": "可观测性 (Observability)",
+                "translations": {
+                    "en": "Observability"
+                },
+                "link": "docs/1.0.0.3/single-agent/observability"
+            }
+        ]
+    },
+    {
+        "label": "多智能体指南",
+        "translations": {
+            "en": "Multi-Agent Guides"
+        },
+        "collapsed": true,
+        "items": [
+
+            {
+                "label": "开发 Graph 应用",
+                "translations": {
+                    "en": "Develop Graph Application"
+                },
+                "collapsed": true,
+                "items": [
+                    {
+                        "label": "概览",
+                        "translations": {
+                            "en": "Overview"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/graph/overview"
+                    },
+                    {
+                        "label": "基础用法",
+                        "translations": {
+                            "en": "Basic Usage"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/graph/basic-usage"
+                    },
+                    {
+                        "label": "高级配置",
+                        "translations": {
+                            "en": "Advanced Configuration"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/graph/advanced-config"
+                    },
+                    {
+                        "label": "控制流",
+                        "translations": {
+                            "en": "Control Flow"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/graph/control-flow"
+                    },
+                    {
+                        "label": "并行处理",
+                        "translations": {
+                            "en": "Parallel Processing"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/graph/parallel-processing"
+                    },
+                    {
+                        "label": "可视化和调试",
+                        "translations": {
+                            "en": "Visualization & Debugging"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/graph/visualization-debugging"
+                    }
+                ]
+            },
+            {
+                "label": "流式处理 (Streaming)",
+                "translations": {
+                    "en": "Streaming"
+                },
+                "collapsed": true,
+                "items": [
+                    {
+                        "label": "概览",
+                        "translations": {
+                            "en": "Overview"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/streaming/overview"
+                    },
+                    {
+                        "label": "智能体流式处理",
+                        "translations": {
+                            "en": "Agent Streaming"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/streaming/agent-streaming"
+                    },
+                    {
+                        "label": "工作流流式处理",
+                        "translations": {
+                            "en": "Workflow Streaming"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/streaming/workflow-streaming"
+                    },
+                    {
+                        "label": "自定义流式数据",
+                        "translations": {
+                            "en": "Custom Streaming"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/streaming/custom-streaming"
+                    },
+                    {
+                        "label": "性能优化",
+                        "translations": {
+                            "en": "Performance"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/streaming/performance"
+                    }
+                ]
+            },
+            {
+                "label": "状态与上下文管理",
+                "translations": {
+                    "en": "State & Context Management"
+                },
+                "collapsed": true,
+                "items": [
+                    {
+                        "label": "概览",
+                        "translations": {
+                            "en": "Overview"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/overview"
+                    },
+                    {
+                        "label": "基础概念",
+                        "translations": {
+                            "en": "Fundamentals"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/fundamentals"
+                    },
+                    {
+                        "label": "短期状态管理",
+                        "translations": {
+                            "en": "Short-term State Management"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/short-term-state"
+                    },
+                    {
+                        "label": "长期状态管理",
+                        "translations": {
+                            "en": "Long-term State Management"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/long-term-state"
+                    },
+                    {
+                        "label": "持久执行",
+                        "translations": {
+                            "en": "Durable Execution"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/durable-execution"
+                    },
+                    {
+                        "label": "上下文工程",
+                        "translations": {
+                            "en": "Context Engineering"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/context-engineering"
+                    },
+                    {
+                        "label": "实践指南",
+                        "translations": {
+                            "en": "Best Practices"
+                        },
+                        "link": "docs/1.0.0.3/multi-agent/state-context-management/best-practices"
+                    }
+                ]
+            },
+            {
+                "label": "人机协作 (Human-in-the-loop)",
+                "translations": {
+                    "en": "Human-in-the-loop"
+                },
+                "link": "docs/1.0.0.3/multi-agent/human-in-the-loop"
+            },
+
+            {
+                "label": "子图 (Subgraphs)",
+                "translations": {
+                    "en": "Subgraphs"
+                },
+                "link": "docs/1.0.0.3/multi-agent/subgraphs"
+            },
+            {
+                "label": "可观测性 (Observability)",
+                "translations": {
+                    "en": "Observability"
+                },
+                "link": "docs/1.0.0.3/multi-agent/observability"
+            }
+        ]
+    },
+    {
+        "label": "Playground",
+        "translations": {
+            "en": "Playground"
+        },
+        "collapsed": true,
+        "items": [
+            {
+                "label": "Studio",
+                "translations": {
+                    "en": "Studio"
+                },
+                "link": "docs/1.0.0.3/playground/studio"
+            },
+            {
+                "label": "JManus",
+                "translations": {
+                    "en": "JManus"
+                },
+                "link": "docs/1.0.0.3/playground/jmanus"
+            },
+            {
+                "label": "DeepResearch",
+                "translations": {
+                    "en": "DeepResearch"
+                },
+                "link": "docs/1.0.0.3/playground/deepresearch"
+            },
+            {
+                "label": "NL2SQL",
+                "translations": {
+                    "en": "NL2SQL"
+                },
+                "link": "docs/1.0.0.3/playground/nl2sql"
+            }
+        ]
+    }
+]
