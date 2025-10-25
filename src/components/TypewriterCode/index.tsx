@@ -46,24 +46,24 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
     return () => clearTimeout(timer);
   }, [currentIndex, code, isTyping, typingSpeed]);
 
-  // 自动滚动到光标位置
+  // Auto scroll to cursor position
   useEffect(() => {
     if (cursorRef.current && codeContentRef.current) {
       const cursor = cursorRef.current;
       const container = codeContentRef.current;
 
-      // 获取光标相对于容器的位置
+      // Get cursor position relative to container
       const cursorRect = cursor.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
 
-      // 如果光标超出可视区域，滚动到光标位置
+      // If cursor is outside visible area, scroll to cursor position
       if (cursorRect.bottom > containerRect.bottom - 20) {
         cursor.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
     }
   }, [displayedCode]);
 
-  // 标记化代码行
+  // Tokenize code line
   const tokenizeLine = (line: string): Token[] => {
     const tokens: Token[] = [];
     const keywords = ['public', 'private', 'class', 'return', 'new', 'final', 'this'];
@@ -75,7 +75,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
     while (remaining.length > 0) {
       let matched = false;
 
-      // 匹配注解
+      // Match annotations
       for (const annotation of annotations) {
         if (remaining.startsWith(annotation)) {
           tokens.push({ type: 'annotation', value: annotation });
@@ -86,7 +86,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
       }
       if (matched) continue;
 
-      // 匹配关键字
+      // Match keywords
       for (const keyword of keywords) {
         const regex = new RegExp(`^${keyword}\\b`);
         if (regex.test(remaining)) {
@@ -98,7 +98,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
       }
       if (matched) continue;
 
-      // 匹配类型
+      // Match types
       for (const type of types) {
         const regex = new RegExp(`^${type}\\b`);
         if (regex.test(remaining)) {
@@ -110,7 +110,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
       }
       if (matched) continue;
 
-      // 匹配字符串
+      // Match strings
       if (remaining[0] === '"') {
         const endQuote = remaining.indexOf('"', 1);
         if (endQuote !== -1) {
@@ -121,7 +121,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         }
       }
 
-      // 匹配方法调用
+      // Match method calls
       const methodMatch = remaining.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/);
       if (methodMatch) {
         tokens.push({ type: 'method', value: methodMatch[1] });
@@ -129,7 +129,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         continue;
       }
 
-      // 匹配变量赋值
+      // Match variable assignments
       const varMatch = remaining.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=/);
       if (varMatch) {
         tokens.push({ type: 'variable', value: varMatch[1] });
@@ -137,7 +137,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         continue;
       }
 
-      // 匹配空格
+      // Match spaces
       const spaceMatch = remaining.match(/^\s+/);
       if (spaceMatch) {
         tokens.push({ type: 'space', value: spaceMatch[0] });
@@ -145,7 +145,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         continue;
       }
 
-      // 其他字符
+      // Other characters
       tokens.push({ type: 'text', value: remaining[0] });
       remaining = remaining.slice(1);
     }
@@ -153,7 +153,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
     return tokens;
   };
 
-  // 渲染标记化的行
+  // Render tokenized lines
   const renderTokens = (tokens: Token[], lineIndex: number) => {
     return tokens.map((token, tokenIndex) => {
       const key = `${lineIndex}-${tokenIndex}`;
@@ -180,7 +180,7 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
     });
   };
 
-  // 高亮代码的辅助函数
+  // Highlight code helper function
   const highlightCode = (codeString: string) => {
     const lines = codeString.split('\n');
     return lines.map((line, lineIndex) => {
