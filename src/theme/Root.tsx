@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PineconeFloatingSearch from '../components/PineconeFloatingSearch';
 import DocNeuralBackground from '../components/DocNeuralBackground';
 import BackToTop from '../components/BackToTop';
+import VersionDropdown from '../components/VersionDropdown';
 
 interface RootProps {
   children: React.ReactNode;
@@ -48,12 +49,34 @@ export default function Root({ children }: RootProps) {
     };
   }, []);
 
+  // 在 navbar 右侧添加版本选择器
+  useEffect(() => {
+    const navbar = document.querySelector('.navbar__items--right');
+    if (navbar) {
+      // 检查是否已添加
+      let versionContainer = document.querySelector('.navbar__version-dropdown');
+      if (!versionContainer) {
+        versionContainer = document.createElement('div');
+        versionContainer.className = 'navbar__version-dropdown';
+        versionContainer.id = 'version-dropdown-portal';
+        // 插入到语言选择器之前
+        const localeDropdown = navbar.querySelector('.navbar__item.dropdown');
+        if (localeDropdown) {
+          navbar.insertBefore(versionContainer, localeDropdown);
+        } else {
+          navbar.appendChild(versionContainer);
+        }
+      }
+    }
+  }, []);
+
   return (
     <>
       {isDocPage && <DocNeuralBackground />}
       {children}
       <PineconeFloatingSearch />
       <BackToTop />
+      <VersionDropdown />
     </>
   );
 }

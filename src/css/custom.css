@@ -1037,3 +1037,19 @@ svg,
 video {
   transition: none !important;
 }
+
+/* Version dropdown portal positioning */
+.navbar__version-dropdown-portal {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+/* Ensure version dropdown integrates with navbar */
+@media (max-width: 996px) {
+  .navbar__version-dropdown-portal {
+    margin-left: auto;
+    margin-right: 12px;
+  }
+}

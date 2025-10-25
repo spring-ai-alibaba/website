@@ -19,20 +19,14 @@ const sidebars: SidebarsConfig = {
       label: '开发框架',
       items: [
         {
-          type: 'category',
+          type: 'link',
           label: 'Agent Framework',
-          items: [
-            'frameworks/agent-framework/quick-start',
-            'frameworks/agent-framework/troubleshooting',
-          ],
+          href: '/docs/frameworks/agent-framework/current/quick-start',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Graph Core',
-          items: [
-            'frameworks/graph-core/quick-start',
-            'frameworks/graph-core/troubleshooting',
-          ],
+          href: '/docs/frameworks/graph-core/current/quick-start',
         },
         {
           type: 'category',

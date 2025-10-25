@@ -58,7 +58,48 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
 
-  plugins: [],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'agent-framework',
+        path: 'docs-versioned/agent-framework/current',
+        routeBasePath: 'docs/frameworks/agent-framework/current',
+        sidebarPath: './sidebars-agent-framework.ts',
+        editUrl: githubUrls.editDocs,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'agent-framework-1x',
+        path: 'docs-versioned/agent-framework/1.x',
+        routeBasePath: 'docs/frameworks/agent-framework/1.x',
+        sidebarPath: './sidebars-agent-framework.ts',
+        editUrl: githubUrls.editDocs,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'graph-core',
+        path: 'docs-versioned/graph-core/current',
+        routeBasePath: 'docs/frameworks/graph-core/current',
+        sidebarPath: './sidebars-graph-core.ts',
+        editUrl: githubUrls.editDocs,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'graph-core-1x',
+        path: 'docs-versioned/graph-core/1.x',
+        routeBasePath: 'docs/frameworks/graph-core/1.x',
+        sidebarPath: './sidebars-graph-core.ts',
+        editUrl: githubUrls.editDocs,
+      },
+    ],
+  ],
 
   presets: [
     [
@@ -171,11 +212,11 @@ const config: Config = {
           items: [
             {
               label: 'Agent Framework',
-              to: '/docs/frameworks/agent-framework/quick-start',
+              to: '/docs/frameworks/agent-framework/current/quick-start',
             },
             {
               label: 'Graph Core',
-              to: '/docs/frameworks/graph-core/quick-start',
+              to: '/docs/frameworks/graph-core/current/quick-start',
             },
             {
               label: 'Admin',

@@ -1,0 +1,97 @@
+.versionDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.versionButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  color: var(--ifm-color-content);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.versionButton:hover {
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .versionButton:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.versionLabel {
+  font-weight: 500;
+}
+
+.versionIcon {
+  transition: transform 0.2s ease;
+}
+
+.versionButton:hover .versionIcon {
+  transform: translateY(1px);
+}
+
+.versionMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 1000;
+}
+
+[data-theme='dark'] .versionMenu {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.versionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--ifm-color-content);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.versionItem:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.versionItemActive {
+  background: var(--ifm-color-primary-lightest);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .versionItemActive {
+  background: var(--ifm-color-primary-darkest);
+}
+
+.versionBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--ifm-color-primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
