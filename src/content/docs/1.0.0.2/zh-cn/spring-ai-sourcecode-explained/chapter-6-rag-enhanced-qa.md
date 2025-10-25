@@ -3156,7 +3156,7 @@ public class ParagraphManager {
 
 用于从多种文档格式（如 PDF、DOC/DOCX、PPT/PPTX、HTML 等）中提取文本，并将其封装为 Document 对象，基于 Apache Tika 库实现，支持广泛的文档格式。
 
-- `AutoDetectParser parser`：自动检索文档类型并文本的解析器
+- `AutoDetectParser parser`：自动检索文档类型并解析文本的解析器
 - `ContentHandler handler`：管理内容提取的处理器
 - `Metadata metadata`：读取文档相关的元数据
 - `ParseContext context`：解析过程信息的上下文
