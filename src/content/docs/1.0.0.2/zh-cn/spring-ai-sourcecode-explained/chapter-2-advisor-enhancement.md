@@ -354,7 +354,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATIONID;
+import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATIONID_ID;
 
 @RestController
 @RequestMapping("/advisor/memory/sqlite")
@@ -384,7 +384,7 @@ public class SqliteMemoryController {
     ) {
         return chatClient.prompt(query)
                 .advisors(
-                        a -> a.param(CONVERSATIONID, conversationId)
+                        a -> a.param(CONVERSATIONID_ID, conversationId)
                 )
                 .call().content();
     }
