@@ -94,13 +94,13 @@ checklinks: ## Check for broken links in the docs
 npm-lint: ## Lint Check the npm files.
 npm-lint:
 	@$(LOG_TARGET)
-	npm lint
+	npm run lint
 
 .PHONY: npm-lint-fix
 npm-lint-fix: ## Lint Check the npm files and fix them.
 npm-lint-fix:
 	@$(LOG_TARGET)
-	npm lint --fix
+	npm run lint:fix
 
 ## help: Show this help info.
 .PHONY: help
