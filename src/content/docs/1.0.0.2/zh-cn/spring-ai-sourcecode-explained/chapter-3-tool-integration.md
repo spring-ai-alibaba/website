@@ -2330,7 +2330,7 @@ public interface ToolCallingManager {
 ToolCallingManager 的默认实现类，负责管理 AI 聊天模型的工具调用流程，包括工具定义的解析、工具调用的执行、异常处理和观测埋点等
 
 - `ObservationRegistry observationRegistry`：观测注册表，用于埋点和监控工具调用过程
-- `ToolCallbackResolver toolCallbackResolver`：具回调解析器，根据工具名查找对应的 ToolCallback 实例
+- `ToolCallbackResolver toolCallbackResolver`：工具回调解析器，根据工具名查找对应的 ToolCallback 实例
 - `ToolExecutionExceptionProcessor toolExecutionExceptionProcessor`：工具执行异常处理器，负责将工具调用异常转为可返回的结果
 - `ToolCallingObservationConvention observationConvention`：工具调用观测约定，定义观测数据的结构和内容
 
