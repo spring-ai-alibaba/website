@@ -311,7 +311,7 @@ public interface ChatClientCustomizer {
 
    - @Scope("prototype")：每次注入都会生成新实例
 
-内部配置配 TracerPresentObservationConfiguration、TracerNotPresentObservationConfiguration
+内部配置类 TracerPresentObservationConfiguration、TracerNotPresentObservationConfiguration
 
 - 配置项：`spring.ai.chat.client.observations.log-prompt=true`
 - 当项目中存在 Tracer 时，启用带追踪能力的日志记录处理器
