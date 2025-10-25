@@ -300,7 +300,7 @@ public interface ChatClientCustomizer {
 类上重点注解说明
 
 1. 在 ObservationAutoConfiguration 类之后加载，确保观测基础设施已就绪
-2. 当类路径 ChatClient 类时才启用该自动配置
+2. 当 ChatClient 类在类路径上时才启用该自动配置
 3. 启用 ChatClientBuilderProperties 配置属性的支持，将配置文件中的 `spring.ai.chat.client.*` 映射到该类实例
 4. 只有当配置项 `spring.ai.chat.client.enabled=true` 时，才启用该自动配置，默认为 true
 
