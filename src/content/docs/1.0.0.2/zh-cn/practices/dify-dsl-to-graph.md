@@ -25,7 +25,7 @@ curl --location --request POST 'http://localhost:8080/starter.zip' \
 --data-urlencode 'packageName=com.example.demo' \
 --data-urlencode 'packaging=jar' \
 --data-urlencode 'javaVersion=17' \
---data-urlencode '{put-your-dify-dsl-here}'
+--data-urlencode 'dsl={put-your-dify-dsl-here}'
 ```
 
 > 请注意，这块的配套还在持续建设中，请关注文档更新，我们将补充更多详细说明。
