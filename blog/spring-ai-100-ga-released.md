@@ -19,21 +19,21 @@ category: article
 ## 两件有意思的事情
 第一件事，是 Spring AI 官方发布了全新 LOGO：
 
-![](https://raw.githubusercontent.com/spring-io/spring-io-static/refs/heads/main/blog/tzolov/20250520/spring-ai-logo.png)
+![Spring AI Logo](https://raw.githubusercontent.com/spring-io/spring-io-static/refs/heads/main/blog/tzolov/20250520/spring-ai-logo.png)
 
 第二件事，Spring AI 官方目前并没有将 1.0.0 的二进制包推送到 Maven 中央仓库，而是选择继续推送到 Spring 自己维护的 Maven 库。因此，1.0.0 版本的开发者目前还是需要在项目中增加以下仓库配置，以便在 Maven Central 中找到依赖包。
 
 ```xml
  <dependencyManagement>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-bom</artifactId>
-			<version>1.0.0</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-	</dependencies>
+ <dependencies>
+  <dependency>
+   <groupId>org.springframework.ai</groupId>
+   <artifactId>spring-ai-bom</artifactId>
+   <version>1.0.0</version>
+   <type>pom</type>
+   <scope>import</scope>
+  </dependency>
+ </dependencies>
 </dependencyManagement>
 ```
 
@@ -66,7 +66,6 @@ Spring AI 的 ChatClient 支持调用**20 个**AI 模型，包括 Anthropic、Op
 
 Spring AI ChatClient 的一个关键特性是 Advisor API。这是一个拦截器链设计模式，允许你通过注入检索数据（Retrieval Context）和对话历史（Chat Memory）来修改传入的 Prompt。
 
-
 现在让我们深入了解 AI 应用开发中模型增强模式的每个组成部分。
 
 ### 检索（Retrieval）
@@ -79,13 +78,11 @@ Spring AI 包含一个轻量级、可配置的**ETL（提取、转换、加载�
 
 Spring AI 还支持检索增强生成 (RAG) 模式，该模式使 AI 模型能够根据您传入的数据生成响应。您可以先使用简单的方法`QuestionAnswerAdvisor` 将相关上下文注入提示中，也可以使用 扩展至更复杂、更模块化的 RAG 管道，以满足您的应用需求`RetrievalAugmentationAdvisor`。
 
-
 ### 记忆（ChatMemory）
 
 对话历史记录是创建 AI 聊天应用程序的重要组成部分。Spring AI 通过`ChatMemory`接口支持这一点，该接口管理消息的存储和检索。该`MessageWindowChatMemory`实现在滑动窗口中维护最后 N 条消息，并随着对话的进展进行自我更新。它委托给一个`ChatMemoryRepository`，我们目前为 JDBC、Cassandra 和 Neo4j 提供存储库实现，并且正在开发更多版本。
 
 另一种方法是使用`VectorStoreChatMemoryAdvisor`。它不仅仅记住最新消息，还使用向量搜索从过去的对话中检索语义最相似的消息。
-
 
 ### 工具（Tool）
 
@@ -101,18 +98,16 @@ Spring AI 还支持检索增强生成 (RAG) 模式，该模式使 AI 模型能�
 
 Spring AI 可以轻松检查 AI 生成内容的准确性和相关性。它配备了灵活的`Evaluator`界面和两个方便的内置评估器：
 
-*   **RelevancyEvaluator** – 帮助您确定 AI 的响应是否与用户的问题和检索到的上下文真正匹配。它非常适合测试 RAG 流程，并使用可自定义的提示来询问另一个模型：“根据检索到的内容，这个响应是否合理？”
+* **RelevancyEvaluator** – 帮助您确定 AI 的响应是否与用户的问题和检索到的上下文真正匹配。它非常适合测试 RAG 流程，并使用可自定义的提示来询问另一个模型：“根据检索到的内容，这个响应是否合理？”
 
-*   **FactCheckingEvaluator** – 根据提供的上下文验证 AI 的响应是否符合事实。它的工作原理是要求模型判断某个语句是否在逻辑上得到文档的支持。您可以使用 Bespoke 的 Minicheck（通过 Ollama）等小型模型来运行此模型，这比每次检查都使用 GPT-4 之类的工具要便宜得多。
-
+* **FactCheckingEvaluator** – 根据提供的上下文验证 AI 的响应是否符合事实。它的工作原理是要求模型判断某个语句是否在逻辑上得到文档的支持。您可以使用 Bespoke 的 Minicheck（通过 Ollama）等小型模型来运行此模型，这比每次检查都使用 GPT-4 之类的工具要便宜得多。
 
 然而，这并非灵丹妙药。Hugging Face “LLM as judges” 排行榜的首席维护者[Clémentine Fourrier](https://clefourrier.github.io/) 警告说，**“LLM as judges” 并非灵丹妙药**。在接受[Latent Space Podcast](https://deepcast.fm/episode/benchmarks-201-why-leaderboards-arenas-llm-as-judge)采访时，她概述了几个关键问题：
 
-*   **模式崩溃和位置偏差**：法学硕士评委通常青睐来自同一系列模型的答案或显示的第一个答案。
-*   **冗长偏见**：​​无论准确性如何，模型对较长的答案的评价更为有利。
-*   **评分较差**：排名比评分更可靠；即便如此，可重复性也很弱。
-*   **过度自信偏见**：人们和模型通常更喜欢自信的答案，即使是错误的。
-
+* **模式崩溃和位置偏差**：法学硕士评委通常青睐来自同一系列模型的答案或显示的第一个答案。
+* **冗长偏见**：​​无论准确性如何，模型对较长的答案的评价更为有利。
+* **评分较差**：排名比评分更可靠；即便如此，可重复性也很弱。
+* **过度自信偏见**：人们和模型通常更喜欢自信的答案，即使是错误的。
 
 ### 可观测性（Observability）
 
@@ -120,12 +115,11 @@ Spring AI 可以轻松检查 AI 生成内容的准确性和相关性。它配备
 
 Spring AI 与**Micrometer**集成，提供有关关键指标的详细遥测，例如：
 
-*   **模型延迟**——你的模型需要多长时间才能做出反应（不仅仅是情感上的）。
+* **模型延迟**——你的模型需要多长时间才能做出反应（不仅仅是情感上的）。
 
-*   **令牌使用情况**——每个请求的输入/输出令牌，因此您可以跟踪和优化成本。
+* **令牌使用情况**——每个请求的输入/输出令牌，因此您可以跟踪和优化成本。
 
-*   **工具调用和检索**——了解您的模型何时充当有用的助手，而不是仅仅在您的矢量存储上免费加载。
-
+* **工具调用和检索**——了解您的模型何时充当有用的助手，而不是仅仅在您的矢量存储上免费加载。
 
 **您还可以通过Micrometer Tracing**获得全面的 tracing 支持，其中包含模型交互中每个主要步骤的 span。您还可以获取有助于故障排除的日志消息，以便查看用户提示或向量存储响应的内容。
 
@@ -149,8 +143,8 @@ Spring AI 凭借其专用的启动模块和基于注解的直观方法，简化�
 
 另请查看 Spring 生态系统中已开始使用专用服务器来拥抱 MCP 的项目：
 
-*   [Spring Batch MCP Server](https://github.com/fmbenhassine/spring-batch-lab/tree/main/sandbox/spring-batch-mcp-server)公开批处理操作，允许 AI 助手查询作业状态、查看步骤详细信息并分析指标以优化工作流程。
-*   [Spring Cloud Config MCP Server](https://github.com/ryanjbaxter/spring-cloud-config/tree/mcp-server)通过工具实现可通过 AI 访问的配置管理，以跨环境检索、更新和刷新配置并处理敏感值加密。
+* [Spring Batch MCP Server](https://github.com/fmbenhassine/spring-batch-lab/tree/main/sandbox/spring-batch-mcp-server)公开批处理操作，允许 AI 助手查询作业状态、查看步骤详细信息并分析指标以优化工作流程。
+* [Spring Cloud Config MCP Server](https://github.com/ryanjbaxter/spring-cloud-config/tree/mcp-server)通过工具实现可通过 AI 访问的配置管理，以跨环境检索、更新和刷新配置并处理敏感值加密。
 
 这些服务器将 Spring 的企业功能带入不断发展的 MCP 生态系统
 
@@ -159,7 +153,6 @@ Spring AI 凭借其专用的启动模块和基于注解的直观方法，简化�
 在企业环境中，您希望对哪些数据作为上下文呈现给 LLM 以及哪些 API（尤其是那些修改数据/状态的 API）拥有一定程度的控制权，这不足为奇。MCP 规范通过 OAuth 解决了这些问题。Spring Security 和 Spring Authorization Server 可以满足您的需求。Spring Security 专家 Daniel 在他的博客[《使用 Spring AI 和 OAuth2 进行 MCP 授权实践》](https://spring.io/blog/2025/05/19/spring-ai-mcp-client-oauth2)中详细介绍了如何保护 MCP 应用程序。
 
 ## 智能体（Agent）
-
 
 2025年是智能体之年，价值百万美元的问题是“如何定义智能体”，好吧，我来回答一下 :)。智能体的核心是“利用人工智能模型与环境交互，以解决用户定义的任务”。高效的智能体会结合规划、记忆和行动来完成用户分配的任务。
 
@@ -175,18 +168,17 @@ Spring AI 凭借其专用的启动模块和基于注解的直观方法，简化�
 
 Spring AI 支持几种构建代理行为的工作流模式：在下图中，每个 llm 框都是前面显示的“增强型 llm”图。
 
-1.  [**评估器优化器**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/evaluator-optimizer)——该模型分析自身的反应，并通过结构化的自我评估过程对其进行改进。
+1. [**评估器优化器**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/evaluator-optimizer)——该模型分析自身的反应，并通过结构化的自我评估过程对其进行改进。
 
 ![增强法学硕士](https://raw.githubusercontent.com/spring-io/spring-io-static/refs/heads/main/blog/tzolov/20250520/anthropic-augmented-llm-agents.png)
 
-2.  [**路由**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/routing-workflow)——此模式能够根据用户请求和上下文的分类将输入智能路由到专门的处理程序。
+2. [**路由**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/routing-workflow)——此模式能够根据用户请求和上下文的分类将输入智能路由到专门的处理程序。
 
-3.  [**Orchestrator Workers——**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/orchestrator-workers)这种模式是一种灵活的方法，用于处理需要动态任务分解和专门处理的复杂任务
+3. [**Orchestrator Workers——**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/orchestrator-workers)这种模式是一种灵活的方法，用于处理需要动态任务分解和专门处理的复杂任务
 
-4.  [**链接**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/chain-workflow)——该模式将复杂的任务分解为一系列步骤，其中每个 LLM 调用都会处理前一个调用的输出。
+4. [**链接**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/chain-workflow)——该模式将复杂的任务分解为一系列步骤，其中每个 LLM 调用都会处理前一个调用的输出。
 
-5.  [**并行化**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/parallelization-worflow)——该模式对于需要并行执行 LLM 调用并自动进行输出聚合的情况很有用。
-
+5. [**并行化**](https://github.com/spring-projects/spring-ai-examples/tree/main/agentic-patterns/parallelization-worflow)——该模式对于需要并行执行 LLM 调用并自动进行输出聚合的情况很有用。
 
 这些模式可以使用 Spring AI 的聊天模型和工具执行功能来实现，其中框架可以处理大部分底层复杂性。
 
@@ -196,10 +188,10 @@ Spring AI 支持几种构建代理行为的工作流模式：在下图中，每�
 
 Spring AI 还支持通过模型上下文协议 (MCP) 开发自主代理。正在孵化的[Spring MCP Agent](https://github.com/tzolov/spring-mcp-agent) 项目演示了如何创建以下代理：
 
-1.  接受用户指令并自主确定最佳方法
-2.  通过 MCP 动态发现并利用可用工具
-3.  维护执行记忆以跟踪进度和决策
-4.  根据结果​​递归地完善策略
+1. 接受用户指令并自主确定最佳方法
+2. 通过 MCP 动态发现并利用可用工具
+3. 维护执行记忆以跟踪进度和决策
+4. 根据结果​​递归地完善策略
 
 ## 未来展望
 

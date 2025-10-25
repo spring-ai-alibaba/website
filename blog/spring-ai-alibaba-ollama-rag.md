@@ -114,30 +114,30 @@ xpack.security.enabled: false
 ```xml
 <!-- Spring Boot Web Starter -->
 <dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-web</artifactId>
-	<version>3.3.4</version>
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-web</artifactId>
+ <version>3.3.4</version>
 </dependency>
 
 <!-- Spring AI Ollama Starter -->
 <dependency>
-	<groupId>org.springframework.ai</groupId>
-	<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
-	<version>1.0.0-M5</version>
+ <groupId>org.springframework.ai</groupId>
+ <artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
+ <version>1.0.0-M5</version>
 </dependency>
 
 <!-- 向量存储 -->
 <dependency>
-	<groupId>org.springframework.ai</groupId>
-	<artifactId>spring-ai-elasticsearch-store</artifactId>
-	<version>1.0.0-M5</version>
+ <groupId>org.springframework.ai</groupId>
+ <artifactId>spring-ai-elasticsearch-store</artifactId>
+ <version>1.0.0-M5</version>
 </dependency>
 
 <!-- PDF 解析 -->
 <dependency>
-	<groupId>org.springframework.ai</groupId>
-	<artifactId>spring-ai-pdf-document-reader</artifactId>
-	<version>1.0.0-M5</version>
+ <groupId>org.springframework.ai</groupId>
+ <artifactId>spring-ai-pdf-document-reader</artifactId>
+ <version>1.0.0-M5</version>
 </dependency>
 ```
 
@@ -206,47 +206,47 @@ spring:
 ```java
 public class KnowledgeInitializer implements ApplicationRunner {
 
-	// 注入 VectorStore 实例，负责向量化数据的增查操作
-	private final VectorStore vectorStore;
+ // 注入 VectorStore 实例，负责向量化数据的增查操作
+ private final VectorStore vectorStore;
 
-	// 向量数据库客户端，此处使用 es
-	private final ElasticsearchClient elasticsearchClient;
+ // 向量数据库客户端，此处使用 es
+ private final ElasticsearchClient elasticsearchClient;
 
-	// .....
+ // .....
 
-	@Override
-	public void run(ApplicationArguments args) {
+ @Override
+ public void run(ApplicationArguments args) {
 
-		// 1. load pdf resources.
-		List<Resource> pdfResources = loadPdfResources();
+  // 1. load pdf resources.
+  List<Resource> pdfResources = loadPdfResources();
 
-		// 2. parse pdf resources to Documents.
-		List<Document> documents = parsePdfResource(pdfResources);
+  // 2. parse pdf resources to Documents.
+  List<Document> documents = parsePdfResource(pdfResources);
 
-		// 3. import to ES.
-		importToES(documents);
-	}
+  // 3. import to ES.
+  importToES(documents);
+ }
 
-	private List<Document> parsePdfResource (List <Resource> pdfResources) {
+ private List<Document> parsePdfResource (List <Resource> pdfResources) {
 
-		// 按照指定策略切分文本并转为 Document 资源对象
-		for (Resource springAiResource : pdfResources) {
+  // 按照指定策略切分文本并转为 Document 资源对象
+  for (Resource springAiResource : pdfResources) {
 
-			// 1. parse document
-			DocumentReader reader = new PagePdfDocumentReader(springAiResource);
-			List<Document> documents = reader.get();
-			logger.info("{} documents loaded", documents.size());
-			
+   // 1. parse document
+   DocumentReader reader = new PagePdfDocumentReader(springAiResource);
+   List<Document> documents = reader.get();
+   logger.info("{} documents loaded", documents.size());
+   
             // 2. split trunks            
-			List<Document> splitDocuments = new TokenTextSplitter().apply(documents);            
-			logger.info("{} documents split", splitDocuments.size());
-			
+   List<Document> splitDocuments = new TokenTextSplitter().apply(documents);            
+   logger.info("{} documents split", splitDocuments.size());
+   
             // 3. add res list            
-			resList.addAll(splitDocuments);       
-		}    
-	}
-	
-	// ......
+   resList.addAll(splitDocuments);       
+  }    
+ }
+ 
+ // ......
 }
 ```
 
@@ -443,9 +443,9 @@ Spring AI Alibaba RAG 文档：https://java2ai.com/docs/1.0.0-M5.1/tutorials/rag
 
 Q：向量入库失败
 A：检查 ES 索引维度是否匹配模型输出
-Q：检索结果不相关	
+Q：检索结果不相关 
 A：检查 Embedding 模型是否与文本类型匹配
-Q：响应速度慢	
+Q：响应速度慢 
 A：调整 Ollama 的计算资源配置
 Q：spring-ai-alibaba-starter依赖拉取失败
 A：需要配置 mvn 仓库

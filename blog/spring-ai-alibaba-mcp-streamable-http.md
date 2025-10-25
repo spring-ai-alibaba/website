@@ -12,6 +12,7 @@ category: article
 MCP 官方引入了全新的 [**`Streamable HTTP`**](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) 传输层，对原有 HTTP+SSE 传输机制有重大改进。
 
 本文将：
+
 1. 详细解析这个协议的设计思想、技术细节以及实际应用。
 2. 详解 Spring AI Alibaba 开源框架提供的 Stramable HTTP Java 实现 ，文后包含 Spring AI Alibaba + Higress 的 Streamable HTTP 示例讲解。
 
@@ -65,22 +66,22 @@ MCP 官方引入了全新的 [**`Streamable HTTP`**](https://modelcontextprotoco
 Streamable HTTP 的工作流程如下：
 
 1. **会话初始化（非强制，适用于有状态实现场景）**：
-    - 客户端发送初始化请求到 **/mcp** 端点
-    - 服务器可选择生成会话 ID 返回给客户端
-    - 会话 ID 用于后续请求中标识会话
+    + 客户端发送初始化请求到 **/mcp** 端点
+    + 服务器可选择生成会话 ID 返回给客户端
+    + 会话 ID 用于后续请求中标识会话
 2. **客户端向服务器通信**：
-    - 所有消息通过 HTTP POST 请求发送到 **/mcp** 端点
-    - 如果有会话 ID，则包含在请求中
+    + 所有消息通过 HTTP POST 请求发送到 **/mcp** 端点
+    + 如果有会话 ID，则包含在请求中
 3. **服务器响应方式**：
-    - **普通响应**：直接返回 HTTP 响应，适合简单交互
-    - **流式响应**：升级连接为 SSE，发送一系列事件后关闭
-    - **长连接**：维持 SSE 连接持续发送事件
+    + **普通响应**：直接返回 HTTP 响应，适合简单交互
+    + **流式响应**：升级连接为 SSE，发送一系列事件后关闭
+    + **长连接**：维持 SSE 连接持续发送事件
 4. **主动建立 SSE 流**：
-    - 客户端可发送 GET 请求到 **/mcp** 端点主动建立 SSE 流
-    - 服务器可通过该流推送通知或请求
+    + 客户端可发送 GET 请求到 **/mcp** 端点主动建立 SSE 流
+    + 服务器可通过该流推送通知或请求
 5. **连接恢复**：
-    - 连接中断时，客户端可使用之前的会话 ID 重新连接
-    - 服务器可恢复会话状态继续之前的交互
+    + 连接中断时，客户端可使用之前的会话 ID 重新连接
+    + 服务器可恢复会话状态继续之前的交互
 
 ### Streamable 请求示例
 ### **无状态服务器模式**
@@ -182,8 +183,6 @@ Streamable HTTP 的工作流程如下：
 ### Streamable HTTP Java 版实现方案
 当前 MCP 和 Spring AI 官方并没有给出Streamable 目前我们只给出了 Stream HTTP Client实现，且只支持 Stateless 模式，可以调通官方的 Typescript server 实现、Higress 社区的 server 实现。
 
-
-
 > 完整可运行示例可参考： [https://github.com/springaialibaba/spring-ai-alibaba-examples](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example/starter-example/client/starter-streamable-client)
 >
 > 由于 [streamable http](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) 方案的 MCP java sdk 实现还在开发中，因此该示例仓库中包含如下两个仓库的定制源码：
@@ -223,8 +222,6 @@ return Mono.defer(() -> Mono.fromFuture(() -> {
     }));
 ```
 
-
-
 ### POST 请求，服务端可以普通 response 响应或者升级 SSE 响应
 对等的示例 http 请求，listTool 与 callTool 是类似的请求。
 
@@ -248,19 +245,15 @@ curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -
 }' -i http://localhost:3000/mcp
 ```
 
-
-
 > 可以启动并使用官方 [typescript-sdk](https://github.com/modelcontextprotocol/typescript-sdk/tree/main/src/examples) 提供的 Streamable Server 配合当前 client 实现进行测试。
 >
-
-
 
 Java 代码实现
 
 ```java
 // 发送 POST 请求到 /mcp，包括
 public Mono<Void> sendMessage(final McpSchema.JSONRPCMessage message,
-			final Function<Mono<McpSchema.JSONRPCMessage>, Mono<McpSchema.JSONRPCMessage>> handler) {
+   final Function<Mono<McpSchema.JSONRPCMessage>, Mono<McpSchema.JSONRPCMessage>> handler) {
     // ...
     return sentPost(message, handler).onErrorResume(e -> {
         LOGGER.error("Streamable transport sendMessage error", e);
@@ -299,7 +292,7 @@ private Mono<Void> sentPost(final Object msg,
 
 // 处理服务端可能发回的不同类型响应
 private Mono<Void> handleStreamingResponse(final HttpResponse<InputStream> response,
-			final Function<Mono<McpSchema.JSONRPCMessage>, Mono<McpSchema.JSONRPCMessage>> handler) {
+   final Function<Mono<McpSchema.JSONRPCMessage>, Mono<McpSchema.JSONRPCMessage>> handler) {
     final String contentType = response.headers().firstValue("Content-Type").orElse("");
     if (contentType.contains("application/json-seq")) {
         return handleJsonStream(response, handler);
@@ -316,37 +309,34 @@ private Mono<Void> handleStreamingResponse(final HttpResponse<InputStream> respo
 }
 ```
 
-
-
 ### 集成到 Spring AI 框架
+
 ```java
 @AutoConfiguration
 @ConditionalOnClass({ McpSchema.class, McpSyncClient.class })
 @EnableConfigurationProperties({ McpStreamableClientProperties.class, McpClientCommonProperties.class })
 @ConditionalOnProperty(prefix = McpClientCommonProperties.CONFIG_PREFIX, name = "enabled", havingValue = "true",
-		matchIfMissing = true)
+  matchIfMissing = true)
 public class StreamableHttpClientTransportAutoConfiguration {
-	@Bean
-	public List<NamedClientMcpTransport> mcpHttpClientTransports(McpStreamableClientProperties streamableProperties,
-			ObjectProvider<ObjectMapper> objectMapperProvider) {
+ @Bean
+ public List<NamedClientMcpTransport> mcpHttpClientTransports(McpStreamableClientProperties streamableProperties,
+   ObjectProvider<ObjectMapper> objectMapperProvider) {
 
-		ObjectMapper objectMapper = objectMapperProvider.getIfAvailable(ObjectMapper::new);
+  ObjectMapper objectMapper = objectMapperProvider.getIfAvailable(ObjectMapper::new);
 
-		List<NamedClientMcpTransport> sseTransports = new ArrayList<>();
+  List<NamedClientMcpTransport> sseTransports = new ArrayList<>();
 
-		for (Map.Entry<String, McpStreamableClientProperties.StreamableParameters> serverParameters : streamableProperties.getConnections().entrySet()) {
+  for (Map.Entry<String, McpStreamableClientProperties.StreamableParameters> serverParameters : streamableProperties.getConnections().entrySet()) {
 
-			var transport = StreamableHttpClientTransport.builder(serverParameters.getValue().url()).withObjectMapper(objectMapper).build();
-			sseTransports.add(new NamedClientMcpTransport(serverParameters.getKey(), transport));
-		}
+   var transport = StreamableHttpClientTransport.builder(serverParameters.getValue().url()).withObjectMapper(objectMapper).build();
+   sseTransports.add(new NamedClientMcpTransport(serverParameters.getKey(), transport));
+  }
 
-		return sseTransports;
-	}
+  return sseTransports;
+ }
 
 }
 ```
-
-
 
 ### 完整 Spring AI Alibaba + Higress Streamable HTTP 示例
 通过配置如下，可以开启 Streamable HTTP Transport。配置如下 Higress 提供的 MCP Server 地址（支持有限的 Streamable HTTP Server 实现）。
@@ -363,8 +353,6 @@ spring:
             server1:
               url: http://env-cvpjbjem1hkjat42sk4g-ap-southeast-1.alicloudapi.com/mcp-quark
 ```
-
-
 
 ```java
 @SpringBootApplication(exclude = {
@@ -391,48 +379,44 @@ public class Application {
 }
 ```
 
-
-
 运行示例后，看到成功连接 MCP Server 并执行 list tool，Higress 示例内置了两个 tool。
 
 ```json
 {
-	"jsonrpc": "2.0",
-	"id": "32124bd9-1",
-	"result": {
-		"nextCursor": "",
-		"tools": [{
-			"description": "Performs a web search using the Quark Search API, ideal for general queries, news, articles, and online content.\nUse this for broad information gathering, recent events, or when you need diverse web sources.\nBecause Quark search performs poorly for English searches, please use Chinese for the query parameters.",
-			"inputSchema": {
-				"additionalProperties": false,
-				"properties": {
-					"contentMode": {
-						"default": "summary",
-						"description": "Return the level of content detail, choose to use summary or full text",
-						"enum": ["full", "summary"],
-						"type": "string"
-					},
-					"number": {
-						"default": 5,
-						"description": "Number of results",
-						"type": "integer"
-					},
-					"query": {
-						"description": "Search query, please use Chinese",
-						"examples": ["黄金价格走势"],
-						"type": "string"
-					}
-				},
-				"required": ["query"],
-				"type": "object"
-			},
-			"name": "web_search"
-		}]
-	}
+ "jsonrpc": "2.0",
+ "id": "32124bd9-1",
+ "result": {
+  "nextCursor": "",
+  "tools": [{
+   "description": "Performs a web search using the Quark Search API, ideal for general queries, news, articles, and online content.\nUse this for broad information gathering, recent events, or when you need diverse web sources.\nBecause Quark search performs poorly for English searches, please use Chinese for the query parameters.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "contentMode": {
+      "default": "summary",
+      "description": "Return the level of content detail, choose to use summary or full text",
+      "enum": ["full", "summary"],
+      "type": "string"
+     },
+     "number": {
+      "default": 5,
+      "description": "Number of results",
+      "type": "integer"
+     },
+     "query": {
+      "description": "Search query, please use Chinese",
+      "examples": ["黄金价格走势"],
+      "type": "string"
+     }
+    },
+    "required": ["query"],
+    "type": "object"
+   },
+   "name": "web_search"
+  }]
+ }
 }
 ```
-
-
 
 示例发起 chat 会话，模型会引导智能体调用 `web_search` tool 并返回结果。
 
@@ -445,6 +429,7 @@ public class Application {
 2. /mcp GET 请求在协议中是被约束为 client 主动发起 SSE 请求时使用，而当前实现是在每次connect时发起 GET 请求并建立 SSE 会话，后续的 POST 请求通过也依赖这里发回响应，这可以通过 pendingResponses 属性的操作看出来。
 
 ## 官方实现与参考资料
+
 1. Spring AI Alibaba 官方网站：[https://java2ai.com/](https://java2ai.com/)
 2. Spring AI Alibaba 开源项目源码仓库：[https://github.com/alibaba/spring-ai-alibaba](https://github.com/alibaba/spring-ai-alibaba)
 3. [https://www.claudemcp.com/blog/mcp-streamable-http](https://www.claudemcp.com/blog/mcp-streamable-http)

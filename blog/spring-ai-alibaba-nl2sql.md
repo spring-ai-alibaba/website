@@ -27,7 +27,6 @@ Spring-ai-alibaba-nl2sql 是基于 Spring AI Alibaba 的一个子项目，致力
 
 作为阿里云析言 GBI 产品的开源延伸，Spring-ai-alibaba-nl2sql 已经在 GitHub 上发布，并持续更新迭代中。如果你正在寻找一款面向企业级数据场景、支持本地部署与云端调用、兼容多种数据库的 NL2SQL 解决方案，Spring-ai-alibaba-nl2sql 将是一个理想的选择。
 
-
 ## 🧠 核心功能
 ### ✅ Schema 智能召回：精准匹配数据库语义
 在复杂的数据环境中，用户往往不清楚具体字段名或表结构。Spring-ai-alibaba-nl2sql 提供了强大的语义相似度计算能力和多策略召回机制，能够在海量表结构中精准匹配出最可能涉及的数据库 schema 和字段信息。Schema 召回是 NL2SQL 的第一步，也是决定生成质量的关键环节。析言 GBI 开源模块通过以下创新设计，显著提升 Schema 匹配的准确性：
@@ -56,7 +55,6 @@ Schema 召回结果：
 | 输入问提 | 传统方案生成SQL | Spring-ai-alibaba-nl2sql |
 | --- | --- | --- |
 | 找出销售额最高的前 10 个商品，并展示品类和库存量 | `SELECT * FROM products ORDER BY sales DESC LIMIT 10`（漏掉品类字段） | SELECT product_name, category, stock, sales FROM products ORDER BY sales DESC LIMIT 10 |
-
 
 ### ✅ SQL 自动执行与结果反馈：安全、高效、可扩展
 生成的 SQL 语句可以直接调度并安全执行，返回结构化结果。同时，系统还提供了丰富的错误处理机制，确保即使在执行失败时也能给出清晰的提示和建议。
@@ -116,6 +114,7 @@ export AI_DASHSCOPE_API_KEY=your_api_key
 ![Spring AI Alibaba Nl2sql](/img/blog/nl2sql/demo.png)
 
 ## 开源计划
+
 + 扩展更多数据库支持 ：涵盖主流数据库系统，如 Oracle、SQL Server 等。
 + 提供可视化配置界面 ：降低使用门槛，方便非技术人员快速上手。
 + 支持对 SQL 结果进行分析总结 ：通过可视化模块展示 SQL 查询结果，帮助用户更直观地理解数据。
@@ -135,7 +134,6 @@ export AI_DASHSCOPE_API_KEY=your_api_key
 + GitHub 地址：[https://github.com/XGenerationLab/XiYan-SQL?tab=readme-ov-file](https://github.com/XGenerationLab/XiYan-SQL?tab=readme-ov-file)
 
 通过这些模型，开发者可以轻松实现高质量的自然语言到 SQL 的转换。
-
 
 ## 总结
 

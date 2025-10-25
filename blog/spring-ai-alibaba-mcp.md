@@ -13,15 +13,20 @@ category: article
 # 0、文章摘要
 
 1. MCP 基础与快速体验（熟悉的读者可以跳过此部分）
+
 2. 如何将自己开发的 Spring 应用发布为 MCP Server，验证使用 Claude 或 Spring 应用作为客户端接入自己发布的 Java MCP Server。
-	* 发布 stdio 模式的 MCP Server
-	* 发布 SSE 模式的 MCP Server
-	* 开发另一个 Spring 应用作为 MCP Client 调用 MCP Server 服务
-	* 使用 Claude 桌面应用接入我们的 Java MCP Server
+
+* 发布 stdio 模式的 MCP Server
+* 发布 SSE 模式的 MCP Server
+* 开发另一个 Spring 应用作为 MCP Client 调用 MCP Server 服务
+* 使用 Claude 桌面应用接入我们的 Java MCP Server
+
 3. 如何使用自己开发的 Spring 应用调用 MCP Server，包括调用自己发布的 Java MCP Server，也包括市面上其他通用 MCP Server。
-	* 配置并调用 stdio 模式的 MCP Server
-	* 配置并调用 SSE 模式的 MCP Server
-4. 如何在 Spring AI Alibaba OpemManus 实现中使用 MCP 服务。
+
+* 配置并调用 stdio 模式的 MCP Server
+* 配置并调用 SSE 模式的 MCP Server
+
+4. 如何在 Spring AI Alibaba OpemManus Agent 框架中使用 MCP Server
 
 <!-- truncate -->
 
@@ -29,23 +34,23 @@ category: article
 
 2024 年 11 月，Anthropic 公司搞了个挺有意思的新玩意 - Model Context Protocol（模型上下文协议）简称为 MCP 协议。简单来说，它就是给 AI 和各类工具数据之间搭了个标准化的"桥梁"，让开发者不用再为对接问题头疼了。大模型应用可以使用别人分享的 MCP 服务来完成各种各样的工作内容，你可以从这些地方获取 MCP 服务：
 
-- awesome-mcp-servers
-- mcp.so
+* awesome-mcp-servers
+* mcp.so
 
 MCP 协议在实际的应用场景上非常广泛，列举一些比较常见的应用场景：
 
-- 使用百度/高德地图分析旅线计算时间
-- 接 Puppeteer 自动操作网页
-- 使用 Github/Gitlab 让大模型接管代码仓库
-- 使用数据库组件完成对 Mysql、ES、Redis 等数据库的操作
-- 使用搜索组件扩展大模型的数据搜索能力
+* 使用百度/高德地图分析旅线计算时间
+* 接 Puppeteer 自动操作网页
+* 使用 Github/Gitlab 让大模型接管代码仓库
+* 使用数据库组件完成对 Mysql、ES、Redis 等数据库的操作
+* 使用搜索组件扩展大模型的数据搜索能力
 
 ## 1.1 在 Claude Desktop 中体验 MCP
 
 接下来我们使用 Claude 快速接入 Github 服务（提前申请 token），编辑一下 Claude Desktop 的配置文件：
 
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+* macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+* Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 添加如下内容，注意把`<YOUR_TOKEN>`替换成你自己申请的 token：
 
@@ -70,7 +75,6 @@ MCP 协议在实际的应用场景上非常广泛，列举一些比较常见的�
 
 ![spring-ai-alibaba-mcp](/img/blog/mcp/1.png)
 
-
 点开之后可以看到具体的工具内容：
 
 ![spring-ai-alibaba-mcp](/img/blog/mcp/2.png)
@@ -89,8 +93,8 @@ MCP 协议在实际的应用场景上非常广泛，列举一些比较常见的�
 
 MCP 主要分为MCP服务和MCP客户端：
 
-- 客户端：一般指的是大模型应用，比如 Claude、通过 Spring AI Alibaba、Langchain 等框架开发的 AI 应用
-- 服务端：连接各种数据源的服务和工具
+* 客户端：一般指的是大模型应用，比如 Claude、通过 Spring AI Alibaba、Langchain 等框架开发的 AI 应用
+* 服务端：连接各种数据源的服务和工具
 
 整体架构如下：
 
@@ -108,8 +112,8 @@ Spring AI MCP 为模型上下文协议提供 Java 和 Spring 框架集成。它�
 
 Spring AI MCP 采用模块化架构，包括以下组件：
 
-- Spring AI 应用程序：使用 Spring AI 框架构建想要通过 MCP 访问数据的生成式 AI 应用程序
-- Spring MCP 客户端：MCP 协议的 Spring AI 实现，与服务器保持 1:1 连接
+* Spring AI 应用程序：使用 Spring AI 框架构建想要通过 MCP 访问数据的生成式 AI 应用程序
+* Spring MCP 客户端：MCP 协议的 Spring AI 实现，与服务器保持 1:1 连接
 
 通过 Spring AI MCP，可以快速搭建 MCP 客户端和服务端程序。
 
@@ -117,8 +121,8 @@ Spring AI MCP 采用模块化架构，包括以下组件：
 
 Spring AI 提供了两种机制快速搭建 MCP Server，通过这两种方式开发者可以快速向 AI 应用开放自身的能力，这两种机制如下：
 
-- 基于 stdio 的进程间通信传输，以独立的进程运行在 AI 应用本地，适用于比较轻量级的工具。
-- 基于 SSE（Server-Sent Events） 进行远程服务访问，需要将服务单独部署，客户端通过服务端的 URL 进行远程访问，适用于比较重量级的工具。
+* 基于 stdio 的进程间通信传输，以独立的进程运行在 AI 应用本地，适用于比较轻量级的工具。
+* 基于 SSE（Server-Sent Events） 进行远程服务访问，需要将服务单独部署，客户端通过服务端的 URL 进行远程访问，适用于比较重量级的工具。
 
 接下来逐一介绍一下这两种方式的实现，示例代码可以通过如下链接获取：https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example/starter-example/server
 
@@ -665,7 +669,7 @@ Spring AI Alibaba 中提供了 Open Manus 的实现，整体架构如下：
 
 源代码如下：https://github.com/alibaba/spring-ai-alibaba/tree/main/community/openmanus
 
-### 添加依赖
+## 添加依赖
 
 首先，在项目中添加 Spring AI MCP starter 依赖：
 
@@ -683,7 +687,7 @@ Spring AI Alibaba 中提供了 Open Manus 的实现，整体架构如下：
 
 ![spring-ai-alibaba-mcp](/img/blog/mcp/14.png)
 
-添加`mcp-servers-config.json`，在 json 中配置了百度地图。百度地图核心 API 现已全面兼容 MCP 协议，是国内首家兼容 MCP 协议的地图服务商。百度地图已经完成了 8 个核心 API 接口和 MCP 协议的对接， 涵盖逆地理编码、地点检索、路线规划等。 
+添加`mcp-servers-config.json`，在 json 中配置了百度地图。百度地图核心 API 现已全面兼容 MCP 协议，是国内首家兼容 MCP 协议的地图服务商。百度地图已经完成了 8 个核心 API 接口和 MCP 协议的对接， 涵盖逆地理编码、地点检索、路线规划等。
 
 使用百度地图的 MCP，需要申请ak：https://lbsyun.baidu.com/apiconsole/key。
 
@@ -782,4 +786,4 @@ Duration: The estimated travel time is 50,592 seconds (approximately 14 hours an
 
 作为 AI 开发领域的革命性突破，Model Context Protocol（MCP）重新定义了智能体与工具生态的交互范式。通过标准化协议打通地图服务、代码仓库、数据库等核心工具链，MCP 不仅解决了传统 AI 开发中跨平台对接的碎片化难题，更以"开箱即用"的轻量化集成模式，让开发者能够快速构建具备多模态能力的智能应用。
 
-未来，随着更多工具接入 MCP 生态，开发者只需专注于业务逻辑创新，而复杂的工具链整合将真正成为"看不见的底层能力"——这或许正是 AI 普惠化进程中，最具实际意义的技术跃迁。 
+未来，随着更多工具接入 MCP 生态，开发者只需专注于业务逻辑创新，而复杂的工具链整合将真正成为"看不见的底层能力"——这或许正是 AI 普惠化进程中，最具实际意义的技术跃迁。

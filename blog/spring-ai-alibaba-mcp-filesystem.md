@@ -33,6 +33,7 @@ Spring AI MCP 采用模块化架构，包括以下组件：
 
 ### 运行示例
 #### 前提条件
+
 1. 安装 npx (Node Package eXecute):
 首先确保本地机器安装了 [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)，然后运行如下命令：
 
@@ -78,6 +79,7 @@ Spring AI MCP 采用模块化架构，包括以下组件：
 3. **Chat Client**，Spring AI 关键组件，用于LLM模型交互、智能体代理。
 
 #### 声明 ChatClient
+
 ```java
 // List<McpFunctionCallback> functionCallbacks;
 var chatClient = chatClientBuilder.defaultFunctions(functionCallbacks).build();
@@ -94,8 +96,6 @@ var chatClient = chatClientBuilder.defaultFunctions(functionCallbacks).build();
 2. 依次将每个 tool 转换成 Spring AI function callback
 3. 最终我们会将这些 McpFunctionCallback 注册到 ChatClient 使用
 
-
-
 ```java
 @Bean
 public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
@@ -107,8 +107,6 @@ public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
 }
 ```
 
-
-
 可以看出，ChatClient 与模型交互的过程是没有变化的，模型在需要的时候告知 ChatClient 去做函数调用，只不过 Spring AI 通过 McpFunctionCallback 将实际的函数调用过程委托给了 MCP，通过标准的 MCP 协议与本地文件系统交互:
 
 + 在与大模交互的过程中，ChatClient 处理相关的 function calls 请求
@@ -117,8 +115,6 @@ public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
 
 #### 初始化 McpClient
 该智能体应用使用同步 MCP 客户端与本地运行的文件系统 MCP server 通信：
-
-
 
 ```java
 @Bean(destroyMethod = "close")
@@ -137,14 +133,11 @@ public McpSyncClient mcpClient() {
 }
 ```
 
-
-
 在以上代码中：
 
 1. 配置 MCP server 启动命令与参数
-2.  初始化 McpClient：关联 MCP server、指定超时时间等
-3.  Spring AI 会使用 `npx -y @modelcontextprotocol/server-filesystem "/path/to/file"`在本地机器创建一个独立的子进程（代表本地 Mcp server），Spring AI 与 McpClient 通信，McpClient 进而通过与 Mcp server 的连接操作本地文件。
+2. 初始化 McpClient：关联 MCP server、指定超时时间等
+3. Spring AI 会使用 `npx -y @modelcontextprotocol/server-filesystem "/path/to/file"`在本地机器创建一个独立的子进程（代表本地 Mcp server），Spring AI 与 McpClient 通信，McpClient 进而通过与 Mcp server 的连接操作本地文件。
 
 ## 总结
 MCP 统一，当前 Spring Ai ，随着生态中越来越多的系统与服务集成。在 Java 生态中，我们有非常多的基础服务与业务应用，如何将这些使用 Spring Boot、Spring Cloud、Dubbo 等开发的单体或微服务应用发布为 MCP server
-

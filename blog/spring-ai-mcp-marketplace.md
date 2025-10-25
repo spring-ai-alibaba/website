@@ -14,7 +14,7 @@ Spring AI Alibaba 正式上线 MCP 市场：[**https://java2ai.com/mcp/**](https
 
 <!-- truncate -->
 
-![](/img/blog/mcp-marketplace/marketplace-screenshot.png)
+![Image](/img/blog/mcp-marketplace/marketplace-screenshot.png)
 
 ## MCP 市场是做什么的？
 Spring AI Alibaba MCP 当前主要提供 MCP Server 的查看与浏览能力，帮您省去了到处搜集 MCP 实现的负担，后续可通过接入 Higress 等 AI 网关体验在线接入。
@@ -48,4 +48,3 @@ Spring AI Alibaba 支持将 Java 应用发布为标准的 MCP Server，开发者
 2. 使用 Nacos + Higress 网关代理，通过配置化的形式在 Nacos 中增加服务描述等元数据，同时使用 Higress 实现协议代理转换。该方案的优势是可以实现零代码修改 MCP 升级，具体可参考 [Nacos 社区发布的博客](https://nacos.io/blog/nacos-gvr7dx_awbbpb_vksfvdh9258pgddl/)。
 
 稍后，我们将会在 Spring AI Alibaba 社区发布通过集成 Higress、Nacos 提供的 MCP 集成方案，敬请期待！
-

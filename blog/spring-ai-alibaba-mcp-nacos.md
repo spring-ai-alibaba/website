@@ -17,7 +17,6 @@ Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以�
 ## 企业级 MCP 部署需要的分布式能力
 市面上有很多公开可用的 MCP 服务，如生活类的高德地图、天气预报等 MCP 服务，这类服务的一个特点是他们都通过公开可访问的域名地址提供服务，因此对于消费端来说只需要配置访问地址即可使用。
 
-
 区别于此类公共服务，Spring AI Alibaba MCP 解决的是企业内部 MCP 服务的部署与访问架构问题，接下来我们通过一个 Agent 的开发示例，一起来看一下 Spring AI Alibaba MCP 的整体架构。
 
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/img.png)
@@ -27,17 +26,13 @@ Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以�
 1. 企业内部订票服务是一个独立的 MCP Server 应用，使用 Spring AI Alibaba 框架开发，具备自动注册 MCP 实例与元数据到 Nacos 注册中心的能力，目前同时兼容 Nacos2 与 Nacos3。
 2. 机票助手 Agent 使用 Spring AI Alibaba 框架开发，作为 MCP Client 可以自动感知下游 MCP 服务实例的动态变化，动态感知 MCP 服务元数据的变化（如工具增加、参数更新、描述更新等），能够在保证负载均衡的情况下调用后端实例。
 
-
 ## 适用业务场景
 对于任何需要在企业内部构建 MCP 业务系统的开发者，都可以使用 Spring AI Alibaba MCP
-
 
 接下来，我们从企业现实情况出发，分析在不同场景下，应该如何发布自己的 MCP 服务，并将Agent接入 MCP 服务：
 
 1. 企业内存在大量的已有微服务应用、HTTP接口，需要将这些应用或接口发布为 MCP 服务
 2. 无需考虑存量应用，直接开发全新的 MCP 服务
-
-
 
 ### 通过 MCP 接入存量业务系统
 对于存量应用或接口的接入，我们推荐使用增加代理应用的模式实现平滑接入，如下架构图所示，在存量应用和 Agent 之间部署一个新应用，这个应用主要有两个职责：
@@ -47,10 +42,7 @@ Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以�
 
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/saa-mcp-proxy.png)
 
-
 以下是一个代码片段，展示如何在新开发的 MCP Server 应用中定义 MCP 服务并代理转发到后端微服务（rest 或 dubbo）：
-
-
 
 ```java
 @Bean
@@ -70,14 +62,10 @@ public Order getAirQuality(@ToolParam(description = "订单号") String orderId)
 }
 ```
 
-
-
 其中，`restTemplate`基于 Spring Cloud Alibaba 的服务发现能力，可以动态发现后端 `order-service`服务与实例地址。而`@Tool`和`@ToolParam`注解将发布为可被 Agent 使用的 MCP 工具。
 
 ### 开发全新 MCP
 如果您不需要考虑存量的应用或服务，则整体会更简单，只需要使用 Spring AI Alibaba MCP 开发一个 MCP server，并将业务逻辑发布为 MCP tool 就可以了。
-
-
 
 以下是使用 Spring AI Alibaba 开发的整体架构图：
 
@@ -86,20 +74,16 @@ public Order getAirQuality(@ToolParam(description = "订单号") String orderId)
 ## 完整开发指南
 以下示例完整源码地址：[https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example/starter-example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example/starter-example)
 
-
-
 首先，您需要安装部署 Nacos，访问 Nacos Server 控制台，创建 MCP 服务专属的命名空间 `nacos-default-mcp`。
 
-
-
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/img_2.png)
-
-
 
 注册 `nacos-default-mcp` 命名空间后，记住命名空间 ID：9ba5f1aa-b37d-493b-9057-72918a40ef35
 
 ### 开发 Spring AI Alibaba MCP Server
-##### pom.xml 文件
+
+#### pom.xml 文件
+
 添加如下`spring-ai-alibaba-starter-nacos-mcp-server`关键 starter 依赖到项目中：
 
 ```xml
@@ -162,25 +146,19 @@ logging:
 1. MCP Server 的服务名称：mcp-server-provider
 2. MCP 的命名空间 ID：9ba5f1aa-b37d-493b-9057-72918a40ef35
 
-
-
 ##### 效果演示
 打开 Nacos 控制台，可以看到 MCP Server 自动注册服务与实例信息。
 
-
-
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/img_3.png)
 
-
-
 打开 Nacos 控制台，可以查看 MCP Server 自动注册上来的元数据信息
-
-
 
 ![Spring AI Alibaba MCP Nacos](/img/blog/mcp-nacos/img_4.png)
 
 ### 开发 Spring AI Alibaba MCP Client
-##### pom.xml 文件
+
+#### pom.xml 文件
+
 ```java
 <properties>
     <spring-ai.version>1.0.0</spring-ai.version>
@@ -253,8 +231,6 @@ logging:
         spec: DEBUG
 ```
 
-
-
 请注意，我们需要在配置中指定要连接的 MCP 服务，这样 Client 将只订阅该服务相关地址与元数据的更新
 
 ```yaml
@@ -307,4 +283,3 @@ Spring AI Alibaba MCP 联合 Nacos，解决了企业级 AI Agent 的应用与落
 
 1. 查看完整示例源码：[spring-ai-alibaba-mcp-example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example)
 2. Github 项目仓库：[https://github.com/alibaba/spring-ai-alibaba](https://github.com/alibaba/spring-ai-alibaba)
-

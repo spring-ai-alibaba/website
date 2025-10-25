@@ -18,7 +18,7 @@ java版的MCP源码：https://github.com/modelcontextprotocol/java-sdk
 
 ## 理论部分
 
-![](/img/blog/mcp-desc/overall.PNG)
+![Image](/img/blog/mcp-desc/overall.PNG)
 
 ### MCP调用链路（核心）
 
@@ -26,11 +26,11 @@ java版的MCP源码：https://github.com/modelcontextprotocol/java-sdk
 
 初始化连接链路...
 
-![](/img/blog/mcp-desc/initialize.png)
+![Image](/img/blog/mcp-desc/initialize.png)
 
 客户端咨询问题，调用服务端工具链路
 
-![](/img/blog/mcp-desc/interactive.png)
+![Image](/img/blog/mcp-desc/interactive.png)
 
 ### McpClient（客户端）
 
@@ -5399,7 +5399,7 @@ public final class McpSchema {
 
 写法同下文Webflux端Server保持一致。完成后打成jar包形式
 
-![](/img/blog/mcp-desc/stdio-jar.png)
+![Image](/img/blog/mcp-desc/stdio-jar.png)
 
 #### Client
 
@@ -5481,7 +5481,7 @@ public class ClientStdioApplication {
 
 #### 效果展示
 
-![](/img/blog/mcp-desc/stdio-example.png)
+![Image](/img/blog/mcp-desc/stdio-example.png)
 
 ### Webflux
 
@@ -5930,7 +5930,7 @@ public class ClientWebfluxApplication {
 
 先启动server端，再启动client端，在client端端命令行中可进行多轮问答，触发在server配置过的MCP服务
 
-![](/img/blog/mcp-desc/webflux-example.png)
+![Image](/img/blog/mcp-desc/webflux-example.png)
 
 ## 参考资料
 

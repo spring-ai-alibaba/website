@@ -39,7 +39,6 @@ spring.ai.dashscope.api-key=${AI_DASHSCOPE_API_KEY}
 ## Prompt模板动态加载
 众所周知，Spring AI提供了Prompt Template来方便开发者根据用户参数动态渲染Prompt内容，然后喂给AI模型去处理。但是模型响应结果的质量特别依赖一个好的Prompt模板，这也就意味着我们往往需要在使用期间经常调整这个模板内容来测试效果。但是Spring AI原生提供的方式要么需要在代码中固定写死，要么就是在配置文件中预置好模板内容，没有办法做到动态更新。
 
-
 为了解决这个问题，Spring AI Alibaba内置了一套基于Nacos实现的动态PromptTemplate功能，你只需要在Nacos上把要托管的PromptTemplate配置好，配置内容是一个JSON数组，JSON里面的格式也很简单。另外配置在Nacos上标识是固定的，data ID 是 **spring.ai.alibaba.configurable.prompt**, group 是 **DEFAULT_GROUP**。
 
 ```plain
@@ -54,11 +53,7 @@ spring.ai.dashscope.api-key=${AI_DASHSCOPE_API_KEY}
 ]
 ```
 
-
-
 ![spring-ai-dynamic-prompt-nacos](/img/blog/nacos/spring-ai-dynamic-prompt-nacos-2.png)
-
-
 
 搞定了以上配置后，我们来基于Spring AI Alibaba写一个测试例子，运行起来后访问"localhost:8080/ai/prompt-template"看下效果
 
@@ -67,31 +62,29 @@ spring.ai.dashscope.api-key=${AI_DASHSCOPE_API_KEY}
 @RequestMapping("/ai")
 public class PromptTemplateController {
 
-	private final ChatClient chatClient;
+ private final ChatClient chatClient;
 
-	private final ConfigurablePromptTemplateFactory configurablePromptTemplateFactory;
+ private final ConfigurablePromptTemplateFactory configurablePromptTemplateFactory;
 
-	@Autowired
-	public PromptTemplateController(ChatClient.Builder builder,
-			ConfigurablePromptTemplateFactory configurablePromptTemplateFactory) {
-		this.chatClient = builder.build();
-		this.configurablePromptTemplateFactory = configurablePromptTemplateFactory;
-	}
-	@GetMapping("/prompt-template")
-	public AssistantMessage generate(@RequestParam(value = "author") String author) {
-		ConfigurablePromptTemplate template = configurablePromptTemplateFactory.create("test-template",
-				"please list the three most famous books by this {author}.");
-		Prompt prompt;
-		if (StringUtils.hasText(author)) {
-			prompt = template.create(Map.of("author", author));
-		} else {
-			prompt = template.create();
-		}
-		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput();
-	}
+ @Autowired
+ public PromptTemplateController(ChatClient.Builder builder,
+   ConfigurablePromptTemplateFactory configurablePromptTemplateFactory) {
+  this.chatClient = builder.build();
+  this.configurablePromptTemplateFactory = configurablePromptTemplateFactory;
+ }
+ @GetMapping("/prompt-template")
+ public AssistantMessage generate(@RequestParam(value = "author") String author) {
+  ConfigurablePromptTemplate template = configurablePromptTemplateFactory.create("test-template",
+    "please list the three most famous books by this {author}.");
+  Prompt prompt;
+  if (StringUtils.hasText(author)) {
+   prompt = template.create(Map.of("author", author));
+  } else {
+   prompt = template.create();
+  }
+  return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput();
+ }
 ```
-
-
 
 ![spring-ai-dynamic-prompt-nacos](/img/blog/nacos/spring-ai-dynamic-prompt-nacos-3.png)
 
@@ -106,16 +99,12 @@ public class PromptTemplateController {
 
 但用了Spring AI Alibaba，内置的Nacos集成方案可不允许你的时间浪费在这种没意义的地方。跟着我来做，到控制台上来创建以下一条配置，配置data ID默认为**spring.ai.alibaba.dashscope.chat.options**，group 默认为 **DEFAULT_GROUP**，配置内容就是你需要自定义的 **DashScopeChatOptions **配置JSON文本。后续如果想要变更算法模型的调用参数，只需要在控制台上更新配置即可动态下发生效新的参数，再也不需要重启应用发布了，使用体验跟刚才的Prompt 模板配置几乎一模一样。
 
-
 ![spring-ai-dynamic-prompt-nacos](/img/blog/nacos/spring-ai-dynamic-prompt-nacos-7.png)
-
 
 todo: 场景列举
 
 ## 敏感配置加密存储
 最后再介绍下像 API-KEY、外部依赖服务认证信息这种高度敏感的配置如何托管管理，一般的配置中心都会以明文的格式来存储，但是Nacos通过集成KMS的密钥服务，提供了配置数据的加解密能力，从而大幅降低这些敏感数据的泄漏风险，具体的配置文档可以参考 [https://nacos.io/docs/latest/plugin/config-encryption-plugin/](https://nacos.io/docs/latest/plugin/config-encryption-plugin/)
-
-
 
 接下来我们来实操一下，首先需要在Nacos控制台上新建一个配置项来管理所有需要加密存储的配置内容，这里我们使用推荐的 KMS AES-256位 加密算法，加密强度足够高且配置内容的数据也不会传输到KMS系统，安全性更高。需要注意的是，这样加密存储的配置data ID会默认有个 **cipher-kms-aes-256- **前缀，这个不可以丢掉。另外配置的内容就是我们想要加密存储的配置项，这里推荐用properties的格式来管理。
 

@@ -20,19 +20,20 @@ category: article
 
 业内开始出现一种声音，开源 LLM 不再仅仅是闭源模型的追随者，而是开始主导 AI 发展的方向，而 DeepSeek 和 Qwen 是目前领跑的开源项目。本文将介绍如何基于开源工具部署大模型、构建测试应用、调用大模型能力的完整链路。
 
-
 ### 为什么选择 PC 或手机在本地部署？
+
 + 模型计算发生在电脑或手机上，免除算力费用
 + API 调用发生在本地网络内，免除 Token 调用费用
 + 敏感数据，无需离开本地环境，适合个人开发者体验。
 
 ### 为什么要选择 DeepSeek R1 蒸馏版？
+
 + 由于本地设备的限制，只能运行量化或蒸馏版本。满血版的deepseek-R1, 参数671B，理论上起码需要350G以上显存/内存才能够部署FP4的量化版本。
 + DeepSeek R1 开源协议明确可“模型蒸馏”(Distill)，且提供了基于 Qwen 的蒸馏版本，可以直接下载使用。
 
-
 ## 实践
 接下来，我们就详细演示如何在本地部署 DeepSeek 模型，并通过 Spring AI Alibaba 开发应用，调用大模型能力。
+
 1. 下载 Ollama 并安装运行 DeepSeek 本地模型
 2. 使用 Spring AI Alibaba 开发应用，调用 DeepSeek 模型
 3. 无需联网、私有数据完全本地存储，为 Java 应用赋予 AI 智能
@@ -64,8 +65,6 @@ curl -fsSL https://ollama.com/install.sh | sh
 # 运行安装 DeepSeek-R1-Distill-Qwen-1.5B 蒸馏模型
 ollama run deepseek-r1:1.5b
 ```
-
-
 
 > 目前 deepseek-r1 模型大小提供了多个选择，包括 1.5b、7b、8b、14b、32b、70b、671b。
 > 请根据你机器的显卡配置进行选择，这里只选择最小的 1.5b 模型来做演示。通常来说，8G 显存可以部署 8B 级别模型；24G 显存可以刚好适配到 32B 的模型。
@@ -110,37 +109,32 @@ spring.ai.ollama.base-url=http://localhost:11434
 spring.ai.ollama.chat.model=deepseek-r1
 ```
 
-
 注入 `ChatClient`：
 
 ```java
 @RestController
 public class ChatController {
 
-	private final ChatClient chatClient;
+ private final ChatClient chatClient;
 
-	public ChatController(ChatClient.Builder builder) {
-		this.chatClient = builder.build();
-	}
+ public ChatController(ChatClient.Builder builder) {
+  this.chatClient = builder.build();
+ }
 
-	@GetMapping("/chat")
-	public String chat(String input) {
-		return this.chatClient.prompt()
-				.user(input)
-				.call()
-				.content();
-	}
+ @GetMapping("/chat")
+ public String chat(String input) {
+  return this.chatClient.prompt()
+    .user(input)
+    .call()
+    .content();
+ }
 }
 ```
 
 ## 总结
 以上是本地部署 DeepSeek 本地模型的实践，如果您希望通过云端方式进行部署，可以参考 [魔搭+函数计算 FC](https://mp.weixin.qq.com/s/yk5t0oIv7XQR0ky6phiq6g)。
 
-
-
 Spring AI Alibaba 钉群群号：105120009405
-
-
 
 [1] [https://github.com/deepseek-ai/DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1)
 

@@ -15,11 +15,11 @@ category: article
 ## 理论部分
 
 大模型转换数据结构流程图
-![](/img/blog/spring-ai-output-structure/data_flow.png)
+![Image](/img/blog/spring-ai-output-structure/data_flow.png)
 
 Map、Bean、List转换器的底层实现
 
-![](/img/blog/spring-ai-output-structure/convert_base.png)
+![Image](/img/blog/spring-ai-output-structure/convert_base.png)
 
 ### FormatProvider（格式提供接口）
 
@@ -1456,11 +1456,11 @@ public class JsonController {
 
 无内置，可以看到返回上面有标json
 
-![](/img/blog/spring-ai-output-structure/json_none.png)
+![Image](/img/blog/spring-ai-output-structure/json_none.png)
 
 有内置，返回最纯粹的JSON格式
 
-![](/img/blog/spring-ai-output-structure/json_inter.png)
+![Image](/img/blog/spring-ai-output-structure/json_inter.png)
 
 ### Bean转换
 
@@ -1628,15 +1628,15 @@ public class BeanController {
 
 没有格式规定，反序列失败
 
-![](/img/blog/spring-ai-output-structure/serialize_no_format.png)
+![Image](/img/blog/spring-ai-output-structure/serialize_no_format.png)
 
 ChatClient反序列化成功
 
-![](/img/blog/spring-ai-output-structure/serialize_client_format.png)
+![Image](/img/blog/spring-ai-output-structure/serialize_client_format.png)
 
 ChatModel反序列化成功
 
-![](/img/blog/spring-ai-output-structure/serialize_model_format.png)
+![Image](/img/blog/spring-ai-output-structure/serialize_model_format.png)
 
 ### Map及List转换
 
@@ -1733,11 +1733,11 @@ public class MapListController {
 
 map转换
 
-![](/img/blog/spring-ai-output-structure/map_convert.png)
+![Image](/img/blog/spring-ai-output-structure/map_convert.png)
 
 list转换
 
-![](/img/blog/spring-ai-output-structure/list_convert.png)
+![Image](/img/blog/spring-ai-output-structure/list_convert.png)
 
 ## 参考资料
 

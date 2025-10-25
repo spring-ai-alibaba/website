@@ -16,7 +16,6 @@ category: article
 
 上半年，以 Manus 为代表的通用智能体的火爆，让具备自主规划能力的通用智能体进入大众视线，另一方面，MCP 则将模型或智能体外部数据、外部系统的交互方式做了统一。结合这些技术趋势，在探索 Spring AI Alibaba 框架、Manus 通用智能体的过程中，我们正逐步构建起一套零代码快速构建垂直领域智能体的方案（JManus），我们相信它能弥补低代码、高代码框架的开发复杂度问题，同时又能解决通用智能体效果难以满足企业级生产要求的弊端。
 
-
 ## 什么是 Spring AI Alibaba
 
 Spring AI Alibaba 是一款以 Spring AI 为基础，深度集成百炼平台，支持 ChatBot、工作流、多智能体应用开发模式的 AI 框架。
@@ -36,17 +35,17 @@ Spring AI Alibaba 是一款以 Spring AI 为基础，深度集成百炼平台，
 在 Spring Boot 工程中添加以下依赖，就可以开始您的 AI 智能体开发之旅了。
 
 ```xml
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.alibaba.cloud.ai</groupId>
-				<artifactId>spring-ai-alibaba-bom</artifactId>
-				<version>1.0.0.2</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+ <dependencyManagement>
+  <dependencies>
+   <dependency>
+    <groupId>com.alibaba.cloud.ai</groupId>
+    <artifactId>spring-ai-alibaba-bom</artifactId>
+    <version>1.0.0.2</version>
+    <type>pom</type>
+    <scope>import</scope>
+   </dependency>
+  </dependencies>
+ </dependencyManagement>
 
 <dependencies>
   <dependency>
@@ -55,8 +54,6 @@ Spring AI Alibaba 是一款以 Spring AI 为基础，深度集成百炼平台，
   </dependency>
 </dependencies>
 ```
-
-
 
 您可以参考我们发布在官网的快速开始了解如何开发 Chatbot、智能体或工作流等应用：
 
@@ -68,15 +65,11 @@ Spring AI Alibaba 是一款以 Spring AI 为基础，深度集成百炼平台，
 ### 体验官方 Playground 示例
 Spring AI Alibaba 官方社区开发了一个**包含完整 “前端 UI+后端实现” 的智能体 Playground 示例**，示例使用 Spring AI Alibaba 开发，可以体验聊天机器人、多轮对话、图片生成、多模态、工具调用、MCP集成、RAG 知识库等所有框架核心能力。
 
-
-
 整体运行后的界面效果如下所示：
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_1.png)
 
 您可以[本地部署 Playground 示例](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-playground)并通过浏览器访问体验，或者拷贝源码并按照自己的业务需求调整，以这种方式快速搭建一套自己的 AI 应用。
-
-
 
 如果想通过更多示例来学习 Spring AI Alibaba 框架用法，请参考我们的官方示例仓库：
 
@@ -104,8 +97,6 @@ Spring AI Alibaba 官方社区开发了一个**包含完整 “前端 UI+后端�
 ### Multi-agent 多智能体框架
 Graph 是 Spring AI Alibaba 社区核心实现之一，也是整个框架在设计理念上区别于 Spring AI 只做底层原子抽象的地方，Spring AI Alibaba 期望帮助开发者更容易地构建智能体应用。基于 Spring AI Alibaba Graph 开发者可以构建工作流、多智能体应用。Spring AI Alibaba Graph 在设计理念上借鉴 LangGraph，因此在一定程度上可以理解为是 Java 版的 LangGraph 实现，社区在此基础上增加了大量预置 Node、简化了 State 定义过程等，让开发者更容易编写对等低代码平台的工作流、多智能体等。
 
-
-
 Spring AI Alibaba Graph 核心能力：
 
 + 支持 Multi-agent，内置 ReAct Agent、Supervisor 等常规智能体模式
@@ -116,8 +107,6 @@ Spring AI Alibaba Graph 核心能力：
 + 支持流程快照
 + 支持嵌套分支、并行分支
 + PlantUML、Mermaid 可视化导出
-
-
 
 关于 Graph 的具体使用方式，请关注官网文档更新。在下文中我们会介绍官方发布的 [基于 Spring AI Alibaba 实现的通用智能体平台](/#)，您可以把这些官方智能体实现当作 Graph 的最佳应用实践。
 
@@ -182,17 +171,16 @@ Flux<String> response = chatClient.prompt(query)
 
 以上是一个可视化绘制的“用户评价分类系统”工作流，对应 Spring AI Alibaba Graph 代码如下所示：
 
-
 ```java
 StateGraph stateGraph = new StateGraph("Consumer Service Workflow Demo", stateFactory)
-			.addNode("feedback_classifier", node_async(feedbackClassifier))
-			.addNode("specific_question_classifier", node_async(specificQuestionClassifier))
-			.addNode("recorder", node_async(new RecordingNode()))
+   .addNode("feedback_classifier", node_async(feedbackClassifier))
+   .addNode("specific_question_classifier", node_async(specificQuestionClassifier))
+   .addNode("recorder", node_async(new RecordingNode()))
 
-			.addEdge(START, "feedback_classifier")
-			.addConditionalEdges("feedback_classifier",edge_async(new CustomerServiceController.FeedbackQuestionDispatcher()),Map.of("positive", "recorder", "negative", "specific_question_classifier"))
-			.addConditionalEdges("specific_question_classifier",edge_async(new CustomerServiceController.SpecificQuestionDispatcher()),Map.of("after-sale", "recorder", "transportation", "recorder", "quality", "recorder", "others","recorder"))
-			.addEdge("recorder", END);
+   .addEdge(START, "feedback_classifier")
+   .addConditionalEdges("feedback_classifier",edge_async(new CustomerServiceController.FeedbackQuestionDispatcher()),Map.of("positive", "recorder", "negative", "specific_question_classifier"))
+   .addConditionalEdges("specific_question_classifier",edge_async(new CustomerServiceController.SpecificQuestionDispatcher()),Map.of("after-sale", "recorder", "transportation", "recorder", "quality", "recorder", "others","recorder"))
+   .addEdge("recorder", END);
 ```
 
 ### 多智能体（Multi-agent）
@@ -212,8 +200,6 @@ Spring AI Alibaba 定位为以 `ChatClient`、`Graph` 抽象为核心的智能�
 
 ### JManus 智能体平台
 在我们最开始发布 JManus 时，给它的定位是一款完全以 Java 语言为核心、彻底开源的 Manus 复刻实现，基于 Spring AI Alibaba 实现的通用 AI Agent 产品，包含一个设计良好的前端 UI 交互界面。
-
-
 
 随着我们对于通用智能体等方向的深度探索，我们对于 JManus 通用智能体的最终产品定位也进行了调整。Manus 的横空出世，让通用智能体自动规划、执行规划的能力给了人们无限想象空间，它非常擅长解决开放性问题，在日常生活、工作等场景都能有广泛的应用。但在实践中人们也开始认识到，基于当前以及未来相当长时间内的模型能力，完全依赖通用智能体的自动规划模式很难解决一些确定性极强的企业场景问题。企业级业务场景的典型特点是确定性，我们需要定制化的工具、子agent，需要稳定而又确定性强的规划与流程，为此，我们期望 JManus 能成为一个智能体开发平台，让用户能以最直观、低成本的方式构建自己垂直领域的智能体实现。
 
@@ -269,6 +255,7 @@ Spring AI 是 Spring 官方社区维护的开源框架，最初于 2024 年 5 �
 自 2024 年 9 月正式开源以来，Spring AI Alibaba 一直与 Spring AI 社区有深度沟通合作，期间发布了多个 Milestone 版本并与很多企业客户建立了深度合作关系。在交流过程中，我们看到了低代码开发模式的优势与限制，随着业务复杂度提升客户从聊天机器人、单智能体到对多智能体架构方案的诉求，也看到了智能体开发从简单 Demo 走向生产上线过程中遇到的困难。Spring AI Alibaba 孵化自企业智能体构建过程，目标是为企业提供开箱即用的企业级解决方案，包括多智能体搭建与编排的 Graph 框架、低代码框架集成、企业数据与工具集成、效果评估、通用智能体产品与平台构建等。
 
 ### 相关链接
+
 + Spring AI Alibaba 官网：[https://java2ai.com](https://java2ai.com)
 + Spring AI Alibaba 仓库：[https://github.com/alibaba/spring-ai-alibaba](https://github.com/alibaba/spring-ai-alibaba)
 + Spring AI Alibaba 官方示例仓库：[https://github.com/springaialibaba/spring-ai-alibaba-examples](https://github.com/springaialibaba/spring-ai-alibaba-examples)

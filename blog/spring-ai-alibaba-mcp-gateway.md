@@ -42,11 +42,11 @@ Spring AI Alibaba MCP Gateway 模块的动态代理能力可以理解成是 higr
 
 1. 在 nacos 中进入 mcp 列表管理功能，创建一个 mcp server。
 
-![](https://intranetproxy.alipay.com/skylark/lark/0/2025/png/54037/1747986476230-5a84634f-7d75-4745-a425-1b585ff08992.png)
+![Image](https://intranetproxy.alipay.com/skylark/lark/0/2025/png/54037/1747986476230-5a84634f-7d75-4745-a425-1b585ff08992.png)
 
 2. 在 mcp server 中添加 tools 相关内容，表明要暴露的 tools 信息
 
-![](https://intranetproxy.alipay.com/skylark/lark/0/2025/png/54037/1747986480357-58081f37-3acf-485a-90cc-69cae9345d59.png)
+![Image](https://intranetproxy.alipay.com/skylark/lark/0/2025/png/54037/1747986480357-58081f37-3acf-485a-90cc-69cae9345d59.png)
 
 3. 在 tools 信息中，需要配置一个 request template。格式与 higress 目前支持的格式完全兼容
 
@@ -111,10 +111,8 @@ Spring AI Alibaba MCP Gateway 模块的动态代理能力可以理解成是 higr
 
 ![Spring AI Alibaba MCP Gateway](/img/blog/mcp-gateway/mcp-inspector.png)
 
-
 ## 总结
 Spring AI Alibaba MCP 联合 Nacos，解决了企业级 AI Agent 的应用与落地场景中 MCP 分布式部署与动态更新的关键问题，其中包括流量的负载均衡、节点变更动态感知等关键解决方案，可阅读本公众号上一篇文章了解详情。
-
 
 参考资料：
 

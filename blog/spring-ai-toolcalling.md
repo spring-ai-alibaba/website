@@ -16,13 +16,14 @@ Tool工具允许模型与一组API或工具进行交互，增强模型功能，�
 <!-- truncate -->
 
 注：
+
 - 本版源码解析取自[Spring-ai（20250321）](https://github.com/spring-projects/spring-ai)仓库最新代码（暂未发版），目前最新的1.0.0.-M6有部分类和方法将过期，故不在此讨论范畴中
 
 本文实践代码可见spingr-ai-alibaba-examples项目下的[spring-ai-alibaba-tool-calling-examples](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-tool-calling-example)
 
 ## 理论部分
 
-![](/img/blog/spring-ai-tool-calling/toolcalling-overall.png)
+![Image](/img/blog/spring-ai-tool-calling/toolcalling-overall.png)
 
 1. 在聊天请求中包含工具的定义，包括工具名称、描述、输入模式
 2. 当AI模型决定调用一个工具时，会发送一个响应，包含工具名称和输入参数（大模型提取文本根据输入模式转化而得）
@@ -35,7 +36,7 @@ Tool工具允许模型与一组API或工具进行交互，增强模型功能，�
 
 下图以ChatClient调用tools(String... toolNames)方法全链路流程展示
 
-![](/img/blog/spring-ai-tool-calling/flow.png)
+![Image](/img/blog/spring-ai-tool-calling/flow.png)
 
 ```Java
 public class DefaultChatClient implements ChatClient {
@@ -1264,15 +1265,15 @@ public class TimeController {
 
 无工具版
 
-![](/img/blog/spring-ai-tool-calling/time.png)
+![Image](/img/blog/spring-ai-tool-calling/time.png)
 
 工具版 - function
 
-![](/img/blog/spring-ai-tool-calling/time-function.png)
+![Image](/img/blog/spring-ai-tool-calling/time-function.png)
 
 工具版 - method
 
-![](/img/blog/spring-ai-tool-calling/time-method.png)
+![Image](/img/blog/spring-ai-tool-calling/time-method.png)
 
 ### 天气预测
 
@@ -1577,15 +1578,15 @@ public class WeatherController {
 
 无工具版
 
-![](/img/blog/spring-ai-tool-calling/weather.png)
+![Image](/img/blog/spring-ai-tool-calling/weather.png)
 
 工具版 - function
 
-![](/img/blog/spring-ai-tool-calling/weather-function.png)
+![Image](/img/blog/spring-ai-tool-calling/weather-function.png)
 
 工具版 - method
 
-![](/img/blog/spring-ai-tool-calling/weather-method.png)
+![Image](/img/blog/spring-ai-tool-calling/weather-method.png)
 
 ### 百度翻译
 
@@ -1987,15 +1988,15 @@ public class TranslateController {
 
 无工具版
 
-![](/img/blog/spring-ai-tool-calling/translate.png)
+![Image](/img/blog/spring-ai-tool-calling/translate.png)
 
 工具版 - function
 
-![](/img/blog/spring-ai-tool-calling/translate-function.png)
+![Image](/img/blog/spring-ai-tool-calling/translate-function.png)
 
 工具版 - method
 
-![](/img/blog/spring-ai-tool-calling/translate-method.png)
+![Image](/img/blog/spring-ai-tool-calling/translate-method.png)
 
 ## 参考资料
 

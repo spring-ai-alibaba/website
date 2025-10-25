@@ -25,3 +25,5 @@ pnpm-debug.log*
 # Editor directories and files
 .docusaurus
 /**/*/.cache-loader
+
+.venv

@@ -65,8 +65,6 @@ Spring AI Alibaba 的扩展性在于它提供了多种不同来源文档加载�
 + **huggingface-fs-document-reader**
 + **poi-document-reader**
 
-
-
 以下是支持的不同 **文档格式解析工具** 列表，以及它们各自的功能说明：
 
 + **document-parser-apache-pdfbox**：用于解析 PDF 格式文档。
@@ -98,8 +96,6 @@ Spring AI Alibaba 的扩展性在于它提供了多种不同来源文档加载�
 </dependency>
 ```
 
-
-
 按如下代码片段所示，配置访问语雀平台需要的Token、文档路径后，使用 YuQueDocumentReader 加载语雀来源的文档，请注意这里我们使用的是 Tika 器来解析语雀文档中的内容。
 
 ```java
@@ -107,8 +103,6 @@ YuQueResource source = YuQueResource.builder().yuQueToken(YU_QUE_TOKEN).resource
 YuQueDocumentReader reader = new YuQueDocumentReader(source, new TikaDocumentParser());
 List<Document> documents = reader.get();
 ```
-
-
 
 接下来，就是标准的 RAG 开发流程了，将文档写入向量数据库并用于后续的检索召回。
 
@@ -152,8 +146,6 @@ vectorStore.similaritySearch("请给我讲一下 Spring AI 开发智能体的优
 + **spring-ai-alibaba-starter-function-calling-yuque**：集成语雀（Yuque）文档平台API，支持文档创建、管理等操作。
 + **spring-ai-alibaba-starter-function-calling-jsonprocessor**：提供JSON数据处理功能，用于JSON数据的解析、修改等操作。
 
-
-
 ### 使用示例 - 智能体接入实时天气预报服务
 首先，在 Spring AI 应用基础上，增加以下天气预报插件实现依赖，如下所示：
 
@@ -165,22 +157,16 @@ vectorStore.similaritySearch("请给我讲一下 Spring AI 开发智能体的优
 </dependency>
 ```
 
-
-
 按如下代码片段所示，在 `ChatClient` 调用中加入 `天气预报插件` 声明，这部分插件信息将随用户 message 一同发送给模型，由模型决策何时调用插件。
 
 ```java
-String ans = chatClient.prompt().functions("getWeatherServiceFunction").user(text).call().content();
+String answer = chatClient.prompt().functions("getWeatherServiceFunction").user(text).call().content();
 ```
-
-
 
 请注意，`getWeatherServiceFunction`是官方插件的注册名，必须严格配置为 `getWeatherServiceFunction` 而不能是其他任何名称。如果您需要使用其他插件，请到官网或github仓库查看相应插件的注册名【1】【2】。
 
 ## 总结
 通过使用社区官方提供的超过 **20 种 RAG 数据源** 和 **20 种 Tool Calling 接口**，开发者可以轻松接入多种外部数据源（如 GitHub、飞书、云 OSS 等）以及调用各种工具（如天气预报、地图导航、翻译服务等）。这些默认实现大大简化了智能体的开发过程，使得开发者无需从零开始，便可以快速构建功能强大的智能体系统。通过这种方式，智能体不仅能够高效处理复杂任务，还能适应各种应用场景，提供更加智能、精准的服务。
-
-
 
 1. 社区插件仓库 [https://github.com/alibaba/spring-ai-alibaba/tree/main/community](https://github.com/alibaba/spring-ai-alibaba/tree/main/community)
 2. Spring AI Alibaba 官方网站 [https://java2ai.com/](https://java2ai.com/)

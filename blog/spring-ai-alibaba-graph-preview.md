@@ -18,7 +18,6 @@ Spring AI Alibaba Graph 的核心内容开发已基本就绪，将在近期发�
 2. 示例二：基于 ReAct Agent 模式的天气预报查询系统
 3. 示例三：基于 Supervisor 多智能体的 OpenManus 实现
 
-
 Spring AI Alibaba Graph 内核与示例完整源码请参见：[https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-graph](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-graph)
 
 ## 示例一：基于工作流编排的客户评价处理系统
@@ -32,37 +31,33 @@ Spring AI Alibaba Graph 内核与示例完整源码请参见：[https://github.c
 2. 第二级分类节点，根据 negative 评论的具体内容识别用户的具体问题，如 "after-sale service"、"product quality"、"transportation" 等，根据具体问题分流到具体的问题处理节点。
 3. 最后问题处理节点进行处理并记录后，流程结束。
 
-
-
 核心代码展示：
 
 ```java
 AgentStateFactory<OverAllState> stateFactory = (inputs) -> {
-			OverAllState state = new OverAllState();
-			state.registerKeyAndStrategy("input", new ReplaceStrategy());
-			state.registerKeyAndStrategy("classifier_output", new ReplaceStrategy());
-			state.registerKeyAndStrategy("solution", new ReplaceStrategy());
-			state.input(inputs);
-			return state;
-		};
+   OverAllState state = new OverAllState();
+   state.registerKeyAndStrategy("input", new ReplaceStrategy());
+   state.registerKeyAndStrategy("classifier_output", new ReplaceStrategy());
+   state.registerKeyAndStrategy("solution", new ReplaceStrategy());
+   state.input(inputs);
+   return state;
+  };
 
 StateGraph stateGraph = new StateGraph("Consumer Service Workflow Demo", stateFactory)
-			.addNode("feedback_classifier", node_async(feedbackClassifier))
-			.addNode("specific_question_classifier", node_async(specificQuestionClassifier))
-			.addNode("recorder", node_async(new RecordingNode()))
+   .addNode("feedback_classifier", node_async(feedbackClassifier))
+   .addNode("specific_question_classifier", node_async(specificQuestionClassifier))
+   .addNode("recorder", node_async(new RecordingNode()))
 
-			.addEdge(START, "feedback_classifier")
-			.addConditionalEdges("feedback_classifier",
-					edge_async(new CustomerServiceController.FeedbackQuestionDispatcher()),
-					Map.of("positive", "recorder", "negative", "specific_question_classifier"))
-			.addConditionalEdges("specific_question_classifier",
-					edge_async(new CustomerServiceController.SpecificQuestionDispatcher()),
-					Map.of("after-sale", "recorder", "transportation", "recorder", "quality", "recorder", "others",
-							"recorder"))
-			.addEdge("recorder", END);
+   .addEdge(START, "feedback_classifier")
+   .addConditionalEdges("feedback_classifier",
+     edge_async(new CustomerServiceController.FeedbackQuestionDispatcher()),
+     Map.of("positive", "recorder", "negative", "specific_question_classifier"))
+   .addConditionalEdges("specific_question_classifier",
+     edge_async(new CustomerServiceController.SpecificQuestionDispatcher()),
+     Map.of("after-sale", "recorder", "transportation", "recorder", "quality", "recorder", "others",
+       "recorder"))
+   .addEdge("recorder", END);
 ```
-
-
 
 可下载本示例源码并运行，打开浏览器访问如下示例链接，查看运行效果：
 
@@ -75,10 +70,7 @@ StateGraph stateGraph = new StateGraph("Consumer Service Workflow Demo", stateFa
 
 ![Spring AI Alibaba Graph react](/img/blog/graph-preview/react.png)
 
-
 在本示例中，我们仅为 Agent 绑定了一个天气查询服务，接收到用户的天气查询服务后，流程会在 AgentNode 和 ToolNode 之间循环执行，直到完成用户指令。示例中判断指令完成的条件（即 ReAct 结束条件）也很简单，模型 AssistantMessage 无 tool_call 指令则结束（采用默认行为）。
-
-
 
 核心代码展示：
 
@@ -94,8 +86,6 @@ ReactAgent reactAgent = ReactAgent.builder()
 reactAgent.invoke(Map.of("messages", new UserMessage(query)))
 ```
 
-
-
 可下载本示例源码并运行，打开浏览器访问如下示例链接，查看运行效果：
 
 + [http://localhost:18080/react/chat?query=分别帮我查询杭州、上海和南京的天气](http://localhost:18080/react/chat?query=分别帮我查询杭州、上海和南京的天气)
@@ -105,8 +95,6 @@ Spring AI Alibaba 曾发布了业界首个 OpenManus 的 Java 版本实现方案
 
 1. 博客解读 [https://java2ai.com/blog/spring-ai-alibaba-openmanus](https://java2ai.com/blog/spring-ai-alibaba-openmanus)
 2. 示例源码：[https://github.com/alibaba/spring-ai-alibaba](https://github.com/alibaba/spring-ai-alibaba)/community/openmanus
-
-
 
 原 OpenManus 的实现并没有使用 Spring AI Alibaba Graph，因此我们花费了大量时间在编写流程控制逻辑。在之前版本的 OpenManus 实现解读中，我们总结了以下相关实现问题：
 
@@ -160,6 +148,4 @@ mvn spring-boot:run
 ## 设计理念与未来规划
 当前版本的 Spring AI Alibaba Graph 在设计理念上大幅参考了 Langgraph，包括全局 State 管理、Graph 定义等，基本上可以说是 Langgraph 的 Java 实现版本，特别感谢 Langchain 社区开源贡献的 Langgraph 智能体框架，让我们可以站在巨人肩膀上继续前进。Agent 技术一直在快速发展之中，我们将在此基础上探索更多前沿 Agent 实现方案。
 
-
 Spring AI Alibaba Graph 尚未正式发布，欢迎开发者通过 Github 源码体验并参与贡献：[https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-graph](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-graph)
-

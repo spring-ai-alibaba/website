@@ -22,7 +22,7 @@ Spring AI 实现了模块化 RAG 架构，架构的灵感来自于论文“[模�
 
 总体上分为以下几个步骤：
 
-###  Pre-Retrieval
+### Pre-Retrieval
 
 > 增强和转换用户输入，使其更有效地执行检索任务，解决格式不正确的查询、query 语义不清晰、或不受支持的语言等。
 
@@ -59,7 +59,7 @@ DashScope apiKey：https://help.aliyun.com/zh/model-studio/developer-reference/g
 
 阿里云 IQS 服务 apiKey：https://help.aliyun.com/product/2837261.html
 
-###  Pre-Retrieval
+### Pre-Retrieval
 
 > 将用户 Query 使用  qwen-plus 大模型进行增强改写。
 
@@ -68,54 +68,54 @@ CustomContextQueryAugmenter.java
 ```java
 public class CustomContextQueryAugmenter implements QueryAugmenter {
     // 定义 prompt tmpl。
-	private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate(
-			// ......
-	);
+ private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate(
+   // ......
+ );
 
-	private static final PromptTemplate DEFAULT_EMPTY_PROMPT_TEMPLATE = new PromptTemplate(
-		// ...
+ private static final PromptTemplate DEFAULT_EMPTY_PROMPT_TEMPLATE = new PromptTemplate(
+  // ...
     );
 
-	@NotNull
-	@Override
-	public Query augment(
-			@Nullable Query query,
-			@Nullable List<Document> documents
-	) {
-		// 1. collect content from documents.
-		AtomicInteger idCounter = new AtomicInteger(1);
-		String documentContext = documents.stream()
-				.map(document -> {
-					String text = document.getText();
-					return "[[" + (idCounter.getAndIncrement()) + "]]" + text;
-				})
-				.collect(Collectors.joining("\n-----------------------------------------------\n"));
+ @NotNull
+ @Override
+ public Query augment(
+   @Nullable Query query,
+   @Nullable List<Document> documents
+ ) {
+  // 1. collect content from documents.
+  AtomicInteger idCounter = new AtomicInteger(1);
+  String documentContext = documents.stream()
+    .map(document -> {
+     String text = document.getText();
+     return "[[" + (idCounter.getAndIncrement()) + "]]" + text;
+    })
+    .collect(Collectors.joining("\n-----------------------------------------------\n"));
 
-		// 2. Define prompt parameters.
-		Map<String, Object> promptParameters = Map.of(
-				"query", query.text(),
-				"context", documentContext
-		);
+  // 2. Define prompt parameters.
+  Map<String, Object> promptParameters = Map.of(
+    "query", query.text(),
+    "context", documentContext
+  );
 
-		// 3. Augment user prompt with document context.
-		return new Query(this.promptTemplate.render(promptParameters));
-	}
+  // 3. Augment user prompt with document context.
+  return new Query(this.promptTemplate.render(promptParameters));
+ }
 
     // 当上下文为空时，返回 DEFAULT_EMPTY_PROMPT_TEMPLATE
-	private Query augmentQueryWhenEmptyContext(Query query) {
+ private Query augmentQueryWhenEmptyContext(Query query) {
 
-		if (this.allowEmptyContext) {
-			logger.debug("Empty context is allowed. Returning the original query.");
-			return query;
-		}
+  if (this.allowEmptyContext) {
+   logger.debug("Empty context is allowed. Returning the original query.");
+   return query;
+  }
 
-		logger.debug("Empty context is not allowed. Returning a specific query for empty context.");
-		return new Query(this.emptyPromptTemplate.render());
-	}
+  logger.debug("Empty context is not allowed. Returning a specific query for empty context.");
+  return new Query(this.emptyPromptTemplate.render());
+ }
 
-	public static final class Builder {
-		// ......
-	}
+ public static final class Builder {
+  // ......
+ }
 }
 ```
 
@@ -150,14 +150,14 @@ public class MultiQueryExpander implements QueryExpander {
     private static final Logger logger = LoggerFactory.getLogger(MultiQueryExpander.class);
 
     private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate(
-		// ...
+  // ...
     );
 
     @NotNull
     @Override
     public List<Query> expand(@Nullable Query query) {
 
-		// ...
+  // ...
 
        String resp = this.chatClient.prompt()
              .user(user -> user.text(this.promptTemplate.getTemplate())
@@ -190,7 +190,7 @@ public class MultiQueryExpander implements QueryExpander {
     }
 
     public static final class Builder {
-		// ......
+  // ......
     }
 
 }
@@ -198,13 +198,13 @@ public class MultiQueryExpander implements QueryExpander {
 
 ### Retrieval
 
->  从不同数据源查询和用户 query 相似度最高的数据。（这里使用 Web Search）
+> 从不同数据源查询和用户 query 相似度最高的数据。（这里使用 Web Search）
 
 WebSearchRetriever.java
 
 ```java
 public class WebSearchRetriever implements DocumentRetriever {
-	
+ 
     // 注入 IQS 搜索引擎
     private final IQSSearchEngine searchEngine;
 
@@ -252,7 +252,7 @@ public class WebSearchRetriever implements DocumentRetriever {
 
 
     public static final class Builder {
-		// ...
+  // ...
     }
 }
 ```
@@ -267,7 +267,7 @@ public class ConcatenationDocumentJoiner implements DocumentJoiner {
     public List<Document> join(
           @Nullable Map<Query, List<List<Document>>> documentsForQuery
     ) {
-		// ...
+  // ...
        Map<Query, List<List<Document>>> selectDocuments = selectDocuments(documentsForQuery, 10);
 
        Set<String> seen = new HashSet<>();
@@ -344,7 +344,7 @@ public class ConcatenationDocumentJoiner implements DocumentJoiner {
     }
 
     private List<String> extractKeys(Document document) {
-		// 提取 key
+  // 提取 key
        return keys;
     }
 }
@@ -367,7 +367,7 @@ public class DashScopeDocumentRanker implements DocumentRanker {
           @Nullable Query query,
           @Nullable List<Document> documents
     ) {
-		// ...
+  // ...
        try {
           List<Document> reorderDocs = new ArrayList<>();
 
@@ -420,7 +420,7 @@ WebSearchService.java
 @Service
 public class SAAWebSearchService {
 
-	// ...
+ // ...
     
     private static final String DEFAULT_WEB_SEARCH_MODEL = "deepseek-r1";
 
