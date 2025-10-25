@@ -1,0 +1,383 @@
+[
+	{
+		"label": "什么是 SAA?",
+		"translations": { "en": "What is SAA?" },
+		"link": "docs/1.0.0.3-dev/overview"
+	},
+	{
+		"label": "SAA 与 Spring AI 的关系",
+		"translations": { "en": "SAA vs Spring AI" },
+		"link": "docs/1.0.0.3-dev/saa-vs-spring-ai"
+	},
+	{
+		"label": "核心概念",
+		"translations": { "en": "Core Concepts" },
+		"collapsed": false,
+		"items": [
+			{
+				"label": "智能体 (Agent)",
+				"translations": { "en": "Agent" },
+				"link": "docs/1.0.0.3-dev/concepts/agent"
+			},
+			{
+				"label": "AI 模型 (AI Models)",
+				"translations": { "en": "AI Models" },
+				"link": "docs/1.0.0.3-dev/concepts/ai-models"
+			},
+			{
+				"label": "工具 (Tool)",
+				"translations": { "en": "Tool" },
+				"link": "docs/1.0.0.3-dev/concepts/tool"
+			},
+			{
+				"label": "上下文 (Context)",
+				"translations": { "en": "Context" },
+				"link": "docs/1.0.0.3-dev/concepts/context"
+			},
+			{
+				"label": "记忆 (Memory)",
+				"translations": { "en": "Memory" },
+				"link": "docs/1.0.0.3-dev/concepts/memory"
+			},
+			{
+				"label": "检索增强生成 (RAG)",
+				"translations": { "en": "RAG" },
+				"link": "docs/1.0.0.3-dev/concepts/rag"
+			},
+			{
+				"label": "模型上下文协议 (MCP)",
+				"translations": { "en": "MCP" },
+				"link": "docs/1.0.0.3-dev/concepts/mcp"
+			},
+			{
+				"label": "智能体互联协议 (A2A)",
+				"translations": { "en": "A2A" },
+				"link": "docs/1.0.0.3-dev/concepts/a2a"
+			}
+		]
+	},
+		{
+			"label": "快速入门",
+			"translations": { "en": "Get Started" },
+			"collapsed": false,
+			"items": [
+				{
+					"label": "环境准备",
+					"translations": { "en": "Environment Setup" },
+					"link": "docs/1.0.0.3-dev/get-started/setup"
+				},
+				{
+					"label": "第一个智能体",
+					"translations": { "en": "Your First Agent" },
+					"link": "docs/1.0.0.3-dev/get-started/first-agent"
+				},
+				{
+					"label": "MCP 快速开始",
+					"translations": { "en": "MCP Quick Start" },
+					"link": "docs/1.0.0.3-dev/get-started/mcp-quickstart"
+				}
+			]
+		},
+	{
+		"label": "构建智能体",
+		"translations": { "en": "Building Agents" },
+		"collapsed": false,
+		"items": [
+			{
+				"label": "Agent 模式",
+				"translations": { "en": "Agent Patterns" },
+				"collapsed": false,
+				"items": [
+					{
+						"label": "ReAct 模式",
+						"translations": { "en": "ReAct Pattern" },
+						"link": "docs/1.0.0.3-dev/building/patterns/react"
+					},
+					{ 
+						"label": "人机交互模式",  
+						"translations": { "en": "Human-in-the-Loop" },
+						"link": "docs/1.0.0.3-dev/building/patterns/react-with-human"
+					},
+					{
+						"label": "流程模式 (Flow)",
+						"translations": { "en": "Flow Pattern" },
+						"link": "docs/1.0.0.3-dev/building/patterns/flow"
+					},
+					{
+						"label": "反思模式 (Reflect)",
+						"translations": { "en": "Reflect Pattern" },
+						"link": "docs/1.0.0.3-dev/building/patterns/reflect"
+					},
+					{
+						"label": "多智能体协作模式 (A2A)",
+						"translations": { "en": "Multi-Agent (A2A)" },
+						"link": "docs/1.0.0.3-dev/building/patterns/a2a"
+					}
+				]
+			},
+			{
+				"label": "Graph 模式",
+				"translations": { "en": "Core Engine: StateGraph" },
+				"collapsed": true,
+				"items": [
+					{
+						"label": "StateGraph 基础",
+						"translations": { "en": "StateGraph Basics" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/basics"
+					},
+					{
+						"label": "状态管理 (KeyStrategy)",
+						"translations": { "en": "State Management (KeyStrategy)" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/state-management"
+					},
+					{
+						"label": "节点 (Node) 开发",
+						"translations": { "en": "Node Development" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/nodes"
+					},
+					{
+						"label": "边 (Edge) 与路由",
+						"translations": { "en": "Edge & Routing" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/edges"
+					},
+					{
+						"label": "预定义节点",
+						"translations": { "en": "Predefined Nodes" },
+						"link": "docs/1.0.0.3-dev/building/stategraph/predefined-nodes"
+					},
+					{
+						"label": "高级特性",
+						"translations": { "en": "Advanced Features" },
+						"collapsed": true,
+						"items": [
+							{
+								"label": "持久化与恢复",
+								"translations": { "en": "Persistence & Resuming" },
+								"link": "docs/1.0.0.3-dev/building/advanced/persistence"
+							},
+							{
+								"label": "可观测性",
+								"translations": { "en": "Observability" },
+								"link": "docs/1.0.0.3-dev/building/advanced/observability"
+							},
+							{
+								"label": "子图 (SubGraphs)",
+								"translations": { "en": "SubGraphs" },
+								"link": "docs/1.0.0.3-dev/building/advanced/subgraphs"
+							},
+							{
+								"label": "流式响应",
+								"translations": { "en": "Streaming Response" },
+								"link": "docs/1.0.0.3-dev/building/advanced/streaming"
+							},
+							{
+								"label": "并行执行",
+								"translations": { "en": "Parallel Execution" },
+								"link": "docs/1.0.0.3-dev/building/advanced/parallel-execution"
+							},
+							{
+								"label": "图可视化",
+								"translations": { "en": "Graph Visualization" },
+								"link": "docs/1.0.0.3-dev/building/advanced/visualization"
+							}
+						]
+					}
+				]
+			},
+			{
+				"label": "工具调用",
+				"translations": { "en": "Tool Calling" },
+				"link": "docs/1.0.0.3-dev/building/tool-calling"
+			},
+			{
+				"label": "记忆管理",
+				"translations": { "en": "Memory Management" },
+				"collapsed": true,
+				"items": [
+					{
+						"label": "Graph Memory（状态图记忆）",
+						"translations": { "en": "Graph Memory" },
+						"link": "docs/1.0.0.3-dev/building/memory/graph-memory"
+					},
+					{
+						"label": "ChatClient Memory（高层记忆）",
+						"translations": { "en": "ChatClient Memory" },
+						"link": "docs/1.0.0.3-dev/building/memory/chatclient-memory"
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "分布式智能体",
+		"translations": { "en": "Distributed Agents" },
+		"collapsed": true,
+		"items": [
+			{
+				"label": "MCP 分布式工具",
+				"translations": { "en": "MCP Distributed Tools" },
+				"collapsed": true,
+				"items": [
+					{
+						"label": "MCP 协议基础",
+						"translations": { "en": "MCP Protocol Basics" },
+						"link": "docs/1.0.0.3-dev/distributed/mcp/protocol-basics"
+					},
+					{
+						"label": "工具集成",
+						"translations": { "en": "Tool Integration" },
+						"link": "docs/1.0.0.3-dev/distributed/mcp/tool-integration"
+					},
+					{
+						"label": "Nacos 服务注册",
+						"translations": { "en": "Nacos Service Registry" },
+						"link": "docs/1.0.0.3-dev/distributed/mcp/nacos-registry"
+					}
+				]
+			},
+			{
+				"label": "A2A 智能体协作",
+				"translations": { "en": "A2A Agent Collaboration" },
+				"collapsed": true,
+				"items": [
+					{
+						"label": "A2A 协议",
+						"translations": { "en": "A2A Protocol" },
+						"link": "docs/1.0.0.3-dev/distributed/a2a/protocol"
+					},
+					{
+						"label": "智能体注册与发现",
+						"translations": { "en": "Agent Registry & Discovery" },
+						"link": "docs/1.0.0.3-dev/distributed/a2a/registry"
+					},
+					{
+						"label": "跨智能体通信",
+						"translations": { "en": "Cross-Agent Communication" },
+						"link": "docs/1.0.0.3-dev/distributed/a2a/communication"
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "开发工具",
+		"translations": { "en": "Development Tools" },
+		"collapsed": true,
+		"items": [
+			{
+				"label": "Graph Studio 可视化",
+				"translations": { "en": "Graph Studio Visualization" },
+				"link": "docs/1.0.0.3-dev/tools/graph-studio"
+			},
+			{
+				"label": "调试与监控",
+				"translations": { "en": "Debugging & Monitoring" },
+				"link": "docs/1.0.0.3-dev/tools/debugging"
+			}
+		]
+	},
+	{
+		"label": "集成与扩展",
+		"translations": { "en": "Integration & Extensions" },
+		"collapsed": true,
+		"items": [
+			{
+				"label": "模型集成",
+				"translations": { "en": "Model Integration" },
+				"link": "docs/1.0.0.3-dev/integration/model-integration"
+			},
+			{
+				"label": "增强RAG",
+				"translations": { "en": "Enhanced RAG" },
+				"collapsed": true,
+				"items": [
+					{
+						"label": "RAG 快速上手",
+						"translations": { "en": "RAG Quickstart" },
+						"link": "docs/1.0.0.3-dev/integration/rag/quickstart"
+					},
+					{
+						"label": "核心组件与架构",
+						"translations": { "en": "Core Components & Architecture" },
+						"link": "docs/1.0.0.3-dev/integration/rag/core-components"
+					},
+					{
+						"label": "文档读取器",
+						"translations": { "en": "Document Readers" },
+						"link": "docs/1.0.0.3-dev/integration/rag/document-readers"
+					},
+					{
+						"label": "向量存储",
+						"translations": { "en": "Vector Stores" },
+						"link": "docs/1.0.0.3-dev/integration/rag/vector-stores"
+					},
+					{
+						"label": "检索与重排",
+						"translations": { "en": "Retrieval & Reranking" },
+						"link": "docs/1.0.0.3-dev/integration/rag/retrieval-rerank"
+					},
+					{
+						"label": "文档转换器",
+						"translations": { "en": "Document Transformers" },
+						"link": "docs/1.0.0.3-dev/integration/rag/document-transformers"
+					},
+					{
+						"label": "高级Advisor组件",
+						"translations": { "en": "Advanced Advisors" },
+						"link": "docs/1.0.0.3-dev/integration/rag/advanced-advisors"
+					},
+					{
+						"label": "质量评估",
+						"translations": { "en": "Quality Evaluation" },
+						"link": "docs/1.0.0.3-dev/integration/rag/evaluation"
+					},
+					{
+						"label": "百炼RAG集成",
+						"translations": { "en": "Bailian RAG Integration" },
+						"link": "docs/1.0.0.3-dev/integration/rag/bailian"
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": "示例代码",
+		"translations": { "en": "Code Examples" },
+		"collapsed": true,
+		"items": [
+			{
+				"label": "示例仓库",
+				"translations": { "en": "Examples Repository" },
+				"link": "https://github.com/spring-ai-alibaba/spring-ai-alibaba-examples"
+			}
+		]
+	},
+	{
+		"label": "官方应用",
+		"translations": { "en": "Applications" },
+		"collapsed": true,
+		"items": [
+			{
+				"label": "JManus",
+				"translations": { "en": "JManus" },
+				"link": "docs/1.0.0.3-dev/showcases/jmanus"
+			},
+			{
+				"label": "DeepResearch",
+				"translations": { "en": "DeepResearch" },
+				"link": "docs/1.0.0.3-dev/showcases/deepresearch"
+			},
+			{
+				"label": "Graph Studio",
+				"translations": { "en": "Graph Studio" },
+				"link": "docs/1.0.0.3-dev/showcases/graph-studio"
+			},
+			{
+				"label": "NL2SQL",
+				"translations": { "en": "NL2SQL" },
+				"link": "docs/1.0.0.3-dev/showcases/nl2sql"
+			}
+		]
+	}
+]
+
