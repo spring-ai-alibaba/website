@@ -37,6 +37,17 @@
 		"collapsed": false
 	},
 	{
+        "label": "模型",
+        "translations": {
+            "en": "Models"
+        },
+        "autogenerate": {
+            "directory": "models"
+        },
+		"collapsed": true,
+        "items": []
+	},
+	{
 		"label": "使用教程",
 		"translations": {
 			"en": "Tutorials"
