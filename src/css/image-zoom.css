@@ -1,0 +1,244 @@
+/* 图片放大功能样式 */
+.image-zoom-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  max-width: 100%;
+}
+
+.image-zoom-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.image-zoom-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.image-zoom-wrapper:hover img {
+  filter: brightness(0.95);
+}
+
+/* 放大按钮样式 */
+.image-zoom-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #374151;
+  z-index: 10;
+}
+
+.image-zoom-wrapper:hover .image-zoom-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.image-zoom-button:hover {
+  background: rgba(37, 99, 235, 0.95);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* 模态框覆盖层 */
+.image-zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 模态框内容 */
+.image-zoom-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: scaleIn 0.3s ease;
+}
+
+/* 关闭按钮 */
+.image-zoom-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #374151;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+}
+
+.image-zoom-close:hover {
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* 放大后的图片 */
+.image-zoom-zoomed {
+  max-width: 100%;
+  max-height: calc(90vh - 100px);
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* 图片描述 */
+.image-zoom-caption {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  color: #374151;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 80%;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 深色主题适配 */
+[data-theme='dark'] .image-zoom-button {
+  background: rgba(31, 41, 55, 0.95);
+  color: #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .image-zoom-button:hover {
+  background: rgba(37, 99, 235, 0.95);
+  color: white;
+}
+
+[data-theme='dark'] .image-zoom-close {
+  background: rgba(31, 41, 55, 0.95);
+  color: #d1d5db;
+}
+
+[data-theme='dark'] .image-zoom-close:hover {
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
+}
+
+[data-theme='dark'] .image-zoom-caption {
+  background: rgba(31, 41, 55, 0.95);
+  color: #d1d5db;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .image-zoom-modal {
+    padding: 1rem;
+  }
+  
+  .image-zoom-modal-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .image-zoom-zoomed {
+    max-height: calc(95vh - 80px);
+  }
+  
+  .image-zoom-close {
+    top: -40px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .image-zoom-button {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+  }
+  
+  .image-zoom-button svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .image-zoom-caption {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    max-width: 90%;
+  }
+}
+
+/* 防止滚动穿透 */
+.modal-open {
+  overflow: hidden;
+}
+
+/* 键盘导航支持 */
+.image-zoom-close:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.5);
+  outline-offset: 2px;
+}
+
+.image-zoom-button:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.5);
+  outline-offset: 2px;
+}
