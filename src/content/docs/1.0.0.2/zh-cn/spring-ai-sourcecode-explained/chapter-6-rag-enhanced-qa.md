@@ -3613,7 +3613,7 @@ public class ContentFormatTransformer implements DocumentTransformer {
 }
 ```
 
-##### ContentFormatte（格式化接口类）
+##### ContentFormatter（格式化接口类）
 
 ```java
 public interface ContentFormatter {
