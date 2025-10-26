@@ -96,6 +96,15 @@
   }
 }
 
+/* Hide back to top button when mobile sidebar is open */
+@media (max-width: 996px) {
+  html[class*='navbar-sidebar--show'] .backToTop {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+}
+
 /* Adjust button position to avoid blocking TOC on blog page which is on the right side */
 @media (min-width: 997px) {
   .theme-blog-post-page .backToTop {

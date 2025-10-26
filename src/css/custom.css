@@ -883,12 +883,14 @@ tr:hover {
     background: var(--ifm-navbar-background-color);
   }
 
+  /* Mobile navbar logo styles */
   .navbar__logo {
-    height: 1.8rem !important;
+    height: 3rem !important;
+    margin-right: 0.5rem !important;
   }
 
   .navbar__logo img {
-    height: 1.8rem !important;
+    height: 3rem !important;
   }
 
   .navbar__title {
@@ -902,15 +904,18 @@ tr:hover {
   }
 
   .navbar-sidebar__brand {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
   }
 
   .navbar-sidebar__brand .navbar__logo {
-    height: 1.8rem !important;
+    height: 3.2rem !important;
+    margin-right: 0.75rem !important;
   }
 
   .navbar-sidebar__brand .navbar__logo img {
-    height: 1.8rem !important;
+    height: 3.2rem !important;
   }
 
   article {
@@ -953,15 +958,18 @@ tr:hover {
   }
 
   .navbar-sidebar__brand {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
   }
 
   .navbar-sidebar__brand .navbar__logo {
-    height: 1.6rem !important;
+    height: 3rem !important;
+    margin-right: 0.75rem !important;
   }
 
   .navbar-sidebar__brand .navbar__logo img {
-    height: 1.6rem !important;
+    height: 3rem !important;
   }
 
   h1 {
@@ -1347,10 +1355,12 @@ video {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100% !important;
+    width: 80% !important;
+    max-width: 350px !important;
     height: 100vh !important;
     z-index: 200 !important;
     background-color: var(--ifm-navbar-background-color) !important;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15) !important;
   }
 
   .navbar-sidebar__backdrop {
@@ -1360,10 +1370,31 @@ video {
     width: 100% !important;
     height: 100vh !important;
     z-index: 199 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(4px) !important;
   }
 
   .navbar-sidebar__items {
     height: calc(100vh - 60px) !important;
     overflow-y: auto !important;
+  }
+
+  /* Style for "Back to main menu" button */
+  .navbar-sidebar__back {
+    background: transparent !important;
+    padding: 0.75rem 1rem !important;
+    margin: 0 !important;
+    border: none !important;
+    font-size: 0.9rem !important;
+    color: var(--ifm-font-color-base) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  .navbar-sidebar__back:hover {
+    background: var(--ifm-color-emphasis-100) !important;
   }
 }
