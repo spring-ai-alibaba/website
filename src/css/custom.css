@@ -897,6 +897,8 @@ tr:hover {
 
   .navbar-sidebar {
     width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
   }
 
   .navbar-sidebar__brand {
@@ -954,6 +956,8 @@ tr:hover {
 
   .navbar-sidebar {
     width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
   }
 
   .navbar-sidebar__brand {
@@ -1097,7 +1101,6 @@ article {
 
 /* Special elements don't need transition animations */
 .navbar,
-.navbar-sidebar,
 .menu,
 .theme-doc-sidebar-menu,
 img,
@@ -1344,4 +1347,31 @@ video {
 .image-zoom-button:focus {
   outline: 2px solid rgba(37, 99, 235, 0.5);
   outline-offset: 2px;
+}
+
+/* Fix mobile sidebar visibility */
+@media (max-width: 996px) {
+  .navbar-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    z-index: 200 !important;
+    background-color: var(--ifm-navbar-background-color) !important;
+  }
+
+  .navbar-sidebar__backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    z-index: 199 !important;
+  }
+
+  .navbar-sidebar__items {
+    height: calc(100vh - 60px) !important;
+    overflow-y: auto !important;
+  }
 }
