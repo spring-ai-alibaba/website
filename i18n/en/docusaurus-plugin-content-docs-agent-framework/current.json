@@ -2,5 +2,25 @@
   "version.label": {
     "message": "2.0.x (Current)",
     "description": "The label for version current"
+  },
+  "sidebar.agentFrameworkSidebar.doc.快速开始": {
+    "message": "Quick Start",
+    "description": "Sidebar label for quick start in agent framework"
+  },
+  "sidebar.agentFrameworkSidebar.category.核心概念": {
+    "message": "Core Concepts",
+    "description": "Sidebar label for core concepts in agent framework"
+  },
+  "sidebar.agentFrameworkSidebar.category.使用指南": {
+    "message": "Guides",
+    "description": "Sidebar label for guides in agent framework"
+  },
+  "sidebar.agentFrameworkSidebar.category.API 参考": {
+    "message": "API Reference",
+    "description": "Sidebar label for API reference in agent framework"
+  },
+  "sidebar.agentFrameworkSidebar.doc.故障排查": {
+    "message": "Troubleshooting",
+    "description": "Sidebar label for troubleshooting in agent framework"
   }
 }
