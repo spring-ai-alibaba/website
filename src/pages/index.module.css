@@ -1788,7 +1788,6 @@
   .heroContent {
     grid-template-columns: 1fr;
     gap: 2rem;
-    text-align: center;
     padding: 0 1rem;
     flex-direction: column;
   }
@@ -1804,10 +1803,14 @@
   }
 
   .heroRight {
-    justify-content: center;
     margin-left: 0;
     order: 2;
     width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 1rem;
+    display: block;
+    text-align: left;
   }
 
   .titleRow {
@@ -1861,6 +1864,11 @@
     order: 2;
     width: 100%;
     margin-top: 1.5rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 1rem;
+    display: block;
+    text-align: left;
   }
 
   .titleRow {

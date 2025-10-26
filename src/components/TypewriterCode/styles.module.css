@@ -243,6 +243,8 @@
 @media screen and (max-width: 996px) {
   .codePreview {
     max-width: 100%;
+    margin-left: 0;
+    margin-right: auto;
   }
 
   .codeBlock {
@@ -251,6 +253,11 @@
 }
 
 @media screen and (max-width: 768px) {
+  .codePreview {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
   .codeContent {
     padding: 1rem;
     max-height: 400px;
