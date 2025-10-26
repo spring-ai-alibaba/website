@@ -279,14 +279,14 @@ body {
 
 /* Navbar logo styles */
 .navbar__logo {
-  height: 3.5rem !important;
+  height: 2rem !important;
   width: auto !important;
   max-width: none !important;
-  margin-right: -1.5rem;
+  margin-right: 0.5rem;
 }
 
 .navbar__logo img {
-  height: 3.5rem !important;
+  height: 2rem !important;
   width: auto !important;
   max-height: none !important;
 }
@@ -884,16 +884,31 @@ tr:hover {
   }
 
   .navbar__logo {
-    height: 2.8rem !important;
+    height: 1.8rem !important;
   }
 
   .navbar__logo img {
-    height: 2.8rem !important;
+    height: 1.8rem !important;
   }
 
-  /* Fix mobile sidebar */
+  .navbar__title {
+    font-size: 0.95rem;
+  }
+
   .navbar-sidebar {
     width: 100% !important;
+  }
+
+  .navbar-sidebar__brand {
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-sidebar__brand .navbar__logo {
+    height: 1.8rem !important;
+  }
+
+  .navbar-sidebar__brand .navbar__logo img {
+    height: 1.8rem !important;
   }
 
   article {
@@ -925,21 +940,32 @@ tr:hover {
     border-radius: 12px;
   }
 
-  .navbar__title {
-    font-size: 1rem;
-  }
-
   .navbar__logo {
-    height: 2.5rem !important;
+    height: 1.6rem !important;
   }
 
   .navbar__logo img {
-    height: 2.5rem !important;
+    height: 1.6rem !important;
   }
 
-  /* Fix mobile sidebar */
+  .navbar__title {
+    font-size: 0.85rem;
+  }
+
   .navbar-sidebar {
     width: 100% !important;
+  }
+
+  .navbar-sidebar__brand {
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-sidebar__brand .navbar__logo {
+    height: 1.6rem !important;
+  }
+
+  .navbar-sidebar__brand .navbar__logo img {
+    height: 1.6rem !important;
   }
 
   h1 {
