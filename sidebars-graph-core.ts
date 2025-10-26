@@ -2,11 +2,11 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 
 const sidebars: SidebarsConfig = {
   graphCoreSidebar: [
-    {
-      type: 'doc',
-      id: 'quick-start',
-      label: '快速开始',
-    },
+      {
+        type: 'doc',
+        id: 'quick-start',
+        label: '快速开始',
+      },
     {
       type: 'category',
       label: '核心概念',

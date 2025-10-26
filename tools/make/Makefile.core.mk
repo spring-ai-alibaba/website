@@ -40,6 +40,18 @@ preview:
 		echo "node_modules directory does not exist. Please run 'make install' to install dependencies."; \
 	fi
 
+.PHONY: preview-en
+preview-en: ## Start the Docusaurus server in preview mode for English.
+preview-en:
+	@$(LOG_TARGET)
+
+	@if [ -d "node_modules" ]; then \
+		echo "Starting Docusaurus server..."; \
+		npm run start:en; \
+	else \
+		echo "node_modules directory does not exist. Please run 'make install' to install dependencies."; \
+	fi
+
 .PHONY: build
 build: ## Build the Docusaurus site.
 build:
