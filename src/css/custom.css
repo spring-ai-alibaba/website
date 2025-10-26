@@ -883,6 +883,19 @@ tr:hover {
     background: var(--ifm-navbar-background-color);
   }
 
+  .navbar__logo {
+    height: 2.8rem !important;
+  }
+
+  .navbar__logo img {
+    height: 2.8rem !important;
+  }
+
+  /* Fix mobile sidebar */
+  .navbar-sidebar {
+    width: 100% !important;
+  }
+
   article {
     margin: 1rem;
     padding: 1.5rem;
@@ -914,6 +927,19 @@ tr:hover {
 
   .navbar__title {
     font-size: 1rem;
+  }
+
+  .navbar__logo {
+    height: 2.5rem !important;
+  }
+
+  .navbar__logo img {
+    height: 2.5rem !important;
+  }
+
+  /* Fix mobile sidebar */
+  .navbar-sidebar {
+    width: 100% !important;
   }
 
   h1 {
