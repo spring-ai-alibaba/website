@@ -279,14 +279,14 @@ body {
 
 /* Navbar logo styles */
 .navbar__logo {
-  height: 2rem !important;
+  height: 3.5rem !important;
   width: auto !important;
   max-width: none !important;
-  margin-right: 0.5rem;
+  margin-right: -1.5rem;
 }
 
 .navbar__logo img {
-  height: 2rem !important;
+  height: 3.5rem !important;
   width: auto !important;
   max-height: none !important;
 }
@@ -942,16 +942,8 @@ tr:hover {
     border-radius: 12px;
   }
 
-  .navbar__logo {
-    height: 1.6rem !important;
-  }
-
-  .navbar__logo img {
-    height: 1.6rem !important;
-  }
-
   .navbar__title {
-    font-size: 0.85rem;
+    font-size: 1rem;
   }
 
   .navbar-sidebar {
@@ -1298,34 +1290,34 @@ video {
   .image-zoom-modal {
     padding: 1rem;
   }
-  
+
   .image-zoom-modal-content {
     max-width: 95vw;
     max-height: 95vh;
   }
-  
+
   .image-zoom-zoomed {
     max-height: calc(95vh - 80px);
   }
-  
+
   .image-zoom-close {
     top: -40px;
     width: 40px;
     height: 40px;
   }
-  
+
   .image-zoom-button {
     width: 32px;
     height: 32px;
     top: 8px;
     right: 8px;
   }
-  
+
   .image-zoom-button svg {
     width: 14px;
     height: 14px;
   }
-  
+
   .image-zoom-caption {
     font-size: 0.8rem;
     padding: 0.5rem 0.75rem;

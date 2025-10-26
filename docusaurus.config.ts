@@ -12,7 +12,7 @@ const githubUrls = getGitHubUrls(projectConfig)
 const config: Config = {
   title: projectConfig.title,
   tagline: projectConfig.tagline,
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
 
   // Set the production url of your site here
   url: projectConfig.deployment.url,
