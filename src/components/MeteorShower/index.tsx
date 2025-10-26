@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback, useMemo } from 'react'
 import styles from './styles.module.css'
 
 interface Meteor {
@@ -17,7 +17,7 @@ const MeteorShower: React.FC = () => {
   const meteorsRef = useRef<Meteor[]>([])
   const animationRef = useRef<number | undefined>(undefined)
 
-  const meteorColors = [
+  const meteorColors = useMemo(() => [
     '#ff6b9d', // Pink
     '#60a5fa', // Blue
     '#fbbf24', // Gold
@@ -26,9 +26,9 @@ const MeteorShower: React.FC = () => {
     '#f97316', // Orange
     '#fde047', // Yellow
     '#94a3b8', // Gray
-  ]
+  ], [])
 
-  const createMeteor = (): Meteor => {
+  const createMeteor = useCallback((): Meteor => {
     // Start randomly from anywhere on the page
     const startX = Math.random() * window.innerWidth // Random across screen width
     const startY = Math.random() * window.innerHeight // Random across screen height
@@ -54,7 +54,7 @@ const MeteorShower: React.FC = () => {
       angle: randomAngle, // Random angle
       tail: [],
     }
-  }
+  }, [meteorColors])
 
   const updateMeteor = (meteor: Meteor, canvas: HTMLCanvasElement): boolean => {
     // Update position - move at 45 degree angle
@@ -121,7 +121,7 @@ const MeteorShower: React.FC = () => {
     ctx.fill()
   }
 
-  const animate = () => {
+  const animate = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -147,7 +147,7 @@ const MeteorShower: React.FC = () => {
     }
 
     animationRef.current = requestAnimationFrame(animate)
-  }
+  }, [createMeteor])
 
   const resizeCanvas = () => {
     const canvas = canvasRef.current
@@ -175,7 +175,7 @@ const MeteorShower: React.FC = () => {
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [])
+  }, [animate, createMeteor])
 
   return <canvas ref={canvasRef} className={styles.meteorCanvas} />
 }

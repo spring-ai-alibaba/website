@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import styles from './styles.module.css';
+import React, { useState, useCallback } from 'react'
+import styles from './styles.module.css'
 
 interface ImageZoomProps {
   src: string;
@@ -8,27 +8,27 @@ interface ImageZoomProps {
 }
 
 const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt = '', className = '' }) => {
-  const [isZoomed, setIsZoomed] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false)
 
   const handleImageClick = useCallback(() => {
-    setIsZoomed(true);
-  }, []);
+    setIsZoomed(true)
+  }, [])
 
   const handleCloseZoom = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsZoomed(false);
-  }, []);
+    e.stopPropagation()
+    setIsZoomed(false)
+  }, [])
 
   const handleZoomClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsZoomed(true);
-  }, []);
+    e.stopPropagation()
+    setIsZoomed(true)
+  }, [])
 
   const handleOverlayClick = useCallback((e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      setIsZoomed(false);
+      setIsZoomed(false)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -99,7 +99,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt = '', className = '' }) 
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default ImageZoom;
+export default ImageZoom

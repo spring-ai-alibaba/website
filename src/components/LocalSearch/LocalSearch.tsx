@@ -4,6 +4,20 @@ import { translate } from '@docusaurus/Translate'
 import Fuse, { IFuseOptions, FuseResult } from 'fuse.js'
 import styles from './LocalSearch.module.css'
 
+// Extend Window interface to include Docusaurus data
+declare global {
+  interface Window {
+    __DOCUSAURUS_DATA__?: {
+      docusaurus?: {
+        siteMetadata?: {
+          locale?: string;
+        };
+        globalData?: Record<string, unknown>;
+      };
+    };
+  }
+}
+
 // ============= Type Definitions =============
 interface SearchItem {
   id: string;
@@ -225,11 +239,8 @@ async function fetchFullContent(url: string): Promise<{ fullText: string; headin
 async function generateSearchData(): Promise<SearchItem[]> {
   const searchData: SearchItem[] = []
   
-  if (typeof window !== 'undefined' && (window as any).__DOCUSAURUS_DATA__) {
-    const docusaurusData = (window as any).__DOCUSAURUS_DATA__
-    
-    // Get current locale
-    const currentLocale = docusaurusData?.docusaurus?.siteMetadata?.locale || 'zh-Hans'
+  if (typeof window !== 'undefined' && window.__DOCUSAURUS_DATA__) {
+    const docusaurusData = window.__DOCUSAURUS_DATA__
     
     // Process all locales data
     const globalData = docusaurusData?.docusaurus?.globalData
@@ -237,28 +248,30 @@ async function generateSearchData(): Promise<SearchItem[]> {
     // Process docs for all locales
     Object.keys(globalData || {}).forEach(pluginName => {
       if (pluginName.startsWith('docusaurus-plugin-content-docs')) {
-        const pluginData = globalData[pluginName]
+        const pluginData = globalData?.[pluginName]
         Object.keys(pluginData || {}).forEach(instanceName => {
           const instance = pluginData[instanceName]
           if (instance?.docs) {
-            Object.values(instance.docs).forEach(async (doc: any) => {
+            Object.values(instance.docs).forEach(async (doc: unknown) => {
+              const typedDoc = doc as { id: string; title: string; description?: string; permalink: string; tags?: Array<{ label: string }> }
+              
               // Determine locale from URL pattern
               let locale = 'zh-Hans' // default
-              if (doc.permalink && doc.permalink.startsWith('/en/')) {
+              if (typedDoc.permalink && typedDoc.permalink.startsWith('/en/')) {
                 locale = 'en'
               }
               
               // Fetch full content for this document
-              const { fullText, headings } = await fetchFullContent(doc.permalink)
+              const { fullText, headings } = await fetchFullContent(typedDoc.permalink)
               
               searchData.push({
-                id: doc.id,
-                title: doc.title,
-                content: doc.description || '',
-                url: doc.permalink,
+                id: typedDoc.id,
+                title: typedDoc.title,
+                content: typedDoc.description || '',
+                url: typedDoc.permalink,
                 type: 'doc',
                 locale: locale,
-                tags: doc.tags?.map((tag: any) => tag.label) || [],
+                tags: typedDoc.tags?.map(tag => tag.label) || [],
                 fullText: fullText,
                 headings: headings,
               })
@@ -269,28 +282,30 @@ async function generateSearchData(): Promise<SearchItem[]> {
       
       // Process blog posts for all locales
       if (pluginName.startsWith('docusaurus-plugin-content-blog')) {
-        const pluginData = globalData[pluginName]
+        const pluginData = globalData?.[pluginName]
         Object.keys(pluginData || {}).forEach(instanceName => {
-          const instance = pluginData[instanceName]
+          const instance = pluginData?.[instanceName]
           if (instance?.blogPosts) {
-            instance.blogPosts.forEach(async (post: any) => {
+            instance.blogPosts.forEach(async (post: unknown) => {
+              const typedPost = post as { id: string; title: string; description?: string; permalink: string; tags?: Array<{ label: string }> }
+              
               // Determine locale from URL pattern
               let locale = 'zh-Hans' // default
-              if (post.permalink && post.permalink.startsWith('/en/')) {
+              if (typedPost.permalink && typedPost.permalink.startsWith('/en/')) {
                 locale = 'en'
               }
               
               // For blog posts, we can use the excerpt or content if available
-              const { fullText, headings } = await fetchFullContent(post.permalink)
+              const { fullText, headings } = await fetchFullContent(typedPost.permalink)
               
               searchData.push({
-                id: post.id,
-                title: post.title,
-                content: post.description || '',
-                url: post.permalink,
+                id: typedPost.id,
+                title: typedPost.title,
+                content: typedPost.description || '',
+                url: typedPost.permalink,
                 type: 'blog',
                 locale: locale,
-                tags: post.tags?.map((tag: any) => tag.label) || [],
+                tags: typedPost.tags?.map(tag => tag.label) || [],
                 fullText: fullText,
                 headings: headings,
               })
@@ -448,7 +463,7 @@ interface SearchResultItemProps {
   onMouseEnter: () => void;
 }
 
-function SearchResultItem({ result, index, isSelected, onSelect, onMouseEnter }: SearchResultItemProps) {
+function SearchResultItem({ result, _index, isSelected, onSelect, onMouseEnter }: SearchResultItemProps) {
   const { item, matches } = result
   const itemRef = useRef<HTMLDivElement>(null)
   
@@ -661,7 +676,7 @@ export default function LocalSearch() {
     }
   }
   
-  const handleMouseEnterResult = (index: number) => {
+  const handleMouseEnterResult = (_index: number) => {
     // Only update selected index on mouse hover to avoid conflicts with keyboard navigation
   }
   
@@ -806,16 +821,16 @@ export default function LocalSearch() {
                   <div className={styles.searchResultsHeader}>
                     Found {searchResults.length} results
                   </div>
-                  {searchResults.map((result, index) => (
-                    <SearchResultItem
-                      key={`${result.item.id}-${index}`}
-                      result={result}
-                      index={index}
-                      isSelected={selectedIndex === index}
-                      onSelect={() => handleResultSelect(result.item.url)}
-                      onMouseEnter={() => handleMouseEnterResult(index)}
-                    />
-                  ))}
+            {searchResults.map((result, _index) => (
+              <SearchResultItem
+                key={`${result.item.id}-${_index}`}
+                result={result}
+                index={_index}
+                isSelected={selectedIndex === _index}
+                onSelect={() => handleResultSelect(result.item.url)}
+                onMouseEnter={() => handleMouseEnterResult(_index)}
+              />
+            ))}
                 </div>
               )}
             </div>

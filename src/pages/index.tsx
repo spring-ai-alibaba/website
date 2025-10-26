@@ -7,7 +7,7 @@ import EcosystemShowcase from '@site/src/components/EcosystemShowcase'
 import MeteorShower from '@site/src/components/MeteorShower'
 import FloatingClouds from '../components/FloatingClouds'
 import TypewriterCode from '@site/src/components/TypewriterCode'
-import Translate, { translate } from '@docusaurus/Translate'
+import Translate from '@docusaurus/Translate'
 
 import styles from './index.module.css'
 import projectConfig, { getGitHubUrls } from '../../project.config'
@@ -118,20 +118,6 @@ function NeuralNetwork() {
   return <canvas ref={canvasRef} className={styles.neuralNetwork} />
 }
 
-// Feature Card Component
-function FeatureCard({ icon, title, description }: {
-  icon: string;
-  title: React.ReactNode;
-  description: React.ReactNode;
-}) {
-  return (
-    <div className={styles.featureCard}>
-      <div className={styles.featureIcon}>{icon}</div>
-      <h3 className={styles.featureTitle}>{title}</h3>
-      <p className={styles.featureDescription}>{description}</p>
-    </div>
-  )
-}
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()

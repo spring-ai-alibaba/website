@@ -1,15 +1,13 @@
 import type { Config } from '@docusaurus/types'
 import type { Options as PresetClassicOptions, ThemeConfig } from '@docusaurus/preset-classic'
 import { themes } from 'prism-react-renderer'
-import projectConfig, { getGitHubUrls, getAuthorInfo } from './project.config'
+import projectConfig, { getGitHubUrls } from './project.config'
 
 const lightCodeTheme = themes.github
 const darkCodeTheme = themes.vsDark
 
 // Generate GitHub links from project configuration
 const githubUrls = getGitHubUrls(projectConfig)
-// If needed, get author information
-const authorInfo = getAuthorInfo(projectConfig)
 
 const config: Config = {
   title: projectConfig.title,

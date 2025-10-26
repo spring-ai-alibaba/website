@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import clsx from 'clsx'
-import projectConfig, { getSearchConfig } from '../../../project.config'
 import styles from './styles.module.css'
 
 interface SearchResult {
@@ -21,8 +20,6 @@ const PineconeFloatingSearch: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const searchConfig = getSearchConfig(projectConfig)
-  const isPineconeConfigured = searchConfig.isVectorSearchConfigured
 
   // Perform search - simplified version, returns demo results
   const performSearch = async (searchQuery: string) => {
