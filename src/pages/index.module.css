@@ -676,36 +676,21 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: -2rem;
   width: 100%;
-  gap: 1rem;
 }
 
 /* Logo positioned inline with title */
 .heroLogo {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
+  width: 300px;
+  height: 300px;
   object-fit: contain;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 6px;
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
 
 .heroLogo:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
-}
-
-[data-theme='dark'] .heroLogo {
-  background: rgba(31, 41, 55, 0.9);
-  box-shadow: 0 4px 16px rgba(96, 165, 250, 0.3);
-}
-
-[data-theme='dark'] .heroLogo:hover {
-  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.4);
 }
 
 /* Ensure title aligns properly with logo */
@@ -729,7 +714,9 @@
   font-weight: 900;
   font-size: 3.2rem;
   line-height: 1.1;
-  margin-bottom: 0;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  text-align: left;
   text-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
   animation: rainbow-flow 4s ease-in-out infinite;
   letter-spacing: -0.02em;
@@ -793,7 +780,7 @@
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0;
   margin-top: 1rem;
@@ -801,11 +788,12 @@
   display: inline-block;
   text-shadow: none;
   transition: all 0.3s ease-in-out;
-  max-width: 90%;
+  max-width: 100%;
   line-height: 1.5;
   letter-spacing: 0.5px;
   position: relative;
   animation: text-glow 3s ease-in-out infinite alternate;
+  white-space: nowrap;
 }
 
 /* Text glow animation - no border effects */
