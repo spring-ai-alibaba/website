@@ -1796,6 +1796,16 @@
     align-items: center;
     text-align: center;
     margin-right: 0;
+    min-width: auto;
+  }
+
+  .titleRow {
+    justify-content: center;
+  }
+
+  .heroLogo {
+    width: 200px;
+    height: 200px;
   }
 
   .heroRight {
@@ -1824,6 +1834,16 @@
 
   .heroContent {
     padding: 0 0.5rem;
+  }
+
+  .titleRow {
+    justify-content: center;
+    margin-bottom: -1rem;
+  }
+
+  .heroLogo {
+    width: 150px;
+    height: 150px;
   }
 
   .heroTitle {
