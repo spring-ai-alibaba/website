@@ -105,7 +105,7 @@ export default function CodeOfConduct(): React.JSX.Element {
               </div>
             </div>
 
-            <div className={styles.section}>
+            {/* <div className={styles.section}>
               <h2 className={styles.sectionTitle}>
                 📞 <Translate id="codeOfConduct.reporting" description="Reporting section title">报告不当行为</Translate>
               </h2>
@@ -118,8 +118,8 @@ export default function CodeOfConduct(): React.JSX.Element {
                     </Translate>
                   </p>
                   <div className={styles.contactMethods}>
-                    <a href="mailto:spring-code-of-conduct@pivotal.io" className={styles.contactMethod}>
-                      📧 spring-code-of-conduct@pivotal.io
+                    <a href="mailto:" className={styles.contactMethod}>
+                      📧 todo: 添加邮箱地址
                     </a>
                   </div>
                   <p className={styles.reportingNote}>
@@ -132,7 +132,7 @@ export default function CodeOfConduct(): React.JSX.Element {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className={styles.attribution}>
               <p>
