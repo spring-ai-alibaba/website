@@ -300,6 +300,20 @@
   .sectionTitle {
     font-size: 1.5rem;
   }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .frameworkGrid,
+  .frameworkGridBottom {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .frameworkGrid > * {
+    flex: 0 0 calc((100% - 2rem) / 2);
+    max-width: calc((100% - 2rem) / 2);
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -315,12 +329,34 @@
     font-size: 1.75rem;
   }
 
-  .sectionTitle {
-    font-size: 1.3rem;
+  .sectionHeader {
+    text-align: center;
   }
 
-  .cardGrid,
-  .frameworkGrid,
+  .sectionTitle {
+    font-size: 1.3rem;
+    justify-content: center;
+  }
+
+  .sectionDescription {
+    text-align: center;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .frameworkGrid {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .frameworkGrid > * {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
   .frameworkGridBottom {
     grid-template-columns: 1fr;
     gap: 1.25rem;
@@ -328,5 +364,30 @@
 
   .ecosystemCard {
     padding: 1.5rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cardTitle {
+    text-align: center;
+  }
+
+  .cardDescription {
+    text-align: center;
+  }
+
+  .cardLinks {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .cardLink {
+    justify-content: center;
   }
 }
