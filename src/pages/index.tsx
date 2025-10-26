@@ -153,10 +153,10 @@ function HomepageHeader() {
                 alt={siteConfig.title}
                 className={styles.heroLogo}
               />
-              <h1 className={clsx('hero__title', styles.heroTitle)}>
-                {siteConfig.title}
-              </h1>
             </div>
+            <h1 className={clsx('hero__title', styles.heroTitle)}>
+              {siteConfig.title}
+            </h1>
             <p className={clsx('hero__subtitle', styles.heroSubtitle)}>
               {siteConfig.tagline}
             </p>
@@ -264,7 +264,7 @@ function AcknowledgmentsSection() {
           <div className={styles.acknowledgmentCard}>
             <div className={styles.acknowledgmentIcon}>
               <img
-                src="https://docs.spring.io/spring-ai/reference/_images/spring_ai_logo_with_text.svg"
+                src="/img/spring-ai.svg"
                 alt="Spring AI Logo"
                 style={{ width: '100%', height: 'auto', maxWidth: '120px' }}
               />

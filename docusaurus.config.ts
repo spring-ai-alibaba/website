@@ -137,8 +137,8 @@ const config: Config = {
       title: projectConfig.title,
       logo: {
         alt: `${projectConfig.title} Logo`,
-        src: 'img/logo.svg',
-        srcDark: 'img/logo-dark.svg',
+        src: 'img/logo-fullname.svg',
+        srcDark: 'img/logo-fullname.svg',
       },
       hideOnScroll: false,
       items: [

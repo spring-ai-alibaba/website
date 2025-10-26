@@ -277,8 +277,24 @@ body {
   z-index: 100;
 }
 
+/* Navbar logo styles */
+.navbar__logo {
+  height: 3.5rem !important;
+  width: auto !important;
+  max-width: none !important;
+  margin-right: -1.5rem;
+}
+
+.navbar__logo img {
+  height: 3.5rem !important;
+  width: auto !important;
+  max-height: none !important;
+}
+
 .navbar__brand {
   transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
 }
 
 .navbar__brand:hover {
