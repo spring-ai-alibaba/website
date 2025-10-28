@@ -432,6 +432,7 @@ for( var out : app.stream( Map.of( "messages", UserMessage.from( "generate a UUI
 }
 ```
 
+```
     START 
     __START__ - UserMessage { name = null contents = [TextContent { text = "generate a UUID for me" }] } 
     StreamingOutput{node=calculation, chunk=` } 
@@ -472,4 +473,4 @@ for( var out : app.stream( Map.of( "messages", UserMessage.from( "generate a UUI
     calculation - AiMessage { text = "`4c9f2e5d-1b3a-4c6f-b7a8-0e92c43f4c55`" toolExecutionRequests = null } 
     summary - AiMessage { text = "`4c9f2e5d-1b3a-4c6f-b7a8-0e92c43f4c55`" toolExecutionRequests = null } 
     __END__ - AiMessage { text = "`4c9f2e5d-1b3a-4c6f-b7a8-0e92c43f4c55`" toolExecutionRequests = null } 
-
+```

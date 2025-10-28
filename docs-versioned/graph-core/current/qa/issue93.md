@@ -342,8 +342,6 @@ void testToolsStreamingChat( String modelName ) throws Exception {
         log.info("StreamingOutput: {}", out);
     }
 }
-
-
 ```
 
 
@@ -351,6 +349,7 @@ void testToolsStreamingChat( String modelName ) throws Exception {
 testToolsStreamingChat("qwen2.5:7b");
 ```
 
+```
     START 
     StreamingOutput: NodeOutput{node=__START__, state={messages=[UserMessage { name = null contents = [TextContent { text = "How is the weather in New York today?" }] }]}} 
     StreamingOutput: StreamingOutput{node=agent, state={messages=[UserMessage { name = null contents = [TextContent { text = "How is the weather in New York today?" }] }]}, chunk=} 
@@ -373,14 +372,14 @@ testToolsStreamingChat("qwen2.5:7b");
     }" }] }, ToolExecutionResultMessage { id = null toolName = "execQuery" text = "Cold, with a low of 13 degrees" }]}, chunk=The current weather in New York is cold, with the temperature expected to drop to a low of 13 degrees.} 
     StreamingOutput: NodeOutput{node=agent, state={messages=[AiMessage { text = "The current weather in New York is cold, with the temperature expected to drop to a low of 13 degrees." toolExecutionRequests = null }]}} 
     StreamingOutput: NodeOutput{node=__END__, state={messages=[AiMessage { text = "The current weather in New York is cold, with the temperature expected to drop to a low of 13 degrees." toolExecutionRequests = null }]}} 
-
-
+```
 
 ```java
 
 testToolsStreamingChat("llama3.1:latest");
 ```
 
+```
     START 
     StreamingOutput: NodeOutput{node=__START__, state={messages=[UserMessage { name = null contents = [TextContent { text = "How is the weather in New York today?" }] }]}} 
     StreamingOutput: StreamingOutput{node=agent, state={messages=[UserMessage { name = null contents = [TextContent { text = "How is the weather in New York today?" }] }]}, chunk=} 
@@ -697,4 +696,4 @@ testToolsStreamingChat("llama3.1:latest");
        at .(#45:1)
 
     |--> testToolsStreamingChat("llama3.1:latest");
-
+```

@@ -124,6 +124,7 @@ var graphBuilder = new StateGraph<>( MessagesState.SCHEMA, MyState::new)
 **示例 B:**
 During graph execution the state needs to be serialized (mostly for cloning purpose) also for providing ability to persist the state across different executions. To do this we have provided a new streighforward implementation based on [Serializer] interface.
 
+```java
 import com.alibaba.cloud.ai.graph.KeyStrategy;
 
 private static KeyStrategyFactory createCustomKeyStrategyFactory() {
@@ -134,6 +135,8 @@ private static KeyStrategyFactory createCustomKeyStrategyFactory() {
         );
         return keyStrategyMap;
     };
+```
+
 1. Manage nullable value in serialization process
 ### 序列化器（Serializer）
 - [x] Allow to plug also different serialization techniques
@@ -152,6 +155,8 @@ There are several provided Serializers out-of-the-box:
 - [x] 允许插入不同的序列化技术
 `AiMessageSerializer` | langchain4j `AiMessage` Serializer
 当前，使用内置 Java 流进行状态序列化的主要类是 [PlainTextStateSerializer]。它支持基于文本的序列化技术，如 `JSON` 和 `YAML`。
+
+```java
 import static org.bsc.langgraph4j.action.AsyncNodeAction.node_async;
 
 public class State extends AgentState {
@@ -171,15 +176,21 @@ AsyncNodeAction<State> myNode = node_async(state -> {
 });
 
 AsyncNodeAction<State> myOtherNode = node_async(state -> state);
+```
+
 ## 节点（Nodes）
 var builder = new StateGraph( State::new )
 在 Spring AI Alibaba 中，节点通常是一个**函数式接口** ([AsyncNodeAction])，其参数是 [state](#state)，您可以使用 [addNode] 方法将这些节点添加到图中：
 
 Since [AsyncNodeAction] is designed to work with [CompletableFuture], you can use `node_async` static method that adapt it to a simpler syncronous scenario. 
+
+### `START` Node
+
+```java
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
 import com.alibaba.cloud.ai.graph.StateGraph;
 import java.util.Map;
-### `START` Node
+
 var myNode = node_async(state -> {
     System.out.println("In myNode: ");
     String input = (String) state.value("input").orElse("");
@@ -187,10 +198,11 @@ var myNode = node_async(state -> {
 import static org.bsc.langgraph4j.StateGraph.END;
 
 var myOtherNode = node_async(state -> Map.of());
-```
 var builder = new StateGraph()
-## Edges
   .addNode("myOtherNode", myOtherNode);
+```
+
+## Edges
 
 - **Normal Edges**: 
 由于 [AsyncNodeAction] 设计用于与 [CompletableFuture] 一起工作，您可以使用 `node_async` 静态方法将其适配为更简单的同步场景。
@@ -204,7 +216,6 @@ var builder = new StateGraph()
 <!-- 👉 PARALLEL
  A node can have MULTIPLE outgoing edges. If a node has multiple out-going edges, **all** of those destination nodes will be executed in parallel as a part of the next superstep. -->
 
-<a id="normal-edges"></a>
 ### Normal Edges
 
 If you **always** want to go from node A to node B, you can use the [addEdge] method directly.
@@ -212,9 +223,11 @@ If you **always** want to go from node A to node B, you can use the [addEdge] me
 ### `START` 节点
 // add a normal edge
 `START` 节点是一个特殊节点，表示将用户输入发送到图的节点。引用此节点的主要目的是确定首先应该调用哪些节点。
+
+```java
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
 ```
 
-import static com.alibaba.cloud.ai.graph.StateGraph.START;
 ### Conditional Edges
 
 If you want to **optionally** route to 1 or more edges (or optionally terminate), you can use the [addConditionalEdges] method. This method accepts the name of a node and a **Functional Interface** ([AsyncEdgeAction]) that will be used as " routing function" to call after that node is executed:
@@ -274,7 +287,9 @@ LangGraph4j has a built-in persistence layer, implemented through [Checkpointers
 入口点是图启动时运行的第一个节点。您可以使用虚拟 `START` 节点的 [addEdge] 方法到第一个要执行的节点来指定进入图的位置。
 First, checkpointers facilitate **human-in-the-loop workflows**<!--[human-in-the-loop workflows](agentic_concepts.md#human-in-the-loop)--> workflows by allowing humans to inspect, interrupt, and approve steps. Checkpointers are needed for these workflows as the human has to be able to view the state of a graph at any point in time, and the graph has to be to resume execution after the human has made any updates to the state.
 
+```java
 import static com.alibaba.cloud.ai.graph.StateGraph.START;
+```
 
 See [this guide](../how-tos/persistence.ipynb) for how to add a checkpointer to your graph.
 
@@ -285,9 +300,10 @@ Threads enable the checkpointing of multiple different runs, making them essenti
 条件入口点允许您根据自定义逻辑从不同的节点开始。您可以从虚拟 `START` 节点使用 [addConditionalEdges] 来实现此目的。
 `thread_id` is simply the ID of a thread. This is always required
 
+```java
 import static com.alibaba.cloud.ai.graph.StateGraph.START;
 import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
-```java
+
 graph.addConditionalEdges(START, edge_async(state -> "nodeB"),
     Map.of("nodeB", "nodeB", "nodeC", "nodeC"));
 var config = RunnableConfig.builder()
@@ -329,7 +345,9 @@ You can also interact with the state directly and update it using [graph.updateS
 在调用图时，您必须将这些作为配置的可配置部分传递。
 - `asNode`
 
+```java
 import com.alibaba.cloud.ai.graph.RunnableConfig;
+```
 **`config`**
 
                            .threadId("a")
@@ -346,7 +364,7 @@ These are the values that will be used to update the state. Note that this updat
 The final thing you specify when calling `updateState` is `asNode`. This update will be applied as if it came from node `asNode`. If `asNode` is null, it will be set to the last node that updated the state, if not ambiguous.
 - **state**：这是此时的状态值。
 - **nextNodeId**：这是图中接下来要执行的节点的标识符。
-<!--
+
 ## Configuration
 
 ### 获取状态
@@ -355,14 +373,21 @@ The final thing you specify when calling `updateState` is `asNode`. This update 
 
 ```typescript
 const config = { configurable: { llm: "anthropic" }};
+```
+
 ### 获取状态历史
+
+```
 await graph.invoke(inputs, config);
+```
+
 您还可以调用 `graph.getStateHistory(config)` 来获取图的历史记录列表。配置应包含 `thread_id`，并将为该线程获取状态历史记录。
 
 You can then access and use this configuration inside a node:
 ### 更新状态
-```typescript
+
 您还可以直接与状态交互并使用 `graph.updateState(config, values, asNode)` 更新它。这需要三个不同的组件：
+```
   const llmType = config?.configurable?.llm;
   let llm: BaseChatModel;
   if (llmType) {
@@ -370,8 +395,8 @@ You can then access and use this configuration inside a node:
   }
   ...
 };
-配置应包含指定要更新哪个线程的 `thread_id`。
 ```
+配置应包含指定要更新哪个线程的 `thread_id`。
 
 See [this guide](/langgraph4j/how-tos/langgraph4j-howtos/configuration.html) for a full breakdown on configuration 
 这些是将用于更新状态的值。请注意，此更新的处理方式与节点的任何更新完全相同。这意味着这些值将传递给作为状态一部分的 [reducer](#reducers) 函数。因此，这不会自动覆盖状态。
@@ -418,7 +443,7 @@ public interface InterruptableAction<State extends AgentState> {
 
  * When the graph is about to execute a node, it first checks if the node's action implements InterruptableAction.
  * If it does, the interrupt(String nodeId, State state) method is called.
- * If the method returns a non-empty Optional<InterruptionMetadata>, the graph's execution is paused. The InterruptionMetadata object contains information about the
+ * If the method returns a non-empty `Optional<InterruptionMetadata>`, the graph's execution is paused. The InterruptionMetadata object contains information about the
   interruption, which can be sent to an external system or user for review.
  * If the method returns an empty Optional, the node executes normally, and the graph continues its execution without interruption.
 

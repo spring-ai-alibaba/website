@@ -139,6 +139,7 @@ for( var step : workflow.stream( Map.of() ) ) {
 }
 ```
 
+```
     START 
 
 
@@ -172,7 +173,7 @@ for( var step : workflow.stream( Map.of() ) ) {
 
 
     NodeOutput{node=A1, state={messages=[A, A1, A2, A3, B]}}
-
+```
 
 ## Use compiled sub graph as parallel node
 
@@ -259,6 +260,7 @@ for( var step : workflow.stream( Map.of() ) ) {
 }
 ```
 
+```
     START 
 
 
@@ -273,8 +275,7 @@ for( var step : workflow.stream( Map.of() ) ) {
     NodeOutput{node=__PARALLEL__(A), state={messages=[A, A1.1, A1.2, A2, A3.1, A3.2]}}
     NodeOutput{node=B, state={messages=[A, A1.1, A1.2, A2, A3.1, A3.2, B]}}
     NodeOutput{node=__END__, state={messages=[A, A1.1, A1.2, A2, A3.1, A3.2, B]}}
-
-
+```
 
 ```java
 import org.bsc.langgraph4j.prebuilt.MessagesStateGraph;
@@ -360,6 +361,7 @@ for( var step : workflow.stream( Map.of() ) ) {
 }
 ```
 
+```
     START 
 
 
@@ -375,4 +377,4 @@ for( var step : workflow.stream( Map.of() ) ) {
     NodeOutput{node=__PARALLEL__(A), state={messages=[A, A1.1, A1.2, A2.1, A2.2, A3.1, A3.2]}}
     NodeOutput{node=B, state={messages=[A, A1.1, A1.2, A2.1, A2.2, A3.1, A3.2, B]}}
     NodeOutput{node=__END__, state={messages=[A, A1.1, A1.2, A2.1, A2.2, A3.1, A3.2, B]}}
-
+```

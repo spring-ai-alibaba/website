@@ -387,6 +387,7 @@ for( var output : workflow.stream( Map.of("input", "search for") ) ) {
 
 ```
 
+```
     EXPLAIN 
     START 
     NodeOutput{node=__START__, state={input=explain me}} 
@@ -399,7 +400,7 @@ for( var output : workflow.stream( Map.of("input", "search for") ) ) {
     NodeOutput{node=intent_recognize, state={input=search for, intent=query}} 
     NodeOutput{node=subAgent2-work, state={input=search for, step=work2, intent=query}} 
     NodeOutput{node=__END__, state={input=search for, step=work2, intent=query}} 
-
+```
 
 ## Using Subgraph as CompiledGraph
 
@@ -445,6 +446,7 @@ for( var output : workflow.stream( Map.of("input", "search for") ) ) {
 
 ```
 
+```
     EXPLAIN 
     START 
     NodeOutput{node=__START__, state={input=explain me}} 
@@ -465,4 +467,4 @@ for( var output : workflow.stream( Map.of("input", "search for") ) ) {
     NodeOutput{node=__END__, state={input=search for, step=work2, intent=query}} 
     NodeOutput{node=subAgent2, state={input=search for, step=work2, intent=query}} 
     NodeOutput{node=__END__, state={input=search for, step=work2, intent=query}} 
-
+```

@@ -364,7 +364,7 @@ public class HumanFeedbackDispatcher implements EdgeAction {
 #### GraphHumanController
 
 - CompileConfig.builder().saverConfig(saverConfig).interruptBefore("humanfeedback"）：在人类反馈节点前断流
-- Sinks.Many<ServerSentEvent<String>> sink：接收 Stream 数据
+- `Sinks.Many<ServerSentEvent<String>>` sink：接收 Stream 数据
 
 ```java
 package com.spring.ai.tutorial.graph.human.controller;

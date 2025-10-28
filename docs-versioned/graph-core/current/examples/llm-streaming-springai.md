@@ -9,6 +9,7 @@ keywords: [LLM Streaming, 流式输出, Spring AI Alibaba, Graph, 流式响应, 
 ## 初始化配置
 **Initialize Logger**
 
+```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -17,11 +18,12 @@ private static final Logger log = LoggerFactory.getLogger("llm-streaming");
 
 var log = org.slf4j.LoggerFactory.getLogger("llm-streaming");
 ```
+
 ## 使用流式 ChatClient
 ## How to use StreamingChatGenerator
 Spring AI Alibaba 支持通过 `ChatClient` 进行流式输出。
 
-
+```java
 import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import org.reactivestreams.Publisher;
@@ -97,6 +99,9 @@ flux.subscribe(
 flux.collectList().block().forEach(response -> {
     System.out.println("Received: " + response.getResult().getOutput().getContent());
 });
+```
+
+```
     Received: StreamingOutput{node=agent, state=null, chunk=:
     
     }
@@ -116,7 +121,7 @@ flux.collectList().block().forEach(response -> {
     Received: StreamingOutput{node=agent, state=null, chunk= everything}
     Received: StreamingOutput{node=agent, state=null, chunk=!}
     Received: StreamingOutput{node=agent, state=null, chunk=}
-
+```
 
 ## Use StreamingChatGenerator in Agent Executor
 
@@ -181,6 +186,7 @@ log.info( "result: {}", state.lastMessage()
 参考 [节点流式输出文档](/workflow/graph/streaming) 获取完整示例。
     callAgent
 
+```java
 import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
 import org.springframework.ai.chat.client.ChatClient;

@@ -147,7 +147,7 @@ Builder outputType(Class<?> outputType)
 ```
 
 **参数:**
-- `outputType` (Class<?>, 必需): 定义输出结构的 Java 类。该类应该是带有标准 getter 和 setter 的 POJO。
+- `outputType` (`Class<?>`, 必需): 定义输出结构的 Java 类。该类应该是带有标准 getter 和 setter 的 POJO。
 
 ## 工作原理
 

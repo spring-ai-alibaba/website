@@ -485,8 +485,6 @@ public class PersistenceExample {
 - [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
 - [Issue #78](/workflow/qa/issue78) - 重置记忆线程示例
 
-```
-
 ## Test function calling
 
 
@@ -514,18 +512,13 @@ var result = model.chat(request );
 result.aiMessage();
 ```
 
-
-
-
+```
     AiMessage { text = "I'm unable to provide real-time weather forecasts. For the most accurate and up-to-date weather information, please check a reliable weather website or app." toolExecutionRequests = null }
-
-
+```
 
 ## Define the graph
 
 We can now put it all together. We will run it first without a checkpointer:
-
-
 
 ```java
 import static org.bsc.langgraph4j.StateGraph.START;
@@ -537,9 +530,13 @@ import org.bsc.langgraph4j.action.NodeAction;
 import static org.bsc.langgraph4j.action.AsyncNodeAction.node_async;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
+```
+
 ## 定义图
 
 我们现在可以将所有内容放在一起。我们将首先在没有 checkpointer 的情况下运行它：
+
+```java
 EdgeAction<MessageState> routeMessage = state -> {
   
   var lastMessage = state.lastMessage();
@@ -613,12 +610,12 @@ for( var r : result ) {
 }
 ```
 
+```
     __START__
     agent
     {messages=[AiMessage { text = "Hi I'm Bartolo, niced to meet you." toolExecutionRequests = null }, AiMessage { text = "Hello Bartolo, nice to meet you too! How can I assist you today?" toolExecutionRequests = null }]}
     __END__
-
-
+```
 
 ```java
 
@@ -634,11 +631,12 @@ for( var r : result ) {
 }
 ```
 
+```
     __START__
     agent
     {messages=[AiMessage { text = "Remember my name?" toolExecutionRequests = null }, AiMessage { text = "I'm sorry, but I don't have the ability to remember personal information or previous interactions. How can I assist you today?" toolExecutionRequests = null }]}
     __END__
-
+```
 
 ## Add Memory
 
@@ -683,11 +681,12 @@ for( var r : result ) {
 }
 ```
 
+```
     __START__
     agent
     AiMessage { text = "Hello Bartolo, nice to meet you too! How can I assist you today?" toolExecutionRequests = null }
     __END__
-
+```
 
 
 ```java
@@ -704,11 +703,12 @@ for( var r : result ) {
 }
 ```
 
+```
     __START__
     agent
     AiMessage { text = "I'm sorry, but I can't remember personal information like names between interactions. However, I'm here to help with any questions or information you need!" toolExecutionRequests = null }
     __END__
-
+```
 
 ## New Conversational Thread
 
@@ -738,8 +738,9 @@ for( var r : result ) {
 }
 ```
 
+```
     __START__
     agent
     AiMessage { text = "No, I don't know your name. I don't have access to personal data about users unless it has been shared with me in the course of our conversation. If you have any questions or need assistance, feel free to ask!" toolExecutionRequests = null }
     __END__
-
+```

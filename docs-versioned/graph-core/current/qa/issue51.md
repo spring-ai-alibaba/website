@@ -84,12 +84,12 @@ class OrchestratorAgent implements NodeAction {
 
 ```
 
+## 定义路由边
 
 ```java
 import com.alibaba.cloud.ai.graph.action.EdgeAction;
 
 class RouteOrchestratorOutcome implements EdgeAction<MyAgentState> {
-## 定义路由边
 
     public String apply(MyAgentState state) throws Exception {
         
@@ -101,18 +101,20 @@ class RouteOrchestratorOutcome implements EdgeAction {
     }
         var orchestrationOutcome = ((MyAgentState)state).orchestratorOutcome()
             .orElseThrow(() -> new IllegalArgumentException("orchestration outcome is not provided!"));
-```
         // 根据 LLM 的输出决定路由
         if (orchestrationOutcome.toLowerCase().contains("story")) {
             return "story_teller";
         } else {
             return "greeting";
         }
+```
 
+## 定义 Story Teller Agent
+
+```java
 class StoryTellerAgent implements NodeAction<MyAgentState> {
 
     public Map<String, Object> apply(MyAgentState state) throws Exception {
-## 定义 Story Teller Agent
         log.info( "Story Teller Agent invoked");
         return Map.of();
 class StoryTellerAgent implements NodeAction {
@@ -120,12 +122,14 @@ class StoryTellerAgent implements NodeAction {
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
         log.info("Story Teller Agent invoked");
+```
+
+## 定义 Greeting Agent
 
 ```java
 class GreetingAgent implements NodeAction<MyAgentState> {
 
     public Map<String, Object> apply(MyAgentState state) throws Exception {
-## 定义 Greeting Agent
         log.info( "Greeting Agent invoked");
         return Map.of();
 class GreetingAgent implements NodeAction {
@@ -133,12 +137,14 @@ class GreetingAgent implements NodeAction {
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
         log.info("Greeting Agent invoked");
+```
+
+## 构建 Graph
 
 ```java
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
 import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
 import com.alibaba.cloud.ai.graph.StateGraph;
-## 构建 Graph
 import static com.alibaba.cloud.ai.graph.StateGraph.START;
 import static com.alibaba.cloud.ai.graph.StateGraph.END;
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
@@ -180,11 +186,14 @@ var workflow = new StateGraph(keyStrategyFactory)
     .addEdge(StateGraph.START, "orchestrator_agent")
     .addEdge("story_teller_agent", StateGraph.END)
     .addEdge("greetings_agent", StateGraph.END);
+```
+
+## 测试示例 1 - Story Teller 路由
+
 ```java
 var app = workflow.compile();
 
 for( var node : app.stream( Map.of( "input", "tell me a xmas story"))) {
-## 测试示例 1 - Story Teller 路由
     log.info( "{}", node );
 }
 for (var node : app.stream(Map.of("input", "tell me a xmas story"))) {
@@ -192,7 +201,10 @@ for (var node : app.stream(Map.of("input", "tell me a xmas story"))) {
     Story Teller Agent invoked
     NodeOutput{node=orchestrator_agent, state={input=tell me a xmas story, orchestrator_outcome=story_teller}} 
     NodeOutput{node=story_teller_agent, state={input=tell me a xmas story, orchestrator_outcome=story_teller}} 
+```
+
 **输出**:
+
 ```
 START
 NodeOutput{node=__START__, state={input=tell me a xmas story}}
@@ -201,7 +213,7 @@ NodeOutput{node=orchestrator_agent, state={input=tell me a xmas story, orchestra
 NodeOutput{node=story_teller_agent, state={input=tell me a xmas story, orchestrator_outcome=story_teller}}
 NodeOutput{node=__END__, state={input=tell me a xmas story, orchestrator_outcome=story_teller}}
 ```
-    log.info( "{}", node );
+
 ## 测试示例 2 - Greeting 路由
 ```
 
@@ -210,7 +222,10 @@ for (var node : app.stream(Map.of("input", "hi there"))) {
     Greeting Agent invoked
     NodeOutput{node=orchestrator_agent, state={input=hi there, orchestrator_outcome=greeting}} 
     NodeOutput{node=greetings_agent, state={input=hi there, orchestrator_outcome=greeting}} 
+```
+
 **输出**:
+
 ```
 START
 NodeOutput{node=__START__, state={input=hi there}}
