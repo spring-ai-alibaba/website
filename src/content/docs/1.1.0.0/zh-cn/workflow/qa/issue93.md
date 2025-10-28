@@ -1,12 +1,208 @@
 ---
-title: Issue #93 - 空指针问题修复
-description: 解决ToolExecutionRequestSerializer中的空指针问题
-keywords: [Issue, QA, NullPointer, 空指针, ToolExecutionRequestSerializer, Bug修复]
+title: Function Calling 工具使用示例
+description: 使用 Spring AI Alibaba 实现工具调用的完整示例
+keywords: [Function Calling, 工具调用, Spring AI Alibaba, Tool, LLM工具]
 ---
 
-# Use case proposed in [issue #78](https://github.com/bsorrentino/langgraph4j/issues/93) by [tansice](https://github.com/tansice)
 
-## There is a null pointer issue in ToolExecutionRequestSerializer.
+本示例展示如何在 Spring AI Alibaba Graph 中使用 Function Calling 功能。
+
+## 初始化配置
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.client.ChatClient;
+
+private static final Logger log = LoggerFactory.getLogger("ToolCalling");
+```
+
+## 定义工具函数
+
+```java
+import java.util.function.Function;
+
+public class SearchTool implements Function<SearchTool.Request, String> {
+
+    public record Request(String query) {}
+
+    @Override
+    public String apply(Request request) {
+        log.info("Searching for: {}", request.query());
+        // 实际应用中应该调用真实的搜索 API
+        return "Cold, with a low of 13 degrees";
+    }
+}
+```
+
+## 使用 ChatClient 进行 Function Calling
+
+```java
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.model.function.FunctionCallback;
+import org.springframework.ai.model.function.FunctionCallbackWrapper;
+
+// 创建工具函数
+SearchTool searchTool = new SearchTool();
+
+// 包装为 FunctionCallback
+FunctionCallback searchCallback = FunctionCallbackWrapper.builder(searchTool)
+    .withName("search")
+    .withDescription("Use to surf the web, fetch current information, check the weather, and retrieve other information.")
+    .build();
+
+// 配置 ChatClient
+ChatClient chatClient = ChatClient.builder(chatModel)
+    .defaultFunctions(searchCallback)
+    .build();
+
+// 执行查询
+String response = chatClient.prompt()
+    .user("How is the weather in New York today?")
+    .call()
+    .content();
+
+log.info("Response: {}", response);
+```
+
+## 在 Graph 节点中使用 Function Calling
+
+```java
+import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import org.springframework.ai.chat.client.ChatClient;
+import java.util.Map;
+
+class ToolCallingNode implements NodeAction {
+
+    private final ChatClient chatClient;
+
+    public ToolCallingNode(ChatClient.Builder chatClientBuilder, SearchTool tool) {
+        // 配置工具
+        FunctionCallback callback = FunctionCallbackWrapper.builder(tool)
+            .withName("search")
+            .withDescription("Search for information")
+            .build();
+
+        this.chatClient = chatClientBuilder
+            .defaultFunctions(callback)
+            .build();
+    }
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        String query = (String) state.value("query")
+            .orElseThrow(() -> new IllegalStateException("No query found"));
+
+        // LLM 会自动决定是否调用工具
+        String response = chatClient.prompt()
+            .user(query)
+            .call()
+            .content();
+
+        return Map.of("response", response);
+    }
+}
+```
+
+## 构建完整的 Graph
+
+```java
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
+import java.util.HashMap;
+
+// 配置状态
+KeyStrategyFactory keyStrategyFactory = () -> {
+    HashMap<String, KeyStrategy> strategies = new HashMap<>();
+    strategies.put("query", new ReplaceStrategy());
+    strategies.put("response", new ReplaceStrategy());
+    return strategies;
+};
+
+// 创建工具和节点
+SearchTool searchTool = new SearchTool();
+var toolNode = nodeasync(new ToolCallingNode(chatClientBuilder, searchTool));
+
+// 构建 Graph
+var workflow = new StateGraph(keyStrategyFactory)
+    .addNode("agent", toolNode)
+    .addEdge(StateGraph.START, "agent")
+    .addEdge("agent", StateGraph.END);
+
+var app = workflow.compile();
+
+// 执行
+var result = app.invoke(Map.of("query", "How is the weather in New York today?"));
+log.info("Final response: {}", result.value("response").orElse(""));
+```
+
+**输出**:
+```
+Searching for: weather in New York today
+Final response: The current weather in New York is cold, with the temperature expected to drop to a low of 13 degrees.
+```
+
+## 多工具支持
+
+```java
+// 定义多个工具
+class WeatherTool implements Function<WeatherTool.Request, String> {
+    public record Request(String location) {}
+
+    @Override
+    public String apply(Request request) {
+        return "Weather in " + request.location() + ": Sunny, 22°C";
+    }
+}
+
+class CalculatorTool implements Function<CalculatorTool.Request, String> {
+    public record Request(String expression) {}
+
+    @Override
+    public String apply(Request request) {
+        // 简化的计算器
+        return "Result: 42";
+    }
+}
+
+// 配置多个工具
+ChatClient chatClient = ChatClient.builder(chatModel)
+    .defaultFunctions(
+        FunctionCallbackWrapper.builder(new WeatherTool())
+            .withName("get_weather")
+            .withDescription("Get weather information")
+            .build(),
+        FunctionCallbackWrapper.builder(new CalculatorTool())
+            .withName("calculate")
+            .withDescription("Perform calculations")
+            .build()
+    )
+    .build();
+```
+
+## 关键要点
+
+1. **自动工具选择**: LLM 根据用户问题自动决定调用哪个工具
+2. **类型安全**: 使用 Java Record 定义工具输入参数
+3. **简洁API**: Spring AI 提供简洁的 Function Calling API
+4. **可组合**: 可以在 Graph 节点中灵活使用工具
+
+## 应用场景
+
+- 天气查询系统
+- 知识库检索
+- 计算器和数学运算
+- API 调用和数据获取
+- 多步骤任务编排
+
+## 相关文档
+
+- [Spring AI Function Calling](https://docs.spring.io/spring-ai/reference/api/functions.html) - Spring AI 官方文档
+- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
+- [节点操作](/workflow/graph/node-action) - NodeAction 详解
 
 
 **Initialize Logger**

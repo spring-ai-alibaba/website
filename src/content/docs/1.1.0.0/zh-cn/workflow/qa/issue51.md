@@ -1,10 +1,8 @@
 ---
-title: Issue #51 - 条件路由使用案例
+title: 条件路由使用案例
 description: 基于Spring AI Alibaba实现条件路由的Agent编排示例
 keywords: [条件路由, Agent编排, Spring AI Alibaba, 智能路由, Graph工作流]
 ---
-
-# 条件路由使用案例
 
 本示例展示如何使用 Spring AI Alibaba Graph 实现基于 LLM 决策的条件路由。
 
