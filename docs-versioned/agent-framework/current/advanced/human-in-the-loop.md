@@ -24,9 +24,9 @@ Hook定义了三种人工响应中断的内置方式：
 
 每个工具可用的决策类型取决于你在 `approvalOn` 中配置的策略。当多个工具调用同时暂停时，每个操作都需要单独的决策。
 
-<Tip>
+<!-- <Tip>
   当**编辑**工具参数时，请保守地进行更改。对原始参数的重大修改可能会导致模型重新评估其方法，并可能多次执行工具或采取意外操作。
-</Tip>
+</Tip> -->
 
 ## 配置中断
 
@@ -63,12 +63,14 @@ ReactAgent agent = ReactAgent.builder()
     .build();
 ```
 
+```
 <Info>
   你必须配置检查点保存器来在中断期间持久化图状态。
   在生产环境中，使用持久化的检查点保存器（如基于Redis或PostgreSQL的实现）。对于测试或原型开发，使用 `MemorySaver`。
 
   调用Agent时，传递包含**线程ID**的 `RunnableConfig` 以将执行与会话线程关联。
 </Info>
+```
 
 ## 响应中断
 
@@ -116,11 +118,13 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
 
 ### 决策类型
 
+<!-- ```
 <Tabs>
   <Tab title="✅ approve - 批准">
     使用 `approve` 批准工具调用原样执行，不做任何更改。
 
-    ```java
+```
+```java
     // 构建批准反馈
     InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
         .nodeId(interruptionMetadata.node())
@@ -256,6 +260,7 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     ```
   </Tab>
 </Tabs>
+``` -->
 
 ## 执行生命周期
 

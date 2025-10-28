@@ -354,6 +354,7 @@ graph.invoke(Map.of(
 
 ***
 
+```
 <Callout icon="pen-to-square" iconType="regular">
   [Edit the source of this page on GitHub.](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/durable-execution.mdx)
 </Callout>
@@ -361,3 +362,4 @@ graph.invoke(Map.of(
 <Tip icon="terminal" iconType="regular">
   [Connect these docs programmatically](/use-these-docs) to Claude, VSCode, and more via MCP for    real-time answers.
 </Tip>
+```

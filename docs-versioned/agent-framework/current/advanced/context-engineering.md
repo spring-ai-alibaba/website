@@ -69,6 +69,7 @@ keywords: [上下文工程, Context Engineering, Agent可靠性, 模型上下文
 
 控制每次模型调用中包含的内容——指令、可用工具、使用哪个模型以及输出格式。这些决策直接影响可靠性和成本。
 
+```
 <CardGroup cols={2}>
   <Card title="系统提示" icon="message-lines">
     开发者对LLM的基础指令。
@@ -90,6 +91,7 @@ keywords: [上下文工程, Context Engineering, Agent可靠性, 模型上下文
     模型最终响应的架构规范。
   </Card>
 </CardGroup>
+```
 
 所有这些类型的模型上下文都可以从**状态**（短期记忆）、**存储**（长期记忆）或**运行时上下文**（静态配置）中获取。
 

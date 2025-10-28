@@ -383,7 +383,8 @@ graph.invoke(Map.of(
 ```
 
 通过这种方式，您的应用程序可以同时利用短期内存（对话历史）和长期内存（用户偏好），提供更个性化和上下文感知的体验。
-
+<!-- 
+```
 <Accordion title="Example: using Postgres checkpointer">
   ```
   pip install -U "psycopg[binary,pool]" langgraph langgraph-checkpoint-postgres
@@ -682,6 +683,7 @@ graph.invoke(Map.of(
     </Tab>
   </Tabs>
 </Accordion>
+```
 
 ### Use in subgraphs
 
@@ -749,6 +751,7 @@ with PostgresStore.from_conn_string(DB_URI) as store:  # [!code highlight]
     graph = builder.compile(store=store)  # [!code highlight]
 ```
 
+```
 <Accordion title="Example: using Postgres store">
   ```
   pip install -U "psycopg[binary,pool]" langgraph langgraph-checkpoint-postgres
@@ -1096,6 +1099,7 @@ with PostgresStore.from_conn_string(DB_URI) as store:  # [!code highlight]
     </Tab>
   </Tabs>
 </Accordion>
+```
 
 ### Use semantic search
 
@@ -1122,6 +1126,7 @@ items = store.search(
 )
 ```
 
+```
 <Accordion title="Long-term memory with semantic search">
   ```python  theme={null}
 
@@ -1173,6 +1178,7 @@ items = store.search(
       print(message.content, end="")
   ```
 </Accordion>
+```
 
 ## Manage short-term memory
 
@@ -1215,6 +1221,7 @@ builder.add_node(call_model)
 ...
 ```
 
+```
 <Accordion title="Full example: trim messages">
   ```python  theme={null}
   from langchain_core.messages.utils import (
@@ -1260,6 +1267,7 @@ builder.add_node(call_model)
   Your name is Bob, as you mentioned when you first introduced yourself.
   ```
 </Accordion>
+```
 
 ### Delete messages
 
@@ -1288,6 +1296,7 @@ def delete_messages(state):
     return {"messages": [RemoveMessage(id=REMOVE_ALL_MESSAGES)]}  # [!code highlight]
 ```
 
+```
 <Warning>
   When deleting messages, **make sure** that the resulting message history is valid. Check the limitations of the LLM provider you're using. For example:
 
@@ -1339,12 +1348,15 @@ def delete_messages(state):
   [('human', "what's my name?"), ('ai', 'Your name is Bob.')]
   ```
 </Accordion>
+```
 
 ### Summarize messages
 
 The problem with trimming or removing messages, as shown above, is that you may lose information from culling of the message queue. Because of this, some applications benefit from a more sophisticated approach of summarizing the message history using a chat model.
 
+```
 <img src="https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=c8ed3facdccd4ef5c7e52902c72ba938" alt="" data-og-width="609" width="609" data-og-height="242" height="242" data-path="oss/images/summary.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?w=280&fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=4208b9b0cc9f459f3dc4e5219918471b 280w, https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?w=560&fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=7acb77c081545f57042368f4e9d0c8cb 560w, https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?w=840&fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=2fcfdb0c481d2e1d361e76db763a41e5 840w, https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?w=1100&fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=4abdac693a562788aa0db8681bef8ea7 1100w, https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?w=1650&fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=40acfefa91dcb11b247a6e4a7705f22b 1650w, https://mintcdn.com/langchain-5e9cc07a/ybiAaBfoBvFquMDz/oss/images/summary.png?w=2500&fit=max&auto=format&n=ybiAaBfoBvFquMDz&q=85&s=8d765aaf7551e8b0fc2720de7d2ac2a8 2500w" />
+```
 
 Prompting and orchestration logic can be used to summarize the message history. For example, in LangGraph you can extend the [`MessagesState`](/oss/python/langgraph/graph-api#working-with-messages-in-graph-state) to include a `summary` key:
 
@@ -1383,6 +1395,7 @@ def summarize_conversation(state: State):
     return {"summary": response.content, "messages": delete_messages}
 ```
 
+<!-- ```
 <Accordion title="Full example: summarize messages">
   ```python  theme={null}
   from typing import Any, TypedDict
@@ -1453,6 +1466,7 @@ def summarize_conversation(state: State):
   Summary: In this conversation, I was introduced to Bob, who then asked me to write a poem about cats. I composed a poem titled "The Mystery of Cats" that captured cats' graceful movements, independent nature, and their special relationship with humans. Bob then requested a similar poem about dogs, so I wrote "The Joy of Dogs," which highlighted dogs' loyalty, enthusiasm, and loving companionship. Both poems were written in a similar style but emphasized the distinct characteristics that make each pet special.
   ```
 </Accordion>
+``` -->
 
 ### Manage checkpoints
 
@@ -1462,6 +1476,7 @@ You can view and delete the information stored by the checkpointer.
 
 #### View thread state
 
+<!-- ```
 <Tabs>
   <Tab title="Graph/Functional API">
     ```python  theme={null}
@@ -1715,6 +1730,7 @@ You can view and delete the information stored by the checkpointer.
     ```
   </Tab>
 </Tabs>
+``` -->
 
 #### Delete all checkpoints for a thread
 
@@ -1729,6 +1745,7 @@ checkpointer.delete_thread(thread_id)
 
 ***
 
+<!-- ```
 <Callout icon="pen-to-square" iconType="regular">
   [Edit the source of this page on GitHub.](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/add-memory.mdx)
 </Callout>
@@ -1736,3 +1753,4 @@ checkpointer.delete_thread(thread_id)
 <Tip icon="terminal" iconType="regular">
   [Connect these docs programmatically](/use-these-docs) to Claude, VSCode, and more via MCP for    real-time answers.
 </Tip>
+``` --> -->

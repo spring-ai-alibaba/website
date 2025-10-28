@@ -645,9 +645,9 @@ public void pt_code_prompting_explaining_code(ChatClient chatClient) {
             .prompt()
             .user(u -> u.text("""
                     Explain to me the below Bash code:
-                    ```
+                    ` ` `
                     {code}
-                    ```
+                    ` ` `
                     """).param("code", code))
             .call()
             .content();
