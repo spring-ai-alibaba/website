@@ -110,6 +110,6 @@ export default defineConfig({
 		'/zh-cn/': '/',
 		'/en-us/': '/en/',
 		'/[...slug].html': '/[...slug]',
-		'/docs/': '/docs/dev/overview/',
+		'/docs/': '/docs/1.1.0.0/overview/',
 	}
 });

@@ -1,0 +1,57 @@
+[
+	{
+        "label": "概览",
+        "translations": {
+            "en": "Introduction"
+        },
+        "link": "docs/1.1.0.0/overview/"
+    },
+	{
+        "label": "快速开始",
+        "translations": {
+            "en": "Introduction"
+        },
+        "link": "docs/1.1.0.0/quickstart/quickstart/"
+    },
+	{
+		"label": "使用教程",
+		"translations": {
+			"en": "Tutorials"
+		},
+		"collapsed": false,
+		"autogenerate": {
+			"directory": "tutorials"
+		},
+		"items": []
+	},
+    {
+        "label": "高级用法",
+        "translations": {
+            "en": "Advanced"
+        },
+        "autogenerate": {
+			"directory": "advanced"
+		},
+		"collapsed": false
+	},
+    {
+        "label": "工作流",
+        "translations": {
+            "en": "Workflow"
+        },
+        "autogenerate": {
+			"directory": "workflow"
+		},
+		"collapsed": true
+	},
+    {
+        "label": "生态集成",
+        "translations": {
+            "en": "Ecosystem"
+        },
+        "autogenerate": {
+			"directory": "ecosystem"
+		},
+		"collapsed": true
+	}
+]

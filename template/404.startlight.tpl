@@ -94,7 +94,7 @@ const route = generateRouteData({
 		// 		track404({ type:'docs'})
 		// 	}
 		// window.location.pathname = '/docs/2023/overview/what-is-sca/'
-		window.location.pathname = "/docs/dev/overview/";
+		window.location.pathname = "/docs/1.1.0.0/overview/";
 	} else {
 		window.location.pathname = '/'
 		track404({type:'others'});

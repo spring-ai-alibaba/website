@@ -50,12 +50,18 @@ let _dataSource = cloneDeep(dataSource);
   const result = match?.[1] || "";
   // 文档的当前版本
   const version = versions.includes(result) ? result : "latest";
-  const docsLabel = matchVersion[version]["zh"];
+  if (matchVersion[version]) {
+    const docsLabel = matchVersion[version]["zh"];
 
-  _dataSource[0].label = docsLabel;
-  _dataSource[0].translations = {
-    en: matchVersion[version]["en"],
-  };
+    _dataSource[0].label = docsLabel;
+    if (_dataSource[0].translations) {
+      _dataSource[0].translations.en = matchVersion[version]["en"];
+    } else {
+      _dataSource[0].translations = {
+        en: matchVersion[version]["en"],
+      };
+    }
+  }
 })();
 
 const ifactive = (toggle) => {

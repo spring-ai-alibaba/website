@@ -30,45 +30,15 @@ export const DOCS_BANNER = {
 // TODO: 文档Header数据
 export const DOCS_ITEM = [
   {
-    key: "1.0.0.2",
-    label: "1.0.0.2",
+    key: "1.1.0.0",
+    label: "1.1.0.0",
     target: "_self",
-    link: "/docs/1.0.0.2/overview/",
+    link: "/docs/1.1.0.0/overview/",
     translations: {
-      en: "1.0.0.2",
-      link: "/en/docs/1.0.0.2/overview/",
+      en: "1.1.0.0",
+      link: "/en/docs/1.1.0.0/overview/",
     }
-  },
-  {
-    key: "1.0.0-M6.1",
-    label: "1.0.0-M6.1",
-    target: "_self",
-    link: "/docs/1.0.0-M6.1/overview/",
-    translations: {
-      en: "1.0.0-M6.1",
-      link: "/en/docs/1.0.0-M6.1/overview/",
-    }
-  },
-  {
-    key: "1.0.0-M5.1",
-    label: "1.0.0-M5.1",
-    target: "_self",
-    link: "/docs/1.0.0-M5.1/overview/",
-    translations: {
-      en: "1.0.0-M5.1",
-      link: "/en/docs/1.0.0-M5.1/overview/",
-    }
-  },
-  {
-    key: "1.0.0-M3.2",
-    label: "1.0.0-M3.2",
-    target: "_self",
-    link: "/docs/1.0.0-M3.2/overview/",
-    translations: {
-      en: "1.0.0-M3.2",
-      link: "/en/docs/1.0.0-M3.2/overview/",
-    }
-  },
+  }
 ];
 
 // 主要特性
