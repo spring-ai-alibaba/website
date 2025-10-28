@@ -1,687 +1,892 @@
 ---
-title: Graph 工作流
-description: Spring AI Alibaba Graph工作流编排核心概念和使用指南
-keywords: [Graph, 工作流, Workflow, StateGraph, 智能体编排, 多Agent系统]
+title: Graph 工作流编排指南
+description: 学习如何使用 Spring AI Alibaba Graph 构建智能工作流，通过分解客服邮件处理流程理解核心概念
+keywords: [Graph, 工作流, Workflow, StateGraph, 智能体编排, 多Agent系统, Spring AI Alibaba]
 ---
 
-> Learn how to think about building agents with LangGraph by breaking down a customer support email agent into discrete steps
+# Graph 工作流编排指南
 
-LangGraph can change how you think about the agents you build. When you build an agent with LangGraph, you will first break it apart into discrete steps called **nodes**. Then, you will describe the different decisions and transitions for each of your nodes. Finally, you will connect your nodes together through a shared **state** that each node can read from and write to. In this tutorial, we'll guide you through the thought process of building a customer support email agent with LangGraph.
+学习如何通过将客服邮件处理流程分解为离散步骤来使用 Spring AI Alibaba Graph 构建智能工作流。
 
-## Start with the process you want to automate
+Spring AI Alibaba Graph 可以改变您构建智能代理的思维方式。使用 Graph 构建代理时，您将首先把它分解为称为**节点（nodes）**的离散步骤。然后，描述每个节点的不同决策和转换。最后，通过一个共享的**状态（state）**将节点连接起来，每个节点都可以读取和写入该状态。在本教程中，我们将指导您完成使用 Spring AI Alibaba Graph 构建客服邮件处理代理的思维过程。
 
-Imagine that you need to build an AI agent that handles customer support emails. Your product team has given you these requirements:
+## 从需要自动化的流程开始
 
-The agent should:
+假设您需要构建一个处理客服邮件的 AI 代理。产品团队给出了以下需求：
 
-* Read incoming customer emails
-* Classify them by urgency and topic
-* Search relevant documentation to answer questions
-* Draft appropriate responses
-* Escalate complex issues to human agents
-* Schedule follow-ups when needed
+代理应该：
 
-Example scenarios to handle:
+* 读取客户邮件
+* 按紧急程度和主题分类
+* 搜索相关文档以回答问题
+* 起草适当的回复
+* 将复杂问题上报给人工客服
+* 在需要时安排后续跟进
 
-1. Simple product question: "How do I reset my password?"
-2. Bug report: "The export feature crashes when I select PDF format"
-3. Urgent billing issue: "I was charged twice for my subscription!"
-4. Feature request: "Can you add dark mode to the mobile app?"
-5. Complex technical issue: "Our API integration fails intermittently with 504 errors"
+需要处理的示例场景：
 
-To implement an agent in LangGraph, you will usually follow the same five steps.
+1. 简单产品问题："如何重置我的密码？"
+2. Bug 报告："导出功能在选择 PDF 格式时崩溃"
+3. 紧急账单问题："我的订阅被重复扣费了！"
+4. 功能请求："能在移动应用中添加暗黑模式吗？"
+5. 复杂技术问题："我们的 API 集成间歇性失败，返回 504 错误"
 
-## Step 1: Map out your workflow as discrete steps
+要在 Spring AI Alibaba Graph 中实现代理，通常遵循以下五个步骤。
 
-Start by identifying the distinct steps in your process. Each step will become a **node** (a function that does one specific thing). Then sketch how these steps connect to each other.
+## 步骤 1：将工作流映射为离散步骤
 
-```mermaid  theme={null}
+首先识别流程中的不同步骤。每个步骤将成为一个**节点**（执行特定任务的函数）。然后勾画这些步骤如何相互连接。
+
+```mermaid
 flowchart TD
-    A[START] --> B[Read Email]
-    B --> C[Classify Intent]
+    A[START] --> B[读取邮件]
+    B --> C[分类意图]
 
-    C -.-> D[Doc Search]
-    C -.-> E[Bug Track]
-    C -.-> F[Human Review]
+    C -.-> D[文档搜索]
+    C -.-> E[Bug跟踪]
+    C -.-> F[人工审核]
 
-    D --> G[Draft Reply]
+    D --> G[起草回复]
     E --> G
     F --> G
 
-    G -.-> H[Human Review]
-    G -.-> I[Send Reply]
+    G -.-> H[人工审核]
+    G -.-> I[发送回复]
 
     H --> J[END]
     I --> J[END]
 ```
 
-The arrows show possible paths, but the actual decision of which path to take happens inside each node.
+箭头显示可能的路径，但具体选择哪条路径的决策发生在每个节点内部。
 
-Now that you've identified the components in your workflow, let's understand what each node needs to do:
+现在您已经识别了工作流中的组件，让我们了解每个节点需要做什么：
 
-* Read Email: Extract and parse the email content
-* Classify Intent: Use an LLM to categorize urgency and topic, then route to appropriate action
-* Doc Search: Query your knowledge base for relevant information
-* Bug Track: Create or update issue in tracking system
-* Draft Reply: Generate an appropriate response
-* Human Review: Escalate to human agent for approval or handling
-* Send Reply: Dispatch the email response
+* **读取邮件**：提取和解析邮件内容
+* **分类意图**：使用 LLM 对紧急程度和主题进行分类，然后路由到适当的操作
+* **文档搜索**：查询知识库以获取相关信息
+* **Bug跟踪**：在跟踪系统中创建或更新问题
+* **起草回复**：生成适当的响应
+* **人工审核**：上报给人工客服进行审批或处理
+* **发送回复**：发送邮件响应
 
-<Tip>
-  Notice that some nodes make decisions about where to go next (Classify Intent, Draft Reply, Human Review), while others always proceed to the same next step (Read Email always goes to Classify Intent, Doc Search always goes to Draft Reply).
-</Tip>
+**提示**：注意有些节点会决定接下来去哪里（分类意图、起草回复、人工审核），而其他节点总是进入相同的下一步（读取邮件总是进入分类意图，文档搜索总是进入起草回复）。
 
-## Step 2: Identify what each step needs to do
+## 步骤 2：确定每个步骤需要做什么
 
-For each node in your graph, determine what type of operation it represents and what context it needs to work properly.
+对于图中的每个节点，确定它代表什么类型的操作以及它需要什么上下文才能正常工作。
 
-<CardGroup cols={2}>
-  <Card title="LLM Steps" icon="brain" href="#llm-steps">
-    Use when you need to understand, analyze, generate text, or make reasoning decisions
-  </Card>
+### LLM 步骤
 
-  <Card title="Data Steps" icon="database" href="#data-steps">
-    Use when you need to retrieve information from external sources
-  </Card>
+当步骤需要理解、分析、生成文本或做出推理决策时：
 
-  <Card title="Action Steps" icon="bolt" href="#action-steps">
-    Use when you need to perform external actions
-  </Card>
+#### 分类意图节点
+* **静态上下文**（提示）：分类类别、紧急程度定义、响应格式
+* **动态上下文**（来自状态）：邮件内容、发件人信息
+* **期望结果**：确定路由的结构化分类
 
-  <Card title="User Input Steps" icon="user" href="#user-input-steps">
-    Use when you need human intervention
-  </Card>
-</CardGroup>
+#### 起草回复节点
+* **静态上下文**（提示）：语气指南、公司政策、响应模板
+* **动态上下文**（来自状态）：分类结果、搜索结果、客户历史
+* **期望结果**：准备好审核的专业邮件响应
 
-### LLM Steps
+### 数据步骤
 
-When a step needs to understand, analyze, generate text, or make reasoning decisions:
+当步骤需要从外部源检索信息时：
 
-<AccordionGroup>
-  <Accordion title="Classify Intent Node">
-    * Static context (prompt): Classification categories, urgency definitions, response format
-    * Dynamic context (from state): Email content, sender information
-    * Desired outcome: Structured classification that determines routing
-  </Accordion>
+#### 文档搜索节点
+* **参数**：从意图和主题构建的查询
+* **重试策略**：是，对瞬时故障使用指数退避
+* **缓存**：可以缓存常见查询以减少 API 调用
 
-  <Accordion title="Draft Reply Node">
-    * Static context (prompt): Tone guidelines, company policies, response templates
-    * Dynamic context (from state): Classification results, search results, customer history
-    * Desired outcome: Professional email response ready for review
-  </Accordion>
-</AccordionGroup>
+#### 客户历史查询
+* **参数**：来自状态的客户邮箱或 ID
+* **重试策略**：是，但如果不可用则回退到基本信息
+* **缓存**：是，使用生存时间来平衡新鲜度和性能
 
-### Data Steps
+### 操作步骤
 
-When a step needs to retrieve information from external sources:
+当步骤需要执行外部操作时：
 
-<AccordionGroup>
-  <Accordion title="Document Search Node">
-    * Parameters: Query built from intent and topic
-    * Retry strategy: Yes, with exponential backoff for transient failures
-    * Caching: Could cache common queries to reduce API calls
-  </Accordion>
+#### 发送回复节点
+* **何时执行**：批准后（人工或自动）
+* **重试策略**：是，对网络问题使用指数退避
+* **不应缓存**：每次发送都是唯一操作
 
-  <Accordion title="Customer History Lookup">
-    * Parameters: Customer email or ID from state
-    * Retry strategy: Yes, but with fallback to basic info if unavailable
-    * Caching: Yes, with time-to-live to balance freshness and performance
-  </Accordion>
-</AccordionGroup>
+#### Bug跟踪节点
+* **何时执行**：当意图是"bug"时总是执行
+* **重试策略**：是，不丢失 bug 报告至关重要
+* **返回**：要包含在响应中的票据 ID
 
-### Action Steps
+### 用户输入步骤
 
-When a step needs to perform an external action:
+当步骤需要人工干预时：
 
-<AccordionGroup>
-  <Accordion title="Send Reply Node">
-    * When to execute: After approval (human or automated)
-    * Retry strategy: Yes, with exponential backoff for network issues
-    * Should not cache: Each send is a unique action
-  </Accordion>
+#### 人工审核节点
+* **决策上下文**：原始邮件、草稿响应、紧急程度、分类
+* **预期输入格式**：批准布尔值加上可选的编辑响应
+* **何时触发**：高紧急程度、复杂问题或质量问题
 
-  <Accordion title="Bug Track Node">
-    * When to execute: Always when intent is "bug"
-    * Retry strategy: Yes, critical to not lose bug reports
-    * Returns: Ticket ID to include in response
-  </Accordion>
-</AccordionGroup>
+## 步骤 3：设计您的状态
 
-### User Input Steps
+状态是图中所有节点可访问的共享记忆。可以把它想象成代理用来跟踪在工作过程中学到和决定的一切的笔记本。
 
-When a step needs human intervention:
+### 什么应该放在状态中？
 
-<AccordionGroup>
-  <Accordion title="Human Review Node">
-    * Context for decision: Original email, draft response, urgency, classification
-    * Expected input format: Approval boolean plus optional edited response
-    * When triggered: High urgency, complex issues, or quality concerns
-  </Accordion>
-</AccordionGroup>
+对每条数据问自己这些问题：
 
-## Step 3: Design your state
+#### 包含在状态中
+**是否需要跨步骤持久化？** 如果是，它就应该放在状态中。
 
-State is the shared [memory](/oss/python/concepts/memory) accessible to all nodes in your agent. Think of it as the notebook your agent uses to keep track of everything it learns and decides as it works through the process.
+#### 不要存储
+**能从其他数据派生吗？** 如果是，在需要时计算它，而不是存储在状态中。
 
-### What belongs in state?
+对于我们的邮件代理，我们需要跟踪：
 
-Ask yourself these questions about each piece of data:
+* 原始邮件和发件人信息（无法重建这些）
+* 分类结果（多个下游节点需要）
+* 搜索结果和客户数据（重新获取成本高）
+* 草稿响应（需要在审核过程中持久化）
+* 执行元数据（用于调试和恢复）
 
-<CardGroup cols={2}>
-  <Card title="Include in State" icon="check">
-    Does it need to persist across steps? If yes, it goes in state.
-  </Card>
+### 保持状态原始，按需格式化提示
 
-  <Card title="Don't Store" icon="code">
-    Can you derive it from other data? If yes, compute it when needed instead of storing it in state.
-  </Card>
-</CardGroup>
+**重要原则**：您的状态应该存储原始数据，而不是格式化的文本。在需要时在节点内格式化提示。
 
-For our email agent, we need to track:
+这种分离意味着：
 
-* The original email and sender info (can't reconstruct these)
-* Classification results (needed by multiple downstream nodes)
-* Search results and customer data (expensive to re-fetch)
-* The draft response (needs to persist through review)
-* Execution metadata (for debugging and recovery)
+* 不同节点可以根据需要以不同方式格式化相同数据
+* 您可以更改提示模板而无需修改状态模式
+* 调试更清晰 - 您可以确切看到每个节点收到了什么数据
+* 您的代理可以演进而不会破坏现有状态
 
-### Keep state raw, format prompts on-demand
+让我们定义状态：
 
-<Tip>
-  A key principle: your state should store raw data, not formatted text. Format prompts inside nodes when you need them.
-</Tip>
+```java
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+import com.alibaba.cloud.ai.graph.state.strategy.AppendStrategy;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
-This separation means:
+// 邮件分类结构
+public class EmailClassification {
+    private String intent;      // "question", "bug", "billing", "feature", "complex"
+    private String urgency;     // "low", "medium", "high", "critical"
+    private String topic;
+    private String summary;
 
-* Different nodes can format the same data differently for their needs
-* You can change prompt templates without modifying your state schema
-* Debugging is clearer - you see exactly what data each node received
-* Your agent can evolve without breaking existing state
+    // Getters and setters
+    public String getIntent() { return intent; }
+    public void setIntent(String intent) { this.intent = intent; }
 
-Let's define our state:
+    public String getUrgency() { return urgency; }
+    public void setUrgency(String urgency) { this.urgency = urgency; }
 
-```python  theme={null}
-from typing import TypedDict, Literal
+    public String getTopic() { return topic; }
+    public void setTopic(String topic) { this.topic = topic; }
 
-# Define the structure for email classification
-class EmailClassification(TypedDict):
-    intent: Literal["question", "bug", "billing", "feature", "complex"]
-    urgency: Literal["low", "medium", "high", "critical"]
-    topic: str
-    summary: str
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+}
 
-class EmailAgentState(TypedDict):
-    # Raw email data
-    email_content: str
-    sender_email: str
-    email_id: str
+// 邮件代理状态
+public class EmailAgentState extends OverAllState {
 
-    # Classification result
-    classification: EmailClassification | None
+    public EmailAgentState(Map<String, Object> initData) {
+        super(initData);
+    }
 
-    # Raw search/API results
-    search_results: list[str] | None  # List of raw document chunks
-    customer_history: dict | None  # Raw customer data from CRM
+    // 原始邮件数据
+    public Optional<String> emailContent() {
+        return value("email_content");
+    }
 
-    # Generated content
-    draft_response: str | None
-    messages: list[str] | None
+    public Optional<String> senderEmail() {
+        return value("sender_email");
+    }
+
+    public Optional<String> emailId() {
+        return value("email_id");
+    }
+
+    // 分类结果
+    public Optional<EmailClassification> classification() {
+        return value("classification");
+    }
+
+    // 原始搜索/API结果
+    public Optional<List<String>> searchResults() {
+        return value("search_results");
+    }
+
+    public Optional<Map<String, Object>> customerHistory() {
+        return value("customer_history");
+    }
+
+    // 生成的内容
+    public Optional<String> draftResponse() {
+        return value("draft_response");
+    }
+
+    public Optional<List<String>> messages() {
+        return value("messages");
+    }
+}
+
+// 配置状态键策略
+KeyStrategyFactory keyStrategyFactory = () -> {
+    HashMap<String, KeyStrategy> strategies = new HashMap<>();
+    strategies.put("email_content", new ReplaceStrategy());
+    strategies.put("sender_email", new ReplaceStrategy());
+    strategies.put("email_id", new ReplaceStrategy());
+    strategies.put("classification", new ReplaceStrategy());
+    strategies.put("search_results", new ReplaceStrategy());
+    strategies.put("customer_history", new ReplaceStrategy());
+    strategies.put("draft_response", new ReplaceStrategy());
+    strategies.put("messages", new AppendStrategy());
+    return strategies;
+};
 ```
 
-Notice that the state contains only raw data - no prompt templates, no formatted strings, no instructions. The classification output is stored as a single dictionary, straight from the LLM.
+注意状态只包含原始数据 - 没有提示模板、没有格式化字符串、没有指令。分类输出直接从 LLM 存储为单个对象。
 
-## Step 4: Build your nodes
+## 步骤 4：构建您的节点
 
-Now we implement each step as a function. A node in LangGraph is just a Python function that takes the current state and returns updates to it.
+现在我们将每个步骤实现为一个函数。Spring AI Alibaba Graph 中的节点就是一个接受当前状态并返回更新的 Java 函数。
 
-### Handle errors appropriately
+### 适当处理错误
 
-Different errors need different handling strategies:
+不同的错误需要不同的处理策略：
 
-| Error Type                                                      | Who Fixes It       | Strategy                           | When to Use                                      |
-| --------------------------------------------------------------- | ------------------ | ---------------------------------- | ------------------------------------------------ |
-| Transient errors (network issues, rate limits)                  | System (automatic) | Retry policy                       | Temporary failures that usually resolve on retry |
-| LLM-recoverable errors (tool failures, parsing issues)          | LLM                | Store error in state and loop back | LLM can see the error and adjust its approach    |
-| User-fixable errors (missing information, unclear instructions) | Human              | Pause with `interrupt()`           | Need user input to proceed                       |
-| Unexpected errors                                               | Developer          | Let them bubble up                 | Unknown issues that need debugging               |
+| 错误类型 | 谁来修复 | 策略 | 何时使用 |
+|---------|---------|------|---------|
+| 瞬时错误（网络问题、速率限制） | 系统（自动） | 重试策略 | 通常会在重试时解决的临时故障 |
+| LLM可恢复错误（工具失败、解析问题） | LLM | 将错误存储在状态中并循环回去 | LLM可以看到错误并调整其方法 |
+| 用户可修复错误（缺少信息、不清楚的指令） | 人工 | 使用 `interrupt()` 暂停 | 需要用户输入才能继续 |
+| 意外错误 | 开发者 | 让它们冒泡 | 需要调试的未知问题 |
 
-<Tabs>
-  <Tab title="Transient errors" icon="rotate">
-    Add a retry policy to automatically retry network issues and rate limits:
+#### 瞬时错误
+添加重试策略以自动重试网络问题和速率限制：
 
-    ```python  theme={null}
-    from langgraph.types import RetryPolicy
+```java
+import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.RetryPolicy;
 
-    workflow.add_node(
-        "search_documentation",
-        search_documentation,
-        retry_policy=RetryPolicy(max_attempts=3, initial_interval=1.0)
-    )
-    ```
-  </Tab>
+// 为可能有瞬时故障的节点添加重试策略
+var compileConfig = CompileConfig.builder()
+    .retryPolicy("search_documentation",
+        RetryPolicy.builder()
+            .maxAttempts(3)
+            .initialInterval(1000L)
+            .build())
+    .build();
+```
 
-  <Tab title="LLM-recoverable" icon="brain">
-    Store the error in state and loop back so the LLM can see what went wrong and try again:
+#### LLM可恢复错误
+将错误存储在状态中并循环回去，以便 LLM 可以看到出错的地方并重试：
 
-    ```python  theme={null}
-    from langgraph.types import Command
+```java
+import com.alibaba.cloud.ai.graph.action.NodeAction;
 
+public class ExecuteToolNode implements NodeAction {
 
-    def execute_tool(state: State) -> Command[Literal["agent", "execute_tool"]]:
-        try:
-            result = run_tool(state['tool_call'])
-            return Command(update={"tool_result": result}, goto="agent")
-        except ToolError as e:
-            # Let the LLM see what went wrong and try again
-            return Command(
-                update={"tool_result": f"Tool error: {str(e)}"},
-                goto="agent"
-            )
-    ```
-  </Tab>
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        try {
+            String result = runTool(state.value("tool_call").orElse(""));
+            return Map.of(
+                "tool_result", result,
+                "next_node", "agent"
+            );
+        } catch (ToolException e) {
+            // 让 LLM 看到出错的地方并重试
+            return Map.of(
+                "tool_result", "Tool error: " + e.getMessage(),
+                "next_node", "agent"
+            );
+        }
+    }
+}
+```
 
-  <Tab title="User-fixable" icon="user">
-    Pause and collect information from the user when needed (like account IDs, order numbers, or clarifications):
+#### 用户可修复错误
+在需要时暂停并从用户那里收集信息（如账户 ID、订单号或澄清）：
 
-    ```python  theme={null}
-    from langgraph.types import Command
+```java
+import com.alibaba.cloud.ai.graph.checkpoint.Checkpoint;
 
+public class LookupCustomerHistory implements NodeAction {
 
-    def lookup_customer_history(state: State) -> Command[Literal["draft_response"]]:
-        if not state.get('customer_id'):
-            user_input = interrupt({
-                "message": "Customer ID needed",
-                "request": "Please provide the customer's account ID to look up their subscription history"
-            })
-            return Command(
-                update={"customer_id": user_input['customer_id']},
-                goto="lookup_customer_history"
-            )
-        # Now proceed with the lookup
-        customer_data = fetch_customer_history(state['customer_id'])
-        return Command(update={"customer_history": customer_data}, goto="draft_response")
-    ```
-  </Tab>
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        String customerId = (String) state.value("customer_id").orElse(null);
 
-  <Tab title="Unexpected" icon="triangle-exclamation">
-    Let them bubble up for debugging. Don't catch what you can't handle:
-
-    ```python  theme={null}
-    def send_reply(state: EmailAgentState):
-        try:
-            email_service.send(state["draft_response"])
-        except Exception:
-            raise  # Surface unexpected errors
-    ```
-  </Tab>
-</Tabs>
-
-### Implementing our email agent nodes
-
-We'll implement each node as a simple function. Remember: nodes take state, do work, and return updates.
-
-<AccordionGroup>
-  <Accordion title="Read and classify nodes" icon="brain">
-    ```python  theme={null}
-    from typing import Literal
-    from langgraph.graph import StateGraph, START, END
-    from langgraph.types import interrupt, Command, RetryPolicy
-    from langchain_openai import ChatOpenAI
-    from langchain_core.messages import HumanMessage
-
-    llm = ChatOpenAI(model="gpt-4")
-
-    def read_email(state: EmailAgentState) -> dict:
-        """Extract and parse email content"""
-        # In production, this would connect to your email service
-        return {
-            "messages": [HumanMessage(content=f"Processing email: {state['email_content']}")]
+        if (customerId == null) {
+            // 暂停执行，等待用户输入
+            // 注意：在 Spring AI Alibaba 中，使用 interruptBefore 配置
+            return Map.of(
+                "status", "需要客户ID",
+                "message", "请提供客户的账户ID以查找其订阅历史"
+            );
         }
 
-    def classify_intent(state: EmailAgentState) -> Command[Literal["search_documentation", "human_review", "draft_response", "bug_tracking"]]:
-        """Use LLM to classify email intent and urgency, then route accordingly"""
-
-        # Create structured LLM that returns EmailClassification dict
-        structured_llm = llm.with_structured_output(EmailClassification)
-
-        # Format the prompt on-demand, not stored in state
-        classification_prompt = f"""
-        Analyze this customer email and classify it:
-
-        Email: {state['email_content']}
-        From: {state['sender_email']}
-
-        Provide classification including intent, urgency, topic, and summary.
-        """
-
-        # Get structured response directly as dict
-        classification = structured_llm.invoke(classification_prompt)
-
-        # Determine next node based on classification
-        if classification['intent'] == 'billing' or classification['urgency'] == 'critical':
-            goto = "human_review"
-        elif classification['intent'] in ['question', 'feature']:
-            goto = "search_documentation"
-        elif classification['intent'] == 'bug':
-            goto = "bug_tracking"
-        else:
-            goto = "draft_response"
-
-        # Store classification as a single dict in state
-        return Command(
-            update={"classification": classification},
-            goto=goto
-        )
-    ```
-  </Accordion>
-
-  <Accordion title="Search and tracking nodes" icon="database">
-    ```python  theme={null}
-    def search_documentation(state: EmailAgentState) -> Command[Literal["draft_response"]]:
-        """Search knowledge base for relevant information"""
-
-        # Build search query from classification
-        classification = state.get('classification', {})
-        query = f"{classification.get('intent', '')} {classification.get('topic', '')}"
-
-        try:
-            # Implement your search logic here
-            # Store raw search results, not formatted text
-            search_results = [
-                "Reset password via Settings > Security > Change Password",
-                "Password must be at least 12 characters",
-                "Include uppercase, lowercase, numbers, and symbols"
-            ]
-        except SearchAPIError as e:
-            # For recoverable search errors, store error and continue
-            search_results = [f"Search temporarily unavailable: {str(e)}"]
-
-        return Command(
-            update={"search_results": search_results},  # Store raw results or error
-            goto="draft_response"
-        )
-
-    def bug_tracking(state: EmailAgentState) -> Command[Literal["draft_response"]]:
-        """Create or update bug tracking ticket"""
-
-        # Create ticket in your bug tracking system
-        ticket_id = "BUG-12345"  # Would be created via API
-
-        return Command(
-            update={
-                "search_results": [f"Bug ticket {ticket_id} created"],
-                "current_step": "bug_tracked"
-            },
-            goto="draft_response"
-        )
-    ```
-  </Accordion>
-
-  <Accordion title="Response nodes" icon="pen-to-square">
-    ```python  theme={null}
-    def draft_response(state: EmailAgentState) -> Command[Literal["human_review", "send_reply"]]:
-        """Generate response using context and route based on quality"""
-
-        classification = state.get('classification', {})
-
-        # Format context from raw state data on-demand
-        context_sections = []
-
-        if state.get('search_results'):
-            # Format search results for the prompt
-            formatted_docs = "\n".join([f"- {doc}" for doc in state['search_results']])
-            context_sections.append(f"Relevant documentation:\n{formatted_docs}")
-
-        if state.get('customer_history'):
-            # Format customer data for the prompt
-            context_sections.append(f"Customer tier: {state['customer_history'].get('tier', 'standard')}")
-
-        # Build the prompt with formatted context
-        draft_prompt = f"""
-        Draft a response to this customer email:
-        {state['email_content']}
-
-        Email intent: {classification.get('intent', 'unknown')}
-        Urgency level: {classification.get('urgency', 'medium')}
-
-        {chr(10).join(context_sections)}
-
-        Guidelines:
-        - Be professional and helpful
-        - Address their specific concern
-        - Use the provided documentation when relevant
-        """
-
-        response = llm.invoke(draft_prompt)
-
-        # Determine if human review needed based on urgency and intent
-        needs_review = (
-            classification.get('urgency') in ['high', 'critical'] or
-            classification.get('intent') == 'complex'
-        )
-
-        # Route to appropriate next node
-        goto = "human_review" if needs_review else "send_reply"
-
-        return Command(
-            update={"draft_response": response.content},  # Store only the raw response
-            goto=goto
-        )
-
-    def human_review(state: EmailAgentState) -> Command[Literal["send_reply", END]]:
-        """Pause for human review using interrupt and route based on decision"""
-
-        classification = state.get('classification', {})
-
-        # interrupt() must come first - any code before it will re-run on resume
-        human_decision = interrupt({
-            "email_id": state.get('email_id',''),
-            "original_email": state.get('email_content',''),
-            "draft_response": state.get('draft_response',''),
-            "urgency": classification.get('urgency'),
-            "intent": classification.get('intent'),
-            "action": "Please review and approve/edit this response"
-        })
-
-        # Now process the human's decision
-        if human_decision.get("approved"):
-            return Command(
-                update={"draft_response": human_decision.get("edited_response", state.get('draft_response',''))},
-                goto="send_reply"
-            )
-        else:
-            # Rejection means human will handle directly
-            return Command(update={}, goto=END)
-
-    def send_reply(state: EmailAgentState) -> dict:
-        """Send the email response"""
-        # Integrate with email service
-        print(f"Sending reply: {state['draft_response'][:100]}...")
-        return {}
-    ```
-  </Accordion>
-</AccordionGroup>
-
-## Step 5: Wire it together
-
-Now we connect our nodes into a working graph. Since our nodes handle their own routing decisions, we only need a few essential edges.
-
-To enable [human-in-the-loop](/oss/python/langgraph/interrupts) with `interrupt()`, we need to compile with a [checkpointer](/oss/python/langgraph/persistence) to save state between runs:
-
-<Accordion title="Graph compilation code" icon="diagram-project" defaultOpen={true}>
-  ```python  theme={null}
-  from langgraph.checkpoint.memory import MemorySaver
-  from langgraph.types import RetryPolicy
-
-  # Create the graph
-  workflow = StateGraph(EmailAgentState)
-
-  # Add nodes with appropriate error handling
-  workflow.add_node("read_email", read_email)
-  workflow.add_node("classify_intent", classify_intent)
-
-  # Add retry policy for nodes that might have transient failures
-  workflow.add_node(
-      "search_documentation",
-      search_documentation,
-      retry_policy=RetryPolicy(max_attempts=3)
-  )
-  workflow.add_node("bug_tracking", bug_tracking)
-  workflow.add_node("draft_response", draft_response)
-  workflow.add_node("human_review", human_review)
-  workflow.add_node("send_reply", send_reply)
-
-  # Add only the essential edges
-  workflow.add_edge(START, "read_email")
-  workflow.add_edge("read_email", "classify_intent")
-  workflow.add_edge("send_reply", END)
-
-  # Compile with checkpointer for persistence, in case run graph with Local_Server --> Please compile without checkpointer
-  memory = MemorySaver()
-  app = workflow.compile(checkpointer=memory)
-  ```
-</Accordion>
+        // 现在继续查找
+        Map<String, Object> customerData = fetchCustomerHistory(customerId);
+        return Map.of(
+            "customer_history", customerData,
+            "next_node", "draft_response"
+        );
+    }
 
-The graph structure is minimal because routing happens inside nodes through [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) objects. Each node declares where it can go using type hints like `Command[Literal["node1", "node2"]]`, making the flow explicit and traceable.
+    private Map<String, Object> fetchCustomerHistory(String customerId) {
+        // 实际的客户历史查询逻辑
+        return Map.of("tier", "premium", "since", "2020-01-01");
+    }
+}
+```
 
-### Try out your agent
-
-Let's run our agent with an urgent billing issue that needs human review:
-
-<Accordion title="Testing the agent" icon="flask">
-  ```python  theme={null}
-  # Test with an urgent billing issue
-  initial_state = {
-      "email_content": "I was charged twice for my subscription! This is urgent!",
-      "sender_email": "customer@example.com",
-      "email_id": "email_123",
-      "messages": []
-  }
-
-  # Run with a thread_id for persistence
-  config = {"configurable": {"thread_id": "customer_123"}}
-  result = app.invoke(initial_state, config)
-  # The graph will pause at human_review
-  print(f"Draft ready for review: {result['draft_response'][:100]}...")
-
-  # When ready, provide human input to resume
-  from langgraph.types import Command
-
-  human_response = Command(
-      resume={
-          "approved": True,
-          "edited_response": "We sincerely apologize for the double charge. I've initiated an immediate refund..."
-      }
-  )
-
-  # Resume execution
-  final_result = app.invoke(human_response, config)
-  print(f"Email sent successfully!")
-  ```
-</Accordion>
-
-The graph pauses when it hits `interrupt()`, saves everything to the checkpointer, and waits. It can resume days later, picking up exactly where it left off. The `thread_id` ensures all state for this conversation is preserved together.
-
-## Summary and next steps
-
-### Key Insights
-
-Building this email agent has shown us the LangGraph way of thinking:
-
-<CardGroup cols={2}>
-  <Card title="Break into discrete steps" icon="sitemap" href="#step-1-map-out-your-workflow-as-discrete-steps">
-    Each node does one thing well. This decomposition enables streaming progress updates, durable execution that can pause and resume, and clear debugging since you can inspect state between steps.
-  </Card>
-
-  <Card title="State is shared memory" icon="database" href="#step-3-design-your-state">
-    Store raw data, not formatted text. This lets different nodes use the same information in different ways.
-  </Card>
-
-  <Card title="Nodes are functions" icon="code" href="#step-4-build-your-nodes">
-    They take state, do work, and return updates. When they need to make routing decisions, they specify both the state updates and the next destination.
-  </Card>
-
-  <Card title="Errors are part of the flow" icon="triangle-exclamation" href="#handle-errors-appropriately">
-    Transient failures get retries, LLM-recoverable errors loop back with context, user-fixable problems pause for input, and unexpected errors bubble up for debugging.
-  </Card>
-
-  <Card title="Human input is first-class" icon="user" href="/oss/python/langgraph/interrupts">
-    The `interrupt()` function pauses execution indefinitely, saves all state, and resumes exactly where it left off when you provide input. When combined with other operations in a node, it must come first.
-  </Card>
-
-  <Card title="Graph structure emerges naturally" icon="diagram-project" href="#step-5-wire-it-together">
-    You define the essential connections, and your nodes handle their own routing logic. This keeps control flow explicit and traceable - you can always understand what your agent will do next by looking at the current node.
-  </Card>
-</CardGroup>
-
-### Advanced considerations
-
-<Accordion title="Node granularity trade-offs" icon="sliders">
-  <Info>
-    This section explores the trade-offs in node granularity design. Most applications can skip this and use the patterns shown above.
-  </Info>
-
-  You might wonder: why not combine `Read Email` and `Classify Intent` into one node?
-
-  Or why separate Doc Search from Draft Reply?
-
-  The answer involves trade-offs between resilience and observability.
-
-  **The resilience consideration:** LangGraph's [durable execution](/oss/python/langgraph/durable-execution) creates checkpoints at node boundaries. When a workflow resumes after an interruption or failure, it starts from the beginning of the node where execution stopped. Smaller nodes mean more frequent checkpoints, which means less work to repeat if something goes wrong. If you combine multiple operations into one large node, a failure near the end means re-executing everything from the start of that node.
-
-  Why we chose this breakdown for the email agent:
-
-  * **Isolation of external services:** Doc Search and Bug Track are separate nodes because they call external APIs. If the search service is slow or fails, we want to isolate that from the LLM calls. We can add retry policies to these specific nodes without affecting others.
-
-  * **Intermediate visibility:** Having `Classify Intent` as its own node lets us inspect what the LLM decided before taking action. This is valuable for debugging and monitoring—you can see exactly when and why the agent routes to human review.
-
-  * **Different failure modes:** LLM calls, database lookups, and email sending have different retry strategies. Separate nodes let you configure these independently.
-
-  * **Reusability and testing:** Smaller nodes are easier to test in isolation and reuse in other workflows.
-
-  A different valid approach: You could combine `Read Email` and `Classify Intent` into a single node. You'd lose the ability to inspect the raw email before classification and would repeat both operations on any failure in that node. For most applications, the observability and debugging benefits of separate nodes are worth the trade-off.
-
-  Application-level concerns: The caching discussion in Step 2 (whether to cache search results) is an application-level decision, not a LangGraph framework feature. You implement caching within your node functions based on your specific requirements—LangGraph doesn't prescribe this.
-
-  Performance considerations: More nodes doesn't mean slower execution. LangGraph writes checkpoints in the background by default ([async durability mode](/oss/python/langgraph/durable-execution#durability-modes)), so your graph continues running without waiting for checkpoints to complete. This means you get frequent checkpoints with minimal performance impact. You can adjust this behavior if needed—use `"exit"` mode to checkpoint only at completion, or `"sync"` mode to block execution until each checkpoint is written.
-</Accordion>
-
-### Where to go from here
-
-This was an introduction to thinking about building agents with LangGraph. You can extend this foundation with:
-
-<CardGroup cols={2}>
-  <Card title="Human-in-the-loop patterns" icon="user-check" href="/oss/python/langgraph/interrupts">
-    Learn how to add tool approval before execution, batch approval, and other patterns
-  </Card>
-
-  <Card title="Subgraphs" icon="diagram-nested" href="/oss/python/langgraph/use-subgraphs">
-    Create subgraphs for complex multi-step operations
-  </Card>
-
-  <Card title="Streaming" icon="tower-broadcast" href="/oss/python/langgraph/streaming">
-    Add streaming to show real-time progress to users
-  </Card>
-
-  <Card title="Observability" icon="chart-line" href="/oss/python/langgraph/observability">
-    Add observability with LangSmith for debugging and monitoring
-  </Card>
-
-  <Card title="Tool Integration" icon="wrench" href="/oss/python/langchain/tools">
-    Integrate more tools for web search, database queries, and API calls
-  </Card>
-
-  <Card title="Retry Logic" icon="rotate" href="/oss/python/langgraph/use-graph-api#add-retry-policies">
-    Implement retry logic with exponential backoff for failed operations
-  </Card>
-</CardGroup>
-
-***
-
-<Callout icon="pen-to-square" iconType="regular">
-  [Edit the source of this page on GitHub.](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/thinking-in-langgraph.mdx)
-</Callout>
-
-<Tip icon="terminal" iconType="regular">
-  [Connect these docs programmatically](/use-these-docs) to Claude, VSCode, and more via MCP for    real-time answers.
-</Tip>
+#### 意外错误
+让它们冒泡以进行调试。不要捕获您无法处理的内容：
+
+```java
+public class SendReplyNode implements NodeAction {
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        try {
+            String response = (String) state.value("draft_response")
+                .orElseThrow(() -> new IllegalStateException("No draft response"));
+
+            emailService.send(response);
+            return Map.of("status", "sent");
+        } catch (Exception e) {
+            // 让意外错误冒泡
+            throw e;
+        }
+    }
+}
+
+### 实现我们的邮件代理节点
+
+我们将每个节点实现为一个简单的函数。记住：节点接受状态，执行工作，并返回更新。
+
+#### 读取和分类节点
+
+```java
+import com.alibaba.cloud.ai.graph.action.NodeAction;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
+private static final Logger log = LoggerFactory.getLogger("EmailAgent");
+
+// 读取邮件节点
+public class ReadEmailNode implements NodeAction {
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        EmailAgentState emailState = (EmailAgentState) state;
+
+        // 在生产环境中，这将连接到您的邮件服务
+        String emailContent = emailState.emailContent().orElse("");
+
+        log.info("Processing email: {}", emailContent);
+
+        List<String> messages = new ArrayList<>();
+        messages.add("Processing email: " + emailContent);
+
+        return Map.of("messages", messages);
+    }
+}
+
+// 分类意图节点
+public class ClassifyIntentNode implements NodeAction {
+
+    private final ChatClient chatClient;
+
+    public ClassifyIntentNode(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.build();
+    }
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        EmailAgentState emailState = (EmailAgentState) state;
+
+        String emailContent = emailState.emailContent()
+            .orElseThrow(() -> new IllegalStateException("No email content"));
+        String senderEmail = emailState.senderEmail().orElse("unknown");
+
+        // 按需格式化提示，不存储在状态中
+        String classificationPrompt = String.format("""
+            分析这封客户邮件并进行分类：
+
+            邮件: %s
+            发件人: %s
+
+            提供分类，包括意图、紧急程度、主题和摘要。
+
+            意图应该是以下之一: question, bug, billing, feature, complex
+            紧急程度应该是以下之一: low, medium, high, critical
+
+            以JSON格式返回: {"intent": "...", "urgency": "...", "topic": "...", "summary": "..."}
+            """, emailContent, senderEmail);
+
+        // 获取结构化响应
+        String response = chatClient.prompt()
+            .user(classificationPrompt)
+            .call()
+            .content();
+
+        // 解析为 EmailClassification 对象
+        EmailClassification classification = parseClassification(response);
+
+        // 根据分类确定下一个节点
+        String nextNode;
+        if ("billing".equals(classification.getIntent()) ||
+            "critical".equals(classification.getUrgency())) {
+            nextNode = "human_review";
+        } else if (List.of("question", "feature").contains(classification.getIntent())) {
+            nextNode = "search_documentation";
+        } else if ("bug".equals(classification.getIntent())) {
+            nextNode = "bug_tracking";
+        } else {
+            nextNode = "draft_response";
+        }
+
+        // 将分类作为单个对象存储在状态中
+        return Map.of(
+            "classification", classification,
+            "next_node", nextNode
+        );
+    }
+
+    private EmailClassification parseClassification(String jsonResponse) {
+        // 简化的JSON解析（实际应用中使用Jackson或Gson）
+        EmailClassification classification = new EmailClassification();
+        // 解析逻辑...
+        return classification;
+    }
+}
+```
+
+#### 搜索和跟踪节点
+
+```java
+// 文档搜索节点
+public class SearchDocumentationNode implements NodeAction {
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        EmailAgentState emailState = (EmailAgentState) state;
+
+        // 从分类构建搜索查询
+        EmailClassification classification = emailState.classification()
+            .orElse(new EmailClassification());
+        String query = classification.getIntent() + " " + classification.getTopic();
+
+        try {
+            // 实现您的搜索逻辑
+            // 存储原始搜索结果，而不是格式化的文本
+            List<String> searchResults = List.of(
+                "通过设置 > 安全 > 更改密码重置密码",
+                "密码必须至少12个字符",
+                "包含大写字母、小写字母、数字和符号"
+            );
+
+            return Map.of(
+                "search_results", searchResults,
+                "next_node", "draft_response"
+            );
+        } catch (Exception e) {
+            // 对于可恢复的搜索错误，存储错误并继续
+            List<String> errorResult = List.of("搜索暂时不可用: " + e.getMessage());
+            return Map.of(
+                "search_results", errorResult,
+                "next_node", "draft_response"
+            );
+        }
+    }
+}
+
+// Bug跟踪节点
+public class BugTrackingNode implements NodeAction {
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        // 在您的bug跟踪系统中创建票据
+        String ticketId = "BUG-12345";  // 将通过API创建
+
+        log.info("Created bug ticket: {}", ticketId);
+
+        return Map.of(
+            "search_results", List.of("已创建Bug票据 " + ticketId),
+            "current_step", "bug_tracked",
+            "next_node", "draft_response"
+        );
+    }
+}
+```
+
+#### 响应节点
+
+```java
+// 起草回复节点
+public class DraftResponseNode implements NodeAction {
+
+    private final ChatClient chatClient;
+
+    public DraftResponseNode(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.build();
+    }
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        EmailAgentState emailState = (EmailAgentState) state;
+
+        EmailClassification classification = emailState.classification()
+            .orElse(new EmailClassification());
+        String emailContent = emailState.emailContent().orElse("");
+
+        // 从原始状态数据按需格式化上下文
+        List<String> contextSections = new ArrayList<>();
+
+        if (emailState.searchResults().isPresent()) {
+            // 为提示格式化搜索结果
+            List<String> docs = emailState.searchResults().get();
+            String formattedDocs = docs.stream()
+                .map(doc -> "- " + doc)
+                .collect(Collectors.joining("\n"));
+            contextSections.add("相关文档:\n" + formattedDocs);
+        }
+
+        if (emailState.customerHistory().isPresent()) {
+            // 为提示格式化客户数据
+            Map<String, Object> history = emailState.customerHistory().get();
+            contextSections.add("客户等级: " + history.getOrDefault("tier", "standard"));
+        }
+
+        // 使用格式化的上下文构建提示
+        String draftPrompt = String.format("""
+            为这封客户邮件起草回复:
+            %s
+
+            邮件意图: %s
+            紧急程度: %s
+
+            %s
+
+            指南:
+            - 专业且有帮助
+            - 解决他们的具体问题
+            - 在相关时使用提供的文档
+            """,
+            emailContent,
+            classification.getIntent(),
+            classification.getUrgency(),
+            String.join("\n", contextSections)
+        );
+
+        String response = chatClient.prompt()
+            .user(draftPrompt)
+            .call()
+            .content();
+
+        // 根据紧急程度和意图确定是否需要人工审核
+        boolean needsReview =
+            List.of("high", "critical").contains(classification.getUrgency()) ||
+            "complex".equals(classification.getIntent());
+
+        // 路由到适当的下一个节点
+        String nextNode = needsReview ? "human_review" : "send_reply";
+
+        return Map.of(
+            "draft_response", response,  // 仅存储原始响应
+            "next_node", nextNode
+        );
+    }
+}
+
+// 人工审核节点
+public class HumanReviewNode implements NodeAction {
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        EmailAgentState emailState = (EmailAgentState) state;
+
+        EmailClassification classification = emailState.classification()
+            .orElse(new EmailClassification());
+
+        // interrupt() 必须首先 - 它之前的任何代码在恢复时都会重新运行
+        // 在 Spring AI Alibaba 中，使用 interruptBefore 配置来实现中断
+
+        Map<String, Object> reviewData = Map.of(
+            "email_id", emailState.emailId().orElse(""),
+            "original_email", emailState.emailContent().orElse(""),
+            "draft_response", emailState.draftResponse().orElse(""),
+            "urgency", classification.getUrgency(),
+            "intent", classification.getIntent(),
+            "action", "请审核并批准/编辑此响应"
+        );
+
+        log.info("Waiting for human review: {}", reviewData);
+
+        // 注意：实际的中断逻辑需要在 Graph 编译时配置 interruptBefore
+        // 这里返回状态以供审核
+        return Map.of(
+            "review_data", reviewData,
+            "status", "waiting_for_review"
+        );
+    }
+}
+
+// 发送回复节点
+public class SendReplyNode implements NodeAction {
+
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        EmailAgentState emailState = (EmailAgentState) state;
+        String draftResponse = emailState.draftResponse().orElse("");
+
+        // 与邮件服务集成
+        log.info("Sending reply: {}...", draftResponse.substring(0, Math.min(100, draftResponse.length())));
+
+        return Map.of("status", "sent");
+    }
+}
+```
+
+## 步骤 5：组装Graph
+
+现在我们将节点连接成一个可工作的图。由于我们的节点处理自己的路由决策，我们只需要一些基本的边。
+
+要启用人工介入（human-in-the-loop）功能，我们需要使用 checkpointer 编译以在运行之间保存状态：
+
+```java
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
+import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.RetryPolicy;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
+import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edgeasync;
+
+// 配置 ChatClient
+ChatClient.Builder chatClientBuilder = ChatClient.builder(chatModel);
+
+// 创建节点
+var readEmail = nodeasync(new ReadEmailNode());
+var classifyIntent = nodeasync(new ClassifyIntentNode(chatClientBuilder));
+var searchDocumentation = nodeasync(new SearchDocumentationNode());
+var bugTracking = nodeasync(new BugTrackingNode());
+var draftResponse = nodeasync(new DraftResponseNode(chatClientBuilder));
+var humanReview = nodeasync(new HumanReviewNode());
+var sendReply = nodeasync(new SendReplyNode());
+
+// 创建图
+StateGraph workflow = new StateGraph(keyStrategyFactory)
+    .addNode("read_email", readEmail)
+    .addNode("classify_intent", classifyIntent)
+    .addNode("search_documentation", searchDocumentation)
+    .addNode("bug_tracking", bugTracking)
+    .addNode("draft_response", draftResponse)
+    .addNode("human_review", humanReview)
+    .addNode("send_reply", sendReply);
+
+// 添加基本边
+workflow.addEdge(StateGraph.START, "read_email");
+workflow.addEdge("read_email", "classify_intent");
+workflow.addEdge("send_reply", StateGraph.END);
+
+// 添加条件边（基于节点返回的 next_node）
+workflow.addConditionalEdges("classify_intent",
+    edgeasync(state -> {
+        return (String) state.value("next_node").orElse("draft_response");
+    }),
+    Map.of(
+        "search_documentation", "search_documentation",
+        "bug_tracking", "bug_tracking",
+        "human_review", "human_review",
+        "draft_response", "draft_response"
+    ));
+
+workflow.addConditionalEdges("draft_response",
+    edgeasync(state -> {
+        return (String) state.value("next_node").orElse("send_reply");
+    }),
+    Map.of(
+        "human_review", "human_review",
+        "send_reply", "send_reply"
+    ));
+
+// 配置持久化和重试策略
+var memory = new MemorySaver();
+var compileConfig = CompileConfig.builder()
+    .checkpointSaver(memory)
+    .interruptBefore("human_review")  // 在人工审核前中断
+    .retryPolicy("search_documentation",
+        RetryPolicy.builder()
+            .maxAttempts(3)
+            .initialInterval(1000L)
+            .build())
+    .build();
+
+CompiledGraph app = workflow.compile(compileConfig);
+```
+
+图结构是最小的，因为路由通过节点内部的返回值发生。每个节点通过返回 `next_node` 键来声明它可以去哪里，使流程显式和可追溯。
+
+### 测试您的代理
+
+让我们用一个需要人工审核的紧急账单问题来运行我们的代理：
+
+```java
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+
+// 测试紧急账单问题
+Map<String, Object> initialState = Map.of(
+    "email_content", "我的订阅被收费两次了！这很紧急！",
+    "sender_email", "customer@example.com",
+    "email_id", "email_123",
+    "messages", new ArrayList<String>()
+);
+
+// 使用 thread_id 运行以实现持久化
+var config = RunnableConfig.builder()
+    .threadId("customer_123")
+    .build();
+
+var result = app.invoke(initialState, config);
+// 图将在 human_review 处暂停
+
+String draftResponse = (String) result.data().get("draft_response");
+log.info("Draft ready for review: {}...", draftResponse.substring(0, Math.min(100, draftResponse.length())));
+
+// 准备好后，提供人工输入以恢复
+Map<String, Object> humanResponse = Map.of(
+    "approved", true,
+    "edited_response", "我们对重复收费深表歉意。我已经立即启动了退款..."
+);
+
+// 恢复执行
+var finalResult = app.invoke(humanResponse, config);
+log.info("Email sent successfully!");
+```
+
+图在遇到 `interruptBefore` 时暂停，将所有内容保存到 checkpointer，然后等待。它可以在几天后恢复，准确地从它停止的地方继续。`thread_id` 确保这个对话的所有状态都保存在一起。
+
+## 总结和下一步
+
+### 关键见解
+
+构建这个邮件代理向我们展示了 Spring AI Alibaba Graph 的思维方式：
+
+#### 1. 分解为离散步骤
+每个节点做好一件事。这种分解使得可以：
+- 流式进度更新
+- 可以暂停和恢复的持久执行
+- 清晰的调试，因为您可以检查步骤之间的状态
+
+#### 2. 状态是共享记忆
+存储原始数据，而不是格式化的文本。这让不同节点可以以不同方式使用相同信息。
+
+#### 3. 节点是函数
+它们接受状态，执行工作，并返回更新。当需要做出路由决策时，它们既指定状态更新又指定下一个目的地。
+
+#### 4. 错误是流程的一部分
+- 瞬时故障获得重试
+- LLM可恢复错误循环回去并带上上下文
+- 用户可修复问题暂停等待输入
+- 意外错误冒泡以进行调试
+
+#### 5. 人工输入是一等公民
+`interruptBefore` 配置暂停执行，保存所有状态，并在您提供输入时准确从停止的地方恢复。
+
+#### 6. 图结构自然涌现
+您定义基本连接，节点处理自己的路由逻辑。这使控制流保持显式和可追溯 - 您总是可以通过查看当前节点来理解代理接下来会做什么。
+
+### 高级考虑
+
+**节点粒度权衡**
+
+本节探讨节点粒度设计中的权衡。大多数应用程序可以跳过这一节，使用上面显示的模式。
+
+您可能想知道：为什么不将"读取邮件"和"分类意图"合并为一个节点？或者为什么要将文档搜索与起草回复分开？
+
+答案涉及韧性和可观察性之间的权衡。
+
+**韧性考虑**：
+
+Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工作流在中断或失败后恢复时，它从执行停止的节点开始处重新开始。较小的节点意味着更频繁的检查点，这意味着如果出问题则重新执行的工作更少。如果您将多个操作合并到一个大节点中，接近结尾的失败意味着从该节点的开始重新执行所有内容。
+
+我们为邮件代理选择这种分解的原因：
+
+* **隔离外部服务**：文档搜索和Bug跟踪是独立的节点，因为它们调用外部API。如果搜索服务慢或失败，我们希望将其与LLM调用隔离。我们可以向这些特定节点添加重试策略而不影响其他节点。
+
+* **中间可见性**：将"分类意图"作为自己的节点让我们可以在采取行动之前检查LLM决定了什么。这对调试和监控很有价值 - 您可以准确看到代理何时以及为什么路由到人工审核。
+
+* **不同的故障模式**：LLM调用、数据库查找和邮件发送具有不同的重试策略。独立的节点让您可以独立配置这些。
+
+* **可重用性和测试**：较小的节点更容易单独测试并在其他工作流中重用。
+
+一种不同的有效方法：您可以将"读取邮件"和"分类意图"合并为单个节点。您将失去在分类之前检查原始邮件的能力，并会在该节点中的任何故障时重复这两个操作。对于大多数应用程序，独立节点的可观察性和调试优势值得权衡。
+
+**应用程序级关注点**：
+
+步骤2中的缓存讨论（是否缓存搜索结果）是应用程序级决策，而不是Spring AI Alibaba Graph框架功能。您根据具体需求在节点函数中实现缓存 - Spring AI Alibaba Graph不规定这一点。
+
+**性能考虑**：
+
+更多节点并不意味着更慢的执行。Spring AI Alibaba Graph默认在后台写入检查点（异步持久性模式），因此您的图继续运行而无需等待检查点完成。这意味着您可以获得频繁的检查点而性能影响最小。
+
+### 下一步
+
+这是使用 Spring AI Alibaba Graph 构建代理的入门介绍。您可以使用以下内容扩展此基础：
+
+#### 1. 人工介入模式
+了解如何在执行前添加工具批准、批量批准和其他模式。参考：
+- [等待用户输入](/workflow/examples/wait-user-input)
+- [Issue #78 - 重置记忆线程](/workflow/qa/issue78)
+
+#### 2. 子图
+为复杂的多步骤操作创建子图。参考：
+- [子图作为 NodeAction](/workflow/examples/subgraph-as-nodeaction)
+- [子图作为 StateGraph](/workflow/examples/subgraph-as-stategraph)
+- [子图作为 CompiledGraph](/workflow/examples/subgraph-as-compiledgraph)
+
+#### 3. 流式输出
+添加流式输出以向用户显示实时进度。参考：
+- [LLM 流式输出](/workflow/examples/llm-streaming-springai)
+- [Issue #118 - 流式输出与图中断](/workflow/qa/issue118)
+
+#### 4. 工具集成
+集成更多工具进行网络搜索、数据库查询和API调用。参考：
+- [Issue #93 - Function Calling](/workflow/qa/issue93)
+- [Spring AI Function Calling](https://docs.spring.io/spring-ai/reference/api/functions.html)
+
+#### 5. 重试逻辑
+为失败的操作实现指数退避的重试逻辑。参考配置示例中的 `RetryPolicy`。
+
+#### 6. 持久化和时光旅行
+深入了解状态持久化和历史回溯。参考：
+- [持久化](/workflow/examples/persistence)
+- [时光旅行](/workflow/examples/time-travel)
+
+#### 7. 并行执行
+学习如何并行执行多个节点。参考：
+- [并行分支](/workflow/examples/parallel-branch)
+
+## 相关文档
+
+- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
+- [条件边](/workflow/graph/conditional-edges) - 条件路由详解
+- [Checkpoint 机制](/workflow/graph/checkpoint) - 状态持久化
+- [节点操作](/workflow/graph/node-action) - NodeAction 详解
+- [Adaptive RAG](/workflow/examples/adaptiverag) - 高级 RAG 示例
