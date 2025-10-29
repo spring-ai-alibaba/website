@@ -149,6 +149,7 @@ There are several provided Serializers out-of-the-box:
 3. 尽可能避免类加载问题
 4. 在序列化过程中管理可空值
  class | description
+
 #### 特性
 `MapSerializer` | built-in `Map<String,Object>` serializer
 - [x] 允许使用 Java 内置标准二进制序列化技术进行序列化
@@ -182,7 +183,7 @@ AsyncNodeAction<State> myOtherNode = node_async(state -> state);
 var builder = new StateGraph( State::new )
 在 Spring AI Alibaba 中，节点通常是一个**函数式接口** ([AsyncNodeAction])，其参数是 [state](#state)，您可以使用 [addNode] 方法将这些节点添加到图中：
 
-Since [AsyncNodeAction] is designed to work with [CompletableFuture], you can use `node_async` static method that adapt it to a simpler syncronous scenario.
+Since [AsyncNodeAction] is designed to work with [CompletableFuture], you can use `node_async` static method that adapt it to a simpler synchronous scenario.
 
 ### `START` Node
 
@@ -216,10 +217,6 @@ var builder = new StateGraph()
 <!-- 👉 PARALLEL
  A node can have MULTIPLE outgoing edges. If a node has multiple out-going edges, **all** of those destination nodes will be executed in parallel as a part of the next superstep. -->
 
-### Normal Edges
-
-If you **always** want to go from node A to node B, you can use the [addEdge] method directly.
-
 ### `START` 节点
 // add a normal edge
 `START` 节点是一个特殊节点，表示将用户输入发送到图的节点。引用此节点的主要目的是确定首先应该调用哪些节点。
@@ -234,16 +231,11 @@ If you want to **optionally** route to 1 or more edges (or optionally terminate)
 
 
 ### `END` 节点
-graph.addConditionalEdges("nodeA", routingFunction, Map.of( "first": "nodeB", "second": "nodeC" ) );
+
 `END` 节点是一个特殊节点，表示终端节点。当您想要表示哪些边在完成后没有任何操作时，会引用此节点。
 
-Similar to nodes, the `routingFunction` accept the current `state` of the graph and return a string value.
-import static com.alibaba.cloud.ai.graph.StateGraph.END;
-<!-- By default, the return value `routingFunction` is used as the name of the node (or an array of nodes) to send the state to next. All those nodes will be run in parallel as a part of the next superstep. -->
-
-You must provide an object that maps the `routingFunction`'s output to the name of the next node.
 ## 边（Edges）
-<a id="entry-point"></a>
+
 边定义了逻辑如何路由以及图如何决定停止。这是智能体工作方式和不同节点之间如何通信的重要部分。有几种关键类型的边：
 
 - **普通边（Normal Edges）**：
@@ -255,13 +247,16 @@ You must provide an object that maps the `routingFunction`'s output to the name 
 - **条件入口点（Conditional Entry Point）**：
   > 调用函数来确定当用户输入到达时首先调用哪个节点。
 
-```java
+
 ### 普通边
-import static org.bsc.langgraph4j.utils.CollectionsUtils.mapOf;
+
 如果您**总是**想从节点 A 到节点 B，可以直接使用 [addEdge] 方法。
+
+```java
+import static org.bsc.langgraph4j.utils.CollectionsUtils.mapOf;
+// 添加普通边
 graph.addConditionalEdges(START, routingFunction, Map.of( "first": "nodeB", "second": "nodeC" ) );
 ```
-// 添加普通边
 You must provide an object that maps the `routingFunction`'s output to the name of the next node.
 
 <!--
