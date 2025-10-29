@@ -379,7 +379,7 @@
     "description": "Admin tool description"
   },
   "ecosystem.framework.extensions.name": {
-    "message": "Spring AI Extensions",
+    "message": "Spring AI",
     "description": "Extensions name"
   },
   "ecosystem.framework.extensions.description": {

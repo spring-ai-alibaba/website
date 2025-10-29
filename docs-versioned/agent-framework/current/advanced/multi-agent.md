@@ -646,8 +646,8 @@ Optional<OverAllState> result = complexWorkflow.invoke("创作关于'人工智�
 
 ## 相关文档
 
-- [Agents](../concepts/agents.md) - Agent基础概念
-- [Tools](../concepts/tools.md) - 工具的创建和使用
-- [Hooks](../concepts/hooks.md) - Hook机制
+- [Agents](../tutorials/agents.md) - Agent基础概念
+- [Tools](../tutorials/tools.md) - 工具的创建和使用
+- [Hooks](../tutorials/hooks.md) - Hook机制
 - [Memory](./memory.md) - 状态和记忆管理
 

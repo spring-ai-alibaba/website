@@ -55,7 +55,7 @@ const frameworkItems: EcosystemItem[] = [
     stars: 'spring-ai-alibaba-admin',
   },
   {
-    name: 'Spring AI Extensions',
+    name: 'Spring AI',
     nameId: 'ecosystem.framework.extensions.name',
     description: 'Extended implementations for Spring AI core concepts, including DashScopeChatModel, MCP registry, etc.',
     descriptionId: 'ecosystem.framework.extensions.description',

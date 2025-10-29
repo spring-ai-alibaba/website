@@ -6,10 +6,9 @@ sidebar_position: 6
 
 在本章节中，我们将学习如何使用 Spring AI Alibaba 接入阿里云 QWQ 32B 系列模型。在开始学习之前，请确保您已经了解相关概念。
 
-1. [Chat Client](../tutorials/chat-client.md)；
-2. [Chat Model](../tutorials/chat-model.md)；
-3. [Spring AI Alibaba 快速开始](../get-started.md)；
-4. 本章节的代码您可以在 [Spring AI Alibaba Example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example/qwq-chat) 中找到。
+1. [Chat Client](../reference/chat-client.md)；
+2. [Chat Model](../reference/chat-model.md)；
+3. 本章节的代码您可以在 [Spring AI Alibaba Example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example/qwq-chat) 中找到。
 
 > 本示例主要演示如何以 ChatClient 形式接入。关于如何使用 ChatModel，请参阅其他模型的 ChatModel 代码示例。
 
@@ -83,7 +82,7 @@ sidebar_position: 6
 				.build();
 	}
     ```
-    
+
 4. 编写 Controller 接口：
 
     ```java

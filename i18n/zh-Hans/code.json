@@ -578,12 +578,12 @@
     "description": "Admin tool description"
   },
   "ecosystem.framework.extensions.name": {
-    "message": "Spring AI Extensions",
-    "description": "Extensions name"
+    "message": "Spring AI",
+    "description": "Spring AI Framework"
   },
   "ecosystem.framework.extensions.description": {
-    "message": "Spring AI 核心概念的扩展实现，包括 DashScopeChatModel、MCP 注册表等。",
-    "description": "Extensions description"
+    "message": "Spring AI 核心概念的扩展实现，包括 DashScopeChatModel、Tool、C ha t MMCP 注册中心等。",
+    "description": "Spring AI Framework"
   },
   "ecosystem.product.examples.name": {
     "message": "Spring AI Alibaba Examples",

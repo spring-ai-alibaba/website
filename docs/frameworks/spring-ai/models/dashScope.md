@@ -6,10 +6,9 @@ sidebar_position: 1
 
 在本章节中，我们将学习如何使用 Spring AI Alibaba 接入阿里云 DashScope 系列模型。在开始学习之前，请确保您已经了解相关概念。
 
-1. [Chat Client](../tutorials/chat-client.md)；
-2. [Chat Model](../tutorials/chat-model.md)；
-3. [Spring AI Alibaba 快速开始](../get-started.md)；
-4. 本章节的代码您可以在 [Spring AI Alibaba Example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example) 仓库找到。
+1. [Chat Client](../reference/chat-client.md)；
+2. [Chat Model](../reference/chat-model.md)；
+3. 本章节的代码您可以在 [Spring AI Alibaba Example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example) 仓库找到。
 
 > 本示例主要演示如何以 ChatModel 形式接入。关于如何使用 ChatClient，请参考 Github 代码仓库示例。
 
@@ -53,7 +52,7 @@ sidebar_position: 1
 		this.dashScopeChatModel = chatModel;
 	}
     ```
-    
+
 4. 编写 Controller 接口：
 
     ```java
@@ -82,7 +81,7 @@ sidebar_position: 1
 
 ## 进阶使用
 
-### 动态设置 DashScope Options 
+### 动态设置 DashScope Options
 
 Spring AI Alibaba 的运行时 Options 同 Spring AI。分为 Runtime Options 和 Default Options。在 `application.yml` 中配置的 options 参数为 Default Options。
 

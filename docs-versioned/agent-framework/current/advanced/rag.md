@@ -396,8 +396,8 @@ import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 
 ## 相关文档
 
-- [Tools](../concepts/tools.md) - 创建检索工具
-- [Agents](../concepts/agents.md) - 构建Agentic RAG
+- [Tools](../tutorials/tools.md) - 创建检索工具
+- [Agents](../tutorials/agents.md) - 构建Agentic RAG
 - [Memory](./memory.md) - 对话记忆管理
 - [Multi-Agent](./multi-agent.md) - 多Agent协作
 

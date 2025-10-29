@@ -221,8 +221,8 @@ const config: Config = {
               to: '/docs/frameworks/admin/quick-start',
             },
             {
-              label: 'Extensions',
-              to: '/docs/frameworks/extensions/quick-start',
+              label: 'Spring AI',
+              to: '/docs/frameworks/spring-ai/quick-start',
             },
           ],
         },

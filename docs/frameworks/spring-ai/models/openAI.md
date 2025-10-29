@@ -6,14 +6,13 @@ sidebar_position: 5
 
 在本章节中，我们将学习如何使用 Spring AI Alibaba 接入OpenAI 系列模型。在开始学习之前，请确保您已经了解相关概念。
 
-1. [Chat Client](../tutorials/basics/chat-client.md)；
-2. [Chat Model](../tutorials/basics/chat-model.md)；
-3. [Spring AI Alibaba 快速开始](../get-started.md)；
-4. 本章节的代码您可以在 [Spring AI Alibaba Example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example) 仓库找到。
+1. [Chat Client](../reference/chat-client.md)；
+2. [Chat Model](../reference/chat-model.md)；
+3. 本章节的代码您可以在 [Spring AI Alibaba Example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example) 仓库找到。
 
 > 本示例主要演示如何以 ChatModel 形式接入。关于如何使用 ChatClient，请参考 Github 代码仓库示例。
 
-## OpenAI 
+## OpenAI
 
 OpenAI，是一个美国人工智能研究实验室，由非营利组织 OpenAI Inc，和其营利组织子公司 OpenAI LP 所组成。OpenAI 进行 AI 研究的目的是促进和发展友好的人工智能，使人类整体受益。
 

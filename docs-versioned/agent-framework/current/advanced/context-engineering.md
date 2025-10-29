@@ -534,8 +534,8 @@ public class SummarizationHook implements ModelHook {
 
 ## 相关文档
 
-- [Hooks](../concepts/hooks.md) - Hook机制详解
-- [Interceptors](../concepts/interceptors.md) - 拦截器详解
-- [Agents](../concepts/agents.md) - Agent基础概念
+- [Hooks](../tutorials/hooks.md) - Hook机制详解
+- [Interceptors](../tutorials/hooks.md) - 拦截器详解
+- [Agents](../tutorials/agents.md) - Agent基础概念
 - [Memory](./memory.md) - 状态和记忆管理
 
