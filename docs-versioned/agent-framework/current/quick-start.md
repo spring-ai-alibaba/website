@@ -58,7 +58,7 @@ spring:
 
 **获取 API Key**：
 - DashScope（阿里云百炼）：访问 [https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api](https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api)
-- [其他模型提供商请参考对应的文档](../ecosystem/basics/models/openAI/)
+- 其他模型提供商请参考对应的文档
 
 ## 构建一个基础 Agent
 
@@ -283,7 +283,7 @@ AssistantMessage response = agent.call("what is the weather in San Francisco tod
 AssistantMessage response = agent.call("How about the weather tomorrow", runnableConfig);
 ```
 
-**注意**: 在生产环境中，使用持久化的 CheckPointer 将数据保存到数据库。更多详情参见 [内存管理](../tutorials/memory/) 文档。
+**注意**: 在生产环境中，使用持久化的 CheckPointer 将数据保存到数据库。更多详情参见 [内存管理](./tutorials/memory/) 文档。
 
 ### 6. 创建和运行 Agent
 

@@ -349,17 +349,5 @@ graph.invoke(Map.of(
 ```
 
 通过这种方式，即使处理过程被中断，您也可以使用相同的 `threadId` 恢复执行，工作流将从上次保存的检查点继续处理。
-  Inside the subgraph, the starting point will be the specific [**node**](/oss/python/langgraph/graph-api#nodes) where execution stopped.
-* If you're using the Functional API, the starting point is the beginning of the [**entrypoint**](/oss/python/langgraph/functional-api#entrypoint) where execution stopped.
 
-***
 
-```
-<Callout icon="pen-to-square" iconType="regular">
-  [Edit the source of this page on GitHub.](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/durable-execution.mdx)
-</Callout>
-
-<Tip icon="terminal" iconType="regular">
-  [Connect these docs programmatically](/use-these-docs) to Claude, VSCode, and more via MCP for    real-time answers.
-</Tip>
-```

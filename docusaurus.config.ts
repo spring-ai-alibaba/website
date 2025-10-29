@@ -201,7 +201,7 @@ const config: Config = {
           items: [
             {
               label: '快速开始',
-              to: '/docs/intro',
+              to: '/docs/overview',
             },
           ],
         },
@@ -222,7 +222,7 @@ const config: Config = {
             },
             {
               label: 'Spring AI',
-              to: '/docs/frameworks/spring-ai/quick-start',
+              to: '/docs/frameworks/spring-ai/reference/concepts',
             },
           ],
         },

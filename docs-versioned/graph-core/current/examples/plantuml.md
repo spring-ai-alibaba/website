@@ -103,8 +103,7 @@ step3 --> END
 
 ## 相关文档
 
-- [GraphRepresentation API](/api/graph-representation) - Graph 表示 API
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
+- [快速入门](../quick-start) - Graph 基础使用
 - [PlantUML 官方文档](https://plantuml.com/) - PlantUML 语法参考
 
 

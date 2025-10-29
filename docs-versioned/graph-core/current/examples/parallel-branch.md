@@ -34,7 +34,7 @@ Spring AI Alibaba Graph 支持并行执行节点以加速图的整体执行。
 
 * 不允许使用**条件边**（Conditional Edges）
 
-完整的并行节点示例请参考：[并行节点执行文档](/workflow/graph/parallel-node)
+完整的并行节点示例请参考：[并行节点执行文档](../core/parallel-branch)
 
 ## 定义带并行分支的 Graph
 
@@ -119,9 +119,8 @@ NodeOutput{node=__END__, state={messages=[A, A1, A2, A3, B, C]}}
 
 ## 相关文档
 
-- [并行节点执行](/workflow/graph/parallel-node) - 完整的并行节点示例
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
-- [状态管理](/workflow/graph/state-management) - 状态策略配置
+- [并行节点执行](../core/parallel-branch) - 完整的并行节点示例
+- [快速入门](../quick-start) - Graph 基础使用
 
 
 
@@ -140,7 +139,7 @@ for( var step : workflow.stream( Map.of() ) ) {
 ```
 
 ```
-    START 
+    START
 
 
     NodeOutput{node=__START__, state={messages=[]}}
@@ -169,7 +168,7 @@ for( var step : workflow.stream( Map.of() ) ) {
     NodeOutput{node=B, state={messages=[A, A1, A2, A3, B]}}
 
 
-    Maximum number of iterations (25) reached! 
+    Maximum number of iterations (25) reached!
 
 
     NodeOutput{node=A1, state={messages=[A, A1, A2, A3, B]}}
@@ -177,7 +176,7 @@ for( var step : workflow.stream( Map.of() ) ) {
 
 ## Use compiled sub graph as parallel node
 
-This example answer to issue **Will plan support multiple target on parallel node?** [#104](https://github.com/bsorrentino/langgraph4j/issues/104) 
+This example answer to issue **Will plan support multiple target on parallel node?** [#104](https://github.com/bsorrentino/langgraph4j/issues/104)
 
 
 ```java
@@ -198,15 +197,15 @@ var subgraphA3 = new MessagesStateGraph<String>()
                 .addNode("A3.2", makeNode("A3.2"))
                 .addEdge(START, "A3.1")
                 .addEdge( "A3.1", "A3.2")
-                .addEdge("A3.2", END)   
-                .compile(); 
+                .addEdge("A3.2", END)
+                .compile();
 var subgraphA1 = new MessagesStateGraph<String>()
                 .addNode("A1.1", makeNode("A1.1"))
                 .addNode("A1.2", makeNode("A1.2"))
                 .addEdge(START, "A1.1")
                 .addEdge( "A1.1", "A1.2")
-                .addEdge("A1.2", END)   
-                .compile(); 
+                .addEdge("A1.2", END)
+                .compile();
 
 var workflow = new MessagesStateGraph<String>()
                 .addNode("A", makeNode("A"))
@@ -221,7 +220,7 @@ var workflow = new MessagesStateGraph<String>()
                 .addEdge("A2", "B")
                 .addEdge("A3", "B")
                 .addEdge(START, "A")
-                .addEdge("B", END)                   
+                .addEdge("B", END)
                 .compile();
 
 ```
@@ -236,9 +235,9 @@ display( plantUML2PNG( representation.getContent() ) )
 ```
 
 
-    
+
 ![png](/img/graph/examples/parallel-branch_files/parallel-branch_16_0.png)
-    
+
 
 
 
@@ -261,14 +260,14 @@ for( var step : workflow.stream( Map.of() ) ) {
 ```
 
 ```
-    START 
+    START
 
 
     NodeOutput{node=__START__, state={messages=[]}}
 
 
-    START 
-    START 
+    START
+    START
 
 
     NodeOutput{node=A, state={messages=[A]}}
@@ -295,24 +294,24 @@ var subgraphA3 = new MessagesStateGraph<String>()
                 .addNode("A3.2", makeNode("A3.2"))
                 .addEdge(START, "A3.1")
                 .addEdge( "A3.1", "A3.2")
-                .addEdge("A3.2", END)   
-                .compile(); 
+                .addEdge("A3.2", END)
+                .compile();
 
 var subgraphA2 = new MessagesStateGraph<String>()
                 .addNode("A2.1", makeNode("A2.1"))
                 .addNode("A2.2", makeNode("A2.2"))
                 .addEdge(START, "A2.1")
                 .addEdge( "A2.1", "A2.2")
-                .addEdge("A2.2", END)   
-                .compile(); 
+                .addEdge("A2.2", END)
+                .compile();
 
 var subgraphA1 = new MessagesStateGraph<String>()
                 .addNode("A1.1", makeNode("A1.1"))
                 .addNode("A1.2", makeNode("A1.2"))
                 .addEdge(START, "A1.1")
                 .addEdge( "A1.1", "A1.2")
-                .addEdge("A1.2", END)   
-                .compile(); 
+                .addEdge("A1.2", END)
+                .compile();
 
 var workflow = new MessagesStateGraph<String>()
                 .addNode("A", makeNode("A"))
@@ -327,7 +326,7 @@ var workflow = new MessagesStateGraph<String>()
                 .addEdge("A2", "B")
                 .addEdge("A3", "B")
                 .addEdge(START, "A")
-                .addEdge("B", END)                   
+                .addEdge("B", END)
                 .compile();
 
 ```
@@ -342,9 +341,9 @@ display( plantUML2PNG( representation.getContent() ) )
 ```
 
 
-    
+
 ![png](/img/graph/examples/parallel-branch_files/parallel-branch_20_0.png)
-    
+
 
 
 
@@ -362,15 +361,15 @@ for( var step : workflow.stream( Map.of() ) ) {
 ```
 
 ```
-    START 
+    START
 
 
     NodeOutput{node=__START__, state={messages=[]}}
 
 
-    START 
-    START 
-    START 
+    START
+    START
+    START
 
 
     NodeOutput{node=A, state={messages=[A]}}

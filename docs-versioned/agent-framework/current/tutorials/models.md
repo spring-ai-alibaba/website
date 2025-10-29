@@ -224,7 +224,7 @@ Spring AI 提供了与多个 AI 服务提供商的集成，所有这些都通过
 - **Mistral AI Chat Completion** (支持流式和函数调用)
 - **Anthropic Chat Completion** (支持流式和函数调用)
 
-关于每个模型的具体用法与特性，请查看 [模型适配](../ecosystem/basics/models/dashScope/) 文档。
+关于每个模型的具体用法与特性，请查看 Spring AI Alibaba 模型适配文档。
 
 ## DashScopeChatModel
 

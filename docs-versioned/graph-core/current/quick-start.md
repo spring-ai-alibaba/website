@@ -852,23 +852,20 @@ Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工�
 
 #### 1. 人工介入模式
 了解如何在执行前添加工具批准、批量批准和其他模式。参考：
-- [等待用户输入](/workflow/examples/wait-user-input)
-- [Issue #78 - 重置记忆线程](/workflow/qa/issue78)
+- [等待用户输入](./examples/wait-user-input)
 
 #### 2. 子图
 为复杂的多步骤操作创建子图。参考：
-- [子图作为 NodeAction](/workflow/examples/subgraph-as-nodeaction)
-- [子图作为 StateGraph](/workflow/examples/subgraph-as-stategraph)
-- [子图作为 CompiledGraph](/workflow/examples/subgraph-as-compiledgraph)
+- [子图作为 NodeAction](./examples/subgraph-as-nodeaction)
+- [子图作为 StateGraph](./examples/subgraph-as-stategraph)
+- [子图作为 CompiledGraph](./examples/subgraph-as-compiledgraph)
 
 #### 3. 流式输出
 添加流式输出以向用户显示实时进度。参考：
-- [LLM 流式输出](/workflow/examples/llm-streaming-springai)
-- [Issue #118 - 流式输出与图中断](/workflow/qa/issue118)
+- [LLM 流式输出](./examples/llm-streaming-springai)
 
 #### 4. 工具集成
 集成更多工具进行网络搜索、数据库查询和API调用。参考：
-- [Issue #93 - Function Calling](/workflow/qa/issue93)
 - [Spring AI Function Calling](https://docs.spring.io/spring-ai/reference/api/functions.html)
 
 #### 5. 重试逻辑
@@ -876,17 +873,9 @@ Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工�
 
 #### 6. 持久化和时光旅行
 深入了解状态持久化和历史回溯。参考：
-- [持久化](/workflow/examples/persistence)
-- [时光旅行](/workflow/examples/time-travel)
+- [持久化](./examples/persistence)
+- [时光旅行](./examples/time-travel)
 
 #### 7. 并行执行
 学习如何并行执行多个节点。参考：
-- [并行分支](/workflow/examples/parallel-branch)
-
-## 相关文档
-
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
-- [条件边](/workflow/graph/conditional-edges) - 条件路由详解
-- [Checkpoint 机制](/workflow/graph/checkpoint) - 状态持久化
-- [节点操作](/workflow/graph/node-action) - NodeAction 详解
-- [Adaptive RAG](/workflow/examples/adaptiverag) - 高级 RAG 示例
+- [并行分支](./examples/parallel-branch)

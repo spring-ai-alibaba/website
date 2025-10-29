@@ -177,7 +177,7 @@ function HomepageHeader() {
             <div className={styles.heroButtons}>
               <Link
                 className={clsx('button button--primary button--lg', styles.heroButton)}
-                to="/docs/intro">
+                to="/docs/overview">
                 <svg className={styles.buttonIcon} viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9,4V20H15V4H9M4,8V16H6V8H4M18,8V16H20V8H18Z" />
                 </svg>

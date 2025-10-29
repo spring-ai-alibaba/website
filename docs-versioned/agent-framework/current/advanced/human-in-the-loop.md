@@ -477,7 +477,7 @@ InterruptionMetadata editMetadata = HITLHelper.editTool(
 ## 相关文档
 
 - [Hooks](../tutorials/hooks.md) - 了解Hook机制
-- [Interceptors](../tutorials/interceptors.md) - 了解Interceptor机制
+- [Interceptors](../tutorials/hooks.md) - 了解Interceptor机制
 - [Memory](./memory.md) - 检查点和持久化
 - [Agents](../tutorials/agents.md) - Agent基础概念
 

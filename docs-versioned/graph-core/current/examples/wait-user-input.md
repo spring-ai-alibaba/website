@@ -76,7 +76,7 @@ StateGraph builder = new StateGraph(keyStrategyFactory)
     .addNode("step_3", step3)
     .addEdge(StateGraph.START, "step_1")
     .addEdge("step_1", "human_feedback")
-    .addConditionalEdges("human_feedback", evalHumanFeedback, 
+    .addConditionalEdges("human_feedback", evalHumanFeedback,
         Map.of("back", "step_1", "next", "step_3", "unknown", "human_feedback"))
     .addEdge("step_3", StateGraph.END);
 
@@ -176,7 +176,7 @@ System.out.printf("\n--User Input--\n用户选择: '%s'\n", userInput);
 // 更新状态
 var updateConfig = graph.updateState(invokeConfig, Map.of("human_feedback", userInput), null);
 
-System.out.printf("\ngetNext()\n\twith invokeConfig:[%s]\n\twith updateConfig:[%s]\n", 
+System.out.printf("\ngetNext()\n\twith invokeConfig:[%s]\n\twith updateConfig:[%s]\n",
     graph.getState(invokeConfig).getNext(),
     graph.getState(updateConfig).getNext());
 ```
@@ -206,7 +206,6 @@ NodeOutput{node=__END__, state={messages=[Step 0, Step 1, Step 3], human_feedbac
 
 ## 相关文档
 
-- [Checkpoint 机制](/workflow/graph/checkpoint) - 状态持久化
-- [条件边](/workflow/graph/conditional-edges) - 条件路由
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
+- [Checkpoint 机制](../core/checkpoint-postgres) - 状态持久化
+- [快速入门](../quick-start) - Graph 基础使用
 

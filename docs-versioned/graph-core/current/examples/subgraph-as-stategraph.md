@@ -316,8 +316,7 @@ System.out.println("Result: " + result.value("result").orElse(""));
 
 ## 相关文档
 
-- [子图作为 NodeAction](/workflow/examples/subgraph-as-nodeaction) - 另一种集成方式
-- [子图作为 CompiledGraph](/workflow/examples/subgraph-as-compiledgraph) - 编译后使用
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础
-- [状态管理](/workflow/graph/state-management) - 状态策略
+- [子图作为 NodeAction](./subgraph-as-nodeaction) - 另一种集成方式
+- [子图作为 CompiledGraph](./subgraph-as-compiledgraph) - 编译后使用
+- [快速入门](../quick-start) - Graph 基础
 

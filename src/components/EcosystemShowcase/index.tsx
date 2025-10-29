@@ -61,7 +61,7 @@ const frameworkItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.framework.extensions.description',
     icon: '🔌',
     repoUrl: 'https://github.com/spring-ai-alibaba/spring-ai-extensions',
-    docUrl: '/docs/frameworks/extensions/quick-start',
+    docUrl: '/docs/frameworks/spring-ai/reference/concepts',
     stars: 'spring-ai-extensions',
   },
 ]

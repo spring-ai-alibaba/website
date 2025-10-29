@@ -657,8 +657,5 @@ Spring AI Alibaba 压测截图：
 
 ## 相关资源
 
-- [Graph 快速入门](../workflow/graph/quick-guide/)
-- [ReactAgent 教程](../tutorials/agents/)
-- [并行节点](../workflow/graph/parallel-node/)
-- [Human-in-the-Loop](../workflow/graph/human-in-the-loop/)
+- Graph 框架文档
 

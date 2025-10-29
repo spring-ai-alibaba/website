@@ -419,8 +419,7 @@ System.out.println("Output: " + result.value("output").orElse(""));
 
 ## 相关文档
 
-- [子图作为 NodeAction](/workflow/examples/subgraph-as-nodeaction) - 节点包装方式
-- [子图作为 StateGraph](/workflow/examples/subgraph-as-stategraph) - 直接嵌入方式
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
-- [性能优化](/workflow/graph/performance) - 性能优化指南
+- [子图作为 NodeAction](./subgraph-as-nodeaction) - 节点包装方式
+- [子图作为 StateGraph](./subgraph-as-stategraph) - 直接嵌入方式
+- [快速入门](../quick-start) - Graph 基础使用
 

@@ -40,17 +40,6 @@ const sidebars: SidebarsConfig = {
         'examples/wait-user-input',
       ],
     },
-    {
-      type: 'category',
-      label: '问题解答',
-      items: [
-        'qa/issue51',
-        'qa/issue78',
-        'qa/issue93',
-        'qa/issue99',
-        'qa/issue118',
-      ],
-    },
   ],
 }
 

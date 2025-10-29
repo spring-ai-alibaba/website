@@ -201,8 +201,7 @@ public class SubGraphNodeWithMapping implements NodeAction {
 
 ## 相关文档
 
-- [子图作为 StateGraph](/workflow/examples/subgraph-as-stategraph) - 另一种子图集成方式
-- [子图作为 CompiledGraph](/workflow/examples/subgraph-as-compiledgraph) - 编译后的子图使用
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
-- [节点操作](/workflow/graph/node-action) - NodeAction 详解
+- [子图作为 StateGraph](./subgraph-as-stategraph) - 另一种子图集成方式
+- [子图作为 CompiledGraph](./subgraph-as-compiledgraph) - 编译后的子图使用
+- [快速入门](../quick-start) - Graph 基础使用
 

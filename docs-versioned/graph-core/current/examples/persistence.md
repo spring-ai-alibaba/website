@@ -480,10 +480,9 @@ public class PersistenceExample {
 
 ## 相关文档
 
-- [等待用户输入](/workflow/examples/wait-user-input) - 中断和恢复示例
-- [时光旅行](/workflow/examples/time-travel) - 状态历史导航
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
-- [Issue #78](/workflow/qa/issue78) - 重置记忆线程示例
+- [等待用户输入](./wait-user-input) - 中断和恢复示例
+- [时光旅行](./time-travel) - 状态历史导航
+- [快速入门](../quick-start) - Graph 基础使用
 
 ## Test function calling
 
@@ -538,23 +537,23 @@ import dev.langchain4j.data.message.ChatMessage;
 
 ```java
 EdgeAction<MessageState> routeMessage = state -> {
-  
+
   var lastMessage = state.lastMessage();
-  
+
   if ( !lastMessage.isPresent()) return "exit";
 
   var message = (AiMessage)lastMessage.get();
 
   // If tools should be called
   if ( message.hasToolExecutionRequests() ) return "next";
-  
+
   // If no tools are called, we can finish (respond to the user)
   return "exit";
 };
 
 // Call Model
 NodeAction<MessageState> callModel = state -> {
-  
+
 
   var request = ChatRequest.builder()
                 .messages( state.messages() )
@@ -568,7 +567,7 @@ NodeAction<MessageState> callModel = state -> {
 var searchTool = new SearchTool();
 
 
-// Invoke Tool 
+// Invoke Tool
 NodeAction<MessageState> invokeTool = state -> {
 
   var lastMessage = (AiMessage)state.lastMessage()
@@ -648,8 +647,8 @@ which will "save" checkpoints in-memory.
 
 
 ```java
-import org.bsc.langgraph4j.checkpoint.MemorySaver; 
-import org.bsc.langgraph4j.CompileConfig; 
+import org.bsc.langgraph4j.checkpoint.MemorySaver;
+import org.bsc.langgraph4j.CompileConfig;
 
 // Here we only save in-memory
 var memory = new MemorySaver();

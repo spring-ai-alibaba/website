@@ -217,8 +217,8 @@ graph.invoke(Map.of(), replayConfig);
 
 ## 相关文档
 
-- [持久化](/workflow/examples/persistence) - 状态持久化
-- [等待用户输入](/workflow/examples/wait-user-input) - 中断和恢复
-- [Checkpoint 机制](/workflow/graph/checkpoint) - 检查点详解
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
+- [持久化](./persistence) - 状态持久化
+- [等待用户输入](./wait-user-input) - 中断和恢复
+- [Checkpoint 机制](../core/checkpoint-postgres) - 检查点详解
+- [快速入门](../quick-start) - Graph 基础使用
 

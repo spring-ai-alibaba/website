@@ -165,14 +165,14 @@ public class State extends AgentState {
     super( initData  );
   }
 
-  Optional<String> input() { return value("input"); } 
-  Optional<String> results() { return value("results"); } 
- 
+  Optional<String> input() { return value("input"); }
+  Optional<String> results() { return value("results"); }
+
 }
 
 AsyncNodeAction<State> myNode = node_async(state -> {
     System.out.println( "In myNode: " );
-    return Map.of( results: "Hello " + state.input().orElse( "" ) );  
+    return Map.of( results: "Hello " + state.input().orElse( "" ) );
 });
 
 AsyncNodeAction<State> myOtherNode = node_async(state -> state);
@@ -182,7 +182,7 @@ AsyncNodeAction<State> myOtherNode = node_async(state -> state);
 var builder = new StateGraph( State::new )
 在 Spring AI Alibaba 中，节点通常是一个**函数式接口** ([AsyncNodeAction])，其参数是 [state](#state)，您可以使用 [addNode] 方法将这些节点添加到图中：
 
-Since [AsyncNodeAction] is designed to work with [CompletableFuture], you can use `node_async` static method that adapt it to a simpler syncronous scenario. 
+Since [AsyncNodeAction] is designed to work with [CompletableFuture], you can use `node_async` static method that adapt it to a simpler syncronous scenario.
 
 ### `START` Node
 
@@ -204,13 +204,13 @@ var builder = new StateGraph()
 
 ## Edges
 
-- **Normal Edges**: 
+- **Normal Edges**:
 由于 [AsyncNodeAction] 设计用于与 [CompletableFuture] 一起工作，您可以使用 `node_async` 静态方法将其适配为更简单的同步场景。
 - **Conditional Edges**:
   > Call a function to determine which node(s) to go to next.
-- **Entry Point**: 
+- **Entry Point**:
   > Which node to call first when user input arrives.
-- **Conditional Entry Point**: 
+- **Conditional Entry Point**:
   > Call a function to determine which node(s) to call first when user input arrives.
 
 <!-- 👉 PARALLEL
@@ -264,7 +264,7 @@ graph.addConditionalEdges(START, routingFunction, Map.of( "first": "nodeB", "sec
 // 添加普通边
 You must provide an object that maps the `routingFunction`'s output to the name of the next node.
 
-<!-- 
+<!--
 ## `Send`
 ### 条件边
 By default, `Nodes` and `Edges` are defined ahead of time and operate on the same shared state. However, there can be cases where the exact edges are not known ahead of time and/or you may want different versions of `State` to exist at the same time. A common of example of this is with `map-reduce` design patterns. In this design pattern, a first node may generate an array of objects, and you may want to apply some other node to all those objects. The number of objects may be unknown ahead of time (meaning the number of edges may not be known) and the input `State` to the downstream `Node` should be different (one for each generated object).
@@ -291,9 +291,6 @@ First, checkpointers facilitate **human-in-the-loop workflows**<!--[human-in-the
 import static com.alibaba.cloud.ai.graph.StateGraph.START;
 ```
 
-See [this guide](../how-tos/persistence.ipynb) for how to add a checkpointer to your graph.
-
-
 ## Threads
 ### 条件入口点
 Threads enable the checkpointing of multiple different runs, making them essential for multi-tenant chat applications and other scenarios where maintaining separate states is necessary. A thread is a unique ID assigned to a series of checkpoints saved by a checkpointer. When using a checkpointer, you must specify a `thread_id` when running the graph.
@@ -311,20 +308,7 @@ var config = RunnableConfig.builder()
 您必须提供一个对象，将 `routingFunction` 的输出映射到下一个节点的名称。
 graph.invoke(inputs, config);
 ```
-
-See [this guide](../how-tos/persistence.ipynb) for how to use threads.
-
 <a id="checkpointer-state"></a>
-
-## Checkpointer state
-
-When interacting with the checkpointer state, you must specify a [thread identifier](#threads). Each checkpoint saved by the checkpointer has two properties:
-
-- **state**: This is the value of the state at this point in time.
-- **nextNodeId**: This is the Idenfier of the node to execute next in the graph.
-
-
-<a id="get-state"></a>
 
 ## Checkpointer（检查点）
 
@@ -354,7 +338,7 @@ import com.alibaba.cloud.ai.graph.RunnableConfig;
                            .build();
 **`values`**
 
-These are the values that will be used to update the state. Note that this update is treated exactly as any update from a node is treated. This means that these values will be passed to the [reducer](#reducers) functions that are part of the state. So this does NOT automatically overwrite the state. 
+These are the values that will be used to update the state. Note that this update is treated exactly as any update from a node is treated. This means that these values will be passed to the [reducer](#reducers) functions that are part of the state. So this does NOT automatically overwrite the state.
 有关如何使用线程的信息，请参阅[此指南](../examples/persistence.md)。
 **`asNode`**
 
@@ -398,133 +382,8 @@ You can then access and use this configuration inside a node:
 ```
 配置应包含指定要更新哪个线程的 `thread_id`。
 
-See [this guide](/langgraph4j/how-tos/langgraph4j-howtos/configuration.html) for a full breakdown on configuration 
 这些是将用于更新状态的值。请注意，此更新的处理方式与节点的任何更新完全相同。这意味着这些值将传递给作为状态一部分的 [reducer](#reducers) 函数。因此，这不会自动覆盖状态。
 
 ## Breakpoints (AKA interruptions )
 
 调用 `updateState` 时指定的最后一件事是 `asNode`。此更新将应用为好像它来自节点 `asNode`。如果 `asNode` 为 null，它将被设置为更新状态的最后一个节点。
-wait for external input before proceeding.
-
-To set breakpoints before or after certain nodes execute. This can be used to wait for human approval before continuing. These can be set when you ["compile" a graph](#compiling-your-graph). 
-
-### Static definition 
-
-You can set breakpoints either _before_ a node executes (using `interruptBefore`) or _after_ a node executes (using `interruptAfter`) adding them on `CompileConfig`.
-
-```java
-var compileConfig = CompileConfig.builder()
-                    .checkpointSaver(saver)
-                    .interruptBefore( "tools")
-                    .build();
-```
-
-### Dynamic definition
-
-The `org.bsc.langgraph4j.action.InterruptableAction<State>` interface is the core component that enables this functionality. Any node action that implements this interface can conditionally interrupt the graph's execution.
-
-The heart of the interface is the interrupt method:
-
-```java
-public interface InterruptableAction<State extends AgentState> {
-   /**
-    * Determines whether the graph execution should be interrupted at the current node.
-    *
-    * @param nodeId The identifier of the current node being processed.
-    * @param state  The current state of the agent.
-    * @return An {@link Optional} containing {@link InterruptionMetadata} if the execution
-    *         should be interrupted. Returns an empty {@link Optional} to continue execution.
-   */
-   Optional<InterruptionMetadata<State>> interrupt(String nodeId, State state );
-}
-```
-
-**Here’s how it works**:
-
- * When the graph is about to execute a node, it first checks if the node's action implements InterruptableAction.
- * If it does, the interrupt(String nodeId, State state) method is called.
- * If the method returns a non-empty `Optional<InterruptionMetadata>`, the graph's execution is paused. The InterruptionMetadata object contains information about the
-  interruption, which can be sent to an external system or user for review.
- * If the method returns an empty Optional, the node executes normally, and the graph continues its execution without interruption.
-
----- 
-
-You **MUST** use a [checkpoiner](#checkpointer) when using breakpoints. This is because your graph needs to be able to resume execution.
-
-In order to resume execution, you can just invoke your graph with `GraphInput.resume()` as the input.
-
-```java
-// Initial run of graph
-graph.stream(inputs, config);
-
-// Let's assume it hit a breakpoint somewhere, you can then resume by passing in None
-graph.stream(GraphInput.resume(), config);
-```
-
-### Achieve InterruptionMetadata object after interruption
-
-It is most important understand that the **nodes iterator holds the final result of graph execution**. In the case of interruption the `InterruptionMetadata` instance will be set as iterator's result so you can achieve it using : `AsyncGenerator.resultValue(generator)` as shown below
- 
-```java
-var generator = app.stream( inputs );
-for (var i : iterator) {
-   System.out.println(i);
-}
-var resultValue = AsyncGenerator.resultValue(generator).orElse(null);
-
-```
-> `resultValue` is a generic `Object` that in case of interruptions is an instance of InterruptionMetadata
-
-
-
-See [Wait for user Input (HITL)](../how-tos/wait-user-input.ipynb) for a full walkthrough of how to add breakpoints.
-
-## Visualization
-
-It's often nice to be able to visualize graphs, especially as they get more complex. LangGraph4j comes with several built-in ways to visualize graphs using diagram-as-code tools such as [PlantUML] and [Mermaid] through the [graph.getGraph] method. 
-
-```java
-// for PlantUML
-GraphRepresentation result = app.getGraph(GraphRepresentation.Type.PLANTUML);
-
-System.out.println(result.getContent());
-
-// for Mermaid
-GraphRepresentation result = app.getGraph(GraphRepresentation.Type.MERMAID);
-System.out.println(result.getContent());
-
-```
-
-<!-- 
-There are several different streaming modes that LangGraph4j supports:
-
-- ["values"](/langgraph4j/how-tos/langgraph4j-howtos/stream-values.html): This streams the full value of the state after each step of the graph.
-- ["updates](/langgraph4j/how-tos/langgraph4j-howtos/stream-updates.html): This streams the updates to the state after each step of the graph. If multiple updates are made in the same step (e.g. multiple nodes are run) then those updates are streamed separately.
-
-In addition, you can use the [streamEvents](https://v02.api.js.langchain.com/classes/langchain_core_runnables.Runnable.html#streamEvents) method to stream back events that happen _inside_ nodes. This is useful for [streaming tokens of LLM calls](/langgraph4j/how-tos/langgraph4j-howtos/streaming-tokens-without-langchain.html). -->
-
-[Mermaid]: https://mermaid.js.org
-[java-async-generator]: https://github.com/bsorrentino/java-async-generator
-
-[PlainTextStateSerializer]: /langgraph4j/apidocs/org/bsc/langgraph4j/serializer/plain_text/PlainTextStateSerializer.html
-[ObjectStreamStateSerializer]: /langgraph4j/apidocs/org/bsc/langgraph4j/serializer/std/ObjectStreamStateSerializer.html
-[RemoveByHash]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/RemoveByHash.html
-[RemoveIdentifier]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/AppenderChannel.RemoveIdentifier.html
-[Serializer]: /langgraph4j/apidocs/org/bsc/langgraph4j/serializer/Serializer.html
-[Reducer]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/Reducer.html
-[AgentState]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/AgentState.html
-[StateGraph]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html
-[Channel]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/Channel.html
-[AsyncNodeAction]: /langgraph4j/apidocs/org/bsc/langgraph4j/action/AsyncNodeAction.html
-[AsyncEdgeAction]: /langgraph4j/apidocs/org/bsc/langgraph4j/action/AsyncEdgeAction.html
-[AppenderChannel]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/AppenderChannel.html
-[addNode]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html#addNode(java.lang.String,org.bsc.langgraph4j.action.AsyncNodeAction)
-## 可视化
-[addConditionalEdges]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html#addConditionalEdges(java.lang.String,org.bsc.langgraph4j.action.AsyncEdgeAction,java.util.Map)
-能够可视化图通常很有用，尤其是当它们变得更复杂时。Spring AI Alibaba 提供了几种内置方式，通过 `graph.getGraph` 方法使用图表即代码工具（如 [PlantUML] 和 [Mermaid]）可视化图。
-[Checkpointers]: /langgraph4j/apidocs/org/bsc/langgraph4j/checkpoint/BaseCheckpointSaver.html
-[graph.updateState(config,values,asNode)]: /langgraph4j/apidocs/org/bsc/langgraph4j/CompiledGraph.html#updateState(org.bsc.langgraph4j.RunnableConfig,java.util.Map,java.lang.String)
-import com.alibaba.cloud.ai.graph.GraphRepresentation;
-
-// 对于 PlantUML
-[graph.getGraph]: /langgraph4j/apidocs/org/bsc/langgraph4j/CompiledGraph.html#getGraph(org.bsc.langgraph4j.GraphRepresentation.Type(java.lang.String)

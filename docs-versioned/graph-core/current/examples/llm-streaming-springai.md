@@ -103,7 +103,7 @@ flux.collectList().block().forEach(response -> {
 
 ```
     Received: StreamingOutput{node=agent, state=null, chunk=:
-    
+
     }
     Received: StreamingOutput{node=agent, state=null, chunk=Why}
     Received: StreamingOutput{node=agent, state=null, chunk= don}
@@ -112,7 +112,7 @@ flux.collectList().block().forEach(response -> {
     Received: StreamingOutput{node=agent, state=null, chunk= trust}
     Received: StreamingOutput{node=agent, state=null, chunk= atoms}
     Received: StreamingOutput{node=agent, state=null, chunk=?
-    
+
     }
     Received: StreamingOutput{node=agent, state=null, chunk=Because}
     Received: StreamingOutput{node=agent, state=null, chunk= they}
@@ -183,7 +183,7 @@ log.info( "result: {}", state.lastMessage()
 ```
 ### 创建带流式输出的 Graph 节点
     START
-参考 [节点流式输出文档](/workflow/graph/streaming) 获取完整示例。
+参考 [节点流式输出文档](../core/streaming) 获取完整示例。
     callAgent
 
 ```java
@@ -256,6 +256,6 @@ Final result: The weather in Napoli is currently cold, with a low of 13 degrees 
 
 ## 相关文档
 
-- [节点流式输出](/workflow/graph/streaming) - 完整的流式输出示例
-- [快速入门](/workflow/graph/quick-guide) - Graph 基础使用
+- [节点流式输出](../core/streaming) - 完整的流式输出示例
+- [快速入门](../quick-start) - Graph 基础使用
 - [Spring AI 文档](https://docs.spring.io/spring-ai/reference/) - Spring AI 官方文档
