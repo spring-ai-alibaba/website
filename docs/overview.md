@@ -8,9 +8,10 @@ sidebar_position: 1
 
 Spring AI Alibaba 是构建 Agent 智能体应用最简单的方式，只需不到 10 行代码就可以构建您的智能体应用。
 
-![](/img/agent/overview/architecture.png)
+![Architecture](/img/agent/overview/architecture.png)
 
 Spring AI Alibaba 项目从架构上包含如下三层：
+
 * Aegnt Framework，是一个以 ReactAgent 设计理念为核心的 Agent 开发框架，使开发者能够构建具备自动上下文工程和人机交互等核心能力的Agent。
 * Graph，graph 是一个低级别的工作流和多代理协调框架，能够帮助开发者实现复杂的应用程序编排，它具备丰富的预置节点和简化的图状态定义，Graph 是 Agent Framework 的底层运行时基座。
 * Augmented LLM，以 Spring AI 框架底层原子抽象为基础，为构建大型语言模型（LLM）应用提供基础抽象，例如模型（Model）、工具（Tool）、多模态组件（MCP）、消息（Message）、向量存储（Vector Store）等。
@@ -73,9 +74,9 @@ public class AgentExample {
 
 * **人机协同**：将人工反馈和审批步骤无缝集成到代理工作流程中，从而实现关键工具和操作的监督执行。
 
-- **流式传输支持**：代理响应的实时流式传输
+* **流式传输支持**：代理响应的实时流式传输
 
-- **错误处理**：强大的错误恢复和重试机制
+* **错误处理**：强大的错误恢复和重试机制
 
 * **基于图的工作流**：基于图的工作流运行时和 API，用于条件路由、嵌套图、并行执行和状态管理。可将工作流导出为 PlantUML 和 Mermaid 格式。
 

@@ -89,11 +89,13 @@ make version-sync-current
 ### 添加新版本到配置
 
 1. 创建版本目录和文档：
+
    ```bash
    make version-create-agent VERSION=1.5
    ```
 
 2. 更新 `docusaurus.config.ts` 中的版本配置：
+
    ```typescript
    {
      id: 'agent-framework',
@@ -119,6 +121,7 @@ make version-sync-current
    ```
 
 3. 更新 `src/components/VersionDropdown/index.tsx` 中的版本列表：
+
    ```typescript
    const frameworkVersions: Record<string, Version[]> = {
      'agent-framework': [
@@ -133,6 +136,7 @@ make version-sync-current
 ## 版本切换器
 
 版本切换器会自动在以下页面显示：
+
 - `/docs/frameworks/agent-framework/**`
 - `/docs/frameworks/graph-core/**`
 
@@ -153,10 +157,12 @@ make version-sync-current
 
 1. 确保 `current` 版本的文档是最新的
 2. 创建版本快照：
+
    ```bash
    make version-create-agent VERSION=1.5
    make version-create-graph VERSION=1.5
    ```
+
 3. 更新配置文件（见上文）
 4. 提交更改
 5. 部署网站
@@ -182,6 +188,7 @@ make version-sync-current
 ### 版本切换器不显示
 
 检查：
+
 1. 是否在正确的页面路径（`/docs/frameworks/agent-framework/**` 或 `/docs/frameworks/graph-core/**`）
 2. 浏览器控制台是否有错误
 3. 版本配置是否正确
@@ -189,6 +196,7 @@ make version-sync-current
 ### 版本切换后 404
 
 检查：
+
 1. 版本目录是否存在
 2. `docusaurus.config.ts` 中的版本配置是否正确
 3. 文档文件是否存在于对应版本目录中
@@ -196,6 +204,7 @@ make version-sync-current
 ### 样式问题
 
 检查：
+
 1. `styles.module.css` 是否正确加载
 2. CSS 变量是否在当前主题中定义
 
