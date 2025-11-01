@@ -617,6 +617,14 @@
     "message": "基于 spring-ai-alibaba-graph 实现的深度研究工具。",
     "description": "DeepResearch description"
   },
+  "ecosystem.product.copilot.name": {
+    "message": "Copilot",
+    "description": "Copilot name"
+  },
+  "ecosystem.product.copilot.description": {
+    "message": "基于 Spring AI Alibaba 构建的 AI 编程助手智能体，帮助开发者更快地编写更好的代码。",
+    "description": "Copilot description"
+  },
   "codeOfConduct.title": {
     "message": "行为准则",
     "description": "The page title for code of conduct"

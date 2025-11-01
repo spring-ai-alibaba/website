@@ -418,6 +418,14 @@
     "message": "Deep Research implemented based on spring-ai-alibaba-graph.",
     "description": "DeepResearch description"
   },
+  "ecosystem.product.copilot.name": {
+    "message": "Copilot",
+    "description": "Copilot name"
+  },
+  "ecosystem.product.copilot.description": {
+    "message": "An AI programming assistant agent built with Spring AI Alibaba, helping developers write better code faster.",
+    "description": "Copilot description"
+  },
   "codeOfConduct.title": {
     "message": "Code of Conduct",
     "description": "The page title for code of conduct"

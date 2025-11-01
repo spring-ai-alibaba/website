@@ -74,7 +74,7 @@ const productItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.product.jmanus.description',
     icon: '🤖',
     repoUrl: 'https://github.com/spring-ai-alibaba/jmanus',
-    docUrl: '/docs/agents/jmanus/quick-start',
+    docUrl: '/agents/jmanus/quick-start',
     stars: 'jmanus',
   },
   {
@@ -84,7 +84,7 @@ const productItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.product.dataagent.description',
     icon: '🗃️',
     repoUrl: 'https://github.com/spring-ai-alibaba/dataagent',
-    docUrl: '/docs/agents/dataagent/quick-start',
+    docUrl: '/agents/dataagent/quick-start',
     stars: 'dataagent',
   },
   {
@@ -94,8 +94,18 @@ const productItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.product.deepresearch.description',
     icon: '🔬',
     repoUrl: 'https://github.com/spring-ai-alibaba/deep-research',
-    docUrl: '/docs/agents/deepresearch/quick-start',
+    docUrl: '/agents/deepresearch/quick-start',
     stars: 'deep-research',
+  },
+  {
+    name: 'Copilot',
+    nameId: 'ecosystem.product.copilot.name',
+    description: 'An AI programming assistant agent built with Spring AI Alibaba, helping developers write better code faster.',
+    descriptionId: 'ecosystem.product.copilot.description',
+    icon: '💻',
+    repoUrl: 'https://github.com/spring-ai-alibaba/copilot',
+    docUrl: '/agents/copilot/quick-start',
+    stars: 'copilot',
   },
 ]
 

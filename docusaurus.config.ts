@@ -56,48 +56,18 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
 
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'agent-framework',
-        path: 'docs-versioned/agent-framework/current',
-        routeBasePath: 'docs/frameworks/agent-framework/current',
-        sidebarPath: './sidebars/current/sidebars-agent-framework.ts',
-        editUrl: githubUrls.editDocs,
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'agent-framework-1x',
-        path: 'docs-versioned/agent-framework/1.x',
-        routeBasePath: 'docs/frameworks/agent-framework/1.x',
-        sidebarPath: './sidebars/1.x/sidebars-agent-framework.ts',
-        editUrl: githubUrls.editDocs,
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'graph-core',
-        path: 'docs-versioned/graph-core/current',
-        routeBasePath: 'docs/frameworks/graph-core/current',
-        sidebarPath: './sidebars/current/sidebars-graph-core.ts',
-        editUrl: githubUrls.editDocs,
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'graph-core-1x',
-        path: 'docs-versioned/graph-core/1.x',
-        routeBasePath: 'docs/frameworks/graph-core/1.x',
-        sidebarPath: './sidebars/1.x/sidebars-graph-core.ts',
-        editUrl: githubUrls.editDocs,
-      },
-    ],
-  ],
+  // plugins: [
+  //   [
+  //     '@docusaurus/plugin-content-docs',
+  //     {
+  //       id: 'agents',
+  //       path: 'docs/agents',
+  //       routeBasePath: 'agents',
+  //       sidebarPath: './sidebars-agents.ts',
+  //       editUrl: githubUrls.editDocs,
+  //     },
+  //   ],
+  // ],
 
   presets: [
     [
@@ -146,6 +116,13 @@ const config: Config = {
           position: 'left',
           label: '文档',
         },
+        // {
+        //   type: 'docSidebar',
+        //   sidebarId: 'agentsSidebar',
+        //   docsPluginId: 'agents',
+        //   position: 'left',
+        //   label: '智能体',
+        // },
         {
           to: '/blog',
           label: '博客',
@@ -210,11 +187,11 @@ const config: Config = {
           items: [
             {
               label: 'Agent Framework',
-              to: '/docs/frameworks/agent-framework/current/quick-start',
+              to: '/docs/frameworks/agent-framework/quick-start',
             },
             {
               label: 'Graph Core',
-              to: '/docs/frameworks/graph-core/current/quick-start',
+              to: '/docs/frameworks/graph-core/quick-start',
             },
             {
               label: 'Admin',
@@ -231,15 +208,19 @@ const config: Config = {
           items: [
             {
               label: 'DataAgent',
-              to: '/docs/agents/dataagent/quick-start',
+              to: '/agents/dataagent/quick-start',
             },
             {
               label: 'JManus',
-              to: '/docs/agents/jmanus/quick-start',
+              to: '/agents/jmanus/quick-start',
             },
             {
               label: 'DeepResearch',
-              to: '/docs/agents/deepresearch/quick-start',
+              to: '/agents/deepresearch/quick-start',
+            },
+            {
+              label: 'Copilot',
+              to: '/agents/copilot/quick-start',
             },
           ],
         },

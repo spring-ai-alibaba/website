@@ -1,7 +1,0 @@
-# Best Practices
-
-Graph Core 的最佳实践。
-
-## 概述
-
-待补充...
