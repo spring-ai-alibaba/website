@@ -56,18 +56,18 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
 
-  // plugins: [
-  //   [
-  //     '@docusaurus/plugin-content-docs',
-  //     {
-  //       id: 'agents',
-  //       path: 'docs/agents',
-  //       routeBasePath: 'agents',
-  //       sidebarPath: './sidebars-agents.ts',
-  //       editUrl: githubUrls.editDocs,
-  //     },
-  //   ],
-  // ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'agents',
+        path: 'agents-docs',
+        routeBasePath: 'agents',
+        sidebarPath: './sidebars/sidebars-agents.ts',
+        editUrl: githubUrls.editDocs,
+      },
+    ],
+  ],
 
   presets: [
     [
@@ -116,13 +116,13 @@ const config: Config = {
           position: 'left',
           label: '文档',
         },
-        // {
-        //   type: 'docSidebar',
-        //   sidebarId: 'agentsSidebar',
-        //   docsPluginId: 'agents',
-        //   position: 'left',
-        //   label: '智能体',
-        // },
+        {
+          type: 'docSidebar',
+          sidebarId: 'agentsSidebar',
+          docsPluginId: 'agents',
+          position: 'left',
+          label: '智能体',
+        },
         {
           to: '/blog',
           label: '博客',

@@ -3,9 +3,6 @@ LOG_TARGET = echo -e "\033[0;32m===========> Running $@ ... \033[0m"
 
 LINKINATOR_IGNORE := "langchain.com golang.org goproxy.cn wikipedia.org docs.spring.io aliyun.com gov.cn favicon.ico github.com githubusercontent.com example.com github.io gnu.org _print"
 
-# Include version management makefile
-include tools/make/Makefile.version.mk
-
 ##@ Common
 
 .PHONY: install
