@@ -22,7 +22,7 @@ const frameworkItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.framework.agent.description',
     icon: '🚀',
     repoUrl: 'https://github.com/spring-ai-alibaba/spring-ai-alibaba',
-    docUrl: '/docs/frameworks/agent-framework/current/quick-start',
+    docUrl: '/docs/frameworks/agent-framework/quick-start',
     stars: 'spring-ai-alibaba',
   },
   {
@@ -32,7 +32,7 @@ const frameworkItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.framework.graph.description',
     icon: '🔗',
     repoUrl: 'https://github.com/spring-ai-alibaba/spring-ai-alibaba-graph',
-    docUrl: '/docs/frameworks/graph-core/current/quick-start',
+    docUrl: '/docs/frameworks/graph-core/quick-start',
     stars: 'spring-ai-alibaba-graph',
   },
   {
