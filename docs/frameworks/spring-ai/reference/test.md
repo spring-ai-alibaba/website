@@ -2,7 +2,7 @@
 sidebar_position: 23
 ---
 
-# Testcontainers
+# Spring AI Test
 
 Spring AI 提供了 Spring Boot 自动配置，用于建立与通过 Testcontainers 运行的模型服务或向量存储的连接。要启用它，请将以下依赖项添加到项目的 Maven `pom.xml` 文件中：
 

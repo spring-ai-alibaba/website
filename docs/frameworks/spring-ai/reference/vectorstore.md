@@ -2,7 +2,7 @@
 sidebar_position: 25
 ---
 
-# 向量数据库
+# Vector Database
 
 向量数据库是一种专门类型的数据库，在 AI 应用中扮演着重要角色。
 
@@ -19,25 +19,25 @@ sidebar_position: 25
 Spring AI 通过 `VectorStore` 接口提供了与向量数据库交互的抽象 API。以下是 `VectorStore` 接口的定义:
 
 ```java
-public interface VectorStore extends DocumentWriter { 
-    default String getName () { 
-        return this.getClass().getSimpleName(); 
-    } 
-    
-    void add (List<Document> documents); 
-    
-    void delete (List<String> idList); 
-    
-    void delete (Filter.Expression filterExpression); 
-    
-    default void delete (String filterExpression) { ... }; 
-    
-    List<Document> similaritySearch (String query); 
-    
-    List<Document> similaritySearch (SearchRequest request); 
-    
-    default <T> Optional<T> getNativeClient () { 
-        return Optional.empty(); 
+public interface VectorStore extends DocumentWriter {
+    default String getName () {
+        return this.getClass().getSimpleName();
+    }
+
+    void add (List<Document> documents);
+
+    void delete (List<String> idList);
+
+    void delete (Filter.Expression filterExpression);
+
+    default void delete (String filterExpression) { ... };
+
+    List<Document> similaritySearch (String query);
+
+    List<Document> similaritySearch (SearchRequest request);
+
+    default <T> Optional<T> getNativeClient () {
+        return Optional.empty();
     }
 }
 ```
@@ -45,69 +45,69 @@ public interface VectorStore extends DocumentWriter {
 以及相关的 `SearchRequest` 构建器:
 
 ```java
-public class SearchRequest { 
-    public static final double SIMILARITY_THRESHOLD_ACCEPT_ALL = 0.0; 
-    public static final int DEFAULT_TOP_K = 4; 
-    
-    private String query = ""; 
-    private int topK = DEFAULT_TOP_K; 
-    private double similarityThreshold = SIMILARITY_THRESHOLD_ACCEPT_ALL; 
-    @Nullable 
-    private Filter.Expression filterExpression; 
-    
-    public static Builder from (SearchRequest originalSearchRequest) { 
+public class SearchRequest {
+    public static final double SIMILARITY_THRESHOLD_ACCEPT_ALL = 0.0;
+    public static final int DEFAULT_TOP_K = 4;
+
+    private String query = "";
+    private int topK = DEFAULT_TOP_K;
+    private double similarityThreshold = SIMILARITY_THRESHOLD_ACCEPT_ALL;
+    @Nullable
+    private Filter.Expression filterExpression;
+
+    public static Builder from (SearchRequest originalSearchRequest) {
         return builder()
-            .query(originalSearchRequest.getQuery()) 
-            .topK(originalSearchRequest.getTopK()) 
-            .similarityThreshold(originalSearchRequest.getSimilarityThreshold()) 
-            .filterExpression(originalSearchRequest.getFilterExpression()); 
-    } 
-    
-    public static class Builder { 
-        private final SearchRequest searchRequest = new SearchRequest(); 
-        
-        public Builder query (String query) { 
-            Assert.notNull(query, "Query can not be null."); 
-            this.searchRequest.query = query; 
-            return this; 
-        } 
-        
-        public Builder topK (int topK) { 
-            Assert.isTrue(topK >= 0, "TopK should be positive."); 
-            this.searchRequest.topK = topK; 
-            return this; 
-        } 
-        
-        public Builder similarityThreshold (double threshold) { 
-            Assert.isTrue(threshold >= 0 && threshold <= 1, "Similarity threshold must be in [0,1] range."); 
-            this.searchRequest.similarityThreshold = threshold; 
-            return this; 
-        } 
-        
-        public Builder similarityThresholdAll () { 
-            this.searchRequest.similarityThreshold = 0.0; 
-            return this; 
-        } 
-        
-        public Builder filterExpression (@Nullable Filter.Expression expression) { 
-            this.searchRequest.filterExpression = expression; 
-            return this; 
-        } 
-        
-        public Builder filterExpression (@Nullable String textExpression) { 
-            this.searchRequest.filterExpression = (textExpression != null) 
-                ? new FilterExpressionTextParser().parse(textExpression) : null; 
-            return this; 
-        } 
-        
-        public SearchRequest build () { 
-            return this.searchRequest; 
-        } 
-    } 
-    
-    public String getQuery () {...} 
-    public int getTopK () {...} 
-    public double getSimilarityThreshold () {...} 
+            .query(originalSearchRequest.getQuery())
+            .topK(originalSearchRequest.getTopK())
+            .similarityThreshold(originalSearchRequest.getSimilarityThreshold())
+            .filterExpression(originalSearchRequest.getFilterExpression());
+    }
+
+    public static class Builder {
+        private final SearchRequest searchRequest = new SearchRequest();
+
+        public Builder query (String query) {
+            Assert.notNull(query, "Query can not be null.");
+            this.searchRequest.query = query;
+            return this;
+        }
+
+        public Builder topK (int topK) {
+            Assert.isTrue(topK >= 0, "TopK should be positive.");
+            this.searchRequest.topK = topK;
+            return this;
+        }
+
+        public Builder similarityThreshold (double threshold) {
+            Assert.isTrue(threshold >= 0 && threshold <= 1, "Similarity threshold must be in [0,1] range.");
+            this.searchRequest.similarityThreshold = threshold;
+            return this;
+        }
+
+        public Builder similarityThresholdAll () {
+            this.searchRequest.similarityThreshold = 0.0;
+            return this;
+        }
+
+        public Builder filterExpression (@Nullable Filter.Expression expression) {
+            this.searchRequest.filterExpression = expression;
+            return this;
+        }
+
+        public Builder filterExpression (@Nullable String textExpression) {
+            this.searchRequest.filterExpression = (textExpression != null)
+                ? new FilterExpressionTextParser().parse(textExpression) : null;
+            return this;
+        }
+
+        public SearchRequest build () {
+            return this.searchRequest;
+        }
+    }
+
+    public String getQuery () {...}
+    public int getTopK () {...}
+    public double getSimilarityThreshold () {...}
     public Filter.Expression getFilterExpression () {...}
 }
 ```
@@ -142,7 +142,7 @@ Spring AI 通过 `BatchingStrategy` 接口提供此功能，该接口允许基�
 #### 核心 BatchingStrategy 接口
 
 ```java
-public interface BatchingStrategy { 
+public interface BatchingStrategy {
     List<List<Document>> batch(List<Document> documents);
 }
 ```
@@ -164,15 +164,15 @@ Spring AI 提供了一个名为 `TokenCountBatchingStrategy` 的默认实现。�
 以下是创建自定义` TokenCountBatchingStrategy bean` 的示例:
 
 ```java
-@Configuration 
-public class EmbeddingConfig { 
-    @Bean 
-    public BatchingStrategy customTokenCountBatchingStrategy () { 
-        return new TokenCountBatchingStrategy( 
-            EncodingType.CL100K_BASE, // 指定编码类型 
-            8000, // 设置最大输入令牌计数 
+@Configuration
+public class EmbeddingConfig {
+    @Bean
+    public BatchingStrategy customTokenCountBatchingStrategy () {
+        return new TokenCountBatchingStrategy(
+            EncodingType.CL100K_BASE, // 指定编码类型
+            8000, // 设置最大输入令牌计数
             0.1 // 设置保留百分比
-        ); 
+        );
     }
 }
 ```
@@ -215,34 +215,34 @@ TokenCountBatchingStrategy strategy = new TokenCountBatchingStrategy(
 以下是使用 Vertex AI 的自动截断和自定义 `BatchingStrategy` 的配置示例:
 
 ```java
-@Configuration 
-public class AutoTruncationEmbeddingConfig { 
-    @Bean 
-    public VertexAiTextEmbeddingModel vertexAiEmbeddingModel ( 
-        VertexAiEmbeddingConnectionDetails connectionDetails) { 
-        VertexAiTextEmbeddingOptions options = VertexAiTextEmbeddingOptions.builder() 
-            .model(VertexAiTextEmbeddingOptions.DEFAULT_MODEL_NAME) 
+@Configuration
+public class AutoTruncationEmbeddingConfig {
+    @Bean
+    public VertexAiTextEmbeddingModel vertexAiEmbeddingModel (
+        VertexAiEmbeddingConnectionDetails connectionDetails) {
+        VertexAiTextEmbeddingOptions options = VertexAiTextEmbeddingOptions.builder()
+            .model(VertexAiTextEmbeddingOptions.DEFAULT_MODEL_NAME)
             .autoTruncate(true) // 启用自动截断
-            .build(); 
-        return new VertexAiTextEmbeddingModel(connectionDetails, options); 
-    } 
-    
-    @Bean 
-    public BatchingStrategy batchingStrategy () { 
-        // 仅当嵌入模型中启用了自动截断时才使用高令牌限制。 
-        // 设置比模型实际支持的令牌计数高得多 
-        // (例如，当 Vertex AI 仅支持最多 20,000 时设置为 132,900) 
-        return new TokenCountBatchingStrategy( 
-            EncodingType.CL100K_BASE, 132900, // 人为设置的高限制 
+            .build();
+        return new VertexAiTextEmbeddingModel(connectionDetails, options);
+    }
+
+    @Bean
+    public BatchingStrategy batchingStrategy () {
+        // 仅当嵌入模型中启用了自动截断时才使用高令牌限制。
+        // 设置比模型实际支持的令牌计数高得多
+        // (例如，当 Vertex AI 仅支持最多 20,000 时设置为 132,900)
+        return new TokenCountBatchingStrategy(
+            EncodingType.CL100K_BASE, 132900, // 人为设置的高限制
             0.1 // 10% 保留
-        ); 
-    } 
-    
-    @Bean 
-    public VectorStore vectorStore (JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel, BatchingStrategy batchingStrategy) { 
-        return PgVectorStore.builder(jdbcTemplate, embeddingModel) 
+        );
+    }
+
+    @Bean
+    public VectorStore vectorStore (JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel, BatchingStrategy batchingStrategy) {
+        return PgVectorStore.builder(jdbcTemplate, embeddingModel)
             // 此处省略其他属性
-            .build(); 
+            .build();
     }
 }
 ```
@@ -278,11 +278,11 @@ public class AutoTruncationEmbeddingConfig {
 如果你使用 Spring Boot 自动配置，你必须提供一个自定义 `BatchingStrategy` bean 来覆盖 Spring AI 附带的默认策略：
 
 ```java
-@Bean 
-public BatchingStrategy customBatchingStrategy () { 
-    // 此 bean 将覆盖默认的 BatchingStrategy 
-    return new TokenCountBatchingStrategy( 
-        EncodingType.CL100K_BASE, 132900, // 比模型的实际限制高得多 
+@Bean
+public BatchingStrategy customBatchingStrategy () {
+    // 此 bean 将覆盖默认的 BatchingStrategy
+    return new TokenCountBatchingStrategy(
+        EncodingType.CL100K_BASE, 132900, // 比模型的实际限制高得多
         0.1
     );
 }
@@ -297,11 +297,11 @@ public BatchingStrategy customBatchingStrategy () {
 要自定义批处理策略，在你的 Spring Boot 应用程序中定义一个 `BatchingStrategy` bean：
 
 ```java
-@Configuration 
-public class EmbeddingConfig { 
-    @Bean 
-    public BatchingStrategy customBatchingStrategy () { 
-        return new CustomBatchingStrategy(); 
+@Configuration
+public class EmbeddingConfig {
+    @Bean
+    public BatchingStrategy customBatchingStrategy () {
+        return new CustomBatchingStrategy();
     }
 }
 ```
@@ -350,22 +350,22 @@ Spring Boot starter 的 OpenAI 自动配置使 `EmbeddingModel` 的实现可用�
 
 ```java
 @Autowired
-VectorStore vectorStore; 
+VectorStore vectorStore;
 
-void load (String sourceFile) { 
+void load (String sourceFile) {
     JsonReader jsonReader = new JsonReader(
-        new FileSystemResource(sourceFile), 
+        new FileSystemResource(sourceFile),
         "price", "name", "shortDescription", "description", "tags"
-    ); 
-    List<Document> documents = jsonReader.get(); 
-    this.vectorStore.add(documents); 
+    );
+    List<Document> documents = jsonReader.get();
+    this.vectorStore.add(documents);
 }
 ```
 
 #### 相似性搜索
 
 ```java
-String question = <question from user> 
+String question = <question from user>
 List<Document> similarDocuments = store.similaritySearch(this.question);
 ```
 
@@ -430,7 +430,7 @@ NOT: 'NOT' | 'not';
 
 ```java
 Expression exp = b.and(
-    b.in("genre", "drama", "documentary"), 
+    b.in("genre", "drama", "documentary"),
     b.not(b.lt("year", 2020))
 ).build();
 ```
@@ -453,7 +453,7 @@ void delete(List<String> idList);
 
 ```java
 // 创建并添加文档
-Document document = new Document("The World is Big", 
+Document document = new Document("The World is Big",
     Map.of("country", "Netherlands"));
 vectorStore.add(List.of(document));
 
@@ -475,18 +475,18 @@ void delete(Filter.Expression filterExpression);
 
 ```java
 // 创建具有不同元数据的测试文档
-Document bgDocument = new Document("The World is Big", 
+Document bgDocument = new Document("The World is Big",
     Map.of("country", "Bulgaria"));
-Document nlDocument = new Document("The World is Big", 
+Document nlDocument = new Document("The World is Big",
     Map.of("country", "Netherlands"));
 
 // 将文档添加到存储中
 vectorStore.add(List.of(bgDocument, nlDocument));
 
 // 使用过滤表达式删除保加利亚的文档
-Filter.Expression filterExpression = new Filter.Expression( 
-    Filter.ExpressionType.EQ, 
-    new Filter.Key("country"), 
+Filter.Expression filterExpression = new Filter.Expression(
+    Filter.ExpressionType.EQ,
+    new Filter.Key("country"),
     new Filter.Value("Bulgaria")
 );
 vectorStore.delete(filterExpression);
@@ -506,9 +506,9 @@ void delete(String filterExpression);
 
 ```java
 // 创建并添加文档
-Document bgDocument = new Document("The World is Big", 
+Document bgDocument = new Document("The World is Big",
     Map.of("country", "Bulgaria"));
-Document nlDocument = new Document("The World is Big", 
+Document nlDocument = new Document("The World is Big",
     Map.of("country", "Netherlands"));
 vectorStore.add(List.of(bgDocument, nlDocument));
 
@@ -533,10 +533,10 @@ List<Document> results = vectorStore.similaritySearch(request);
 示例用法
 
 ```java
-try { 
+try {
     vectorStore.delete("country == 'Bulgaria'");
 }
-catch (Exception e) { 
+catch (Exception e) {
     logger.error("Invalid filter expression", e);
 }
 ```

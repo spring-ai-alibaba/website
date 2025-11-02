@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# 嵌入模型 API
+# Embeddings Model API
 
 ### 概述
 

@@ -2,7 +2,7 @@
 sidebar_position: 14
 ---
 
-# 模型评估
+# Model Evaluation
 
 测试 AI 应用程序需要评估生成的内容，以确保 AI 模型没有产生幻觉响应。
 
@@ -209,16 +209,16 @@ public abstract class LaajEvaluator implements Evaluator {
 
 ```java
 public class AnswerCorrectnessEvaluator extends LaajEvaluator {
-    
+
     private static final String DEFAULT_EVALUATION_PROMPT_TEXT = """
             你的任务是评估Query返回的Response是否符合提供的Context信息。
             你有两个选项来回答，要么是"YES"/"NO"。
             如果查询的响应与上下文信息一致，回答"YES"，否则回答"NO"。
-            
+
             Query: {query}
             Response: {response}
             Context: {context}
-            
+
             Answer: "
             """;
 
@@ -354,20 +354,20 @@ public class AnswerFaithfulnessEvaluator extends LaajEvaluator {
     private static final String DEFAULT_EVALUATION_PROMPT_TEXT = """
             您是一名评测专家，能够基于提供的评分标准和内容信息进行评分。
             您将获得一些FACTS(事实内容)和STUDENT ANSWER。
-            
+
             以下是评分标准：
             (1) 确保STUDENT ANSWER的内容是基于FACTS的事实内容，不能随意编纂。
             (2) 确保STUDENT ANSWER的内容没有超出FACTS的内容范围外的虚假信息。
-            
+
             Score:
             得分为1意味着STUDENT ANSWER满足所有标准。这是最高（最佳）得分。
             得分为0意味着STUDENT ANSWER没有满足所有标准。这是最低的得分。
-            
+
             请逐步解释您的推理，以确保您的推理和结论正确，避免简单地陈述正确答案。
-            
+
             最终答案按照标准的json格式输出,不要使用markdown的格式, 比如:
             \\{"score": 0.7, "feedback": "STUDENT ANSWER的内容超出了FACTS的事实内容。"\\}
-            
+
             FACTS: {context}
             STUDENT ANSWER: {student_answer}
             """;
@@ -404,7 +404,7 @@ public class AnswerFaithfulnessEvaluator extends LaajEvaluator {
         float score = (float) evaluationResponse.get("score").asDouble();
         String feedback = evaluationResponse.get("feedback").asText();
         boolean passing = score > 0;
-        
+
         //封装必要的响应信息并返回
         return new EvaluationResponse(passing, score, feedback, Collections.emptyMap());
     }
@@ -513,22 +513,22 @@ public class AnswerRelevancyEvaluator extends LaajEvaluator {
     private static final String DEFAULT_EVALUATION_PROMPT_TEXT = """
             您是一名评测专家，能够基于提供的评分标准和内容信息进行评分。
             您将获得一个QUESTION, GROUND TRUTH (correct) ANSWER和STUDENT ANSWER。
-            
+
             以下是评分标准：
             (1) 基于提供的GROUND TRUTH ANSWER作为正确基准答案，对STUDENT ANSWER的事实性、准确性和相关性进行评分。
             (2) 确保STUDENT ANSWER不包含任何冲突的陈述和内容。
             (3) 可以接受STUDENT ANSWER比GROUND TRUTH ANSWER包含更多的信息，只要对于GROUND TRUTH ANSWER保证事实性、准确性和相关性.
-            
+
             Score:
             得分为1意味着STUDENT ANSWER满足所有标准。这是最高（最佳）得分。
             得分为0意味着STUDENT ANSWER没有满足所有标准。这是最低的得分。
-            
+
             请逐步解释您的推理，以确保您的推理和结论正确。
             避免简单地陈述正确答案。
-            
+
             最终答案按照标准的json格式输出, 比如:
             \\{"score": 0.7, "feedback": "GROUND TRUTH ANSWER与STUDENT ANSWER完全不相关。"\\}
-            
+
             QUESTION: {question}
             GROUND TRUTH ANSWER: {correct_answer}
             STUDENT ANSWER: {student_answer}
@@ -540,7 +540,7 @@ public class AnswerRelevancyEvaluator extends LaajEvaluator {
         if (evaluationRequest == null) {
             throw new IllegalArgumentException("EvaluationRequest must not be null");
         }
-        
+
         //获取response和context
         var response = doGetResponse(evaluationRequest);
         var context = doGetSupportingData(evaluationRequest);
@@ -567,7 +567,7 @@ public class AnswerRelevancyEvaluator extends LaajEvaluator {
         float score = (float) evaluationResponse.get("score").asDouble();
         String feedback = evaluationResponse.get("feedback").asText();
         boolean passing = score > 0;
-        
+
         //封装必要的响应信息并返回
         return new EvaluationResponse(passing, score, feedback, Collections.emptyMap());
     }

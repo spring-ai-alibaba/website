@@ -1,0 +1,12 @@
+{
+    "claudeCode.selectedModel": "qwen3-coder-plus",
+    "claudeCode.environmentVariables": [
+      {
+        "ANTHROPIC_AUTH_TOKEN": "sk-762e6e532c8a4745b881bbf2a7db7608",
+        "API_TIMEOUT_MS": "3000000",
+        "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/apps/anthropic",
+        "MCP_TOOL_TIMEOUT": "30000"
+      }
+    ],
+    "claudeCode.allowDangerouslySkipPermissions": true
+}

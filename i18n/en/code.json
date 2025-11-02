@@ -384,7 +384,7 @@
   },
   "ecosystem.framework.extensions.description": {
     "message": "Extended implementations for Spring AI core concepts, including DashScopeChatModel, MCP registry, etc.",
-    "description": "Extensions description"
+    "description": "Spring AI Extensions description"
   },
   "ecosystem.product.examples.name": {
     "message": "Spring AI Alibaba Examples",

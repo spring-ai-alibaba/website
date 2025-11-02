@@ -111,6 +111,21 @@ npm-lint-fix:
 	@$(LOG_TARGET)
 	npm run lint:fix
 
+.PHONY: pangu-lint
+pangu-lint: ## Lint Check the pangu spacing. Usage: make pangu-lint FILE=path/to/file.md or make pangu-lint DIR=docs/
+pangu-lint:
+	@$(LOG_TARGET)
+	@if [ -n "$(FILE)" ]; then \
+		echo "Processing file: $(FILE)"; \
+		./tools/pangu.sh $(FILE); \
+	elif [ -n "$(DIR)" ]; then \
+		echo "Processing directory: $(DIR)"; \
+		./tools/pangu-batch.sh $(DIR); \
+	else \
+		echo "Processing all markdown files in docs/ and blog/"; \
+		./tools/pangu-batch.sh docs/ blog/; \
+	fi 
+
 ## help: Show this help info.
 .PHONY: help
 help:

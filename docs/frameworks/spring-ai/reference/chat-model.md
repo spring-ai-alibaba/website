@@ -8,13 +8,15 @@ sidebar_position: 3
 
 Chat Model API 为开发人员提供了将 AI 驱动的聊天完成功能集成到其应用程序中的能力。它利用预训练的语言模型，如 GPT（生成式预训练转换器），以自然语言生成对用户输入的人类般响应。
 
-API 通常通过向 AI 模型发送提示或部分对话来工作，然后 AI 模型基于其训练数据和对自然语言模式的理解生成完成或对话的延续。完成的响应随后返回给应用程序，应用程序可以将其呈现给用户或用于进一步处理。
+大模型平台（DashScope）API 通过向 AI 模型发送提示或部分对话来工作，然后 AI 模型基于其训练数据和对自然语言模式的理解生成完成或对话的延续。完成的响应随后返回给应用程序，应用程序可以将其呈现给用户或用于进一步处理。
 
-`Spring AI Chat Model API` 设计为一个简单且可移植的接口，用于与各种 AI 模型交互，允许开发人员以最小的代码更改在不同模型之间切换。这种设计与 Spring 的模块化和可互换性理念保持一致。
+Spring AI Chat Model API 设计为一个简单且可移植的接口，用于与各种 AI 模型交互，允许开发人员以最小的代码更改在不同模型之间切换。这种设计与 Spring 的模块化和可互换性理念保持一致。
 
 同时，借助 `Prompt` 用于输入封装和 `ChatResponse` 用于输出处理的配套类，Chat Model API 统一了与 AI 模型的通信。它管理请求准备和响应解析的复杂性，提供直接和简化的 API 交互。
 
-您可以在可用实现部分找到更多关于可用实现的信息，以及在聊天模型比较部分找到详细的比较。
+:::tip
+您可以在 [Model 集成](../models/dashScope)部分找到更多关于模型集成实现的信息。
+:::
 
 ### API 概述
 
@@ -23,12 +25,28 @@ API 通常通过向 AI 模型发送提示或部分对话来工作，然后 AI �
 这是 ChatModel 接口定义：
 
 ```java
-public interface ChatModel extends Model<Prompt, ChatResponse> {
+public interface ChatModel extends Model<Prompt, ChatResponse>, StreamingChatModel {
+    default String call(String message) {
+        Prompt prompt = new Prompt(new UserMessage(message));
+        Generation generation = this.call(prompt).getResult();
+        return generation != null ? generation.getOutput().getText() : "";
+    }
 
-    default String call(String message) {...}
+    default String call(Message... messages) {
+        Prompt prompt = new Prompt(Arrays.asList(messages));
+        Generation generation = this.call(prompt).getResult();
+        return generation != null ? generation.getOutput().getText() : "";
+    }
 
-    @Override
     ChatResponse call(Prompt prompt);
+
+    default ChatOptions getDefaultOptions() {
+        return ChatOptions.builder().build();
+    }
+
+    default Flux<ChatResponse> stream(Prompt prompt) {
+        throw new UnsupportedOperationException("streaming is not supported");
+    }
 }
 ```
 
@@ -39,12 +57,28 @@ public interface ChatModel extends Model<Prompt, ChatResponse> {
 这是 `StreamingChatModel` 接口定义：
 
 ```java
+@FunctionalInterface
 public interface StreamingChatModel extends StreamingModel<Prompt, ChatResponse> {
 
-    default Flux<String> stream(String message) {...}
+	default Flux<String> stream(String message) {
+		Prompt prompt = new Prompt(message);
+		return stream(prompt).map(response -> Optional.ofNullable(response.getResult())
+			.map(Generation::getOutput)
+			.map(AssistantMessage::getText)
+			.orElse(""));
+	}
 
-    @Override
-    Flux<ChatResponse> stream(Prompt prompt);
+	default Flux<String> stream(Message... messages) {
+		Prompt prompt = new Prompt(Arrays.asList(messages));
+		return stream(prompt).map(response -> Optional.ofNullable(response.getResult())
+			.map(Generation::getOutput)
+			.map(AssistantMessage::getText)
+			.orElse(""));
+	}
+
+	@Override
+	Flux<ChatResponse> stream(Prompt prompt);
+
 }
 ```
 
@@ -97,7 +131,6 @@ public interface Message extends Content {
 public interface MediaContent extends Content {
 
     Collection<Media> getMedia();
-
 }
 ```
 
@@ -129,7 +162,6 @@ public interface ChatOptions extends ModelOptions {
     Integer getTopK();
     Float getTopP();
     ChatOptions copy();
-
 }
 ```
 

@@ -2,7 +2,7 @@
 sidebar_position: 16
 ---
 
-# 可观测性
+# Observations
 
 Spring AI 基于 Spring 生态系统中的可观测性功能，为 AI 相关操作提供洞察。 Spring AI 为其核心组件提供指标和追踪功能：`ChatClient`（包括 `Advisor`）、 `ChatModel`、`EmbeddingModel`、`ImageModel` 和 `VectorStore`。
 
@@ -30,7 +30,7 @@ Table 1. 低基数键
 
 | 名称                             | 描述                                |
 |--------------------------------|-----------------------------------|
-| `gen_ai.operation.name`        | 始终为 framework                     | 
+| `gen_ai.operation.name`        | 始终为 framework                     |
 | `gen_ai.system`                | 始终为 spring_ai                     |
 | `spring.ai.chat.client.stream` | 聊天模型响应是否为流 - true 或 false         |
 | `spring.ai.kind`               | Spring AI 中框架 API 的类型：chat_client |

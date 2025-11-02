@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 开发时服务
+# Development-time Services
 
 Spring AI 提供了 Spring Boot 自动配置，用于建立与通过 Docker Compose 运行的模型服务或向量存储的连接。 要启用它，请将以下依赖项添加到项目的 Maven `pom.xml` 文件中：
 
@@ -69,5 +69,3 @@ Gradle 用户也可通过 Gradle（5.0+）原生支持的 Maven BOM 依赖约束
 | `QdrantConnectionDetails`        | 名为 `qdrant/qdrant` 的容器                                                         |
 | `TypesenseConnectionDetails`     | 名为 `typesense/typesense` 的容器                                                   |
 | `WeaviateConnectionDetails`      | 名为 `semitechnologies/weaviate`, `cr.weaviate.io/semitechnologies/weaviate` 的容器 |
-
-

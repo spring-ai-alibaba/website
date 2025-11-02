@@ -98,44 +98,102 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Extensions',
+      label: 'Spring AI',
       items: [
-        'frameworks/spring-ai/reference/advisors',
-        'frameworks/spring-ai/reference/chat-client',
-        'frameworks/spring-ai/reference/chat-model',
-        'frameworks/spring-ai/reference/concepts',
-        'frameworks/spring-ai/reference/docker-compose',
-        'frameworks/spring-ai/reference/embedding',
-        'frameworks/spring-ai/reference/ETL',
-        'frameworks/spring-ai/reference/MCP-client',
-        'frameworks/spring-ai/reference/MCP-server',
-        'frameworks/spring-ai/reference/MCP-tool',
-        'frameworks/spring-ai/reference/MCP',
-        'frameworks/spring-ai/reference/memory',
-        'frameworks/spring-ai/reference/model-context-protocol',
-        'frameworks/spring-ai/reference/model-evaluation',
-        'frameworks/spring-ai/reference/multimodality',
-        'frameworks/spring-ai/reference/observability',
-        'frameworks/spring-ai/reference/prompt-engineering-patterns',
-        'frameworks/spring-ai/reference/prompt',
-        'frameworks/spring-ai/reference/RAG',
-        'frameworks/spring-ai/reference/retriever',
-        'frameworks/spring-ai/reference/spring-ai-alibaba-mcp-nacos-introduce',
-        'frameworks/spring-ai/reference/structured-output',
-        'frameworks/spring-ai/reference/test',
-        'frameworks/spring-ai/reference/tool-calling',
-        'frameworks/spring-ai/reference/vectorstore',
         {
           type: 'category',
-          label: 'Models',
+          label: '概览',
           items: [
-            'frameworks/spring-ai/models/dashScope',
-            'frameworks/spring-ai/models/deepseek',
-            'frameworks/spring-ai/models/like-openAI',
-            'frameworks/spring-ai/models/ollama',
-            'frameworks/spring-ai/models/openAI',
-            'frameworks/spring-ai/models/qwq',
+            'frameworks/spring-ai/reference/concepts',
+          ]
+        },
+        {
+          type: 'category',
+          label: '文档',
+          items: [
+            {
+              type: 'category',
+              label: 'Chat API',
+              items: [
+                'frameworks/spring-ai/reference/chat-model',
+                {
+                  type: 'category',
+                  label: 'Chat Client API',
+                  items: [
+                    'frameworks/spring-ai/reference/chat-client',
+                    'frameworks/spring-ai/reference/advisors',
+                  ]
+                },
+              ]
+            },
+            {
+              type: 'category',
+              label: 'Prompt Engineer',
+              items: [
+                'frameworks/spring-ai/reference/prompt',
+                'frameworks/spring-ai/reference/prompt-engineering-patterns',
+              ]
+            },
+            'frameworks/spring-ai/reference/structured-output',
+            'frameworks/spring-ai/reference/multimodality',
+            'frameworks/spring-ai/reference/memory',
+            'frameworks/spring-ai/reference/tool-calling',
+            {
+              type: 'category',
+              label: 'MCP Integration',
+              items: [
+                'frameworks/spring-ai/reference/MCP-client',
+                'frameworks/spring-ai/reference/MCP-server',
+                'frameworks/spring-ai/reference/MCP-tool',
+                'frameworks/spring-ai/reference/MCP',
+                'frameworks/spring-ai/reference/model-context-protocol',
+              ]
+            },
+            {
+              type: 'category',
+              label: 'RAG Integration',
+              items: [
+                'frameworks/spring-ai/reference/RAG',
+                'frameworks/spring-ai/reference/ETL',
+                'frameworks/spring-ai/reference/retriever',
+              ]
+            },
+            'frameworks/spring-ai/reference/docker-compose',
+            'frameworks/spring-ai/reference/embedding',
+            'frameworks/spring-ai/reference/model-evaluation',
+            'frameworks/spring-ai/reference/observability',
+            'frameworks/spring-ai/reference/vectorstore',
+            'frameworks/spring-ai/reference/test',
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Model Integration',
+          items: [
+            {
+              type: 'category',
+              label: 'Chat Models',
+              items: [
+                'frameworks/spring-ai/models/dashScope',
+                'frameworks/spring-ai/models/deepseek',
+                'frameworks/spring-ai/models/like-openAI',
+                'frameworks/spring-ai/models/ollama',
+                'frameworks/spring-ai/models/openAI',
+                'frameworks/spring-ai/models/qwq',
+              ],
+            },
+            'frameworks/spring-ai/models/image',
+            'frameworks/spring-ai/models/embedding',
+            'frameworks/spring-ai/models/audio',
+            'frameworks/spring-ai/models/video',
           ],
+        },
+        {
+          type: 'category',
+          label: 'Ecosystem Integration',
+          items: [
+            'frameworks/spring-ai/reference/spring-ai-alibaba-mcp-nacos-introduce',
+          ]
         },
       ],
     },

@@ -40,7 +40,7 @@
     "description": "The label for category Admin in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.Extensions": {
-    "message": "Extensions",
+    "message": "Spring AI",
     "description": "The label for category Extensions in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.智能体": {

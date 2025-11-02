@@ -2,7 +2,7 @@
 sidebar_position: 22
 ---
 
-# 结构化输出转换器
+# Structured Output Converter
 
 ### 概述
 
@@ -38,7 +38,7 @@ public interface StructuredOutputConverter<T> extends Converter<String, T>, Form
 它结合了 `Spring Converter<String, T>` 接口和 `FormatProvider` 接口
 
 ```java
-public interface FormatProvider { 
+public interface FormatProvider {
     String getFormat();
 }
 ```
@@ -56,13 +56,13 @@ public interface FormatProvider {
 格式指令通常使用 `PromptTemplate` 附加到用户输入的末尾，如下所示：
 
 ```java
-StructuredOutputConverter outputConverter = ... 
-String userInputTemplate = """ 
-... 用户文本输入 .... 
-{format} 
+StructuredOutputConverter outputConverter = ...
+String userInputTemplate = """
+... 用户文本输入 ....
+{format}
 """; // 带有 "format" 占位符的用户输入。
 
-Prompt prompt = new Prompt(new PromptTemplate(this.userInputTemplate, 
+Prompt prompt = new Prompt(new PromptTemplate(this.userInputTemplate,
 Map.of(..., "format", outputConverter.getFormat()) // 用转换器的格式替换 "format" 占位符。
 ).createMessage());
 ```
@@ -97,10 +97,10 @@ record ActorsFilms(String actor, List<String> movies) {
 以下是使用高级、流畅的 `ChatClient` API 应用 BeanOutputConverter 的方法：
 
 ```java
-ActorsFilms actorsFilms = ChatClient.create(chatModel).prompt() 
-    .user(u -> u.text("为 {actor} 生成 5 部电影的电影作品。") 
-    .param("actor", "Tom Hanks")) 
-    .call() 
+ActorsFilms actorsFilms = ChatClient.create(chatModel).prompt()
+    .user(u -> u.text("为 {actor} 生成 5 部电影的电影作品。")
+    .param("actor", "Tom Hanks"))
+    .call()
     .entity(ActorsFilms.class);
 ```
 
@@ -110,9 +110,9 @@ ActorsFilms actorsFilms = ChatClient.create(chatModel).prompt()
 BeanOutputConverter<ActorsFilms> beanOutputConverter = new BeanOutputConverter<>(ActorsFilms.class);
 String format = this.beanOutputConverter.getFormat();
 String actor = "Tom Hanks";
-String template = """ 
-    为 {actor} 生成 5 部电影的电影作品。 
-    {format} 
+String template = """
+    为 {actor} 生成 5 部电影的电影作品。
+    {format}
 """;
 Generation generation = chatModel.call(new PromptTemplate(this.template, Map.of("actor", this.actor, "format", this.format)).create()).getResult();
 ActorsFilms actorsFilms = this.beanOutputConverter.convert(this.generation.getOutput().getText());
@@ -138,9 +138,9 @@ record ActorsFilms(String actor, List<String> movies) {}
 例如，要表示演员及其电影作品列表：
 
 ```java
-List<ActorsFilms> actorsFilms = ChatClient.create(chatModel).prompt() 
-    .user("为 Tom Hanks 和 Bill Murray 生成 5 部电影的电影作品。") 
-    .call() 
+List<ActorsFilms> actorsFilms = ChatClient.create(chatModel).prompt()
+    .user("为 Tom Hanks 和 Bill Murray 生成 5 部电影的电影作品。")
+    .call()
     .entity(new ParameterizedTypeReference<List<ActorsFilms>>() {});
 ```
 
@@ -149,9 +149,9 @@ List<ActorsFilms> actorsFilms = ChatClient.create(chatModel).prompt()
 ```java
 BeanOutputConverter<List<ActorsFilms>> outputConverter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<ActorsFilms>>() { });
 String format = this.outputConverter.getFormat();
-String template = """ 
-    为 Tom Hanks 和 Bill Murray 生成 5 部电影的电影作品。 
-    {format} 
+String template = """
+    为 Tom Hanks 和 Bill Murray 生成 5 部电影的电影作品。
+    {format}
 """;
 Prompt prompt = new PromptTemplate(this.template, Map.of("format", this.format)).create();
 Generation generation = chatModel.call(this.prompt).getResult();
@@ -163,10 +163,10 @@ List<ActorsFilms> actorsFilms = this.outputConverter.convert(this.generation.get
 以下代码片段显示如何使用 `MapOutputConverter` 将模型输出转换为地图中的数字列表。
 
 ```java
-Map<String, Object> result = ChatClient.create(chatModel).prompt() 
-    .user(u -> u.text("为我提供 {subject}") 
-    .param("subject", "一个从 1 到 9 的数字数组，键名为 'numbers'")) 
-    .call() 
+Map<String, Object> result = ChatClient.create(chatModel).prompt()
+    .user(u -> u.text("为我提供 {subject}")
+    .param("subject", "一个从 1 到 9 的数字数组，键名为 'numbers'"))
+    .call()
     .entity(new ParameterizedTypeReference<Map<String, Object>>() {});
 ```
 
@@ -175,11 +175,11 @@ Map<String, Object> result = ChatClient.create(chatModel).prompt()
 ```java
 MapOutputConverter mapOutputConverter = new MapOutputConverter();
 String format = this.mapOutputConverter.getFormat();
-String template = """ 
-    为我提供 {subject} 
-    {format} 
+String template = """
+    为我提供 {subject}
+    {format}
 """;
-Prompt prompt = new PromptTemplate(this.template, 
+Prompt prompt = new PromptTemplate(this.template,
 Map.of("subject", "一个从 1 到 9 的数字数组，键名为 'numbers'", "format", this.format)).create();
 Generation generation = chatModel.call(this.prompt).getResult();
 Map<String, Object> result = this.mapOutputConverter.convert(this.generation.getOutput().getText());
@@ -190,10 +190,10 @@ Map<String, Object> result = this.mapOutputConverter.convert(this.generation.get
 以下代码片段显示如何使用 `ListOutputConverter` 将模型输出转换为冰淇淋口味列表。
 
 ```java
-List<String> flavors = ChatClient.create(chatModel).prompt() 
-    .user(u -> u.text("列出五种 {subject}") 
-    .param("subject", "冰淇淋口味")) 
-    .call() 
+List<String> flavors = ChatClient.create(chatModel).prompt()
+    .user(u -> u.text("列出五种 {subject}")
+    .param("subject", "冰淇淋口味"))
+    .call()
     .entity(new ListOutputConverter(new DefaultConversionService()));
 ```
 
@@ -202,11 +202,11 @@ List<String> flavors = ChatClient.create(chatModel).prompt()
 ```java
 ListOutputConverter listOutputConverter = new ListOutputConverter(new DefaultConversionService());
 String format = this.listOutputConverter.getFormat();
-String template = """ 
-    列出五种 {subject} 
-    {format} 
+String template = """
+    列出五种 {subject}
+    {format}
 """;
-Prompt prompt = new PromptTemplate(this.template, 
+Prompt prompt = new PromptTemplate(this.template,
 Map.of("subject", "冰淇淋口味", "format", this.format)).create();
 Generation generation = this.chatModel.call(this.prompt).getResult();
 List<String> list = this.listOutputConverter.convert(this.generation.getOutput().getText());

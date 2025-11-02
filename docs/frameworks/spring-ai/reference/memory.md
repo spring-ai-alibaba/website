@@ -2,7 +2,7 @@
 sidebar_position: 12
 ---
 
-# 聊天内存
+# Chat Memory
 
 ### 概述
 
@@ -37,8 +37,8 @@ ChatMemory chatMemory;
 `MessageWindowChatMemory` 维护一个最大指定大小的消息窗口。当消息数量超过最大值时，会删除较旧的消息，同时保留系统消息。默认窗口大小为 20 条消息。
 
 ```java
-MessageWindowChatMemory memory = MessageWindowChatMemory.builder() 
-    .maxMessages(10) 
+MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
+    .maxMessages(10)
     .build();
 ```
 
@@ -96,23 +96,23 @@ Spring AI 为 `JdbcChatMemoryRepository` 提供自动配置，您可以直接在
 @Autowired
 JdbcChatMemoryRepository chatMemoryRepository;
 
-ChatMemory chatMemory = MessageWindowChatMemory.builder() 
-    .chatMemoryRepository(chatMemoryRepository) 
-    .maxMessages(10) 
+ChatMemory chatMemory = MessageWindowChatMemory.builder()
+    .chatMemoryRepository(chatMemoryRepository)
+    .maxMessages(10)
     .build();
 ```
 
 如果您想手动创建 `JdbcChatMemoryRepository`，可以通过提供 `JdbcTemplate` 实例和 `JdbcChatMemoryRepositoryDialect` 来实现：
 
 ```java
-ChatMemoryRepository chatMemoryRepository = JdbcChatMemoryRepository.builder() 
-    .jdbcTemplate(jdbcTemplate) 
-    .dialect(new PostgresChatMemoryDialect()) 
+ChatMemoryRepository chatMemoryRepository = JdbcChatMemoryRepository.builder()
+    .jdbcTemplate(jdbcTemplate)
+    .dialect(new PostgresChatMemoryDialect())
     .build();
 
-ChatMemory chatMemory = MessageWindowChatMemory.builder() 
-    .chatMemoryRepository(chatMemoryRepository) 
-    .maxMessages(10) 
+ChatMemory chatMemory = MessageWindowChatMemory.builder()
+    .chatMemoryRepository(chatMemoryRepository)
+    .maxMessages(10)
     .build();
 ```
 
@@ -158,9 +158,9 @@ spring.ai.chat.memory.repository.jdbc.schema = classpath:/custom/path/schema-mys
 要添加对新数据库的支持，请实现 `JdbcChatMemoryRepositoryDialect` 接口并提供用于选择、插入和删除消息的 SQL。然后，您可以将自定义方言传递给存储库构建器：
 
 ```java
-ChatMemoryRepository chatMemoryRepository = JdbcChatMemoryRepository.builder() 
-    .jdbcTemplate(jdbcTemplate) 
-    .dialect(new MyCustomDbDialect()) 
+ChatMemoryRepository chatMemoryRepository = JdbcChatMemoryRepository.builder()
+    .jdbcTemplate(jdbcTemplate)
+    .dialect(new MyCustomDbDialect())
     .build();
 ```
 
@@ -197,21 +197,21 @@ Spring AI 为 `CassandraChatMemoryRepository` 提供自动配置，您可以直�
 @Autowired
 CassandraChatMemoryRepository chatMemoryRepository;
 
-ChatMemory chatMemory = MessageWindowChatMemory.builder() 
-    .chatMemoryRepository(chatMemoryRepository) 
-    .maxMessages(10) 
+ChatMemory chatMemory = MessageWindowChatMemory.builder()
+    .chatMemoryRepository(chatMemoryRepository)
+    .maxMessages(10)
     .build();
 ```
 
 如果您想手动创建 `CassandraChatMemoryRepository`，可以通过提供 `CassandraChatMemoryRepositoryConfig` 实例来实现：
 
 ```java
-ChatMemoryRepository chatMemoryRepository = CassandraChatMemoryRepository 
+ChatMemoryRepository chatMemoryRepository = CassandraChatMemoryRepository
     .create(CassandraChatMemoryConfig.builder().withCqlSession(cqlSession));
 
-ChatMemory chatMemory = MessageWindowChatMemory.builder() 
-    .chatMemoryRepository(chatMemoryRepository) 
-    .maxMessages(10) 
+ChatMemory chatMemory = MessageWindowChatMemory.builder()
+    .chatMemoryRepository(chatMemoryRepository)
+    .maxMessages(10)
     .build();
 ```
 
@@ -263,22 +263,22 @@ Spring AI 为 `Neo4jChatMemoryRepository` 提供自动配置，您可以直接�
 @Autowired
 Neo4jChatMemoryRepository chatMemoryRepository;
 
-ChatMemory chatMemory = MessageWindowChatMemory.builder() 
-    .chatMemoryRepository(chatMemoryRepository) 
-    .maxMessages(10) 
+ChatMemory chatMemory = MessageWindowChatMemory.builder()
+    .chatMemoryRepository(chatMemoryRepository)
+    .maxMessages(10)
     .build();
 ```
 
 如果您想手动创建 `Neo4jChatMemoryRepository`，可以通过提供 Neo4j Driver 实例来实现：
 
 ```java
-ChatMemoryRepository chatMemoryRepository = Neo4jChatMemoryRepository.builder() 
-    .driver(driver) 
+ChatMemoryRepository chatMemoryRepository = Neo4jChatMemoryRepository.builder()
+    .driver(driver)
     .build();
 
-ChatMemory chatMemory = MessageWindowChatMemory.builder() 
-    .chatMemoryRepository(chatMemoryRepository) 
-    .maxMessages(10) 
+ChatMemory chatMemory = MessageWindowChatMemory.builder()
+    .chatMemoryRepository(chatMemoryRepository)
+    .maxMessages(10)
     .build();
 ```
 
@@ -314,8 +314,8 @@ Spring AI 提供了几个内置的 Advisors，您可以使用它们来根据您�
 ```java
 ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
 
-ChatClient chatClient = ChatClient.builder(chatModel) 
-    .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build()) 
+ChatClient chatClient = ChatClient.builder(chatModel)
+    .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
     .build();
 ```
 
@@ -324,10 +324,10 @@ ChatClient chatClient = ChatClient.builder(chatModel)
 ```java
 String conversationId = "007";
 
-chatClient.prompt() 
-    .user("Do I have license to code?") 
-    .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId)) 
-    .call() 
+chatClient.prompt()
+    .user("Do I have license to code?")
+    .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+    .call()
     .content();
 ```
 

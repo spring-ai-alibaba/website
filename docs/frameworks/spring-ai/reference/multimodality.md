@@ -2,7 +2,7 @@
 sidebar_position: 15
 ---
 
-# 多模态 API
+# Multimodal API
 
 > "所有自然相关的事物都应该组合在一起教授" - John Amos Comenius, "Orbis Sensualium Pictus", 1658
 
