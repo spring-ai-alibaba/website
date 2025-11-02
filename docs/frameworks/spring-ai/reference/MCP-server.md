@@ -2,7 +2,7 @@
 sidebar_position: 9
 ---
 
-# MCP服务器启动器
+# MCP 服务器启动器
 
 Spring AI MCP（模型上下文协议）服务器启动器为在 Spring Boot 应用程序中设置 MCP 服务器提供自动配置。它使 MCP 服务器功能能够与 Spring Boot 的自动配置系统无缝集成。
 
@@ -168,7 +168,7 @@ public ToolCallbackProvider myTools(...) {
 }
 ```
 
-或者使用低级API：
+或者使用低级 API：
 
 ```java
 @Bean

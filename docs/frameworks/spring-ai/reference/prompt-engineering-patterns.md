@@ -5,7 +5,7 @@ sidebar_position: 17
 # 提示词工程模式
 
 基于全面的[提示工程指南](https://www.kaggle.com/whitepaper-prompt-engineering)，我们将对即时工程技术进行实际应用。该指南涵盖了有效即时工程的理论、原则和模式，
-并演示了如何使用 Spring AI 流畅的ChatClient API将这些概念转化为可运行的 Java 代码。
+并演示了如何使用 Spring AI ChatClient Fluent API 将这些概念转化为可运行的 Java 代码。
 
 ## 1，配置
 配置部分概述了如何使用 Spring AI 设置和调整大型语言模型 (LLM)。它涵盖了如何根据用例选择合适的 LLM 提供程序，以及如何配置重要的生成参数，以控制模型输出的质量、样式和格式。
@@ -27,45 +27,48 @@ sidebar_position: 17
 ```
 
 ### 模型输出配置
-在深入研究即时工程技术之前，我们有必要了解如何配置 LLM 的输出行为。Spring AI 提供了多个配置选项，可让您通过ChatOptions构建器控制生成的各个方面。
 
-所有配置都可以以编程方式应用，如下面的示例所示，或者在启动时通过 Spring 应用程序属性应用。  
+在深入研究即时工程技术之前，我们有必要了解如何配置 LLM 的输出行为。Spring AI 提供了多个配置选项，可让您通过 ChatOptions 构建器控制生成的各个方面。
+
+所有配置都可以以编程方式应用，如下面的示例所示，或者在启动时通过 Spring 应用程序属性应用。
 ![chat-options](/img/user/ai/tutorials/prompt/chat-options.png)
 
-#### 温度  
+#### Temperature
 
-温度控制模型响应的随机性或“创造性”。
+Temperature 控制模型响应的随机性或“创造性”。
 
 较低值（0.0-0.3）：响应更确定、更集中。更适合事实类问题、分类问题或一致性至关重要的任务。
 
 中等值（0.4-0.7）：在确定性和创造性之间取得平衡。适用于一般用例。
 
 值越高 (0.8-1.0)：回复更具创意、多样性，且可能带来惊喜。更适合创意写作、头脑风暴或生成多样化选项。
+
 ``` java
 .options(ChatOptions.builder()
-        .temperature(0.1)  // 正确的输出
+        .temperature(0.1) // 正确的输出
         .build())
 ```
-了解温度对于快速工程至关重要，因为不同的技术受益于不同的温度设置。
+了解 Temperature 对于快速工程至关重要，因为不同的技术受益于不同的 Temperature 设置。
 
-#### 输出长度（MaxTokens）  
+#### 输出长度（MaxTokens）
 
-该maxTokens参数限制了模型在响应中可以生成的标记（词片段）的数量。
+该 maxTokens 参数限制了模型在响应中可以生成的标记（词片段）的数量。
 
 低值（5-25）：适用于单个单词、短语或分类标签。
 
 中等值（50-500）：用于段落或简短解释。
 
 高值（1000+）：适用于长篇内容、故事或复杂的解释。
+
 ``` java
 .options(ChatOptions.builder()
-        .maxTokens(250)  // 中等长度的响应
+        .maxTokens(250) // 中等长度的响应
         .build())
 ```
 
 设置适当的输出长度非常重要，以确保您获得完整的响应而没有不必要的冗长。
 
-#### 采样控制（Top-K 和 Top-P）  
+#### 采样控制（Top-K 和 Top-P）
 
 这些参数使您可以对生成过程中的令牌选择过程进行细粒度的控制。
 
@@ -81,7 +84,7 @@ Top-P（核采样）：从最小的标记集中动态选择，其累积概率超
 ```
 这些采样控制与温度协同作用来形成响应特性。
 
-#### 结构化响应格式  
+#### 结构化响应格式
 
 除了纯文本响应（使用.content()）之外，Spring AI 还可以轻松地使用.entity()方法将 LLM 响应直接映射到 Java 对象。
 
@@ -98,7 +101,7 @@ Sentiment result = chatClient.prompt("...")
 
 #### 特定于模型的选项
 
-Spring AI不仅提供了跨不同 LLM 提供程序的一致接口ChatOptions，还提供了特定于模型的选项类，用于公开特定于提供程序的功能和配置。这些特定于模型的选项允许您利用每个 LLM 提供程序的独特功能。
+Spring AI 不仅提供了跨不同 LLM 提供程序的一致接口 ChatOptions，还提供了特定于模型的选项类，用于公开特定于提供程序的功能和配置。这些特定于模型的选项允许您利用每个 LLM 提供程序的独特功能。
 
 ``` java
 // 使用 OpenAI 特有的选项
@@ -134,7 +137,7 @@ String result = chatClient.prompt("...")
 
 请注意，使用特定于模型的选项时，您的代码将与该特定提供程序绑定，从而降低可移植性。您需要在访问特定于提供程序的高级功能与在应用程序中保持提供程序独立性之间进行权衡
 
-## 2，Prompt工程技术
+## 2，Prompt 工程技术
 
 ### 2.1 零样本提示
 
@@ -166,7 +169,7 @@ public void pt_zero_shot(ChatClient chatClient) {
 }
 ```
 
-此示例展示了如何在不提供示例的情况下对电影评论情绪进行分类。请注意，为了获得更确定的结果，我们采用了较低的温度 (0.1)，并且直接`.entity(Sentiment.class)`映射到 Java 枚举。  
+此示例展示了如何在不提供示例的情况下对电影评论情绪进行分类。请注意，为了获得更确定的结果，我们采用了较低的温度 (0.1)，并且直接`.entity(Sentiment.class)`映射到 Java 枚举。
 
 **参考文献**： Brown, TB 等人 (2020)。“语言模型是少样本学习器。”arXiv:2005.14165。https ://arxiv.org/abs/2005.14165
 
@@ -183,24 +186,22 @@ public void pt_one_shot_few_shots(ChatClient chatClient) {
             EXAMPLE 1:
             I want a small pizza with cheese, tomato sauce, and pepperoni.
             JSON Response:
-            
+
             {
                 "size": "small",
                 "type": "normal",
                 "ingredients": ["cheese", "tomato sauce", "pepperoni"]
             }
-            
 
             EXAMPLE 2:
             Can I get a large pizza with tomato sauce, basil and mozzarella.
             JSON Response:
-            
+
             {
                 "size": "large",
                 "type": "normal",
                 "ingredients": ["tomato sauce", "basil", "mozzarella"]
             }
-            
 
             Now, I would like a large pizza, with the first half cheese and mozzarella.
             And the other tomato sauce, ham and pineapple.
@@ -218,13 +219,13 @@ public void pt_one_shot_few_shots(ChatClient chatClient) {
 
 **参考文献**： Brown, TB 等人 (2020)。“语言模型是少样本学习器。”arXiv:2005.14165。https ://arxiv.org/abs/2005.14165
 
-### 2.3系统、情境和角色提示
+### 2.3 系统、情境和角色提示
 
-#### 系统提示
+#### System Prompting
 
-系统提示设定了语言模型的整体背景和目的，定义了模型应该做什么的“总体情况”。它为模型的响应建立了行为框架、约束条件和高级目标，并与具体的用户查询区分开来。
+System Prompting 设定了语言模型的整体背景和目的，定义了模型应该做什么的“总体情况”。它为模型的响应建立了行为框架、约束条件和高级目标，并与具体的用户查询区分开来。
 
-系统提示在整个对话过程中充当着持续的“使命”，允许您设置全局参数，例如输出格式、语气、道德界限或角色定义。与专注于特定任务的用户提示不同，系统提示框定了所有用户提示的解读方式。
+System Prompting 在整个对话过程中充当着持续的“使命”，允许您设置全局参数，例如输出格式、语气、道德界限或角色定义。与专注于特定任务的用户提示不同，System Prompting 框定了所有用户提示的解读方式。
 
 ```java
 public void pt_system_prompting_1(ChatClient chatClient) {
@@ -249,7 +250,9 @@ public void pt_system_prompting_1(ChatClient chatClient) {
             .content();
 }
 ```
-系统提示与 Spring AI 的实体映射功能结合使用时尤其强大：
+
+System Prompting 与 Spring AI 的实体映射功能结合使用时尤其强大：
+
 ```java
 record MovieReviews(Movie[] movie_reviews) {
     enum Sentiment {
@@ -277,14 +280,15 @@ MovieReviews movieReviews = chatClient
         .entity(MovieReviews.class);
 ```
 
-系统提示对于多轮对话尤其有价值，可确保跨多个查询的一致行为，并建立适用于所有响应的格式约束（如 JSON 输出）。
+System Prompting 对于多轮对话尤其有价值，可确保跨多个查询的一致行为，并建立适用于所有响应的格式约束（如 JSON 输出）。
 
 **参考文献**： OpenAI。(2022)。“系统消息”。https ://platform.openai.com/docs/guides/chat/introduction
 
-#### 角色提示
-角色提示会指示模型采用特定的角色或人物，这会影响其生成内容的方式。通过为模型分配特定的身份、专业知识或视角，您可以影响其响应的风格、语气、深度和框架。
+#### Role Prompting
 
-角色提示利用模型模拟不同专业领域和沟通风格的能力。常见角色包括专家（例如，“您是一位经验丰富的数据科学家”）、专业人士（例如，“充当导游”）或风格人物（例如，“像莎士比亚一样解释”）。
+Role Prompting 会指示模型采用特定的角色或人物，这会影响其生成内容的方式。通过为模型分配特定的身份、专业知识或视角，您可以影响其响应的风格、语气、深度和框架。
+
+Role Prompting 利用模型模拟不同专业领域和沟通风格的能力。常见 role 包括专家（例如，“您是一位经验丰富的数据科学家”）、专业人士（例如，“充当导游”）或风格人物（例如，“像莎士比亚一样解释”）。
 
 ```java
 public void pt_role_prompting_1(ChatClient chatClient) {
@@ -304,7 +308,9 @@ public void pt_role_prompting_1(ChatClient chatClient) {
             .content();
 }
 ```
-可以通过样式说明来增强角色提示：
+
+可以通过样式说明来增强 Role Prompting：
+
 ```java
 public void pt_role_prompting_2(ChatClient chatClient) {
     String humorousTravelSuggestions = chatClient
@@ -327,8 +333,8 @@ public void pt_role_prompting_2(ChatClient chatClient) {
 
 **参考文献**： Shanahan, M. 等人 (2023)。“使用大型语言模型进行角色扮演。”arXiv:2305.16367。https ://arxiv.org/abs/2305.16367
 
-#### 情景提示
-情境提示通过传递情境参数为模型提供额外的背景信息。这项技术丰富了模型对具体情境的理解，使其能够提供更相关、更有针对性的响应，而不会扰乱主要指令。
+#### Contextual Prompting
+Contextual Prompting 通过传递情境参数为模型提供额外的背景信息。这项技术丰富了模型对具体情境的理解，使其能够提供更相关、更有针对性的响应，而不会扰乱主要指令。
 
 通过提供上下文信息，您可以帮助模型理解与当前查询相关的特定领域、受众、约束或背景事实。这可以带来更准确、更相关、更恰当的响应。
 
@@ -347,12 +353,14 @@ public void pt_contextual_prompting(ChatClient chatClient) {
             .content();
 }
 ```
+
 Spring AI 使用 param() 方法注入上下文变量，使上下文提示更加清晰。当模型需要特定领域知识、根据特定受众或场景调整响应，以及确保响应符合特定约束或要求时，此技术尤为有用。
 
 **参考文献**： Liu, P. 等 (2021)。“什么是 GPT-3 的良好上下文示例？”arXiv:2101.06804。https: //arxiv.org/abs/2101.06804
 
-### 2.4 后退提示
-后退提示法通过先获取背景知识，将复杂的请求分解成更简单的步骤。这种技术鼓励模型先从当前问题“后退一步”，思考更广泛的背景、基本原理或与问题相关的常识，然后再处理具体的问题。
+### 2.4 Step-Back Prompting
+
+Step-Back Prompting 通过先获取背景知识，将复杂的请求分解成更简单的步骤。这种技术鼓励模型先从当前问题“后退一步”，思考更广泛的背景、基本原理或与问题相关的常识，然后再处理具体的问题。
 
 通过将复杂问题分解为更易于管理的部分并首先建立基础知识，该模型可以对难题提供更准确的答案。
 ``` java
@@ -362,7 +370,7 @@ public void pt_step_back_prompting(ChatClient.Builder chatClientBuilder) {
             .defaultOptions(ChatOptions.builder()
                     .model("claude-3-7-sonnet-latest") // 模型名称
                     .temperature(1.0)                 // 温度参数，控制生成的随机性
-                    .topK(40)                         // 采样时考虑的最高概率的前K个词
+                    .topK(40)                         // 采样时考虑的最高概率的前 K 个词
                     .topP(0.8)                        // 样本累积概率阈值
                     .maxTokens(1024)                  // 最大生成 token 数
                     .build())
@@ -440,9 +448,11 @@ public void pt_chain_of_thought_singleshot_fewshots(ChatClient chatClient) {
 参考文献： Wei, J. 等人 (2022)。“思维链提示在大型语言模型中引发推理。”arXiv:2201.11903。https: //arxiv.org/abs/2201.11903
 
 ### 2.6 自洽性
+
 自洽性是指多次运行模型并汇总结果以获得更可靠的答案。该技术通过对同一问题进行不同的推理路径采样，并通过多数表决选出最一致的答案，解决了 LLM 输出结果的差异性问题。
 
 通过生成具有不同温度或采样设置的多条推理路径，然后聚合最终答案，自洽性可以提高复杂推理任务的准确性。它本质上是一种针对 LLM 输出的集成方法。
+
 ```java
 public void pt_self_consistency(ChatClient chatClient) {
     String email = """
@@ -503,7 +513,9 @@ public void pt_self_consistency(ChatClient chatClient) {
 对于高风险决策、复杂推理任务以及需要比单一响应更可靠答案的情况，自洽性尤为重要。但其弊端是由于多次 API 调用会增加计算成本和延迟。
 
 参考文献： Wang, X. 等人 (2022)。“自一致性提升语言模型的思路链推理能力。”arXiv:2203.11171。https: //arxiv.org/abs/2203.11171
+
 ### 2.7 思维树（ToT）
+
 思路树 (ToT) 是一种高级推理框架，它通过同时探索多条推理路径来扩展思路链。它将问题解决视为一个搜索过程，模型会生成不同的中间步骤，评估其可行性，并探索最具潜力的路径。
 
 这种技术对于具有多种可能方法的复杂问题或解决方案需要探索各种替代方案才能找到最佳路径的情况特别有效。
@@ -564,6 +576,7 @@ public void pt_tree_of_thoughts_game(ChatClient chatClient) {
 **参考文献**： Yao, S. 等 (2023)。“思维树：基于大型语言模型的深思熟虑的问题求解”。arXiv:2305.10601。https: //arxiv.org/abs/2305.10601
 
 ### 2.8 自动提示工程
+
 自动提示工程利用人工智能生成并评估备选提示。这项元技术利用语言模型本身来创建、改进和基准测试不同的提示变体，以找到特定任务的最佳方案。
 
 通过系统地生成和评估提示语的变化，APE 可以找到比人工设计更有效的提示语，尤其是在处理复杂任务时。这是利用 AI 提升自身性能的一种方式。
@@ -605,6 +618,7 @@ APE 对于优化生产系统的提示、解决手动提示工程已达到极限�
 参考文献： Zhou, Y. 等 (2022)。“大型语言模型是人类级别的快速工程师。”arXiv:2211.01910。https ://arxiv.org/abs/2211.01910
 
 ### 2.9 代码提示
+
 代码提示是指针对代码相关任务的专门技术。这些技术利用法学硕士 (LLM) 理解和生成编程语言的能力，使他们能够编写新代码、解释现有代码、调试问题以及在语言之间进行转换。
 
 有效的代码提示通常包含清晰的规范、合适的上下文（库、框架、代码规范），有时还会包含类似代码的示例。为了获得更确定的输出，温度设置通常较低（0.1-0.3）。
@@ -683,7 +697,7 @@ public void pt_code_prompting_translating_code(ChatClient chatClient) {
 
 代码提示对于自动化代码文档、原型设计、学习编程概念以及编程语言间的转换尤其有用。将其与少样本提示或思路链等技术结合使用，可以进一步提升其有效性。
 
-参考文献： Chen, M. 等人 (2021)。“评估基于代码训练的大型语言模型。”arXiv:2107.03374。https ://arxiv.org/abs/2107.03374
+参考文献：Chen, M. 等人 (2021)。“评估基于代码训练的大型语言模型。”arXiv:2107.03374。https ://arxiv.org/abs/2107.03374
 
 ## 结论
 
@@ -705,26 +719,26 @@ Spring AI 提供了优雅的 Java API，用于实现所有主要的即时工程�
 
 ## 参考
 
-1.Brown, TB 等人 (2020)。“语言模型是少样本学习器。”arXiv:2005.14165。
+1. Brown, T. B., et al. (2020). "Language Models are Few-Shot Learners." arXiv:2005.14165.
 
-2.Wei, J. 等人 (2022)。“思路链提示在大型语言模型中引发推理。”arXiv:2201.11903。
+2. Wei, J., et al. (2022). "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models." arXiv:2201.11903.
 
-3.Wang, X. 等人 (2022)。“自洽性提升语言模型中的思路链推理能力。”arXiv:2203.11171。
+3. Wang, X., et al. (2022). "Self-Consistency Improves Chain of Thought Reasoning in Language Models." arXiv:2203.11171.
 
-4.Yao, S. 等人 (2023)。“思维树：基于大型语言模型的深思熟虑的问题解决”。arXiv:2305.10601。
+4. Yao, S., et al. (2023). "Tree of Thoughts: Deliberate Problem Solving with Large Language Models." arXiv:2305.10601.
 
-5.Zhou, Y. 等人 (2022)。“大型语言模型是人类级别的快速工程师。”arXiv:2211.01910。
+5. Zhou, Y., et al. (2022). "Large Language Models Are Human-Level Prompt Engineers." arXiv:2211.01910.
 
-6.Zheng, Z. 等人 (2023)。“退一步思考：在大型语言模型中通过抽象引发推理。”arXiv:2310.06117。
+6. Zheng, Z., et al. (2023). "Take a Step Back: Evoking Reasoning via Abstraction in Large Language Models." arXiv:2310.06117.
 
-7.Liu, P. 等人 (2021)。“什么是 GPT-3 的良好上下文示例？”arXiv:2101.06804。
+7. Liu, P., et al. (2021). "What Makes Good In-Context Examples for GPT-3?" arXiv:2101.06804.
 
-8.Shanahan, M. 等人 (2023)。“基于大型语言模型的角色扮演。”arXiv:2305.16367。
+8. Shanahan, M., et al. (2023). "Role-Play with Large Language Models." arXiv:2305.16367.
 
-9.Chen, M. 等人 (2021)。"评估基于代码训练的大型语言模型。" arXiv:2107.03374。
+9. Chen, M., et al. (2021). "Evaluating Large Language Models Trained on Code." arXiv:2107.03374.
 
-10.[Spring AI 文档](https://docs.spring.io/spring-ai/reference/index.html)
+10. Spring AI Documentation
 
-11.[ChatClient API 参考](https://docs.spring.io/spring-ai/reference/api/chatclient.html)
+11. ChatClient API Reference
 
-12.[Google 的快速工程指南](https://www.kaggle.com/whitepaper-prompt-engineering)
+12. Google’s Prompt Engineering Guide

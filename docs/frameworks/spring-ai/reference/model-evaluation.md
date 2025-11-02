@@ -40,7 +40,7 @@ public class EvaluationRequest {
 
 - `userText`: 用户的原始输入，作为 String 类型
 
-- `dataList`: 上下文数据，例如来自检索增强生成(RAG)的数据，附加到原始输入
+- `dataList`: 上下文数据，例如来自检索增强生成 (RAG) 的数据，附加到原始输入
 
 - `responseContent`: AI 模型的响应内容，作为 String 类型
 
@@ -184,16 +184,16 @@ void testFactChecking() {
 }
 ```
 
-### Spring AI Alibaba实现
+### Spring AI Alibaba 实现
 
-#### LaajEvaluator（Evaluator接口实现）
+#### LaajEvaluator（Evaluator 接口实现）
 
-`LaajEvaluator`通过实现Evaluator接口并添加下面三个变量提供具体实现类额外的规范
+`LaajEvaluator`通过实现 Evaluator 接口并添加下面三个变量提供具体实现类额外的规范
 
 ```java
 public abstract class LaajEvaluator implements Evaluator {
 
-    private ChatClient.Builder chatClientBuilder;//聊天客户端builder
+    private ChatClient.Builder chatClientBuilder;//聊天客户端 builder
 
     private String evaluationPromptText;//分析提示词文本
 
@@ -205,13 +205,13 @@ public abstract class LaajEvaluator implements Evaluator {
 
 ##### 源码分析
 
-`AnswerCorrectnessEvaluator`负责评估Query返回的Response是否符合提供的Context信息
+`AnswerCorrectnessEvaluator`负责评估 Query 返回的 Response 是否符合提供的 Context 信息
 
 ```java
 public class AnswerCorrectnessEvaluator extends LaajEvaluator {
 
     private static final String DEFAULT_EVALUATION_PROMPT_TEXT = """
-            你的任务是评估Query返回的Response是否符合提供的Context信息。
+            你的任务是评估 Query 返回的 Response 是否符合提供的 Context 信息。
             你有两个选项来回答，要么是"YES"/"NO"。
             如果查询的响应与上下文信息一致，回答"YES"，否则回答"NO"。
 
@@ -229,11 +229,11 @@ public class AnswerCorrectnessEvaluator extends LaajEvaluator {
 			throw new IllegalArgumentException("EvaluationRequest must not be null");
 		}
 
-        //获取response和context
+        //获取 response 和 context
 		var response = doGetResponse(evaluationRequest);
 		var context = doGetSupportingData(evaluationRequest);
 
-        //创建评估客户端，并且将评估提示词，问题(query)，需要评估的响应(response)，上下文信息(context)，最后进行评估操作
+        //创建评估客户端，并且将评估提示词，问题 (query)，需要评估的响应 (response)，上下文信息 (context)，最后进行评估操作
 		String evaluationResponse = getChatClientBuilder().build()
 			.prompt()
 			.user(userSpec -> userSpec.text(getEvaluationPromptText())
@@ -346,27 +346,27 @@ class AnswerCorrectnessEvaluatorTests {
 
 ##### 源码介绍
 
-`AnswerFaithfulnessEvaluator`作为`LaajEvaluator`的另一个实现类主要功能是将STUDENT ANSWER根据一些FACTS通过预先设定好的评分标准进行评估，并且最终输出格式为JSON。
+`AnswerFaithfulnessEvaluator`作为`LaajEvaluator`的另一个实现类主要功能是将 STUDENT ANSWER 根据一些 FACTS 通过预先设定好的评分标准进行评估，并且最终输出格式为 JSON。
 
 ```java
 public class AnswerFaithfulnessEvaluator extends LaajEvaluator {
 
     private static final String DEFAULT_EVALUATION_PROMPT_TEXT = """
             您是一名评测专家，能够基于提供的评分标准和内容信息进行评分。
-            您将获得一些FACTS(事实内容)和STUDENT ANSWER。
+            您将获得一些 FACTS(事实内容)和 STUDENT ANSWER。
 
             以下是评分标准：
-            (1) 确保STUDENT ANSWER的内容是基于FACTS的事实内容，不能随意编纂。
-            (2) 确保STUDENT ANSWER的内容没有超出FACTS的内容范围外的虚假信息。
+            (1) 确保 STUDENT ANSWER 的内容是基于 FACTS 的事实内容，不能随意编纂。
+            (2) 确保 STUDENT ANSWER 的内容没有超出 FACTS 的内容范围外的虚假信息。
 
             Score:
-            得分为1意味着STUDENT ANSWER满足所有标准。这是最高（最佳）得分。
-            得分为0意味着STUDENT ANSWER没有满足所有标准。这是最低的得分。
+            得分为 1 意味着 STUDENT ANSWER 满足所有标准。这是最高（最佳）得分。
+            得分为 0 意味着 STUDENT ANSWER 没有满足所有标准。这是最低的得分。
 
             请逐步解释您的推理，以确保您的推理和结论正确，避免简单地陈述正确答案。
 
-            最终答案按照标准的json格式输出,不要使用markdown的格式, 比如:
-            \\{"score": 0.7, "feedback": "STUDENT ANSWER的内容超出了FACTS的事实内容。"\\}
+            最终答案按照标准的 json 格式输出,不要使用 markdown 的格式, 比如:
+            \\{"score": 0.7, "feedback": "STUDENT ANSWER 的内容超出了 FACTS 的事实内容。"\\}
 
             FACTS: {context}
             STUDENT ANSWER: {student_answer}
@@ -379,11 +379,11 @@ public class AnswerFaithfulnessEvaluator extends LaajEvaluator {
             throw new IllegalArgumentException("EvaluationRequest must not be null");
         }
 
-        //获取response和context
+        //获取 response 和 context
         var response = doGetResponse(evaluationRequest);
         var context = doGetSupportingData(evaluationRequest);
 
-        //创建评估客户端，并且将评估提示词，需要评估的学生答案(response)，上下文信息(context)，最后进行评估操作
+        //创建评估客户端，并且将评估提示词，需要评估的学生答案 (response)，上下文信息 (context)，最后进行评估操作
         String llmEvaluationResponse = getChatClientBuilder().build()
                 .prompt()
                 .user(userSpec -> userSpec.text(getEvaluationPromptText())
@@ -392,7 +392,7 @@ public class AnswerFaithfulnessEvaluator extends LaajEvaluator {
                 .call()
                 .content();
 
-        //将评估结果以JSON的格式读取
+        //将评估结果以 JSON 的格式读取
         JsonNode evaluationResponse = null;
         try {
             evaluationResponse = getObjectMapper().readTree(llmEvaluationResponse);
@@ -504,30 +504,30 @@ class AnswerFaithfulnessEvaluatorTests {
 
 ##### 源码介绍
 
-`AnswerRelevancyEvaluator`也是`LaajEvaluator`的一个继承类。主要功能：通过提供的正确基准答案对大模型客户端给出的响应(STUDENT ANSWER)进行评分。评分过程中要求STUDENT ANSWER不能出现内容前后冲突的情况。并且该评估模型要求输出格式为JSON类型。
+`AnswerRelevancyEvaluator`也是`LaajEvaluator`的一个继承类。主要功能：通过提供的正确基准答案对大模型客户端给出的响应 (STUDENT ANSWER) 进行评分。评分过程中要求 STUDENT ANSWER 不能出现内容前后冲突的情况。并且该评估模型要求输出格式为 JSON 类型。
 
 ```java
 public class AnswerRelevancyEvaluator extends LaajEvaluator {
 
-    //AnswerRelevancyEvaluator评估模型的默认提示词
+    //AnswerRelevancyEvaluator 评估模型的默认提示词
     private static final String DEFAULT_EVALUATION_PROMPT_TEXT = """
             您是一名评测专家，能够基于提供的评分标准和内容信息进行评分。
-            您将获得一个QUESTION, GROUND TRUTH (correct) ANSWER和STUDENT ANSWER。
+            您将获得一个 QUESTION, GROUND TRUTH (correct) ANSWER 和 STUDENT ANSWER。
 
             以下是评分标准：
-            (1) 基于提供的GROUND TRUTH ANSWER作为正确基准答案，对STUDENT ANSWER的事实性、准确性和相关性进行评分。
-            (2) 确保STUDENT ANSWER不包含任何冲突的陈述和内容。
-            (3) 可以接受STUDENT ANSWER比GROUND TRUTH ANSWER包含更多的信息，只要对于GROUND TRUTH ANSWER保证事实性、准确性和相关性.
+            (1) 基于提供的 GROUND TRUTH ANSWER 作为正确基准答案，对 STUDENT ANSWER 的事实性、准确性和相关性进行评分。
+            (2) 确保 STUDENT ANSWER 不包含任何冲突的陈述和内容。
+            (3) 可以接受 STUDENT ANSWER 比 GROUND TRUTH ANSWER 包含更多的信息，只要对于 GROUND TRUTH ANSWER 保证事实性、准确性和相关性.
 
             Score:
-            得分为1意味着STUDENT ANSWER满足所有标准。这是最高（最佳）得分。
-            得分为0意味着STUDENT ANSWER没有满足所有标准。这是最低的得分。
+            得分为 1 意味着 STUDENT ANSWER 满足所有标准。这是最高（最佳）得分。
+            得分为 0 意味着 STUDENT ANSWER 没有满足所有标准。这是最低的得分。
 
             请逐步解释您的推理，以确保您的推理和结论正确。
             避免简单地陈述正确答案。
 
-            最终答案按照标准的json格式输出, 比如:
-            \\{"score": 0.7, "feedback": "GROUND TRUTH ANSWER与STUDENT ANSWER完全不相关。"\\}
+            最终答案按照标准的 json 格式输出, 比如:
+            \\{"score": 0.7, "feedback": "GROUND TRUTH ANSWER 与 STUDENT ANSWER 完全不相关。"\\}
 
             QUESTION: {question}
             GROUND TRUTH ANSWER: {correct_answer}
@@ -541,11 +541,11 @@ public class AnswerRelevancyEvaluator extends LaajEvaluator {
             throw new IllegalArgumentException("EvaluationRequest must not be null");
         }
 
-        //获取response和context
+        //获取 response 和 context
         var response = doGetResponse(evaluationRequest);
         var context = doGetSupportingData(evaluationRequest);
 
-        //创建评估客户端，并且将评估提示词，需要评估的问题(question)，学生答案(response)，正确答案(context)，最后进行评估操作
+        //创建评估客户端，并且将评估提示词，需要评估的问题 (question)，学生答案 (response)，正确答案 (context)，最后进行评估操作
         String llmEvaluationResponse = getChatClientBuilder().build()
                 .prompt()
                 .user(userSpec -> userSpec.text(getEvaluationPromptText())
@@ -555,7 +555,7 @@ public class AnswerRelevancyEvaluator extends LaajEvaluator {
                 .call()
                 .content();
 
-        //将评估结果以JSON的格式读取
+        //将评估结果以 JSON 的格式读取
         JsonNode evaluationResponse = null;
         try {
             evaluationResponse = getObjectMapper().readTree(llmEvaluationResponse);

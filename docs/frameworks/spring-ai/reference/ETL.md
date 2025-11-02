@@ -2,23 +2,23 @@
 sidebar_position: 7
 ---
 
-# ETL管道
+# ETL 管道
 
-提取、转换和加载(ETL)框架作为检索增强生成(RAG)用例中数据处理的支柱。
+提取、转换和加载 (ETL) 框架作为检索增强生成 (RAG) 用例中数据处理的支柱。
 
-ETL管道编排从原始数据源到结构化向量存储的流程，确保数据以AI模型检索的最佳格式存在。
+ETL 管道编排从原始数据源到结构化向量存储的流程，确保数据以 AI 模型检索的最佳格式存在。
 
-RAG用例通过从数据体中检索相关信息来增强生成模型的能力，从而提高生成输出的质量和相关性。
+RAG 用例通过从数据体中检索相关信息来增强生成模型的能力，从而提高生成输出的质量和相关性。
 
-### API概述
+### API 概述
 
-ETL管道创建、转换和存储`Document`实例。
+ETL 管道创建、转换和存储`Document`实例。
 
 ![ETL-document.png](/img/user/ai/tutorials/basics/ETL-document.png)
 
 `Document`类包含文本、元数据以及可选的额外媒体类型，如图像、音频和视频。
 
-ETL管道有三个主要组件：
+ETL 管道有三个主要组件：
 
 - `DocumentReader` - 实现`Supplier<List<Document>>`
 
@@ -26,13 +26,13 @@ ETL管道有三个主要组件：
 
 - `DocumentWriter` - 实现`Consumer<List<Document>>`
 
-`Document`类的内容是通过`DocumentReader`的帮助从PDF、文本文件和其他文档类型创建的。
+`Document`类的内容是通过`DocumentReader`的帮助从 PDF、文本文件和其他文档类型创建的。
 
-要构建一个简单的ETL管道，您可以将这三种类型的实例链接在一起。
+要构建一个简单的 ETL 管道，您可以将这三种类型的实例链接在一起。
 
 ![ETL-instance.png](/img/user/ai/tutorials/basics/ETL-instance.png)
 
-假设我们有以下ETL类型的实例：
+假设我们有以下 ETL 类型的实例：
 
 - `PagePdfDocumentReader` - `DocumentReader`的实现
 
@@ -40,7 +40,7 @@ ETL管道有三个主要组件：
 
 - `VectorStore` - `DocumentWriter`的实现
 
-要执行将数据加载到向量数据库的基本操作以用于检索增强生成模式，请使用以下Java函数式语法代码：
+要执行将数据加载到向量数据库的基本操作以用于检索增强生成模式，请使用以下 Java 函数式语法代码：
 
 ```java
 vectorStore.accept(tokenTextSplitter.apply(pdfReader.get()));
@@ -52,9 +52,9 @@ vectorStore.accept(tokenTextSplitter.apply(pdfReader.get()));
 vectorStore.write(tokenTextSplitter.split(pdfReader.read()));
 ```
 
-### ETL接口
+### ETL 接口
 
-ETL管道由以下接口和实现组成。 详细的ETL类图在ETL类图部分中显示。
+ETL 管道由以下接口和实现组成。 详细的 ETL 类图在 ETL 类图部分中显示。
 
 #### DocumentReader
 
@@ -84,7 +84,7 @@ public interface DocumentTransformer extends Function<List<Document>, List<Docum
 
 #### DocumentWriter
 
-管理ETL过程的最后阶段，准备文档进行存储。
+管理 ETL 过程的最后阶段，准备文档进行存储。
 
 ```java
 public interface DocumentWriter extends Consumer<List<Document>> {
@@ -95,9 +95,9 @@ public interface DocumentWriter extends Consumer<List<Document>> {
 }
 ```
 
-#### ETL类图
+#### ETL 类图
 
-以下类图说明了ETL接口和实现。
+以下类图说明了 ETL 接口和实现。
 
 ![ETL.png](/img/user/ai/tutorials/basics/ETL.png)
 
@@ -105,7 +105,7 @@ public interface DocumentWriter extends Consumer<List<Document>> {
 
 #### JSON
 
-`JsonReader`处理JSON文档，将它们转换为`Document`对象列表。
+`JsonReader`处理 JSON 文档，将它们转换为`Document`对象列表。
 
 ##### 示例
 
@@ -138,31 +138,31 @@ class MyJsonReader {
 
 ##### 参数
 
-`resource`: 指向JSON文件的Spring `Resource`对象。
+`resource`: 指向 JSON 文件的 Spring `Resource`对象。
 
-`jsonKeysToUse`: 从JSON中应该用作结果`Document`对象中文本内容的键数组。
+`jsonKeysToUse`: 从 JSON 中应该用作结果`Document`对象中文本内容的键数组。
 
 `jsonMetadataGenerator`: 用于为每个`Document`创建元数据的可选`JsonMetadataGenerator`。
 
 ##### 行为
 
-`JsonReader`按以下方式处理JSON内容：
+`JsonReader`按以下方式处理 JSON 内容：
 
-- 它可以处理JSON数组和单个JSON对象。
+- 它可以处理 JSON 数组和单个 JSON 对象。
 
-- 对于每个JSON对象（在数组中或单个对象中）：
+- 对于每个 JSON 对象（在数组中或单个对象中）：
 
   - 它根据指定的`jsonKeysToUse`提取内容。
 
-  - 如果未指定键，则使用整个JSON对象作为内容。
+  - 如果未指定键，则使用整个 JSON 对象作为内容。
 
   - 它使用提供的`JsonMetadataGenerator`（如果未提供则使用空生成器）生成元数据。
 
   - 它创建一个包含提取内容和元数据的`Document`对象。
 
-##### 使用JSON指针
+##### 使用 JSON 指针
 
-`JsonReader`现在支持使用JSON指针检索JSON文档的特定部分。此功能允许您轻松地从复杂的JSON结构中提取嵌套数据。
+`JsonReader`现在支持使用 JSON 指针检索 JSON 文档的特定部分。此功能允许您轻松地从复杂的 JSON 结构中提取嵌套数据。
 
 ###### `get(String pointer)`方法
 
@@ -170,25 +170,25 @@ class MyJsonReader {
 public List<Document> get(String pointer)
 ```
 
-此方法允许您使用JSON指针检索JSON文档的特定部分。
+此方法允许您使用 JSON 指针检索 JSON 文档的特定部分。
 
 ###### 参数
 
-`pointer`: 用于在JSON结构中定位所需元素的JSON指针字符串（如RFC 6901中定义）。
+`pointer`: 用于在 JSON 结构中定位所需元素的 JSON 指针字符串（如 RFC 6901 中定义）。
 
 ###### 返回值
 
-返回一个`List<Document>`，包含从指针定位的JSON元素解析出的文档。
+返回一个`List<Document>`，包含从指针定位的 JSON 元素解析出的文档。
 
 ###### 行为
 
-- 该方法使用提供的JSON指针导航到JSON结构中的特定位置。
+- 该方法使用提供的 JSON 指针导航到 JSON 结构中的特定位置。
 
 - 如果指针有效并指向现有元素：
 
-  - 对于JSON对象：返回包含单个Document的列表。
+  - 对于 JSON 对象：返回包含单个 Document 的列表。
 
-  - 对于JSON数组：返回Document列表，数组中的每个元素一个。
+  - 对于 JSON 数组：返回 Document 列表，数组中的每个元素一个。
 
 - 如果指针无效或指向不存在的元素，则抛出`IllegalArgumentException`。
 
@@ -199,7 +199,7 @@ JsonReader jsonReader = new JsonReader(resource, "description");
 List<Document> documents = this.jsonReader.get("/store/books/0");
 ```
 
-##### 示例JSON结构
+##### 示例 JSON 结构
 
 ```JSON
 [
@@ -220,13 +220,13 @@ List<Document> documents = this.jsonReader.get("/store/books/0");
 
 ##### 注意事项
 
-- `JsonReader`使用Jackson进行JSON解析。
+- `JsonReader`使用 Jackson 进行 JSON 解析。
 
-- 它可以通过使用流式处理来高效处理大型JSON文件。
+- 它可以通过使用流式处理来高效处理大型 JSON 文件。
 
 - 如果在`jsonKeysToUse`中指定了多个键，内容将是这些键值的连接。
 
-- 通过自定义`jsonKeysToUse`和`JsonMetadataGenerator`，读取器可以适应各种JSON结构。
+- 通过自定义`jsonKeysToUse`和`JsonMetadataGenerator`，读取器可以适应各种 JSON 结构。
 
 #### 文本
 
@@ -263,13 +263,13 @@ class MyTextReader {
 
 ##### 参数
 
-- `resourceUrl`: 表示要读取的资源URL的字符串。
+- `resourceUrl`: 表示要读取的资源 URL 的字符串。
 
-- `resource`: 指向文本文件的Spring `Resource`对象。
+- `resource`: 指向文本文件的 Spring `Resource`对象。
 
 ##### 配置
 
-- `setCharset(Charset charset)`: 设置用于读取文本文件的字符集。默认为UTF-8。
+- `setCharset(Charset charset)`: 设置用于读取文本文件的字符集。默认为 UTF-8。
 
 - `getCustomMetadata()`: 返回一个可变映射，您可以在其中添加文档的自定义元数据。
 
@@ -300,13 +300,13 @@ List<Document> documents = textReader.get();
 List<Document> splitDocuments = new TokenTextSplitter().apply(this.documents);
 ```
 
-- 读取器使用Spring的`Resource`抽象，允许从各种源（类路径、文件系统、URL等）读取。
+- 读取器使用 Spring 的`Resource`抽象，允许从各种源（类路径、文件系统、URL 等）读取。
 
 - 可以使用`getCustomMetadata()`方法向读取器创建的所有文档添加自定义元数据。
 
 #### HTML (JSoup)
 
-`JsoupDocumentReader`使用JSoup库处理HTML文档，将它们转换为`Document`对象列表。
+`JsoupDocumentReader`使用 JSoup 库处理 HTML 文档，将它们转换为`Document`对象列表。
 
 ##### 示例
 
@@ -323,8 +323,8 @@ class MyHtmlReader {
     List<Document> loadHtml() {
         JsoupDocumentReaderConfig config = JsoupDocumentReaderConfig.builder()
             .selector("article p") // 提取<article>标签内的段落
-            .charset("ISO-8859-1")  // 使用ISO-8859-1编码
-            .includeLinkUrls(true) // 在元数据中包含链接URL
+            .charset("ISO-8859-1")  // 使用 ISO-8859-1 编码
+            .includeLinkUrls(true) // 在元数据中包含链接 URL
             .metadataTags(List.of("author", "date")) // 提取作者和日期元标签
             .additionalMetadata("source", "my-page.html") // 添加自定义元数据
             .build();
@@ -337,9 +337,9 @@ class MyHtmlReader {
 
 - `JsoupDocumentReaderConfig`允许您自定义`JsoupDocumentReader`的行为：
 
-- `charset`: 指定HTML文档的字符编码（默认为"UTF-8"）。
+- `charset`: 指定 HTML 文档的字符编码（默认为"UTF-8"）。
 
-- `selector`: 一个JSoup CSS选择器，用于指定要提取文本的元素（默认为"body"）。
+- `selector`: 一个 JSoup CSS 选择器，用于指定要提取文本的元素（默认为"body"）。
 
 - `separator`: 用于连接多个选定元素的文本的字符串（默认为"\n"）。
 
@@ -347,7 +347,7 @@ class MyHtmlReader {
 
 - `groupByElement`: 如果为`true`，则为`selector`匹配的每个元素创建单独的`Document`（默认为`false`）。
 
-- `includeLinkUrls`: 如果为`true`，则提取绝对链接URL并将它们添加到元数据中（默认为`false`）。
+- `includeLinkUrls`: 如果为`true`，则提取绝对链接 URL 并将它们添加到元数据中（默认为`false`）。
 
 - `metadataTags`: 要从中提取内容的`<meta>`标签名称列表（默认为`["description", "keywords"]`）。
 
@@ -392,7 +392,7 @@ class MyHtmlReader {
 
 行为：
 
-`JsoupDocumentReader`处理HTML内容并根据配置创建`Document`对象：
+`JsoupDocumentReader`处理 HTML 内容并根据配置创建`Document`对象：
 
 - `selector`确定用于文本提取的元素。
 
@@ -402,15 +402,15 @@ class MyHtmlReader {
 
 - 如果`allElements`和`groupByElement`都不为`true`，则使用`separator`连接`selector`匹配的所有元素的文本。
 
-- 文档标题、指定`<meta>`标签的内容以及（可选）链接URL被添加到`Document`元数据中。
+- 文档标题、指定`<meta>`标签的内容以及（可选）链接 URL 被添加到`Document`元数据中。
 
-- 基本URI（用于解析相对链接）将从URL资源中提取。
+- 基本 URI（用于解析相对链接）将从 URL 资源中提取。
 
-读取器保留选定元素的文本内容，但删除其中的任何HTML标签。
+读取器保留选定元素的文本内容，但删除其中的任何 HTML 标签。
 
 #### Markdown
 
-`MarkdownDocumentReader`处理Markdown文档，将它们转换为`Document`对象列表。
+`MarkdownDocumentReader`处理 Markdown 文档，将它们转换为`Document`对象列表。
 
 ##### 示例
 
@@ -438,9 +438,9 @@ class MyMarkdownReader {
 }
 ```
 
-`MarkdownDocumentReaderConfig`允许您自定义MarkdownDocumentReader的行为：
+`MarkdownDocumentReaderConfig`允许您自定义 MarkdownDocumentReader 的行为：
 
-- `horizontalRuleCreateDocument`: 当设置为`true`时，Markdown中的水平规则将创建新的`Document`对象。
+- `horizontalRuleCreateDocument`: 当设置为`true`时，Markdown 中的水平规则将创建新的`Document`对象。
 
 - `includeCodeBlock`: 当设置为`true`时，代码块将包含在与周围文本相同的`Document`中。当为`false`时，代码块创建单独的`Document`对象。
 
@@ -478,25 +478,25 @@ class MyMarkdownReader {
   ```
 `````
 
-行为：MarkdownDocumentReader处理Markdown内容并根据配置创建Document对象：
+行为：MarkdownDocumentReader 处理 Markdown 内容并根据配置创建 Document 对象：
 
-- 标题成为Document对象中的元数据。
+- 标题成为 Document 对象中的元数据。
 
-- 段落成为Document对象的内容。
+- 段落成为 Document 对象的内容。
 
-- 代码块可以分离到它们自己的Document对象中，或包含在周围文本中。
+- 代码块可以分离到它们自己的 Document 对象中，或包含在周围文本中。
 
-- 引用块可以分离到它们自己的Document对象中，或包含在周围文本中。
+- 引用块可以分离到它们自己的 Document 对象中，或包含在周围文本中。
 
-- 水平规则可用于将内容分割成单独的Document对象。
+- 水平规则可用于将内容分割成单独的 Document 对象。
 
-读取器在Document对象的内容中保留格式，如内联代码、列表和文本样式。
+读取器在 Document 对象的内容中保留格式，如内联代码、列表和文本样式。
 
-#### PDF页面
+#### PDF 页面
 
-`PagePdfDocumentReader`使用Apache PdfBox库解析PDF文档
+`PagePdfDocumentReader`使用 Apache PdfBox 库解析 PDF 文档
 
-使用Maven或Gradle将依赖项添加到您的项目中。
+使用 Maven 或 Gradle 将依赖项添加到您的项目中。
 
 ```xml
 <dependency>
@@ -505,7 +505,7 @@ class MyMarkdownReader {
 </dependency>
 ```
 
-或添加到您的Gradle `build.gradle`构建文件中。
+或添加到您的 Gradle `build.gradle`构建文件中。
 
 ```groovy
 dependencies {
@@ -536,13 +536,13 @@ public class MyPagePdfDocumentReader {
 }
 ```
 
-#### PDF段落
+#### PDF 段落
 
-`ParagraphPdfDocumentReader`使用PDF目录（例如TOC）信息将输入PDF分割成文本段落，并为每个段落输出一个`Document。 注意：并非所有PDF文档都包含PDF目录。
+`ParagraphPdfDocumentReader`使用 PDF 目录（例如 TOC）信息将输入 PDF 分割成文本段落，并为每个段落输出一个`Document。 注意：并非所有 PDF 文档都包含 PDF 目录。
 
 ##### 依赖项
 
-使用Maven或Gradle将依赖项添加到您的项目中。
+使用 Maven 或 Gradle 将依赖项添加到您的项目中。
 
 ```xml
 <dependency>
@@ -551,7 +551,7 @@ public class MyPagePdfDocumentReader {
 </dependency>
 ```
 
-或添加到您的Gradle `build.gradle`构建文件中。
+或添加到您的 Gradle `build.gradle`构建文件中。
 
 ```groovy
 dependencies {
@@ -583,7 +583,7 @@ public class MyPagePdfDocumentReader {
 
 #### Tika (DOCX, PPTX, HTML…​)
 
-`TikaDocumentReader`使用Apache Tika从各种文档格式中提取文本，如PDF、DOC/DOCX、PPT/PPTX和HTML。有关支持的格式的完整列表，请参阅https://tika.apache.org/3.1.0/formats.html[Tika文档]。
+`TikaDocumentReader`使用 Apache Tika 从各种文档格式中提取文本，如 PDF、DOC/DOCX、PPT/PPTX 和 HTML。有关支持的格式的完整列表，请参阅 https://tika.apache.org/3.1.0/formats.html[Tika 文档]。
 
 ##### 依赖项
 
@@ -594,7 +594,7 @@ public class MyPagePdfDocumentReader {
 </dependency>
 ```
 
-或添加到您的Gradle `build.gradle`构建文件中。
+或添加到您的 Gradle `build.gradle`构建文件中。
 
 ```groovy
 dependencies {
@@ -626,11 +626,11 @@ class MyTikaDocumentReader {
 
 #### TextSplitter
 
-`TextSplitter`是一个抽象基类，帮助将文档分割以适应AI模型的上下文窗口。
+`TextSplitter`是一个抽象基类，帮助将文档分割以适应 AI 模型的上下文窗口。
 
 #### TokenTextSplitter
 
-`TokenTextSplitter`是`TextSplitter`的实现，它使用CL100K_BASE编码基于标记计数将文本分割成块。
+`TokenTextSplitter`是`TextSplitter`的实现，它使用 CL100K_BASE 编码基于标记计数将文本分割成块。
 
 ##### 用法
 
@@ -674,7 +674,7 @@ class MyTokenTextSplitter {
 
 `TokenTextSplitter`按以下方式处理文本内容：
 
-1. 它使用CL100K_BASE编码将输入文本编码为标记。
+1. 它使用 CL100K_BASE 编码将输入文本编码为标记。
 
 2. 它根据`defaultChunkSize`将编码文本分割成块。
 
@@ -713,7 +713,7 @@ class MyTokenTextSplitter {
 
 ##### 注意事项
 
-- `TokenTextSplitter`使用来自`jtokkit`库的CL100K_BASE编码，它与较新的OpenAI模型兼容。
+- `TokenTextSplitter`使用来自`jtokkit`库的 CL100K_BASE 编码，它与较新的 OpenAI 模型兼容。
 
 - 分割器尝试通过在可能的情况下在句子边界处断开来创建语义上有意义的块。
 
@@ -729,7 +729,7 @@ class MyTokenTextSplitter {
 
 #### KeywordMetadataEnricher
 
-`KeywordMetadataEnricher`是一个`DocumentTransformer`，它使用生成式AI模型从文档内容中提取关键词并将它们添加为元数据。
+`KeywordMetadataEnricher`是一个`DocumentTransformer`，它使用生成式 AI 模型从文档内容中提取关键词并将它们添加为元数据。
 
 ##### 用法
 
@@ -754,7 +754,7 @@ class MyKeywordEnricher {
 
 `KeywordMetadataEnricher`构造函数接受两个参数：
 
-1. `ChatModel chatModel`: 用于生成关键词的AI模型。
+1. `ChatModel chatModel`: 用于生成关键词的 AI 模型。
 
 2. `int keywordCount`: 为每个文档提取的关键词数量。
 
@@ -799,7 +799,7 @@ System.out.println("Extracted keywords: " + keywords);
 
 - `KeywordMetadataEnricher`需要一个正常工作的`ChatModel`来生成关键词。
 
-- 关键词数量必须为1或更大。
+- 关键词数量必须为 1 或更大。
 
 - 富集器向每个处理的文档添加"excerpt_keywords"元数据字段。
 
@@ -809,7 +809,7 @@ System.out.println("Extracted keywords: " + keywords);
 
 #### SummaryMetadataEnricher
 
-`SummaryMetadataEnricher`是一个`DocumentTransformer`，它使用生成式AI模型为文档创建摘要并将它们添加为元数据。它可以为当前文档以及相邻文档（前一个和后一个）生成摘要。
+`SummaryMetadataEnricher`是一个`DocumentTransformer`，它使用生成式 AI 模型为文档创建摘要并将它们添加为元数据。它可以为当前文档以及相邻文档（前一个和后一个）生成摘要。
 
 ##### 用法
 
@@ -849,7 +849,7 @@ class MySummaryEnricher {
 
 ##### 参数
 
-- `chatModel`: 用于生成摘要的AI模型。
+- `chatModel`: 用于生成摘要的 AI 模型。
 
 - `summaryTypes`: 指示要生成哪些摘要的`SummaryType`枚举值列表（PREVIOUS, CURRENT, NEXT）。
 
@@ -969,17 +969,17 @@ class MyDocumentWriter {
 
 - `metadataMode`: 指定要写入文件的文档内容（默认：MetadataMode.NONE）。
 
-- `append`: 如果为true，数据将写入文件末尾而不是开头（默认：false）。
+- `append`: 如果为 true，数据将写入文件末尾而不是开头（默认：false）。
 
 ##### 行为
 
 `FileDocumentWriter`按以下方式处理文档：
 
-1. 它为指定的文件名打开一个FileWriter。
+1. 它为指定的文件名打开一个 FileWriter。
 
 2. 对于输入列表中的每个文档：
 
-    1. 如果`withDocumentMarkers`为true，它写入包含文档索引和页码的文档标记。
+    1. 如果`withDocumentMarkers`为 true，它写入包含文档索引和页码的文档标记。
 
     2. 它根据指定的`metadataMode`写入文档的格式化内容。
 
@@ -987,7 +987,7 @@ class MyDocumentWriter {
 
 ##### 文档标记
 
-当`withDocumentMarkers`设置为true时，写入器为每个文档包含以下格式的标记：
+当`withDocumentMarkers`设置为 true 时，写入器为每个文档包含以下格式的标记：
 
 ```
 ### Doc: [index], pages:[start_page_number,end_page_number]

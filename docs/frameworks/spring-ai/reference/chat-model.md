@@ -15,7 +15,7 @@ Spring AI Chat Model API 设计为一个简单且可移植的接口，用于与�
 同时，借助 `Prompt` 用于输入封装和 `ChatResponse` 用于输出处理的配套类，Chat Model API 统一了与 AI 模型的通信。它管理请求准备和响应解析的复杂性，提供直接和简化的 API 交互。
 
 :::tip
-您可以在 [Model 集成](../models/dashScope)部分找到更多关于模型集成实现的信息。
+您可以在 [Model 集成](../models/dashScope) 部分找到更多关于模型集成实现的信息。
 :::
 
 ### API 概述

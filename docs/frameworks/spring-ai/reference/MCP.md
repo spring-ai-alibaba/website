@@ -2,7 +2,7 @@
 sidebar_position: 11
 ---
 
-# 模型上下文协议(MCP)
+# 模型上下文协议 (MCP)
 
 模型上下文协议（MCP）是一个标准化协议，使 AI 模型能够以结构化的方式与外部工具和资源交互。 它支持多种传输机制，以在不同环境中提供灵活性。
 
@@ -60,7 +60,7 @@ MCP 客户端是模型上下文协议（MCP）架构中的关键组件，负责�
 
     - WebFlux SSE 客户端传输用于反应式 HTTP 流
 
-MCP服务器
+MCP 服务器
 
 ---
 ![MCP-server.png](/img/user/ai/tutorials/basics/MCP-server.png)

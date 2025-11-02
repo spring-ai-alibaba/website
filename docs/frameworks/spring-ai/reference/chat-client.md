@@ -41,7 +41,7 @@ class MyController {
 }
 ```
 
-在这个简单的示例中，用户输入设置了用户消息的内容。`call()` 方法向 AI 模型发送请求，`content()` 方法返回AI模型的响应作为 `String`。
+在这个简单的示例中，用户输入设置了用户消息的内容。`call()` 方法向 AI 模型发送请求，`content()` 方法返回 AI 模型的响应作为 `String`。
 
 #### 使用多个聊天模型
 
@@ -49,7 +49,7 @@ class MyController {
 
 - 为不同类型的任务使用不同的模型(例如，使用强大的模型进行复杂推理，使用更快、更便宜的模型处理简单任务)
 - 当一个模型服务不可用时实现回退机制
-- 对不同的模型或配置进行A/B测试
+- 对不同的模型或配置进行 A/B 测试
 - 根据用户偏好提供模型选择
 - 组合专业模型(一个用于代码生成，另一个用于创意内容等)
 
@@ -107,22 +107,22 @@ public class ChatClientExample {
             ChatClient chat;
 
             // 模型选择
-            System.out.println("\n选择您的 AI 模型:");
+            System.out.println("\n 选择您的 AI 模型:");
             System.out.println("1. OpenAI");
             System.out.println("2. Anthropic");
-            System.out.print("输入您的选择(1 或 2):");
+            System.out.print("输入您的选择 (1 或 2):");
             String choice = scanner.nextLine().trim();
 
             if (choice.equals("1")) {
                 chat = openAiChatClient;
-                System.out.println("使用OpenAI模型");
+                System.out.println("使用 OpenAI 模型");
             } else {
                 chat = anthropicChatClient;
-                System.out.println("使用Anthropic模型");
+                System.out.println("使用 Anthropic 模型");
             }
 
             // 使用选定的聊天客户端
-            System.out.print("\n输入您的问题:");
+            System.out.print("\n 输入您的问题:");
             String input = scanner.nextLine();
             String response = chat.prompt(input).call().content();
             System.out.println("助手:" + response);
@@ -134,7 +134,7 @@ public class ChatClientExample {
 
 ##### 多个 OpenAI 兼容的 API 端点
 
-`OpenAiApi` 和 `OpenAiChatModel` 类提供了 `mutate()` 方法，允许您创建具有不同属性的现有实例的变体。这在需要与多个OpenAI 兼容的 API 一起工作时特别有用。
+`OpenAiApi` 和 `OpenAiChatModel` 类提供了 `mutate()` 方法，允许您创建具有不同属性的现有实例的变体。这在需要与多个 OpenAI 兼容的 API 一起工作时特别有用。
 
 ```java
 @Service
@@ -149,7 +149,7 @@ public class MultiModelService {
 
     public void multiClientFlow() {
         try {
-            // 为 Groq (Llama3)派生新的 OpenAiApi
+            // 为 Groq (Llama3) 派生新的 OpenAiApi
             OpenAiApi groqApi = baseOpenAiApi.mutate()
                 .baseUrl("https://api.groq.com/openai")
                 .apiKey(System.getenv("GROQ_API_KEY"))
@@ -191,17 +191,17 @@ public class MultiModelService {
 
 ChatClient Fluent API 允许您使用重载的 prompt 方法以三种不同的方式创建提示:
 
-- **`prompt()`**: 这个无参数方法让您开始使用流畅 API，允许您构建用户、系统和其他提示部分。
-- **`prompt(Prompt prompt)`**: 这个方法接受一个 Prompt 参数，让您传入使用 Prompt 的非流畅 API 创建的 Prompt 实例。
+- **`prompt()`**: 这个无参数方法让您开始使用 Fluent API，允许您构建用户、系统和其他提示部分。
+- **`prompt(Prompt prompt)`**: 这个方法接受一个 Prompt 参数，让您传入使用 Prompt 的非 Fluent API 创建的 Prompt 实例。
 - **`prompt(String content)`**: 这是一个类似于前一个重载的便捷方法。它接受用户的文本内容。
 
-### ChatClient响应
+### ChatClient 响应
 
-`ChatClient` API提供了几种使用流畅API格式化AI模型响应的方法。
+`ChatClient` API 提供了几种使用 Fluent API 格式化 AI 模型响应的方法。
 
-#### 返回ChatResponse
+#### 返回 ChatResponse
 
-AI模型的响应是一个由`ChatResponse`类型定义的丰富结构。它包括有关如何生成响应的元数据，还可以包含多个响应，称为`Generations`，每个都有自己的元数据。元数据包括用于创建响应的令牌数量(每个令牌大约是一个单词的3/4)。这些信息很重要，因为托管AI模型根据每个请求使用的令牌数量收费。
+AI 模型的响应是一个由`ChatResponse`类型定义的丰富结构。它包括有关如何生成响应的元数据，还可以包含多个响应，称为`Generations`，每个都有自己的元数据。元数据包括用于创建响应的令牌数量(每个令牌大约是一个单词的 3/4)。这些信息很重要，因为托管 AI 模型根据每个请求使用的令牌数量收费。
 
 以下示例通过调用`call()`方法后的`chatResponse()`返回包含元数据的`ChatResponse`对象:
 
@@ -216,13 +216,13 @@ ChatResponse chatResponse = chatClient.prompt()
 
 您通常希望返回一个从返回的`String`映射的实体类。`entity()`方法提供了这个功能。
 
-例如，给定Java record:
+例如，给定 Java record:
 
 ```java
 record ActorFilms (String actor, List<String> movies) {}
 ```
 
-您可以使用`entity()`方法轻松地将AI模型的输出映射到这个record，如下所示:
+您可以使用`entity()`方法轻松地将 AI 模型的输出映射到这个 record，如下所示:
 
 ```java
 ActorFilms actorFilms = chatClient.prompt()
@@ -235,7 +235,7 @@ ActorFilms actorFilms = chatClient.prompt()
 
 ```java
 List<ActorFilms> actorFilms = chatClient.prompt()
-    .user("生成汤姆·汉克斯和比尔·默瑞的5部电影作品。")
+    .user("生成汤姆·汉克斯和比尔·默瑞的 5 部电影作品。")
     .call()
     .entity(new ParameterizedTypeReference<List<ActorFilms>>() {});
 ```
@@ -253,7 +253,7 @@ Flux<String> output = chatClient.prompt()
 
 您还可以使用方法`Flux<ChatResponse> chatResponse()`流式传输`ChatResponse`。
 
-在未来，我们将提供一个便捷方法，让您使用响应式`stream()`方法返回Java实体。同时，您应该使用结构化输出转换器显式转换聚合响应，如下所示。这也演示了流畅API中参数的使用，这将在文档的后面部分详细讨论。
+在未来，我们将提供一个便捷方法，让您使用响应式`stream()`方法返回 Java 实体。同时，您应该使用结构化输出转换器显式转换聚合响应，如下所示。这也演示了 Fluent API 中参数的使用，这将在文档的后面部分详细讨论。
 
 ```java
 var converter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<ActorsFilms>>() {});
@@ -271,56 +271,58 @@ List<ActorFilms> actorFilms = this.converter.convert(this.content);
 
 ### 提示模板
 
-`ChatClient`流畅API允许您提供带有变量的用户和系统文本作为模板，这些变量在运行时被替换。
+`ChatClient` Fluent API 允许您提供带有变量的用户和系统文本作为模板，这些变量在运行时被替换。
 
 ```java
 String answer = ChatClient.create(chatModel).prompt()
     .user(u -> u
-        .text("告诉我5部由{composer}作曲的电影原声带")
+        .text("告诉我 5 部由{composer}作曲的电影原声带")
         .param("composer", "John Williams"))
     .call()
     .content();
 ```
 
-在内部，ChatClient使用PromptTemplate类来处理用户和系统文本，并使用给定的`TemplateRenderer`实现替换变量。默认情况下，Spring AI使用`StTemplateRenderer`实现，它基于Terence Parr开发的开源String Template引擎。Spring AI还提供了`NoOpTemplateRenderer`用于不需要模板处理的情况。
+在内部，ChatClient 使用 PromptTemplate 类来处理用户和系统文本，并使用给定的`TemplateRenderer`实现替换变量。默认情况下，Spring AI 使用`StTemplateRenderer`实现，它基于 Terence Parr 开发的开源 String Template 引擎。Spring AI 还提供了`NoOpTemplateRenderer`用于不需要模板处理的情况。
 
-**注意**: 直接在`ChatClient`上配置的`TemplateRenderer`(通过`.templateRenderer()`)仅适用于直接在`ChatClient`构建器链中定义的提示内容(例如，通过`.user()`、`.system()`)。它不会影响Advisors内部使用的模板，如`QuestionAnswerAdvisor`，它们有自己的模板自定义机制(参见自定义Advisor模板)。
+:::note
+直接在`ChatClient`上配置的`TemplateRenderer`(通过`.templateRenderer()`)仅适用于直接在`ChatClient`构建器链中定义的提示内容(例如，通过`.user()`、`.system()`)。它不会影响 Advisors 内部使用的模板，如`QuestionAnswerAdvisor`，它们有自己的模板自定义机制(参见自定义 Advisor 模板)。
+:::
 
-如果您想使用不同的模板引擎，您可以直接向ChatClient提供`TemplateRenderer`接口的自定义实现。您也可以继续使用默认的`StTemplateRenderer`，但使用自定义配置。
+如果您想使用不同的模板引擎，您可以直接向 ChatClient 提供`TemplateRenderer`接口的自定义实现。您也可以继续使用默认的`StTemplateRenderer`，但使用自定义配置。
 
-例如，默认情况下，模板变量由{}语法标识。如果您计划在提示中包含JSON，您可能想使用不同的语法以避免与JSON语法冲突。例如，您可以使用`<`和`>`分隔符。
+例如，默认情况下，模板变量由{}语法标识。如果您计划在提示中包含 JSON，您可能想使用不同的语法以避免与 JSON 语法冲突。例如，您可以使用`<`和`>`分隔符。
 
 ```java
 String answer = ChatClient.create(chatModel).prompt()
     .user(u -> u
-        .text("告诉我5部由<composer>作曲的电影原声带")
+        .text("告诉我 5 部由<composer>作曲的电影原声带")
         .param("composer", "John Williams"))
     .templateRenderer(StTemplateRenderer.builder().startDelimiterToken('<').endDelimiterToken('>').build())
     .call()
     .content();
 ```
 
-### call()返回值
+### call() 返回值
 
 在`ChatClient`上指定`call()`方法后，响应类型有几种不同的选项。
 
-- **`String content()`**: 返回响应的String内容
-- **`ChatResponse chatResponse()`**: 返回包含多个生成以及有关响应的元数据的ChatResponse对象，例如创建响应使用了多少令牌。
-- **`ChatClientResponse chatClientResponse()`**: 返回一个ChatClientResponse对象，其中包含ChatResponse对象和ChatClient执行上下文，让您可以访问在执行advisors期间使用的其他数据(例如，在RAG流程中检索的相关文档)。
-- **`entity()`** 返回Java类型
-    - **`entity(ParameterizedTypeReference<T> type)`**: 用于返回实体类型的Collection。
+- **`String content()`**: 返回响应的 String 内容
+- **`ChatResponse chatResponse()`**: 返回包含多个生成以及有关响应的元数据的 ChatResponse 对象，例如创建响应使用了多少令牌。
+- **`ChatClientResponse chatClientResponse()`**: 返回一个 ChatClientResponse 对象，其中包含 ChatResponse 对象和 ChatClient 执行上下文，让您可以访问在执行 advisors 期间使用的其他数据(例如，在 RAG 流程中检索的相关文档)。
+- **`entity()`** 返回 Java 类型
+    - **`entity(ParameterizedTypeReference<T> type)`**: 用于返回实体类型的 Collection。
     - **`entity(Class<T> type)`**: 用于返回特定的实体类型。
-    - **`entity(StructuredOutputConverter<T> structuredOutputConverter)`**: 用于指定`StructuredOutputConverter`的实例，将String转换为实体类型。
+    - **`entity(StructuredOutputConverter<T> structuredOutputConverter)`**: 用于指定`StructuredOutputConverter`的实例，将 String 转换为实体类型。
 
 您也可以调用`stream()`方法而不是`call()`。
 
-### stream()返回值
+### stream() 返回值
 
 在`ChatClient`上指定`stream()`方法后，响应类型有几种选项:
 
-- **`Flux<String> content()`**: 返回AI模型生成的字符串的Flux。
-- **`Flux<ChatResponse> chatResponse()`**: 返回`ChatResponse`对象的Flux，其中包含有关响应的其他元数据。
-- **`Flux<ChatClientResponse> chatClientResponse()`**: 返回`ChatClientResponse`对象的Flux，其中包含ChatResponse对象和ChatClient执行上下文，让您可以访问在执行advisors期间使用的其他数据(例如，在RAG流程中检索的相关文档)。
+- **`Flux<String> content()`**: 返回 AI 模型生成的字符串的 Flux。
+- **`Flux<ChatResponse> chatResponse()`**: 返回`ChatResponse`对象的 Flux，其中包含有关响应的其他元数据。
+- **`Flux<ChatClientResponse> chatClientResponse()`**: 返回`ChatClientResponse`对象的 Flux，其中包含 ChatResponse 对象和 ChatClient 执行上下文，让您可以访问在执行 advisors 期间使用的其他数据(例如，在 RAG 流程中检索的相关文档)。
 
 ### 使用默认值
 
@@ -363,7 +365,7 @@ class AIController {
 
 ```bash
 ❯ curl localhost:8080/ai/simple
-{"completion":"为什么海盗去喜剧俱乐部?为了听一些arrr-rated笑话!啊，伙计!"}
+{"completion":"为什么海盗去喜剧俱乐部?为了听一些 arrr-rated 笑话!啊，伙计!"}
 ```
 
 #### 带参数的默认系统文本
@@ -401,7 +403,7 @@ class AIController {
 }
 ```
 
-当通过httpie调用应用程序端点时，结果是:
+当通过 httpie 调用应用程序端点时，结果是:
 
 ```bash
 http localhost:8080/ai voice=='Robert DeNiro'
@@ -414,14 +416,14 @@ http localhost:8080/ai voice=='Robert DeNiro'
 
 在`ChatClient.Builder`级别，您可以指定默认的提示配置。
 
-- **`defaultOptions(ChatOptions chatOptions)`**: 传入`ChatOptions`类中定义的便携选项或特定于模型的选项，如`OpenAiChatOptions`中的选项。有关特定于模型的ChatOptions实现的更多信息，请参阅JavaDocs。
-- **`defaultFunction(String name, String description, java.util.function.Function<I, O> function)`**: name用于在用户文本中引用函数。description解释函数的用途，帮助AI模型选择正确的函数以获得准确的响应。function参数是模型在需要时将执行的Java函数实例。
-- **`defaultFunctions(String…​ functionNames)`**: 在应用程序上下文中定义的java.util.Function的bean名称。
-- **`defaultUser(String text)`**, **`defaultUser(Resource text)`**, **`defaultUser(Consumer<UserSpec> userSpecConsumer)`**: 这些方法让您定义用户文本。`Consumer<UserSpec>`允许您使用lambda来指定用户文本和任何默认参数。
-- **`defaultAdvisors(Advisor…​ advisor)`**: Advisors允许修改用于创建Prompt的数据。QuestionAnswerAdvisor实现通过将提示附加与用户文本相关的上下文信息来启用Retrieval Augmented Generation模式。
-- **`defaultAdvisors(Consumer<AdvisorSpec> advisorSpecConsumer)`**: 此方法允许您定义一个`Consumer`来使用`AdvisorSpec`配置多个advisors。Advisors可以修改用于创建最终Prompt的数据。`Consumer<AdvisorSpec>`让您指定一个lambda来添加advisors，如`QuestionAnswerAdvisor`，它通过将提示附加基于用户文本的相关上下文信息来支持`Retrieval Augmented Generation`。
+- **`defaultOptions(ChatOptions chatOptions)`**: 传入`ChatOptions`类中定义的便携选项或特定于模型的选项，如`OpenAiChatOptions`中的选项。有关特定于模型的 ChatOptions 实现的更多信息，请参阅 JavaDocs。
+- **`defaultFunction(String name, String description, java.util.function.Function<I, O> function)`**: name 用于在用户文本中引用函数。description 解释函数的用途，帮助 AI 模型选择正确的函数以获得准确的响应。function 参数是模型在需要时将执行的 Java 函数实例。
+- **`defaultFunctions(String…​ functionNames)`**: 在应用程序上下文中定义的 java.util.Function 的 bean 名称。
+- **`defaultUser(String text)`**, **`defaultUser(Resource text)`**, **`defaultUser(Consumer<UserSpec> userSpecConsumer)`**: 这些方法让您定义用户文本。`Consumer<UserSpec>`允许您使用 lambda 来指定用户文本和任何默认参数。
+- **`defaultAdvisors(Advisor…​ advisor)`**: Advisors 允许修改用于创建 Prompt 的数据。QuestionAnswerAdvisor 实现通过将提示附加与用户文本相关的上下文信息来启用 Retrieval Augmented Generation 模式。
+- **`defaultAdvisors(Consumer<AdvisorSpec> advisorSpecConsumer)`**: 此方法允许您定义一个`Consumer`来使用`AdvisorSpec`配置多个 advisors。Advisors 可以修改用于创建最终 Prompt 的数据。`Consumer<AdvisorSpec>`让您指定一个 lambda 来添加 advisors，如`QuestionAnswerAdvisor`，它通过将提示附加基于用户文本的相关上下文信息来支持`Retrieval Augmented Generation`。
 
-您可以在运行时使用不带default前缀的相应方法覆盖这些默认值。
+您可以在运行时使用不带 default 前缀的相应方法覆盖这些默认值。
 
 - `options(ChatOptions chatOptions)`
 - `function(String name, String description, java.util.function.Function<I, O> function)`
@@ -432,14 +434,14 @@ http localhost:8080/ai voice=='Robert DeNiro'
 
 ### Advisors
 
-Advisors API提供了一种灵活而强大的方式来拦截、修改和增强Spring应用程序中的AI驱动交互。在调用带有用户文本的AI模型时，一个常见的模式是将提示附加或增强上下文数据。这种上下文数据可以是不同类型的。常见类型包括:
+Advisors API 提供了一种灵活而强大的方式来拦截、修改和增强 Spring 应用程序中的 AI 驱动交互。在调用带有用户文本的 AI 模型时，一个常见的模式是将提示附加或增强上下文数据。这种上下文数据可以是不同类型的。常见类型包括:
 
-- **您自己的数据**: 这是AI模型没有训练过的数据。即使模型见过类似的数据，附加的上下文数据在生成响应时也会优先考虑。
-- **对话历史**: 聊天模型的API是无状态的。如果您告诉AI模型您的名字，它不会在后续交互中记住。必须随每个请求发送对话历史，以确保在生成响应时考虑之前的交互。
+- **您自己的数据**: 这是 AI 模型没有训练过的数据。即使模型见过类似的数据，附加的上下文数据在生成响应时也会优先考虑。
+- **对话历史**: 聊天模型的 API 是无状态的。如果您告诉 AI 模型您的名字，它不会在后续交互中记住。必须随每个请求发送对话历史，以确保在生成响应时考虑之前的交互。
 
-#### ChatClient中的Advisor配置
+#### ChatClient 中的 Advisor 配置
 
-ChatClient流畅API提供了一个`AdvisorSpec`接口用于配置advisors。这个接口提供了添加参数、一次性设置多个参数以及向链中添加一个或多个advisors的方法。
+ChatClient 流畅 API 提供了一个`AdvisorSpec`接口用于配置 advisors。这个接口提供了添加参数、一次性设置多个参数以及向链中添加一个或多个 advisors 的方法。
 
 ```java
 interface AdvisorSpec {
@@ -450,7 +452,7 @@ interface AdvisorSpec {
 }
 ```
 
-**重要**: 将advisors添加到链中的顺序至关重要，因为它决定了它们的执行顺序。每个advisor都以某种方式修改提示或上下文，一个advisor所做的更改会传递给链中的下一个。
+**重要**: 将 advisors 添加到链中的顺序至关重要，因为它决定了它们的执行顺序。每个 advisor 都以某种方式修改提示或上下文，一个 advisor 所做的更改会传递给链中的下一个。
 
 ```java
 ChatClient.builder(chatModel)
@@ -471,11 +473,11 @@ ChatClient.builder(chatModel)
 
 #### 日志记录
 
-`SimpleLoggerAdvisor`是一个记录`ChatClient`的`request`和`response`数据的advisor。这对于调试和监控您的AI交互很有用。
+`SimpleLoggerAdvisor`是一个记录`ChatClient`的`request`和`response`数据的 advisor。这对于调试和监控您的 AI 交互很有用。
 
-**提示**: Spring AI支持LLM和向量存储交互的可观察性。有关更多信息，请参阅可观察性指南。
+**提示**: Spring AI 支持 LLM 和向量存储交互的可观察性。有关更多信息，请参阅可观察性指南。
 
-要启用日志记录，在创建ChatClient时将`SimpleLoggerAdvisor`添加到advisor链中。建议将其添加到链的末尾:
+要启用日志记录，在创建 ChatClient 时将`SimpleLoggerAdvisor`添加到 advisor 链中。建议将其添加到链的末尾:
 
 ```java
 ChatResponse response = ChatClient.create(chatModel).prompt()
@@ -485,7 +487,7 @@ ChatResponse response = ChatClient.create(chatModel).prompt()
     .chatResponse();
 ```
 
-要查看日志，将advisor包的日志级别设置为`DEBUG`:
+要查看日志，将 advisor 包的日志级别设置为`DEBUG`:
 
 ```properties
 logging.level.org.springframework.ai.chat.client.advisor=DEBUG
@@ -519,7 +521,7 @@ SimpleLoggerAdvisor customLogger = new SimpleLoggerAdvisor(
 
 `ChatMemory`接口表示聊天对话内存的存储。它提供了向对话添加消息、从对话中检索消息以及清除对话历史的方法。目前有一个内置实现:`MessageWindowChatMemory`。
 
-`MessageWindowChatMemory`是一个聊天内存实现，它维护一个最大指定大小(默认:20条消息)的消息窗口。当消息数量超过此限制时，较旧的消息会被逐出，但系统消息会被保留。如果添加了新的系统消息，所有以前的系统消息都会从内存中删除。这确保了对话始终有最新的上下文可用，同时保持内存使用有界。
+`MessageWindowChatMemory`是一个聊天内存实现，它维护一个最大指定大小(默认:20 条消息)的消息窗口。当消息数量超过此限制时，较旧的消息会被逐出，但系统消息会被保留。如果添加了新的系统消息，所有以前的系统消息都会从内存中删除。这确保了对话始终有最新的上下文可用，同时保持内存使用有界。
 
 `MessageWindowChatMemory`由`ChatMemoryRepository`抽象支持，它提供了聊天对话内存的存储实现。有几种实现可用，包括`InMemoryChatMemoryRepository`、`JdbcChatMemoryRepository`、`CassandraChatMemoryRepository`和`Neo4jChatMemoryRepository`。
 
@@ -527,15 +529,11 @@ SimpleLoggerAdvisor customLogger = new SimpleLoggerAdvisor(
 
 ### 实现说明
 
-`ChatClient`中命令式和响应式编程模型的组合使用是API的一个独特方面。通常，应用程序要么是响应式的，要么是命令式的，但不是两者都是。
+`ChatClient`中命令式和响应式编程模型的组合使用是 API 的一个独特方面。通常，应用程序要么是响应式的，要么是命令式的，但不是两者都是。
 
-- 当自定义Model实现的HTTP客户端交互时，必须同时配置RestClient和WebClient。
-- 由于Spring Boot 3.4中的一个错误，必须设置"spring.http.client.factory=jdk"属性。否则，它默认设置为"reactor"，这会破坏某些AI工作流，如ImageModel。
-- 流式传输仅通过响应式堆栈支持。命令式应用程序必须包含响应式堆栈(例如spring-boot-starter-webflux)。
-- 非流式传输仅通过Servlet堆栈支持。响应式应用程序必须包含Servlet堆栈(例如spring-boot-starter-web)，并期望某些调用是阻塞的。
-- 工具调用是命令式的，导致阻塞工作流。这也导致部分/中断的Micrometer观察(例如，ChatClient spans和工具调用spans没有连接，第一个因此保持不完整)。
-- 内置的advisors对标准调用执行阻塞操作，对流式调用执行非阻塞操作。用于advisor流式调用的Reactor Scheduler可以通过每个Advisor类上的Builder进行配置。
-
-### 开始使用
-
-Advisors API
+- 当自定义 Model 实现的 HTTP 客户端交互时，必须同时配置 RestClient 和 WebClient。
+- 由于 Spring Boot 3.4 中的一个错误，必须设置"spring.http.client.factory=jdk"属性。否则，它默认设置为"reactor"，这会破坏某些 AI 工作流，如 ImageModel。
+- 流式传输仅通过响应式堆栈支持。命令式应用程序必须包含响应式堆栈(例如 spring-boot-starter-webflux)。
+- 非流式传输仅通过 Servlet 堆栈支持。响应式应用程序必须包含 Servlet 堆栈(例如 spring-boot-starter-web)，并期望某些调用是阻塞的。
+- 工具调用是命令式的，导致阻塞工作流。这也导致部分/中断的 Micrometer 观察(例如，ChatClient spans 和工具调用 spans 没有连接，第一个因此保持不完整)。
+- 内置的 advisors 对标准调用执行阻塞操作，对流式调用执行非阻塞操作。用于 advisor 流式调用的 Reactor Scheduler 可以通过每个 Advisor 类上的 Builder 进行配置。

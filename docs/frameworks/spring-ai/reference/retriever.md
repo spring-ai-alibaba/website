@@ -2,17 +2,18 @@
 sidebar_position: 20
 ---
 
-# 文档检索
+# Document Retriever
 
 ## 核心概念
-文档检索（`DocumentRetriever`）是一种信息检索技术，旨在从大量未结构化或半结构化文档中快速找到与特定查询相关的文档或信息。文档检索通常以在线(online)方式运行。
 
-`DocumentRetriever`通常基于向量搜索。它将用户的查询问题(query)转化为Embeddings后，在存储文档中进行相似性搜索，返回相关的片段。片段的用途之一是作为提示词(prompt)的一部分，发送给大模型(LLM)汇总处理后，作为答案呈现给用户。
+文档检索（`DocumentRetriever`）是一种信息检索技术，旨在从大量未结构化或半结构化文档中快速找到与特定查询相关的文档或信息。文档检索通常以在线 (online) 方式运行。
+
+`DocumentRetriever`通常基于向量搜索。它将用户的查询问题 (query) 转化为 Embeddings 后，在存储文档中进行相似性搜索，返回相关的片段。片段的用途之一是作为提示词 (prompt) 的一部分，发送给大模型 (LLM) 汇总处理后，作为答案呈现给用户。
 
 `DocumentRetriever API`提供了简单、灵活的方式，供开发者使用自定义的检索系统。
 
-## API介绍
-本节介绍DocumentRetriever的接口和类。
+## API 介绍
+本节介绍 DocumentRetriever 的接口和类。
 ### DocumentRetriever
 ```java
 public interface DocumentRetriever extends Function<String, List<Document>> {
@@ -23,7 +24,7 @@ public interface DocumentRetriever extends Function<String, List<Document>> {
     }
 }
 ```
-DocumentRetriever API简单地将用户的查询作为输入，返回文档片段(`Document`)的列表。
+DocumentRetriever API 简单地将用户的查询作为输入，返回文档片段(`Document`)的列表。
 
 通过`retrieve`方法，用户可以执行自定义的检索步骤。
 
@@ -52,17 +53,19 @@ public class Document implements MediaContent {
 }
 ```
 ## 示例用法
-Spring AI Alibaba已经集成了`阿里云百炼平台`，接下来介绍基于阿里云百炼平台调用 DocumentRetriever API。
+Spring AI Alibaba 已经集成了`阿里云百炼平台`，接下来介绍基于阿里云百炼平台调用 DocumentRetriever API。
 
 ### 准备工作
-由于百炼平台仅支持云端检索，因此在开始之前，参考如下链接获取API-KEY：[获取API-KEY](https://help.aliyun.com/zh/model-studio/developer-reference/get-api-key)。
-然后，在项目环境中设置API-KEY，有两种方式：
+由于百炼平台仅支持云端检索，因此在开始之前，参考如下链接获取 API-KEY：[获取 API-KEY](https://help.aliyun.com/zh/model-studio/developer-reference/get-api-key)。
+然后，在项目环境中设置 API-KEY，有两种方式：
 
-- 方式一：设置`configuration properties：spring.ai.dashscope.api-key` 为上述API-KEY。
+- 方式一：设置`configuration properties：spring.ai.dashscope.api-key` 为上述 API-KEY。
 - 方式二：设置环境变量`export SPRING_AI_DASHSCOPE_API_KEY=<YOUR API  KEY>`
 
 ### Auto-configuration
+
 Spring AI 为 DashScopeDocumentRetriever 提供了 Spring Boot 的自动配置。要启用此功能，请将以下依赖项添加到您项目的 Maven`pom.xml`文件中：
+
 ```xml
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
@@ -70,41 +73,51 @@ Spring AI 为 DashScopeDocumentRetriever 提供了 Spring Boot 的自动配置�
     <version>${version}</version>
 </dependency>
 ```
-或者添加到您的Gradle`build.gradle`文件中：
+
+或者添加到您的 Gradle`build.gradle`文件中：
+
 ```gradle
 dependencies {
     implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter'
 }
 ```
+
 #### Retriever Properties
+
 前缀`spring.ai.dashscope`是用于配置连接至 DashScope 的属性前缀。
 
 | Property                       | Action          | Default |
 |:-------------------------------|:----------------|---------|
-| `spring.ai.dashscope.api-key`  | 来自百炼平台的API KEY  | -       |
+| `spring.ai.dashscope.api-key`  | 来自百炼平台的 API KEY  | -       |
 
 
 ```tips
-所有以 spring.ai.dashscope 开头的属性都可以在构造DashScopeDocumentRetriever时传入Runtime Options来覆盖。
+所有以 spring.ai.dashscope 开头的属性都可以在构造 DashScopeDocumentRetriever 时传入 Runtime Options 来覆盖。
 ```
 
 ### Runtime Options
-`DashScopeDocumentRetrieverOptions`提供了DashScopeDocumentRetriever的配置信息，它通过构建器创建选项。
+
+`DashScopeDocumentRetrieverOptions`提供了 DashScopeDocumentRetriever 的配置信息，它通过构建器创建选项。
 
 在构造`DashScopeDocumentRetriever`时，通过将一个`DashScopeDocumentRetrieverOptions`实例传入，已完成配置。
 
 例如，使用指定的知识库：
+
 ```java
 DocumentRetriever retriever = new DashScopeDocumentRetriever(dashscopeApi,
         DashScopeDocumentRetrieverOptions.builder()
-                .withIndexName("spring-ai知识库")
+                .withIndexName("spring-ai 知识库")
                 .build());
 ```
+
 ### 示例代码
+
 该示例将创建一个`DashScopeDocumentRetriever`实例，在指定的知识库上执行检索操作。以下是简单的`@Controller`类的示例，它使用了该 DashScopeDocumentRetriever 实例。
 ```properties
 spring.ai.dashscope.api-key=YOUR_API_KEY
 ```
+
+
 ```java
 @RestController
 public class RetrieverController {
@@ -124,7 +137,9 @@ public class RetrieverController {
 ```
 
 ### Manual Configuration
+
 如果您不希望使用 Spring Boot 的 Auto-configuration，可以在应用程序中手动配置`DashScopeDocumentRetriever`。为此，请将`spring.ai.dashscope`依赖项添加到您项目的 Maven`pom.xml`文件中：
+
 ```xml
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
@@ -132,22 +147,25 @@ public class RetrieverController {
 </dependency>
 ```
 
-或者添加到您的Gradle`build.gradle`文件中：
+或者添加到您的 Gradle`build.gradle`文件中：
+
 ```gradle
 dependencies {
     implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-core'
 }
 ```
-```note
-spring-ai-dashcope 依赖项还提供了对 DashScopeChatModel 的访问。有关 DashScopeChatModel 的更多信息，请参考 DashScope Chat Client部分。
-```
+
+:::note
+spring-ai-dashcope 依赖项还提供了对 DashScopeChatModel 的访问。有关 DashScopeChatModel 的更多信息，请参考 DashScope Chat Client 部分。
+:::
 
 接下来，创建一个`DocumentRetriever`实例，并使用它检索文档片段：
+
 ```java
 var dashScopeApi = new DashScopeApi(System.getenv("DASHSCOPE_API_KEY"));
 DocumentRetriever retriever = new DashScopeDocumentRetriever(dashScopeApi,
         DashScopeDocumentRetrieverOptions.builder()
-                .withIndexName("spring-ai知识库")
+                .withIndexName("spring-ai 知识库")
                 .build());
 
 List<Document> documentList = retriever.retrieve("What's spring ai");

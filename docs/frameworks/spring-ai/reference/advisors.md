@@ -4,17 +4,17 @@ sidebar_position: 1
 
 # Advisors API
 
-Spring AI Advisors API提供了一种灵活而强大的方法来拦截、修改和增强 Spring 应用程序中的 AI 驱动的交互。 通过利用 Advisors API，开发人员可以创建更复杂、可重用和可维护的 AI 组件。
+Spring AI Advisors API 提供了一种灵活而强大的方法来拦截、修改和增强 Spring 应用程序中的 AI 驱动的交互。 通过利用 Advisors API，开发人员可以创建更复杂、可重用和可维护的 AI 组件。
 
 主要优势包括封装重复的生成式 AI 模式、转换发送到大型语言模型 （LLM） 和从大型语言模型 （LLM） 发送的数据，以及提供跨各种模型和用例的可移植性。
 
-您可以使用 ChatClient API 配置现有advisor，如以下示例所示：
+您可以使用 ChatClient API 配置现有 advisor，如以下示例所示：
 
 ```java
 var chatClient = ChatClient.builder(chatModel)
     .defaultAdvisors(
         MessageChatMemoryAdvisor.builder(chatMemory).build(), // chat-memory advisor
-        QuestionAnswerAdvisor.builder(vectorStore).builder() // RAG advisor
+        QuestionAnswerAdvisor.builder(vectorStore).builder()  // RAG advisor
     )
     .build();
 
@@ -28,7 +28,9 @@ String response = this.chatClient.prompt()
 	.content();
 ```
 
-建议在构建时使用 builder 的方法注册 advisor。defaultAdvisors()
+:::tip
+建议在构建时使用 builder 的方法注册 advisor.defaultAdvisors()
+:::
 
 ### 核心组件
 
@@ -37,7 +39,7 @@ API 由非流式处理方案和 和 流式处理方案组成。 它还包括表�
 
 通常执行各种作，例如检查未密封的 Prompt 数据、自定义和扩充 Prompt 数据、调用 advisor 链中的下一个实体、选择性地阻止请求、检查聊天完成响应以及引发异常以指示处理错误。`nextAroundCall()` `nextAroundStream()`
 
-此外，`getOrder()`方法确定advisor在链上的顺序，而`getName()`提供唯一的advisor名称
+此外，`getOrder()`方法确定 advisor 在链上的顺序，而`getName()`提供唯一的 advisor 名称
 
 由 Spring AI 框架创建的 Advisor Chain 允许按 `getOrder()` 值排序的多个 advisors 顺序调用。 较低的值首先执行。 最后一个 advisor（自动添加）将请求发送到 LLM。
 
@@ -57,7 +59,7 @@ API 由非流式处理方案和 和 流式处理方案组成。 它还包括表�
 
 6. 通过提取 `ChatCompletion` 将最终的 `AdvisedResponse` 返回给客户端。
 
-#### Advisor顺序
+#### Advisor 顺序
 
 链中 advisors 的执行顺序由 `getOrder()` 方法确定。需要理解的关键点：
 
@@ -79,10 +81,12 @@ API 由非流式处理方案和 和 流式处理方案组成。 它还包括表�
 
 - 如果多个 advisors 具有相同的顺序值，它们的执行顺序不能保证。
 
->顺序和执行序列之间的看似矛盾是由于 advisor 链的堆栈性质：
->- 具有最高优先级（最低顺序值）的 advisor 被添加到堆栈顶部。
->- 当堆栈展开时，它将是第一个处理请求的。
->- 当堆栈重绕时，它将是最后一个处理响应的。
+:::note
+顺序和执行序列之间的看似矛盾是由于 advisor 链的堆栈性质：
+- 具有最高优先级（最低顺序值）的 advisor 被添加到堆栈顶部。
+- 当堆栈展开时，它将是第一个处理请求的。
+- 当堆栈重绕时，它将是最后一个处理响应的。
+:::
 
 作为提醒，以下是 Spring `Ordered` 接口的语义：
 
@@ -120,15 +124,14 @@ public interface Ordered {
 >2. 使用不同的顺序值配置它们。
 >3. 使用 advisor 上下文在它们之间共享状态。
 
-### API概述
+### API 概述
 
 主要的 Advisor 接口位于 `org.springframework.ai.chat.client.advisor.api` 包中。以下是创建自己的 advisor 时会遇到的关键接口：
 
 ```java
 public interface Advisor extends Ordered {
 
-	String getName();
-
+    String getName();
 }
 ```
 
@@ -136,11 +139,11 @@ public interface Advisor extends Ordered {
 
 ```java
 public interface CallAdvisor extends Advisor {
-  ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain);
+    ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain);
 }
 
 public interface StreamAdvisor extends Advisor {
-  Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain);
+    Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain);
 }
 ```
 
@@ -148,21 +151,21 @@ public interface StreamAdvisor extends Advisor {
 
 ```java
 public interface CallAdvisorChain extends AdvisorChain {
-    
-  ChatClientResponse nextCall(ChatClientRequest chatClientRequest);
 
-  List<CallAdvisor> getCallAdvisors();
+    ChatClientResponse nextCall(ChatClientRequest chatClientRequest);
+
+    List<CallAdvisor> getCallAdvisors();
 }
 
 public interface StreamAdvisorChain extends AdvisorChain {
-    
-  Flux<ChatClientResponse> nextStream(ChatClientRequest chatClientRequest);
 
-  List<StreamAdvisor> getStreamAdvisors();
+    Flux<ChatClientResponse> nextStream(ChatClientRequest chatClientRequest);
+
+     List<StreamAdvisor> getStreamAdvisors();
 }
 ```
 
-### 实现Advisor
+### 实现 Advisor
 
 要创建 advisor，请实现 `CallAdvisor` 或 `StreamAdvisor`（或两者）。要实现的关键方法是用于非流式的 `nextCall()` 或用于流式的 `nextStream()`。
 
@@ -177,22 +180,22 @@ public interface StreamAdvisorChain extends AdvisorChain {
 ```java
 public class SimpleLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
-	private static final Logger logger = LoggerFactory.getLogger(SimpleLoggerAdvisor.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleLoggerAdvisor.class);
 
-    //	为 advisor 提供唯一名称。
-	@Override
-	public String getName() {
-        
-		return this.getClass().getSimpleName();
-        
+    // 为 advisor 设置唯一名称。
+    @Override
+    public String getName() {
+
+    return this.getClass().getSimpleName();
+
 	}
 
-    //	您可以通过设置顺序值来控制执行顺序。较低的值首先执行。
-	@Override
-	public int getOrder() {
-        
+    // 您可以通过设置顺序值来控制执行顺序。较低的值首先执行。
+    @Override
+    public int getOrder() {
+
 		return 0;
-	}
+  }
 
 
   @Override
@@ -201,21 +204,21 @@ public class SimpleLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvis
     this.logRequest(chatClientRequest);
 
     ChatClientResponse chatClientResponse = callAdvisorChain.nextCall(chatClientRequest);
-    
+
     this.logResponse(chatClientResponse);
-    
+
     return chatClientResponse;
   }
 
-  //	MessageAggregator 是一个实用类，它将 Flux 响应聚合为单个 AdvisedResponse。这对于记录或观察整个响应而不是流中单个项目的其他处理很有用。 
-  //	注意，您不能在 MessageAggregator 中修改响应，因为它是只读操作。
+  // MessageAggregator 是一个实用类，它将 Flux 响应聚合为单个 AdvisedResponse。这对于记录或观察整个响应而不是流中单个项目的其他处理很有用。
+  // 注意，您不能在 MessageAggregator 中修改响应，因为它是只读操作。
   @Override
   public Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain) {
 
     this.logRequest(chatClientRequest);
 
     Flux<ChatClientResponse> chatClientResponses = streamAdvisorChain.nextStream(chatClientRequest);
-    
+
     return (new ChatClientMessageAggregator()).aggregateChatClientResponse(chatClientResponses, this::logResponse);
   }
 }
@@ -223,9 +226,9 @@ public class SimpleLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvis
 
 > `ChatClientMessageAggregator` 是一个实用类，它将 Flux 响应聚合为单个 `chatClientResponses`。 这对于记录或观察整个响应而不是流中单个项目的其他处理很有用。 注意，您不能在 `ChatClientMessageAggregator` 中修改响应，因为它是只读操作。
 
-##### Spring AI Alibaba内置Advisors
+##### Spring AI Alibaba 内置 Advisors
 
-Spring AI Alibaba框架提供了几个内置的 advisors 来增强您的 AI 交互。以下是可用的 advisors 概述：
+Spring AI Alibaba 框架提供了几个内置的 advisors 来增强您的 AI 交互。以下是可用的 advisors 概述：
 
 ###### 文档处理 Advisors
 
@@ -286,11 +289,13 @@ default Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientReques
 
 ### 向后兼容性
 
-重要：`AdvisedRequest` 类已移至新包。
+:::danger
+`AdvisedRequest` 类已移至新包。
+:::
 
-### API重大变更
+### API Break Change
 
-Spring AI Advisor Chain 从版本 1.0 M2 到 1.0 M3 经历了重大变化。以下是主要修改：
+Spring AI Advisor Chain 从版本 1.0.M2 到 1.0.M3 经历了 break change。以下是主要修改：
 
 #### Advisor 接口
 
@@ -310,13 +315,13 @@ Spring AI Advisor Chain 从版本 1.0 M2 到 1.0 M3 经历了重大变化。以�
 
 #### 上下文映射处理
 
-- 在 1.0 M2 中：
+- 在 1.0.M2 中：
 
   - 上下文映射是一个单独的方法参数。
 
   - 映射是可变的，并沿链传递。
 
-- 在 1.0 M3 中：
+- 在 1.0.M3 中：
 
   - 上下文映射现在是 `AdvisedRequest` 和 `AdvisedResponse` 记录的一部分。
 
@@ -324,7 +329,7 @@ Spring AI Advisor Chain 从版本 1.0 M2 到 1.0 M3 经历了重大变化。以�
 
   - 要更新上下文，请使用 `updateContext` 方法，该方法创建一个包含更新内容的新不可修改映射。
 
-在 1.0 M3 中更新上下文的示例：
+在 1.0.M3 中更新上下文的示例：
 
 ```java
 @Override

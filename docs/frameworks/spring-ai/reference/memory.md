@@ -6,35 +6,39 @@ sidebar_position: 12
 
 ### 概述
 
-大型语言模型(LLMs)是无状态的，这意味着它们不保留有关先前交互的信息。当您想要在多个交互中维护上下文或状态时，这可能是一个限制。为了解决这个问题，Spring AI 提供了聊天内存功能，允许您存储和检索与 LLM 的多个交互中的信息。
+大型语言模型 (LLMs) 是无状态的，这意味着它们不保留有关先前交互的信息。当您想要在多个交互中维护上下文或状态时，这可能是一个限制。为了解决这个问题，Spring AI 提供了 Chat Memory 功能，允许您存储和检索与 LLM 的多个交互中的信息。
 
-`ChatMemory` 抽象允许您实现各种类型的内存来支持不同的用例。消息的底层存储由 `ChatMemoryRepository` 处理，其唯一职责是存储和检索消息。由 `ChatMemory` 实现决定保留哪些消息以及何时删除它们。策略示例可能包括保留最后 N 条消息、保留特定时间段的消息或保留达到特定令牌限制的消息。
+`ChatMemory` 接口可以使用使用不同的存储介质实现 Chat Memory。Message 的底层存储由 `ChatMemoryRepository` 处理，其唯一职责是存储和检索 message。由 `ChatMemory` 实现决定保留哪些 message 以及何时删除它们。策略示例可能包括保留最后 N 条 message、保留特定时间段的 message 或保留达到特定令牌限制的 message。
 
-在选择内存类型之前，了解聊天内存和聊天历史之间的区别很重要：
+在实现 Chat Memory 实现之前，了解 Chat Memory 和 Chat Hisroty 之间的区别很重要：
 
-- **聊天内存**：大型语言模型保留并用于在整个对话中保持上下文感知的信息。
-- **聊天历史**：整个对话历史，包括用户和模型之间交换的所有消息。
+:::note
+- **Chat Memory**：大型语言模型保留并用于在整个对话中保持上下文感知的信息。
+- **Chat History**：整个对话历史，包括用户和模型之间交换的所有 message。
+:::
 
-`ChatMemory` 抽象旨在管理*聊天内存*。它允许您存储和检索与当前对话上下文相关的消息。但是，它不适合存储*聊天历史*。如果您需要维护所有交换消息的完整记录，您应该考虑使用不同的方法，例如依赖 Spring Data 来高效存储和检索完整的聊天历史。
+:::tip
+`ChatMemory` 抽象旨在管理*聊天内存*。它允许您存储和检索与当前对话上下文相关的 message。但是，它不适合存储*聊天历史*。如果您需要维护所有交换 message 的完整记录，您应该考虑使用不同的方法，例如依赖 Spring Data 来高效存储和检索完整的聊天历史。
+:::
 
 ### 快速开始
 
-Spring AI 自动配置一个 `ChatMemory` bean，您可以直接在应用程序中使用它。默认情况下，它使用内存存储库来存储消息(`InMemoryChatMemoryRepository`)和 `MessageWindowChatMemory` 实现来管理对话历史。如果已经配置了不同的存储库(例如 Cassandra、JDBC 或 Neo4j)，Spring AI 将使用该存储库。
+Spring AI 自动配置一个 `ChatMemory` bean，您可以直接在应用程序中使用它。默认情况下，它使用内存来存储 message(`InMemoryChatMemoryRepository`)和 `MessageWindowChatMemory` 实现来管理对话历史。如果已经配置了不同的持久层组建(例如 Cassandra、JDBC 或 Neo4j)，Spring AI 将使用其存储。
 
 ```java
 @Autowired
 ChatMemory chatMemory;
 ```
 
-以下部分将详细描述 Spring AI 中可用的不同内存类型和存储库。
+以下部分将详细描述 Spring AI 中可用的不同 Memory 存储策略和持久层。
 
-### 内存类型
+### Chat Memory Type
 
-`ChatMemory` 抽象允许您实现各种类型的内存以适应不同的用例。内存类型的选择会显著影响应用程序的性能和行为。本节描述了 Spring AI 提供的内置内存类型及其特性。
+`ChatMemory` 抽象允许您实现各种类型的 Memory type 以适应不同的用例。Memory type 的选择会显著影响应用程序的性能和行为。本节描述了 Spring AI 提供的内置内存类型及其特性。
 
-#### 消息窗口聊天内存
+#### Message Window
 
-`MessageWindowChatMemory` 维护一个最大指定大小的消息窗口。当消息数量超过最大值时，会删除较旧的消息，同时保留系统消息。默认窗口大小为 20 条消息。
+`MessageWindowChatMemory` 维护一个最大指定大小的 message 窗口。当 message 数量超过最大值时，会删除较旧的 message，同时保留系统 message。默认窗口大小为 20 条 message。
 
 ```java
 MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
@@ -42,17 +46,17 @@ MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
     .build();
 ```
 
-这是 Spring AI 用于自动配置 `ChatMemory` bean 的默认消息类型。
+这是 Spring AI 用于自动配置 `ChatMemory` bean 的默认 message 类型。
 
 ### 内存存储
 
-Spring AI 提供 `ChatMemoryRepository` 抽象用于存储聊天内存。本节描述了 Spring AI 提供的内置存储库以及如何使用它们，但您也可以根据需要实现自己的存储库。
+Spring AI 提供 `ChatMemoryRepository` 抽象用于存储聊天内存。本节描述了 Spring AI 提供的内置存储组件以及如何使用它们，但您也可以根据需要实现自己的存储组件。
 
-#### 内存存储库
+#### 内存实现
 
-`InMemoryChatMemoryRepository` 使用 `ConcurrentHashMap` 在内存中存储消息。
+`InMemoryChatMemoryRepository` 使用 `ConcurrentHashMap` 在内存中存储 message。
 
-默认情况下，如果没有配置其他存储库，Spring AI 会自动配置一个类型为 `InMemoryChatMemoryRepository` 的 `ChatMemoryRepository` bean，您可以直接在应用程序中使用它。
+默认情况下，如果没有配置其他存储组件，Spring AI 会自动配置一个类型为 `InMemoryChatMemoryRepository` 的 `ChatMemoryRepository` bean，您可以直接在应用程序中使用它。
 
 ```java
 @Autowired
@@ -67,7 +71,7 @@ ChatMemoryRepository repository = new InMemoryChatMemoryRepository();
 
 #### JdbcChatMemoryRepository
 
-`JdbcChatMemoryRepository` 是一个内置实现，使用 JDBC 在关系数据库中存储消息。它开箱即用地支持多个数据库，适合需要持久存储聊天内存的应用程序。
+`JdbcChatMemoryRepository` 是一个内置实现，使用 JDBC 在关系数据库中存储 message。它开箱即用地支持多个数据库，适合需要持久存储 Chat Memory 的应用。
 
 ##### 依赖配置
 
@@ -137,7 +141,7 @@ Spring AI 通过方言抽象支持多个关系数据库。以下数据库开箱�
 
 ##### 架构初始化
 
-自动配置将在启动时自动创建 `SPRING_AI_CHAT_MEMORY` 表，使用特定于供应商的 SQL 脚本。默认情况下，架构初始化仅针对嵌入式数据库(H2、HSQL、Derby 等)运行。
+自动配置将在启动时自动创建 `SPRING_AI_CHAT_MEMORY` 表，使用特定于供应商的 SQL 脚本。默认情况下，架构初始化仅针对嵌入式数据库 (H2、HSQL、Derby 等)运行。
 
 您可以使用 `spring.ai.chat.memory.repository.jdbc.initialize-schema` 属性控制架构初始化：
 
@@ -155,7 +159,7 @@ spring.ai.chat.memory.repository.jdbc.schema = classpath:/custom/path/schema-mys
 
 ##### 扩展方言
 
-要添加对新数据库的支持，请实现 `JdbcChatMemoryRepositoryDialect` 接口并提供用于选择、插入和删除消息的 SQL。然后，您可以将自定义方言传递给存储库构建器：
+要添加对新数据库的支持，请实现 `JdbcChatMemoryRepositoryDialect` 接口并提供用于选择、插入和删除 message 的 SQL。然后，您可以将自定义方言传递给存储库构建器：
 
 ```java
 ChatMemoryRepository chatMemoryRepository = JdbcChatMemoryRepository.builder()
@@ -166,7 +170,7 @@ ChatMemoryRepository chatMemoryRepository = JdbcChatMemoryRepository.builder()
 
 #### CassandraChatMemoryRepository
 
-`CassandraChatMemoryRepository` 使用 Apache Cassandra 存储消息。它适合需要持久存储聊天内存的应用程序，特别是在可用性、持久性、扩展性方面，以及利用生存时间(TTL)功能时。
+`CassandraChatMemoryRepository` 使用 Apache Cassandra 存储 message。它适合需要持久存储聊天内存的应用程序，特别是在可用性、持久性、扩展性方面，以及利用生存时间 (TTL) 功能时。
 
 `CassandraChatMemoryRepository` 具有时间序列架构，保留所有过去的聊天窗口记录，对治理和审计很有价值。建议将生存时间设置为某个值，例如三年。
 
@@ -222,9 +226,9 @@ ChatMemory chatMemory = MessageWindowChatMemory.builder()
 | spring.cassandra.contactPoints                    | 用于启动集群发现的主机                   | 127.0.0.1       |
 | spring.cassandra.port                             | 用于连接的 Cassandra 原生协议端口        | 9042            |
 | spring.cassandra.localDatacenter                  | 要连接的 Cassandra 数据中心              | datacenter1     |
-| spring.ai.chat.memory.cassandra.time-to-live      | 在 Cassandra 中写入的消息的生存时间(TTL) |                 |
+| spring.ai.chat.memory.cassandra.time-to-live      | 在 Cassandra 中写入的 message 的生存时间 (TTL) |                 |
 | spring.ai.chat.memory.cassandra.keyspace          | Cassandra 键空间                         | springframework |
-| spring.ai.chat.memory.cassandra.messages-column   | Cassandra 消息列名                       | springframework |
+| spring.ai.chat.memory.cassandra.messages-column   | Cassandra message 列名                       | springframework |
 | spring.ai.chat.memory.cassandra.table             | Cassandra 表                             | ai_chat_memory  |
 | spring.ai.chat.memory.cassandra.initialize-schema | 是否在启动时初始化架构。                 | true            |
 
@@ -234,7 +238,7 @@ ChatMemory chatMemory = MessageWindowChatMemory.builder()
 
 #### Neo4j ChatMemoryRepository
 
-`Neo4jChatMemoryRepository` 是一个内置实现，使用 Neo4j 将聊天消息作为节点和关系存储在属性图数据库中。它适合想要利用 Neo4j 的图功能进行聊天内存持久化的应用程序。
+`Neo4jChatMemoryRepository` 是一个内置实现，使用 Neo4j 将聊天 message 作为节点和关系存储在属性图数据库中。它适合想要利用 Neo4j 的图功能进行聊天内存持久化的应用程序。
 
 ##### 依赖配置
 
@@ -287,15 +291,15 @@ ChatMemory chatMemory = MessageWindowChatMemory.builder()
 | 属性                                                     | 描述                                       | 默认值       |
 | -------------------------------------------------------- | ------------------------------------------ | ------------ |
 | spring.ai.chat.memory.repository.neo4j.sessionLabel      | 存储对话会话的节点的标签                   | Session      |
-| spring.ai.chat.memory.repository.neo4j.messageLabel      | 存储消息的节点的标签                       | Message      |
-| spring.ai.chat.memory.repository.neo4j.toolCallLabel     | 存储工具调用的节点的标签(例如在助手消息中) | ToolCall     |
-| spring.ai.chat.memory.repository.neo4j.metadataLabel     | 存储消息元数据的节点的标签                 | Metadata     |
+| spring.ai.chat.memory.repository.neo4j.messageLabel      | 存储 message 的节点的标签                       | Message      |
+| spring.ai.chat.memory.repository.neo4j.toolCallLabel     | 存储工具调用的节点的标签(例如在助手 message 中) | ToolCall     |
+| spring.ai.chat.memory.repository.neo4j.metadataLabel     | 存储 message 元数据的节点的标签                 | Metadata     |
 | spring.ai.chat.memory.repository.neo4j.toolResponseLabel | 存储工具响应的节点的标签                   | ToolResponse |
-| spring.ai.chat.memory.repository.neo4j.mediaLabel        | 存储与消息关联的媒体的节点的标签           | Media        |
+| spring.ai.chat.memory.repository.neo4j.mediaLabel        | 存储与 message 关联的媒体的节点的标签           | Media        |
 
 ##### 索引初始化
 
-Neo4j 存储库将自动确保为会话 ID 和消息索引创建索引，以优化性能。如果您使用自定义标签，也将为这些标签创建索引。不需要架构初始化，但您应该确保您的 Neo4j 实例可以被您的应用程序访问。
+Neo4j 存储库将自动确保为会话 ID 和 message 索引创建索引，以优化性能。如果您使用自定义标签，也将为这些标签创建索引。不需要架构初始化，但您应该确保您的 Neo4j 实例可以被您的应用程序访问。
 
 ### 聊天客户端中的内存
 
@@ -303,11 +307,13 @@ Neo4j 存储库将自动确保为会话 ID 和消息索引创建索引，以优�
 
 Spring AI 提供了几个内置的 Advisors，您可以使用它们来根据您的需求配置 `ChatClient` 的内存行为。
 
-> **警告**: 目前，在执行工具调用时与大型语言模型交换的中间消息不会存储在内存中。这是当前实现的限制，将在未来的版本中解决。如果您需要存储这些消息，请参阅用户控制的工具执行的说明。
+:::danger
+**警告**: 目前，在执行工具调用时与大型语言模型交换的中间 message 不会存储在内存中。这是当前实现的限制，将在未来的版本中解决。如果您需要存储这些 message，请参阅用户控制的工具执行的说明。
+:::
 
-- `MessageChatMemoryAdvisor`：此 advisor 使用提供的 `ChatMemory` 实现管理对话内存。在每次交互时，它从内存中检索对话历史并将其作为消息集合包含在提示中。
+- `MessageChatMemoryAdvisor`：此 advisor 使用提供的 `ChatMemory` 实现管理对话内存。在每次交互时，它从内存中检索对话历史并将其作为 message 集合包含在提示中。
 - `PromptChatMemoryAdvisor`：此 advisor 使用提供的 `ChatMemory` 实现管理对话内存。在每次交互时，它从内存中检索对话历史并将其作为纯文本附加到系统提示中。
-- `VectorStoreChatMemoryAdvisor`：此 advisor 使用提供的 `VectorStore` 实现管理对话内存。在每次交互时，它从向量存储中检索对话历史并将其作为纯文本附加到系统消息中。
+- `VectorStoreChatMemoryAdvisor`：此 advisor 使用提供的 `VectorStore` 实现管理对话内存。在每次交互时，它从向量存储中检索对话历史并将其作为纯文本附加到系统 message 中。
 
 例如，如果您想将 `MessageWindowChatMemory` 与 `MessageChatMemoryAdvisor` 一起使用，可以这样配置：
 
@@ -333,24 +339,28 @@ chatClient.prompt()
 
 #### PromptChatMemoryAdvisor 自定义模板
 
-`PromptChatMemoryAdvisor` 使用默认模板来增强系统消息与检索到的对话内存。您可以通过 `.promptTemplate()` 构建器方法提供自己的 `PromptTemplate` 对象来自定义此行为。
+`PromptChatMemoryAdvisor` 使用默认模板来增强系统 message 与检索到的对话内存。您可以通过 `.promptTemplate()` 构建器方法提供自己的 `PromptTemplate` 对象来自定义此行为。
 
-> **注意**: 这里提供的 `PromptTemplate` 自定义 advisor 如何将检索到的内存与系统消息合并。这与在 `ChatClient` 本身上配置 `TemplateRenderer`(使用 `.templateRenderer()`)不同，后者影响 advisor 运行之前初始用户/系统提示内容的渲染。有关客户端级模板渲染的更多详细信息，请参阅 ChatClient 提示模板。
+:::note
+**注意**: 这里提供的 `PromptTemplate` 自定义 advisor 如何将检索到的内存与系统 message 合并。这与在 `ChatClient` 本身上配置 `TemplateRenderer`(使用 `.templateRenderer()`)不同，后者影响 advisor 运行之前初始用户/系统提示内容的渲染。有关客户端级模板渲染的更多详细信息，请参阅 ChatClient 提示模板。
+:::
 
 自定义 `PromptTemplate` 可以使用任何 `TemplateRenderer` 实现(默认情况下，它使用基于 `StringTemplate` 引擎的 `StPromptTemplate`)。重要要求是模板必须包含以下两个占位符：
 
-- 一个 `instructions` 占位符，用于接收原始系统消息。
+- 一个 `instructions` 占位符，用于接收原始系统 message。
 - 一个 `memory` 占位符，用于接收检索到的对话内存。
 
 #### VectorStoreChatMemoryAdvisor 自定义模板
 
-`VectorStoreChatMemoryAdvisor` 使用默认模板来增强系统消息与检索到的对话内存。您可以通过 `.promptTemplate()` 构建器方法提供自己的 `PromptTemplate` 对象来自定义此行为。
+`VectorStoreChatMemoryAdvisor` 使用默认模板来增强系统 message 与检索到的对话内存。您可以通过 `.promptTemplate()` 构建器方法提供自己的 `PromptTemplate` 对象来自定义此行为。
 
-> **注意**: 这里提供的 `PromptTemplate` 自定义 advisor 如何将检索到的内存与系统消息合并。这与在 `ChatClient` 本身上配置 `TemplateRenderer`(使用 `.templateRenderer()`)不同，后者影响 advisor 运行之前初始用户/系统提示内容的渲染。有关客户端级模板渲染的更多详细信息，请参阅 ChatClient 提示模板。
+:::note
+**注意**: 这里提供的 `PromptTemplate` 自定义 advisor 如何将检索到的内存与系统 message 合并。这与在 `ChatClient` 本身上配置 `TemplateRenderer`(使用 `.templateRenderer()`)不同，后者影响 advisor 运行之前初始用户/系统提示内容的渲染。有关客户端级模板渲染的更多详细信息，请参阅 ChatClient 提示模板。
+:::
 
 自定义 `PromptTemplate` 可以使用任何 `TemplateRenderer` 实现(默认情况下，它使用基于 `StringTemplate` 引擎的 `StPromptTemplate`)。重要要求是模板必须包含以下两个占位符：
 
-- 一个 `instructions` 占位符，用于接收原始系统消息。
+- 一个 `instructions` 占位符，用于接收原始系统 message。
 - 一个 `long_term_memory` 占位符，用于接收检索到的对话内存。
 
 ### 聊天模型中的内存

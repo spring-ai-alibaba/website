@@ -4,7 +4,7 @@ sidebar_position: 19
 
 ## 检索增强生成
 
-检索增强生成（RAG）是一种有用的技术，可以克服大型语言模型在处理长文本内容、事实准确性和上下文感知方面的局限性。
+检索增强生成（RAG）是一种很有用的技术，可以克服大型语言模型在处理长文本内容、事实准确性和上下文感知方面的局限性。
 
 Spring AI 通过提供模块化架构来支持 RAG，允许您自己构建自定义 RAG 流程或使用 Advisor API 使用开箱即用的 RAG 流程。
 
@@ -123,7 +123,7 @@ Spring AI 包含一个 RAG 模块库，您可以使用它来构建自己的 RAG 
 
 ##### 顺序RAG流程
 
-朴素RAG：
+Advanced RAG：
 
 ```java
 Advisor retrievalAugmentationAdvisor = RetrievalAugmentationAdvisor.builder()
@@ -200,21 +200,23 @@ String answer = chatClient.prompt()
 
 您还可以使用 `DocumentPostProcessor` API 在将检索到的文档传递给模型之前对其进行后处理。例如，您可以使用这样的接口来根据文档与查询的相关性对检索到的文档进行重新排序，删除不相关或冗余的文档，或压缩每个文档的内容以减少噪声和冗余。
 
-### 模块
+### Modules
 
 Spring AI 实现了一个模块化 RAG 架构，其灵感来自论文 ["Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks"](https://arxiv.org/abs/2407.21059)中详细说明的模块化概念。
 
-#### 预检索
+#### Pre-Retrieval
 
 预检索模块负责处理用户查询，以实现最佳的检索结果。
 
-##### 查询转换
+##### Query Transformation
 
 一个用于转换输入查询的组件，使其更有效地用于检索任务，解决诸如 查询格式不佳、术语模糊、复杂词汇或不支持的语言等挑战。
 
-重要：使用 QueryTransformer 时，建议将 `ChatClient.Builder` 配置为低温度（例如，0.0），以确保更确定性和准确的结果，提高检索质量。大多数聊天模型的默认温度通常对于最佳查询转换来说太高，导致检索效果降低。
+:::danger
+使用 QueryTransformer 时，建议将 `ChatClient.Builder` 配置为低温度（例如，0.0），以确保更确定性和准确的结果，提高检索质量。大多数聊天模型的默认温度通常对于最佳查询转换来说太高，导致检索效果降低。
+:::
 
-`CompressionQueryTransformer`
+##### CompressionQueryTransformer`
 
 `CompressionQueryTransformer` 使用大型语言模型将对话历史和后续查询压缩成一个独立的查询，捕捉对话的本质。
 
@@ -236,7 +238,7 @@ Query transformedQuery = queryTransformer.transform(query);
 
 此组件使用的提示词可以通过构建器中可用的 `promptTemplate()` 方法进行自定义。
 
-`RewriteQueryTransformer`
+##### `RewriteQueryTransformer`
 
 `RewriteQueryTransformer` 使用大型语言模型重写用户查询，以在查询目标系统（如向量存储或网络搜索引擎）时提供更好的结果。
 
@@ -273,11 +275,11 @@ Query transformedQuery = queryTransformer.transform(query);
 
 此组件使用的提示词可以通过构建器中可用的 `promptTemplate()` 方法进行自定义。
 
-##### 查询扩展
+##### Query Expansion
 
 一个用于将输入查询扩展为查询列表的组件，通过提供替代查询表述或通过将复杂问题分解为更简单的子查询来解决查询格式不佳等挑战。
 
-`MultiQueryExpander`
+##### `MultiQueryExpander`
 
 `MultiQueryExpander` 使用大型语言模型将查询扩展为多个语义多样化的变体 以捕捉不同的视角，有助于检索额外的上下文信息并增加找到相关结果的机会。
 
@@ -299,15 +301,15 @@ MultiQueryExpander queryExpander = MultiQueryExpander.builder()
 
 此组件使用的提示词可以通过构建器中可用的 `promptTemplate()` 方法进行自定义。
 
-#### 检索
+#### Retrieval
 
 检索模块负责查询数据系统（如向量存储）并检索最相关的文档。
 
-##### 文档搜索
+##### Document Search
 
 负责从底层数据源（如搜索引擎、向量存储、数据库或知识图谱）检索 `Documents` 的组件。
 
-`VectorStoreDocumentRetriever`
+##### `VectorStoreDocumentRetriever`
 
 `VectorStoreDocumentRetriever` 从向量存储中检索与输入查询语义相似的文档。它支持基于元数据、相似性阈值和 top-k 结果的过滤。
 
@@ -345,7 +347,7 @@ Query query = Query.builder()
 List<Document> retrievedDocuments = documentRetriever.retrieve(query);
 ```
 
-##### 文档连接
+##### Document Join
 
 一个用于将基于多个查询和从多个数据源检索的文档组合成单个文档集合的组件。作为连接过程的一部分，它还可以处理重复文档和互惠排名策略。
 
@@ -358,25 +360,26 @@ DocumentJoiner documentJoiner = new ConcatenationDocumentJoiner();
 List<Document> documents = documentJoiner.join(documentsForQuery);
 ```
 
-#### 后检索
+#### Post-Retrieval
 
 后检索模块负责处理检索到的文档，以实现最佳的生成结果。
 
-##### 文档后处理
+##### Document Post-Processing
 
 一个用于基于查询对检索到的文档进行后处理的组件，解决诸如_中间丢失_、模型的上下文长度限制以及需要减少检索信息中的噪声和冗余等挑战。
 
 例如，它可以根据文档与查询的相关性对文档进行排名，删除不相关或冗余的文档，或压缩每个文档的内容以减少噪声和冗余。
 
-#### 生成
+#### Generation
 
 生成模块负责基于用户查询和检索到的文档生成最终响应。
 
-##### 查询增强
+##### Query Augmentation
 
 一个用于用额外数据增强输入查询的组件，有助于为大型语言模型提供回答用户查询所需的上下文。
 
-`ContextualQueryAugmenter`
+##### `ContextualQueryAugmenter`
+
 `ContextualQueryAugmenter` 用提供的文档内容中的上下文数据增强用户查询。
 
 ```java
@@ -393,4 +396,3 @@ QueryAugmenter queryAugmenter = ContextualQueryAugmenter.builder()
 ```
 
 此组件使用的提示词可以通过构建器中可用的 `promptTemplate()` 和 `emptyContextPromptTemplate()` 方法进行自定义。
-

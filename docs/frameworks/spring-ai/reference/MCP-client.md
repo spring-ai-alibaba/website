@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# MCP客户端启动器
+# MCP 客户端启动器
 
 Spring AI MCP（模型上下文协议）客户端启动器为 Spring Boot 应用程序中的 MCP 客户端功能提供自动配置。它支持同步和异步客户端实现，并提供多种传输选项。
 
@@ -35,7 +35,7 @@ MCP 客户端启动器提供：
 
 标准启动器通过 `STDIO`（进程内）和/或 `SSE`（远程）传输同时连接到一个或多个 `MCP` 服务器。 `SSE` 连接使用基于 HttpClient 的传输实现。 每个到 MCP 服务器的连接都会创建一个新的 MCP 客户端实例。 您可以选择 `SYNC` 或 `ASYNC` MCP 客户端（注意：不能混合使用同步和异步客户端）。 对于生产部署，我们建议使用基于 WebFlux 的 SSE 连接，即 `spring-ai-starter-mcp-client-webflux`。
 
-#### WebFlux客户端
+#### WebFlux 客户端
 
 ##### 通用属性
 
@@ -53,7 +53,7 @@ MCP 客户端启动器提供：
 | `toolcallback.enabled`     | 启用/禁用 MCP 工具回调与 Spring AI 工具执行框架的集成         | true                 |
 
 
-##### Stdio传输属性
+##### Stdio 传输属性
 
 标准 I/O 传输的属性以 `spring.ai.mcp.client.stdio` 为前缀：
 
@@ -247,7 +247,7 @@ MCP 客户端自动配置会自动检测并应用在应用程序上下文中找�
 
 - SSE WebFlux（由 `spring-ai-starter-mcp-client-webflux` 激活）
 
-#### 与Spring AI集成
+#### 与 Spring AI 集成
 
 启动器可以配置与 Spring AI 工具执行框架集成的工具回调，允许 MCP 工具作为 AI 交互的一部分使用。默认情况下启用此集成，可以通过设置 `spring.ai.mcp.client.toolcallback.enabled=false` 属性来禁用。
 
@@ -284,7 +284,7 @@ spring:
                 DEBUG: "true"
 ```
 
-MCP客户端bean将自动配置并可用于注入：
+MCP 客户端 bean 将自动配置并可用于注入：
 
 ```java
 @Autowired

@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# MCP工具类
+# MCP 工具类
 
 MCP 工具类为将模型上下文协议与 Spring AI 应用程序集成提供基础支持。 这些工具类实现了 Spring AI 的工具系统与 MCP 服务器之间的无缝通信，支持同步和异步操作。 它们通常用于编程式 MCP 客户端和服务器配置及交互。 对于更简化的配置，请考虑使用启动器。
 
@@ -115,4 +115,3 @@ List<ToolCallback> asyncCallbacks = McpToolUtils.getToolCallbacksFromAsyncClient
 ### 原生镜像支持
 
 `McpHints` 类为 MCP 模式类提供 GraalVM 原生镜像提示。 在构建原生镜像时，此类会自动注册 MCP 模式类的所有必要反射提示。
-

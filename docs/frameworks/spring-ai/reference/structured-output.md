@@ -6,7 +6,9 @@ sidebar_position: 22
 
 ### 概述
 
-> **注意**: 截至 2024年2月5日，旧的 `OutputParser`、`BeanOutputParser`、`ListOutputParser` 和 `MapOutputParser` 类已被弃用，取而代之的是新的 `StructuredOutputConverter`、`BeanOutputConverter`、`ListOutputConverter` 和 `MapOutputConverter` 实现。后者是前者的直接替代品，提供相同的功能。变更的主要原因是为了命名，因为实际上并没有进行任何解析操作，同时也与 Spring 的 `org.springframework.core.convert.converter` 包保持一致，带来了一些改进的功能。
+:::danger
+截至 2024 年 2 月 5 日，旧的 `OutputParser`、`BeanOutputParser`、`ListOutputParser` 和 `MapOutputParser` 类已被弃用，取而代之的是新的 `StructuredOutputConverter`、`BeanOutputConverter`、`ListOutputConverter` 和 `MapOutputConverter` 实现。后者是前者的直接替代品，提供相同的功能。变更的主要原因是为了命名，因为实际上并没有进行任何解析操作，同时也与 Spring 的 `org.springframework.core.convert.converter` 包保持一致，带来了一些改进的功能。
+:::
 
 LLM 生成结构化输出的能力对于依赖可靠解析输出值的下游应用程序来说非常重要。开发人员希望快速将 AI 模型的结果转换为可以传递给其他应用程序函数和方法的数据类型，如 JSON、XML 或 Java 类。
 
@@ -77,7 +79,7 @@ Map.of(..., "format", outputConverter.getFormat()) // 用转换器的格式替�
 
 - **`AbstractConversionServiceOutputConverter<T>`**：提供预配置的 `GenericConversionService` 用于将 LLM 输出转换为所需格式。不提供默认的 `FormatProvider` 实现。
 - **`AbstractMessageOutputConverter<T>`**：提供预配置的 `MessageConverter` 用于将 LLM 输出转换为所需格式。不提供默认的 `FormatProvider` 实现。
-- **`BeanOutputConverter<T>`**：配置指定的 Java 类(例如 Bean)或 `ParameterizedTypeReference`，此转换器使用 `FormatProvider` 实现，指导 AI 模型生成符合从指定 Java 类派生的 `DRAFT_2020_12` JSON Schema 的 JSON 响应。随后，它使用 `ObjectMapper` 将 JSON 输出反序列化为目标类的 Java 对象实例。
+- **`BeanOutputConverter<T>`**：配置指定的 Java 类(例如 Bean) 或 `ParameterizedTypeReference`，此转换器使用 `FormatProvider` 实现，指导 AI 模型生成符合从指定 Java 类派生的 `DRAFT_2020_12` JSON Schema 的 JSON 响应。随后，它使用 `ObjectMapper` 将 JSON 输出反序列化为目标类的 Java 对象实例。
 - **MapOutputConverter**：扩展 `AbstractMessageOutputConverter` 的功能，提供 `FormatProvider` 实现，指导 AI 模型生成符合 RFC8259 的 JSON 响应。此外，它还包含一个转换器实现，使用提供的 `MessageConverter` 将 JSON 负载转换为 `java.util.Map<String, Object>` 实例。
 - **ListOutputConverter**：扩展 `AbstractConversionServiceOutputConverter` 并包含专门用于逗号分隔列表输出的 `FormatProvider` 实现。转换器实现使用提供的 `ConversionService` 将模型文本输出转换为 `java.util.List`。
 
@@ -227,7 +229,7 @@ List<String> list = this.listOutputConverter.convert(this.generation.getOutput()
 
 ### 内置 JSON 模式
 
-一些 AI 模型提供专门的配置选项来生成结构化(通常是 JSON)输出。
+一些 AI 模型提供专门的配置选项来生成结构化(通常是 JSON) 输出。
 
 - **OpenAI 结构化输出**：可以确保您的模型生成严格符合您提供的 JSON Schema 的响应。您可以选择 `JSON_OBJECT`，它保证模型生成的消息是有效的 JSON，或者选择 `JSON_SCHEMA` 并提供模式，保证模型将生成与您提供的模式匹配的响应(`spring.ai.openai.chat.options.responseFormat` 选项)。
 - **Azure OpenAI**：提供 `spring.ai.azure.openai.chat.options.responseFormat` 选项，指定模型必须输出的格式。设置为 `{ "type": "json_object" }` 启用 JSON 模式，它保证模型生成的消息是有效的 JSON。

@@ -4,7 +4,9 @@ sidebar_position: 15
 
 # Multimodal API
 
-> "所有自然相关的事物都应该组合在一起教授" - John Amos Comenius, "Orbis Sensualium Pictus", 1658
+:::tip
+"All things that are naturally connected ought to be taught in combination" - John Amos Comenius, "Orbis Sensualium Pictus", 1658
+:::
 
 人类同时通过多种数据输入模式处理知识。我们的学习方式和经验都是多模态的。我们不仅仅有视觉、音频和文本。
 
@@ -55,15 +57,3 @@ String response = ChatClient.create(chatModel).prompt()
 并产生如下响应：
 
 > 这是一张水果碗的图片，设计简单。碗由金属制成，带有弯曲的金属丝边缘，形成开放式结构，使水果可以从各个角度看到。碗内有两个黄色香蕉放在一个红色苹果上面。香蕉略微过熟，从香蕉皮上的棕色斑点可以看出。碗顶部有一个金属环，可能用作携带的把手。碗放在一个平面上，背景为中性色，可以清晰地看到里面的水果。
-
-### 支持的多模态模型
-
-Spring AI 为以下聊天模型提供多模态支持：
-
-- Anthropic Claude 3
-- AWS Bedrock Converse
-- Azure Open AI（例如 GPT-4o 模型）
-- Mistral AI（例如 Mistral Pixtral 模型）
-- Ollama（例如 LLaVA、BakLLaVA、Llama3.2 模型）
-- OpenAI（例如 GPT-4 和 GPT-4o 模型）
-- Vertex AI Gemini（例如 gemini-1.5-pro-001、gemini-1.5-flash-001 模型）

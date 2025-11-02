@@ -6,7 +6,7 @@ sidebar_position: 6
 
 ### 概述
 
-嵌入是文本、图像或视频的数值表示，用于捕获输入之间的关系。嵌入通过将文本、图像和视频转换为浮点数数组（称为向量）来工作。这些向量旨在捕获文本、图像和视频的含义。嵌入数组的长度称为向量的维度。
+Embeddings 是文本、图像或视频的向量表示，用于捕获输入之间的关系。嵌入通过将文本、图像和视频转换为浮点数数组（称为向量）来工作。这些向量旨在捕获文本、图像和视频的含义。嵌入数组的长度称为向量的维度。
 
 通过计算两段文本的向量表示之间的数值距离，应用程序可以确定用于生成嵌入向量的对象之间的相似性。
 
@@ -135,18 +135,3 @@ public class Embedding implements ModelResult<float[]> {
     // 其他方法省略
 }
 ```
-
-### 可用实现
-
-在内部，各种 `EmbeddingModel` 实现使用不同的低级库和 API 来执行嵌入任务。以下是 `EmbeddingModel` 实现的一些可用实现：
-
-- Spring AI OpenAI 嵌入
-- Spring AI Azure OpenAI 嵌入
-- Spring AI Ollama 嵌入
-- Spring AI Transformers (ONNX) 嵌入
-- Spring AI PostgresML 嵌入
-- Spring AI Bedrock Cohere 嵌入
-- Spring AI Bedrock Titan 嵌入
-- Spring AI VertexAI 嵌入
-- Spring AI Mistral AI 嵌入
-- Spring AI Oracle Cloud Infrastructure GenAI 嵌入
