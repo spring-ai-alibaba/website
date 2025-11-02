@@ -105,7 +105,7 @@ const sidebars: SidebarsConfig = {
           label: '概览',
           items: [
             'frameworks/spring-ai/reference/concepts',
-          ]
+          ],
         },
         {
           type: 'category',
@@ -122,9 +122,9 @@ const sidebars: SidebarsConfig = {
                   items: [
                     'frameworks/spring-ai/reference/chat-client',
                     'frameworks/spring-ai/reference/advisors',
-                  ]
+                  ],
                 },
-              ]
+              ],
             },
             {
               type: 'category',
@@ -132,7 +132,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 'frameworks/spring-ai/reference/prompt',
                 'frameworks/spring-ai/reference/prompt-engineering-patterns',
-              ]
+              ],
             },
             'frameworks/spring-ai/reference/structured-output',
             'frameworks/spring-ai/reference/multimodality',
@@ -147,7 +147,7 @@ const sidebars: SidebarsConfig = {
                 'frameworks/spring-ai/reference/MCP-tool',
                 'frameworks/spring-ai/reference/MCP',
                 'frameworks/spring-ai/reference/model-context-protocol',
-              ]
+              ],
             },
             {
               type: 'category',
@@ -156,7 +156,7 @@ const sidebars: SidebarsConfig = {
                 'frameworks/spring-ai/reference/RAG',
                 'frameworks/spring-ai/reference/ETL',
                 'frameworks/spring-ai/reference/retriever',
-              ]
+              ],
             },
             'frameworks/spring-ai/reference/docker-compose',
             'frameworks/spring-ai/reference/embedding',
@@ -164,7 +164,7 @@ const sidebars: SidebarsConfig = {
             'frameworks/spring-ai/reference/observability',
             'frameworks/spring-ai/reference/vectorstore',
             'frameworks/spring-ai/reference/test',
-          ]
+          ],
         },
         {
           type: 'category',
@@ -193,7 +193,7 @@ const sidebars: SidebarsConfig = {
           label: 'Ecosystem Integration',
           items: [
             'frameworks/spring-ai/reference/spring-ai-alibaba-mcp-nacos-introduce',
-          ]
+          ],
         },
       ],
     },
