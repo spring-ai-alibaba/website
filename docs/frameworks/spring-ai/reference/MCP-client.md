@@ -2,11 +2,11 @@
 sidebar_position: 8
 ---
 
-# MCP 客户端启动器
+# MCP Client Starter
 
-Spring AI MCP（模型上下文协议）客户端启动器为 Spring Boot 应用程序中的 MCP 客户端功能提供自动配置。它支持同步和异步客户端实现，并提供多种传输选项。
+Spring AI MCP（模型上下文协议）Client Starter 为 Spring Boot 应用程序中的 MCP 客户端功能提供自动配置。它支持同步和异步客户端实现，并提供多种传输选项。
 
-MCP 客户端启动器提供：
+MCP Client Starter 提供：
 
 - 多个客户端实例的管理
 
@@ -20,11 +20,11 @@ MCP 客户端启动器提供：
 
 - 通过自定义器实现可自定义的客户端创建
 
-### 启动器
+### Client Starter
 
-> Spring AI 自动配置和启动器模块的构件名称发生了重大变化。 请参阅 [升级说明](https://docs.spring.io/spring-ai/reference/upgrade-notes.html) 了解更多信息。
+> Spring AI 自动配置和 Client Starter 模块的构件名称发生了重大变化。 请参阅 [升级说明](https://docs.spring.io/spring-ai/reference/upgrade-notes.html) 了解更多信息。
 
-#### 标准 MCP 客户端
+#### 标准 MCP Client
 
 ```xml
 <dependency>
@@ -33,29 +33,28 @@ MCP 客户端启动器提供：
 </dependency>
 ```
 
-标准启动器通过 `STDIO`（进程内）和/或 `SSE`（远程）传输同时连接到一个或多个 `MCP` 服务器。 `SSE` 连接使用基于 HttpClient 的传输实现。 每个到 MCP 服务器的连接都会创建一个新的 MCP 客户端实例。 您可以选择 `SYNC` 或 `ASYNC` MCP 客户端（注意：不能混合使用同步和异步客户端）。 对于生产部署，我们建议使用基于 WebFlux 的 SSE 连接，即 `spring-ai-starter-mcp-client-webflux`。
+标准 Client Starter 通过 `STDIO`（进程内）和/或 `SSE`（远程）传输同时连接到一个或多个 `MCP` 服务器。 `SSE` 连接使用基于 HttpClient 的传输实现。 每个到 MCP 服务器的连接都会创建一个新的 MCP 客户端实例。 您可以选择 `SYNC` 或 `ASYNC` MCP 客户端（注意：不能混合使用同步和异步客户端）。 对于生产部署，我们建议使用基于 WebFlux 的 SSE 连接，即 `spring-ai-starter-mcp-client-webflux`。
 
-#### WebFlux 客户端
+#### WebFlux Client
 
 ##### 通用属性
 
-通用属性以 `spring.ai.mcp.client` 为前缀：
+通用属性以 `spring.ai.mcp.client` 为前缀，Client Starter 提供：
 
 | 属性                         | 描述                                          | 默认值                  |
 |----------------------------|---------------------------------------------|----------------------|
-| `enabled`                  | 启用/禁用 MCP 客户端                               | true                 |
-| `name`                     | MCP 客户端实例的名称（用于兼容性检查）                       | spring-ai-mcp-client |
-| `version`                  | MCP 客户端实例的版本                                | 1.0.0                |
-| `initialized`              | 是否在创建时初始化客户端                                | true                 |
-| `request-timeout`          | MCP 客户端请求的超时时间                              | 20s                  |
-| `type`                     | 客户端类型（SYNC 或 ASYNC）。所有客户端必须是同步或异步的；不支持混合使用  | SYNC                 |
-| `root-change-notification` | 为所有客户端启用/禁用根变更通知                            | true                 |
+| `enabled`                  | 启用/禁用 MCP Client                               | true                 |
+| `name`                     | MCP Client 实例的名称（用于兼容性检查）                       | spring-ai-mcp-client |
+| `version`                  | MCP Client 实例的版本                                | 1.0.0                |
+| `initialized`              | 是否在创建时初始化 Client                                | true                 |
+| `request-timeout`          | MCP Client 请求的超时时间                              | 20s                  |
+| `type`                     | Client 类型（SYNC 或 ASYNC）。所有 Client 必须是同步或异步的；不支持混合使用  | SYNC                 |
+| `root-change-notification` | 为所有 Client 启用/禁用根变更通知                            | true                 |
 | `toolcallback.enabled`     | 启用/禁用 MCP 工具回调与 Spring AI 工具执行框架的集成         | true                 |
 
+##### Stdio Transport Properties
 
-##### Stdio 传输属性
-
-标准 I/O 传输的属性以 `spring.ai.mcp.client.stdio` 为前缀：
+标准 I/O 传输的属性以 `spring.ai.mcp.client.stdio` 为前缀，Client Starter 提供：
 
 | 属性                           | 描述                      | 默认值 |
 |------------------------------|-------------------------|-----|
@@ -146,7 +145,7 @@ spring:
 
 #### 同步/异步客户端类型
 
-启动器支持两种类型的客户端：
+Starter 支持两种类型的客户端：
 
 - 同步 - 默认客户端类型，适用于具有阻塞操作的传统请求-响应模式
 
@@ -249,11 +248,11 @@ MCP 客户端自动配置会自动检测并应用在应用程序上下文中找�
 
 #### 与 Spring AI 集成
 
-启动器可以配置与 Spring AI 工具执行框架集成的工具回调，允许 MCP 工具作为 AI 交互的一部分使用。默认情况下启用此集成，可以通过设置 `spring.ai.mcp.client.toolcallback.enabled=false` 属性来禁用。
+Starter 可以配置与 Spring AI 工具执行框架集成的工具回调，允许 MCP 工具作为 AI 交互的一部分使用。默认情况下启用此集成，可以通过设置 `spring.ai.mcp.client.toolcallback.enabled=false` 属性来禁用。
 
 ### 使用示例
 
-将适当的启动器依赖项添加到您的项目中，并在 `application.properties` 或 `application.yml` 中配置客户端：
+将适当的 Starter 依赖项添加到您的项目中，并在 `application.properties` 或 `application.yml` 中配置客户端：
 
 ```yaml
 spring:

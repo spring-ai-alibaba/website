@@ -43,8 +43,8 @@ java版的MCP源码：https://github.com/modelcontextprotocol/java-sdk
 
 内部类
 
-- AsyncSpec：配置异步MCP服务器的构建器类
-- SyncSpec：配置同步MCP服务器的构建器类
+- AsyncSpec：配置异步 MCP Server 的构建器类
+- SyncSpec：配置同步 MCP Server 的构建器类
 
 ```Java
 public interface McpClient {
@@ -1058,19 +1058,19 @@ public class McpSyncClient implements AutoCloseable {
 }
 ```
 
-### McpServer（服务端）
+### McpServer（Server）
 
-用于创建MCP服务端的工厂类，提供了同步、异步服务端的方法，提供如下核心功能
+用于创建MCP Server 的工厂类，提供了同步、异步 Server 的方法，提供如下核心功能
 
-- 暴露工具：允许AI模型调用服务器提供的工具来执行特定操作
+- 暴露工具：允许AI模型调用 Server 提供的工具来执行特定操作
 - 提供资源访问：为AI模型提供上下文数据，如文件、数据库等
 - 管理提示模版：提供结构化的提示模版，用于与AI模型的交互
-- 处理客户端连接和请求：管理客户端的连接，并处理其请求
+- 处理 Client 连接和请求：管理 Client 的连接，并处理其请求
 
 内部类
 
-- AsyncSpecification：配置异步MCP服务器的构建器类
-- SyncSpecification：配置同步MCP服务器的构建器类
+- AsyncSpecification：配置异步 MCP Server 的构建器类
+- SyncSpecification：配置同步 MCP Server 的构建器类
 
 ```Java
 public interface McpServer {
@@ -2194,7 +2194,7 @@ public interface McpTransport {
 
 ### McpClientTransport（客户端传输层接口）
 
-通过connect方法，建立客户端与MCP服务器之间的连接
+通过connect方法，建立 Client 与 MCP Server 之间的连接
 
 ```java
 public interface McpClientTransport extends McpTransport {
@@ -2206,10 +2206,10 @@ public interface McpClientTransport extends McpTransport {
 
 #### StdioClientTransport
 
-通过标准输入输出流（stdin/stdout）与服务器进程进行通信
+通过标准输入输出流（stdin/stdout）与 Server 进程进行通信
 
 - `connect`：启动服务器进程并初始化消息处理流。设置进程的命令、参数和环境，然后启动输入、输出和错误处理线程
-- `sendMessage`：发送JSON-RPC消息到服务器进程
+- `sendMessage`：发送JSON-RPC消息到 Server 进程
 - `closeGracefully`：优雅地关闭传输、销毁进程并释放调度器资源，发送TERM信号给进程并等待其退出
 
 ```java
@@ -2520,13 +2520,13 @@ public class StdioClientTransport implements McpClientTransport {
 
 #### WebFluxSseClientTransport
 
-基于Server-Sent Events（SSE）的MCP客户端传输实现类，用于与MCP服务器建立双向通信通道，基于Spring WebFlux的响应式编程
+基于Server-Sent Events（SSE）的MCP客户端传输实现类，用于与 MCP Server 建立双向通信通道，基于Spring WebFlux的响应式编程
 
-- `connect`：与MCP服务器建立SSE连接，并设置消息处理管道
+- `connect`：与MCP Server 建立SSE连接，并设置消息处理管道
   - 建立SSE连接
-  - 等待服务器发送包含端点的endpoint事件
+  - 等待 Server 发送包含端点的endpoint事件
   - 设置处理传入JSON-RPC消息的处理器
-- `sendMessage`：将JSON-RPC消息发送到服务器
+- `sendMessage`：将JSON-RPC消息发送到 Server
 - `eventStream`：初始化并启动SSE事件处理流
 - `closeGracefully`：优雅地关闭传输，清理所有资源（如订阅和调度器）
 
@@ -2683,9 +2683,9 @@ public class WebFluxSseClientTransport implements McpClientTransport {
 
 #### HttpClientSseClientTransport
 
-基于Server-Sent Events（SSE）的MCP客户端传输实现类，用于与MCP服务器建立双向通信通道。使用Java的HttpClient进行通信
+基于Server-Sent Events（SSE）的MCP客户端传输实现类，用于与 MCP Server 建立双向通信通道。使用Java的HttpClient进行通信
 
-- `connect`：与MCP服务器建立SSE连接，并设置消息处理管道
+- `connect`：与 MCP Server 建立SSE连接，并设置消息处理管道
   - 建立SSE连接（订阅SSE事件 + 处理SSE事件）
   - 等待服务器发送包含端点的endpoint事件
   - 设置处理传入JSON-RPC消息的处理器
