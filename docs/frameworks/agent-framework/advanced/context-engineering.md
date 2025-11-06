@@ -1,14 +1,23 @@
 ---
 title: 上下文工程（Context Engineering）
 description: 学习如何通过上下文工程提高Agent的可靠性，包括模型上下文、工具上下文和生命周期上下文的管理
-keywords: [上下文工程, Context Engineering, Agent可靠性, 模型上下文, 工具上下文, 生命周期上下文, LLM优化]
+keywords:
+  [
+    上下文工程,
+    Context Engineering,
+    Agent可靠性,
+    模型上下文,
+    工具上下文,
+    生命周期上下文,
+    LLM优化,
+  ]
 ---
 
 ## 概述
 
 构建 Agent 的难点在于使其足够可靠、效果足够好。虽然我们可以很容易写一个 Agent 示例，但要做一个能在生产环境中稳定使用、能解决实际问题的 Agent 并不容易。
 
-### 为什么Agent会失败？
+### 为什么 Agent 会失败？
 
 当 Agent 失败时，通常是因为 Agent 内部的 LLM 调用采取了错误的操作或者没有按我们预期的执行。LLM 失败的原因有两个：
 
@@ -17,14 +26,14 @@ keywords: [上下文工程, Context Engineering, Agent可靠性, 模型上下文
 
 大多数情况下 —— 实际上是第二个原因导致 Agent 不可靠。
 
-**上下文工程**是以正确的格式提供正确的信息和工具，使 LLM 能够完成任务。这是AI工程师的首要工作。缺乏"正确"的上下文是更可靠 Agent 的头号障碍，Spring AI Alibaba 的 Agent 抽象专门设计用于优化上下文工程。
+**上下文工程**是以正确的格式提供正确的信息和工具，使 LLM 能够完成任务。这是 AI 工程师的首要工作。缺乏"正确"的上下文是更可靠 Agent 的头号障碍，Spring AI Alibaba 的 Agent 抽象专门设计用于优化上下文工程。
 
-### Agent循环
+### Agent 循环
 
-典型的Agent循环由两个主要步骤组成：
+典型的 Agent 循环由两个主要步骤组成：
 
-1. **模型调用** - 使用提示和可用工具调用LLM，返回响应或执行工具的请求
-2. **工具执行** - 执行LLM请求的工具，返回工具结果
+1. **模型调用** - 使用提示和可用工具调用 LLM，返回响应或执行工具的请求
+2. **工具执行** - 执行 LLM 请求的工具，返回工具结果
 
 ![reactagent](/img/agent/agents/reactagent.png)
 
@@ -32,72 +41,89 @@ keywords: [上下文工程, Context Engineering, Agent可靠性, 模型上下文
 
 ### 你可以控制什么
 
-要构建可靠的Agent，你需要控制 Agent 循环每个步骤发生的事情，以及步骤之间发生的事情。
+要构建可靠的 Agent，你需要控制 Agent 循环每个步骤发生的事情，以及步骤之间发生的事情。
 
-| 上下文类型 | 你控制的内容 | 瞬态或持久 |
-| ---------- | ------------ | ---------- |
-| **[模型上下文](#model-context)** | 模型调用中包含什么（指令、消息历史、工具、响应格式） | 瞬态 |
-| **[工具上下文](#tool-context)** | 工具可以访问和产生什么（对状态、存储、运行时上下文的读/写） | 持久 |
-| **[生命周期上下文](#lifecycle-context)** | 模型和工具调用之间发生什么（摘要、防护栏、日志等） | 持久 |
+| 上下文类型                               | 你控制的内容                                                | 瞬态或持久 |
+| ---------------------------------------- | ----------------------------------------------------------- | ---------- |
+| **[模型上下文](#model-context)**         | 模型调用中包含什么（指令、消息历史、工具、响应格式）        | 瞬态       |
+| **[工具上下文](#tool-context)**          | 工具可以访问和产生什么（对状态、存储、运行时上下文的读/写） | 持久       |
+| **[生命周期上下文](#lifecycle-context)** | 模型和工具调用之间发生什么（摘要、防护栏、日志等）          | 持久       |
 
-
-> * 瞬态上下文。LLM 在单次调用中看到的内容。你可以修改消息、工具或提示，而不改变状态中保存的内容。
-> * 持久上下文。跨轮次保存在状态中的内容。生命周期钩子和工具写入会永久修改它。
+> - 瞬态上下文。LLM 在单次调用中看到的内容。你可以修改消息、工具或提示，而不改变状态中保存的内容。
+> - 持久上下文。跨轮次保存在状态中的内容。生命周期钩子和工具写入会永久修改它。
 
 ### 数据源
 
-在整个过程中，你的Agent访问（读/写）不同的数据源：
+在整个过程中，你的 Agent 访问（读/写）不同的数据源：
 
-| 数据源 | 别名 | 范围 | 示例 |
-| ------ | ---- | ---- | ---- |
-| **运行时上下文** | 静态配置 | 会话范围 | 用户ID、API密钥、数据库连接、权限、环境设置 |
-| **状态（State）** | 短期记忆 | 会话范围 | 当前消息、上传的文件、认证状态、工具结果 |
-| **存储（Store）** | 长期记忆 | 跨会话 | 用户偏好、提取的见解、记忆、历史数据 |
+| 数据源            | 别名     | 范围     | 示例                                          |
+| ----------------- | -------- | -------- | --------------------------------------------- |
+| **运行时上下文**  | 静态配置 | 会话范围 | 用户 ID、API 密钥、数据库连接、权限、环境设置 |
+| **状态（State）** | 短期记忆 | 会话范围 | 当前消息、上传的文件、认证状态、工具结果      |
+| **存储（Store）** | 长期记忆 | 跨会话   | 用户偏好、提取的见解、记忆、历史数据          |
 
 ### 工作原理
 
-在Spring AI Alibaba中，**Hook**和**Interceptor**是实现上下文工程的机制。
+在 Spring AI Alibaba 中，**Hook**和**Interceptor**是实现上下文工程的机制。
 
-它们允许你挂接到Agent生命周期的任何步骤并：
+它们允许你挂接到 Agent 生命周期的任何步骤并：
 
-* 更新上下文
-* 跳转到Agent生命周期的不同步骤
+- 更新上下文
+- 跳转到 Agent 生命周期的不同步骤
 
-在本指南中，你将看到频繁使用Hook和Interceptor API作为上下文工程的手段。
+在本指南中，你将看到频繁使用 Hook 和 Interceptor API 作为上下文工程的手段。
 
 ## 模型上下文（Model Context）
 
 控制每次模型调用中包含的内容——指令、可用工具、使用哪个模型以及输出格式。这些决策直接影响可靠性和成本。
 
-```
-<CardGroup cols={2}>
-  <Card title="系统提示" icon="message-lines">
-    开发者对LLM的基础指令。
-  </Card>
+<div class="card-group" cols="2">
+  <div class="card">
+    <div class="card__header">
+      <div class="card__icon">💬</div>
+      <div class="card__title">系统提示</div>
+    </div>
+    <div class="card__body">开发者对LLM的基础指令。</div>
+  </div>
 
-  <Card title="消息" icon="comments">
-    发送给LLM的完整消息列表（对话历史）。
-  </Card>
+  <div class="card">
+    <div class="card__header">
+      <div class="card__icon">💭</div>
+      <div class="card__title">消息</div>
+    </div>
+    <div class="card__body">发送给LLM的完整消息列表（对话历史）。</div>
+  </div>
 
-  <Card title="工具" icon="wrench">
-    Agent可以访问以采取行动的工具。
-  </Card>
+  <div class="card">
+    <div class="card__header">
+      <div class="card__icon">🔧</div>
+      <div class="card__title">工具</div>
+    </div>
+    <div class="card__body">Agent可以访问以采取行动的工具。</div>
+  </div>
 
-  <Card title="模型" icon="brain-circuit">
-    要调用的实际模型（包括配置）。
-  </Card>
+  <div class="card">
+    <div class="card__header">
+      <div class="card__icon">🧠</div>
+      <div class="card__title">模型</div>
+    </div>
+    <div class="card__body">要调用的实际模型（包括配置）。</div>
+  </div>
 
-  <Card title="响应格式" icon="brackets-curly">
-    模型最终响应的架构规范。
-  </Card>
-</CardGroup>
-```
+  <div class="card">
+    <div class="card__header">
+      <div class="card__icon">📋</div>
+      <div class="card__title">响应格式</div>
+    </div>
+    <div class="card__body">模型最终响应的架构规范。</div>
+  </div>
+</div>
 
 所有这些类型的模型上下文都可以从**状态**（短期记忆）、**存储**（长期记忆）或**运行时上下文**（静态配置）中获取。
 
 ### 系统提示（System Prompt）
 
-系统提示设置LLM的行为和能力。不同的用户、上下文或对话阶段需要不同的指令。成功的Agent利用记忆、偏好和配置为对话的当前状态提供正确的指令。
+系统提示设置 LLM 的行为和能力。不同的用户、上下文或对话阶段需要不同的指令。成功的 Agent 利用记忆、偏好和配置为对话的当前状态提供正确的指令。
 
 #### 基于状态的动态提示
 
@@ -207,7 +233,8 @@ public class PersonalizedPromptInterceptor implements ModelInterceptor {
 
 ### 消息历史（Messages）
 
-控制发送给LLM的消息列表。你可以：
+控制发送给 LLM 的消息列表。你可以：
+
 - 过滤或修改消息
 - 添加上下文或摘要
 - 压缩长对话
@@ -257,12 +284,13 @@ public class MessageFilterInterceptor implements ModelInterceptor {
 ```
 
 > **瞬时消息更新 VS 持久消息更新**
+>
 > 1. 上述示例使用 `ModelInterceptor` 来实现临时更新 —— 修改单次调用时发送给模型的消息内容，而不会改变状态中保存的数据。
 > 2. 对于需要持久更新状态的情况（例如生命周期上下文中的摘要示例），请使用如 ModelHook 等生命周期钩子来永久更新对话历史。更多详情请参阅 Hook & Interceptor 文档。
 
 ### 工具（Tools）
 
-动态控制Agent可以访问哪些工具。
+动态控制 Agent 可以访问哪些工具。
 
 #### 基于上下文的工具选择
 
@@ -433,18 +461,18 @@ public class StateModifyingTool implements Function<StateModifyingTool.Request, 
 
 ## 生命周期上下文（Lifecycle Context）
 
-使用Hook在Agent生命周期的不同阶段执行操作。
+使用 Hook 在 Agent 生命周期的不同阶段执行操作。
 
-### Hook位置
+### Hook 位置
 
-Spring AI Alibaba支持以下Hook位置：
+Spring AI Alibaba 支持以下 Hook 位置：
 
-- `BEFORE_AGENT` - Agent开始之前
-- `AFTER_AGENT` - Agent完成之后
+- `BEFORE_AGENT` - Agent 开始之前
+- `AFTER_AGENT` - Agent 完成之后
 - `BEFORE_MODEL` - 模型调用之前
 - `AFTER_MODEL` - 模型调用之后
 
-### 自定义Hook示例
+### 自定义 Hook 示例
 
 ```java
 import com.alibaba.cloud.ai.graph.agent.hook.Hook;
@@ -490,7 +518,7 @@ ReactAgent agent = ReactAgent.builder()
     .build();
 ```
 
-### 消息摘要Hook
+### 消息摘要 Hook
 
 ```java
 public class SummarizationHook implements ModelHook {
@@ -534,8 +562,7 @@ public class SummarizationHook implements ModelHook {
 
 ## 相关文档
 
-- [Hooks](../tutorials/hooks.md) - Hook机制详解
+- [Hooks](../tutorials/hooks.md) - Hook 机制详解
 - [Interceptors](../tutorials/hooks.md) - 拦截器详解
-- [Agents](../tutorials/agents.md) - Agent基础概念
+- [Agents](../tutorials/agents.md) - Agent 基础概念
 - [Memory](./memory.md) - 状态和记忆管理
-

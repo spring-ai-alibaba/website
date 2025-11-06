@@ -46,7 +46,12 @@
 
   /* Custom gradients */
   --gradient-primary: var(--ifm-background-color);
-  --gradient-hero: linear-gradient(135deg, var(--paper-cream-light) 0%, var(--paper-cream) 50%, var(--paper-texture) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--paper-cream-light) 0%,
+    var(--paper-cream) 50%,
+    var(--paper-texture) 100%
+  );
 }
 
 /* Dark Theme - Starry Night Theme */
@@ -99,7 +104,11 @@
 
   /* Custom gradients */
   --gradient-primary: var(--ifm-background-color);
-  --gradient-hero: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.05) 0%, var(--space-black) 70%);
+  --gradient-hero: radial-gradient(
+    ellipse at center,
+    rgba(96, 165, 250, 0.05) 0%,
+    var(--space-black) 70%
+  );
 }
 
 /* Global styles */
@@ -112,7 +121,8 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    sans-serif;
   background: var(--ifm-background-color) !important;
   color: var(--text-primary);
   line-height: 1.6;
@@ -132,17 +142,44 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image:
-    radial-gradient(1px 1px at 25px 35px, rgba(37, 99, 235, 0.6), transparent),
+  background-image: radial-gradient(
+      1px 1px at 25px 35px,
+      rgba(37, 99, 235, 0.6),
+      transparent
+    ),
     radial-gradient(1px 1px at 85px 75px, rgba(96, 165, 250, 0.4), transparent),
-    radial-gradient(0.5px 0.5px at 135px 45px, rgba(147, 197, 253, 0.7), transparent),
-    radial-gradient(1px 1px at 195px 85px, rgba(191, 219, 254, 0.5), transparent),
+    radial-gradient(
+      0.5px 0.5px at 135px 45px,
+      rgba(147, 197, 253, 0.7),
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 195px 85px,
+      rgba(191, 219, 254, 0.5),
+      transparent
+    ),
     radial-gradient(1px 1px at 45px 125px, rgba(37, 99, 235, 0.4), transparent),
-    radial-gradient(0.5px 0.5px at 125px 155px, rgba(96, 165, 250, 0.6), transparent),
-    radial-gradient(1px 1px at 175px 165px, rgba(147, 197, 253, 0.4), transparent),
-    radial-gradient(0.5px 0.5px at 215px 135px, rgba(191, 219, 254, 0.8), transparent),
+    radial-gradient(
+      0.5px 0.5px at 125px 155px,
+      rgba(96, 165, 250, 0.6),
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 175px 165px,
+      rgba(147, 197, 253, 0.4),
+      transparent
+    ),
+    radial-gradient(
+      0.5px 0.5px at 215px 135px,
+      rgba(191, 219, 254, 0.8),
+      transparent
+    ),
     radial-gradient(1px 1px at 65px 195px, rgba(37, 99, 235, 0.5), transparent),
-    radial-gradient(0.5px 0.5px at 155px 215px, rgba(96, 165, 250, 0.3), transparent);
+    radial-gradient(
+      0.5px 0.5px at 155px 215px,
+      rgba(96, 165, 250, 0.3),
+      transparent
+    );
   background-repeat: repeat;
   background-size: 300px 200px;
   opacity: 0.8;
@@ -152,8 +189,13 @@ body {
 }
 
 @keyframes gentleSparkle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Starry sky background effect - dark theme only */
@@ -164,15 +206,46 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image:
-    radial-gradient(2px 2px at 25px 35px, rgba(255, 255, 255, 0.9), transparent 3px),
-    radial-gradient(1px 1px at 85px 75px, rgba(255, 255, 255, 0.7), transparent 2px),
-    radial-gradient(1px 1px at 135px 45px, rgba(255, 255, 255, 1), transparent 2px),
-    radial-gradient(2px 2px at 195px 85px, rgba(255, 255, 255, 0.8), transparent 3px),
-    radial-gradient(1px 1px at 45px 125px, rgba(255, 255, 255, 0.6), transparent 2px),
-    radial-gradient(1px 1px at 125px 155px, rgba(255, 255, 255, 0.9), transparent 2px),
-    radial-gradient(2px 2px at 175px 165px, rgba(255, 255, 255, 0.7), transparent 3px),
-    radial-gradient(1px 1px at 215px 135px, rgba(255, 255, 255, 1), transparent 2px);
+  background-image: radial-gradient(
+      2px 2px at 25px 35px,
+      rgba(255, 255, 255, 0.9),
+      transparent 3px
+    ),
+    radial-gradient(
+      1px 1px at 85px 75px,
+      rgba(255, 255, 255, 0.7),
+      transparent 2px
+    ),
+    radial-gradient(
+      1px 1px at 135px 45px,
+      rgba(255, 255, 255, 1),
+      transparent 2px
+    ),
+    radial-gradient(
+      2px 2px at 195px 85px,
+      rgba(255, 255, 255, 0.8),
+      transparent 3px
+    ),
+    radial-gradient(
+      1px 1px at 45px 125px,
+      rgba(255, 255, 255, 0.6),
+      transparent 2px
+    ),
+    radial-gradient(
+      1px 1px at 125px 155px,
+      rgba(255, 255, 255, 0.9),
+      transparent 2px
+    ),
+    radial-gradient(
+      2px 2px at 175px 165px,
+      rgba(255, 255, 255, 0.7),
+      transparent 3px
+    ),
+    radial-gradient(
+      1px 1px at 215px 135px,
+      rgba(255, 255, 255, 1),
+      transparent 2px
+    );
   background-repeat: repeat;
   background-size: 200px 100px;
   opacity: 0.1;
@@ -182,8 +255,13 @@ body {
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Ensure main container also uses correct background */
@@ -254,12 +332,19 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image:
-    radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
+  background-image: radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
     radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), transparent),
     radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.4), transparent),
-    radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.7), transparent);
+    radial-gradient(
+      1px 1px at 130px 80px,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    ),
+    radial-gradient(
+      2px 2px at 160px 30px,
+      rgba(255, 255, 255, 0.7),
+      transparent
+    );
   background-repeat: repeat;
   background-size: 200px 100px;
   opacity: 0.1;
@@ -305,7 +390,11 @@ body {
 .navbar__title {
   font-weight: 700;
   font-size: 1.2rem;
-  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary),
+    var(--ifm-color-primary-light)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -415,7 +504,11 @@ article::before {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  background: linear-gradient(
+    90deg,
+    var(--ifm-color-primary),
+    var(--ifm-color-primary-light)
+  );
   opacity: 0.8;
 }
 
@@ -425,7 +518,12 @@ article:hover {
 }
 
 /* Heading styles */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--text-primary);
   font-weight: 700;
   line-height: 1.3;
@@ -434,7 +532,11 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.5rem;
-  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary),
+    var(--ifm-color-primary-light)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -488,8 +590,12 @@ a:hover::after {
 }
 
 @keyframes linkUnderline {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 /* Button styles */
@@ -512,7 +618,12 @@ a:hover::after {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -521,7 +632,11 @@ a:hover::after {
 }
 
 .button--primary {
-  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary),
+    var(--ifm-color-primary-light)
+  );
   color: white;
   border: none;
   box-shadow: var(--card-shadow);
@@ -571,20 +686,14 @@ a:hover::after {
 
 .prism-code:hover {
   transform: translateY(-1px);
-  box-shadow:
-    var(--card-shadow-hover),
-    0 0 15px rgba(37, 99, 235, 0.2),
-    0 0 30px rgba(37, 99, 235, 0.1),
-    0 0 45px rgba(37, 99, 235, 0.05) !important;
+  box-shadow: var(--card-shadow-hover), 0 0 15px rgba(37, 99, 235, 0.2),
+    0 0 30px rgba(37, 99, 235, 0.1), 0 0 45px rgba(37, 99, 235, 0.05) !important;
   border-color: rgba(37, 99, 235, 0.3) !important;
 }
 
 [data-theme='dark'] .prism-code:hover {
-  box-shadow:
-    var(--card-shadow-hover),
-    0 0 15px rgba(96, 165, 250, 0.25),
-    0 0 30px rgba(96, 165, 250, 0.15),
-    0 0 45px rgba(96, 165, 250, 0.08) !important;
+  box-shadow: var(--card-shadow-hover), 0 0 15px rgba(96, 165, 250, 0.25),
+    0 0 30px rgba(96, 165, 250, 0.15), 0 0 45px rgba(96, 165, 250, 0.08) !important;
   border-color: rgba(96, 165, 250, 0.35) !important;
 }
 
@@ -646,7 +755,12 @@ code:hover {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-light), var(--ifm-color-primary-lightest));
+  background: linear-gradient(
+    90deg,
+    var(--ifm-color-primary),
+    var(--ifm-color-primary-light),
+    var(--ifm-color-primary-lightest)
+  );
   opacity: 0.7;
 }
 
@@ -671,6 +785,72 @@ code:hover {
 .card__body {
   color: var(--text-secondary);
   line-height: 1.6;
+}
+
+/* Card Group styles */
+.card-group {
+  display: grid;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-group[cols='2'] {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 768px) {
+  .card-group[cols='2'] {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-group .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-group .card__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0.75rem;
+}
+
+.card-group .card__icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.1),
+    rgba(96, 165, 250, 0.05)
+  );
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .card-group .card__icon {
+  background: linear-gradient(
+    135deg,
+    rgba(96, 165, 250, 0.15),
+    rgba(147, 197, 253, 0.08)
+  );
+}
+
+.card-group .card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+.card-group .card__body {
+  margin: 0;
+  font-size: 0.95rem;
 }
 
 /* Table styles */
@@ -1002,7 +1182,8 @@ tr:hover {
 
 /* Theme switching animations */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 /* Custom animations */
