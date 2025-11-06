@@ -1,26 +1,36 @@
 ---
 title: 人工介入（Human-in-the-Loop）
 description: 学习如何使用人工介入Hook为Agent工具调用添加人工监督，支持批准、编辑和拒绝操作，实现安全的AI应用
-keywords: [人工介入, HITL, Human-in-the-Loop, Agent监督, 工具审批, 中断恢复, Hook, 人工审批]
+keywords:
+  [
+    人工介入,
+    HITL,
+    Human-in-the-Loop,
+    Agent监督,
+    工具审批,
+    中断恢复,
+    Hook,
+    人工审批,
+  ]
 ---
 
 # 人工介入（Human-in-the-Loop）
 
-人工介入（HITL）Hook允许你为Agent工具调用添加人工监督。当模型提出需要审查的操作时——例如写入文件或执行SQL——Hook可以暂停执行并等待人工决策。
+人工介入（HITL）Hook 允许你为 Agent 工具调用添加人工监督。当模型提出需要审查的操作时——例如写入文件或执行 SQL——Hook 可以暂停执行并等待人工决策。
 
-它通过检查每个工具调用并与可配置的策略进行比对来实现。如果需要人工干预，Hook会发出中断（interrupt）来暂停执行。图的状态会通过Spring AI Alibaba的检查点机制保存，因此执行可以安全暂停并在之后恢复。
+它通过检查每个工具调用并与可配置的策略进行比对来实现。如果需要人工干预，Hook 会发出中断（interrupt）来暂停执行。图的状态会通过 Spring AI Alibaba 的检查点机制保存，因此执行可以安全暂停并在之后恢复。
 
 人工决策决定接下来发生什么：操作可以被原样批准（`approve`）、修改后运行（`edit`）或拒绝并提供反馈（`reject`）。
 
 ## 中断决策类型
 
-Hook定义了三种人工响应中断的内置方式：
+Hook 定义了三种人工响应中断的内置方式：
 
-| 决策类型 | 描述                                           | 使用场景示例                     |
-| -------- | ---------------------------------------------- | -------------------------------- |
-| ✅ `approve` | 操作被原样批准并执行，不做任何更改             | 完全按照写好的内容发送电子邮件   |
-| ✏️ `edit`    | 工具调用将被修改后执行                         | 在发送电子邮件之前更改收件人     |
-| ❌ `reject`  | 工具调用被拒绝，并向对话中添加解释             | 拒绝电子邮件草稿并解释如何重写   |
+| 决策类型     | 描述                               | 使用场景示例                   |
+| ------------ | ---------------------------------- | ------------------------------ |
+| ✅ `approve` | 操作被原样批准并执行，不做任何更改 | 完全按照写好的内容发送电子邮件 |
+| ✏️ `edit`    | 工具调用将被修改后执行             | 在发送电子邮件之前更改收件人   |
+| ❌ `reject`  | 工具调用被拒绝，并向对话中添加解释 | 拒绝电子邮件草稿并解释如何重写 |
 
 每个工具可用的决策类型取决于你在 `approvalOn` 中配置的策略。当多个工具调用同时暂停时，每个操作都需要单独的决策。
 
@@ -30,7 +40,7 @@ Hook定义了三种人工响应中断的内置方式：
 
 ## 配置中断
 
-要使用HITL，在创建Agent时将Hook添加到Agent的 `hooks` 列表中。
+要使用 HITL，在创建 Agent 时将 Hook 添加到 Agent 的 `hooks` 列表中。
 
 你可以配置哪些工具需要人工审批，以及为每个工具允许哪些决策类型。
 
@@ -63,18 +73,16 @@ ReactAgent agent = ReactAgent.builder()
     .build();
 ```
 
-```
-<Info>
-  你必须配置检查点保存器来在中断期间持久化图状态。
-  在生产环境中，使用持久化的检查点保存器（如基于Redis或PostgreSQL的实现）。对于测试或原型开发，使用 `MemorySaver`。
+:::info
+你必须配置检查点保存器来在中断期间持久化图状态。
+在生产环境中，使用持久化的检查点保存器（如基于 Redis 或 PostgreSQL 的实现）。对于测试或原型开发，使用 `MemorySaver`。
 
-  调用Agent时，传递包含**线程ID**的 `RunnableConfig` 以将执行与会话线程关联。
-</Info>
-```
+调用 Agent 时，传递包含**线程 ID**的 `RunnableConfig` 以将执行与会话线程关联。
+:::
 
 ## 响应中断
 
-当你调用Agent时，它会一直运行直到完成或触发中断。当工具调用匹配你在 `approvalOn` 中配置的策略时会触发中断。在这种情况下，调用结果将返回 `InterruptionMetadata`，其中包含需要审查的操作。你可以将这些操作呈现给审查者，并在提供决策后恢复执行。
+当你调用 Agent 时，它会一直运行直到完成或触发中断。当工具调用匹配你在 `approvalOn` 中配置的策略时会触发中断。在这种情况下，调用结果将返回 `InterruptionMetadata`，其中包含需要审查的操作。你可以将这些操作呈现给审查者，并在提供决策后恢复执行。
 
 ```java
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -264,13 +272,13 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
 
 ## 执行生命周期
 
-Hook定义了一个在模型生成响应后但在执行任何工具调用之前运行的 `afterModel` 钩子：
+Hook 定义了一个在模型生成响应后但在执行任何工具调用之前运行的 `afterModel` 钩子：
 
-1. Agent调用模型生成响应。
-2. Hook检查响应中的工具调用。
-3. 如果任何调用需要人工输入，Hook会构建包含工具反馈信息的 `InterruptionMetadata` 并触发中断。
-4. Agent等待人工决策。
-5. 基于 `InterruptionMetadata` 中的决策，Hook执行批准或编辑的调用，为拒绝的调用合成工具响应消息，并恢复执行。
+1. Agent 调用模型生成响应。
+2. Hook 检查响应中的工具调用。
+3. 如果任何调用需要人工输入，Hook 会构建包含工具反馈信息的 `InterruptionMetadata` 并触发中断。
+4. Agent 等待人工决策。
+5. 基于 `InterruptionMetadata` 中的决策，Hook 执行批准或编辑的调用，为拒绝的调用合成工具响应消息，并恢复执行。
 
 ## 完整示例
 
@@ -460,24 +468,23 @@ InterruptionMetadata editMetadata = HITLHelper.editTool(
 2. **提供清晰的描述**: 在 `ToolConfig` 中提供清晰的描述，帮助审查者理解操作
 3. **保守编辑**: 编辑工具参数时，尽量保持最小更改
 4. **处理所有工具反馈**: 确保为每个需要审查的工具调用提供决策
-5. **使用相同的threadId**: 恢复执行时必须使用相同的线程ID
+5. **使用相同的 threadId**: 恢复执行时必须使用相同的线程 ID
 6. **考虑超时**: 实现超时机制以处理长时间未响应的人工审批
 
-## 与Interceptor的区别
+## 与 Interceptor 的区别
 
-在Spring AI Alibaba中，Hook和Interceptor都可以用于干预Agent执行：
+在 Spring AI Alibaba 中，Hook 和 Interceptor 都可以用于干预 Agent 执行：
 
-| 特性 | Hook | Interceptor |
-|------|------|-------------|
-| **执行位置** | Agent级别（before/after agent, before/after model） | 模型或工具调用级别 |
-| **中断能力** | 支持中断和恢复（如HumanInTheLoopHook） | 不支持中断，仅拦截和修改 |
-| **使用场景** | 人工审批、Agent间协调 | 日志记录、重试、降级 |
-| **配置方式** | `.hooks(List.of(...))` | `.interceptors(List.of(...))` |
+| 特性         | Hook                                                 | Interceptor                   |
+| ------------ | ---------------------------------------------------- | ----------------------------- |
+| **执行位置** | Agent 级别（before/after agent, before/after model） | 模型或工具调用级别            |
+| **中断能力** | 支持中断和恢复（如 HumanInTheLoopHook）              | 不支持中断，仅拦截和修改      |
+| **使用场景** | 人工审批、Agent 间协调                               | 日志记录、重试、降级          |
+| **配置方式** | `.hooks(List.of(...))`                               | `.interceptors(List.of(...))` |
 
 ## 相关文档
 
-- [Hooks](../tutorials/hooks.md) - 了解Hook机制
-- [Interceptors](../tutorials/hooks.md) - 了解Interceptor机制
+- [Hooks](../tutorials/hooks.md) - 了解 Hook 机制
+- [Interceptors](../tutorials/hooks.md) - 了解 Interceptor 机制
 - [Memory](./memory.md) - 检查点和持久化
-- [Agents](../tutorials/agents.md) - Agent基础概念
-
+- [Agents](../tutorials/agents.md) - Agent 基础概念
