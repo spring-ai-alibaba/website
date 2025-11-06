@@ -45,7 +45,7 @@ Below is a comparison of current mainstream Java AI frameworks.
 | **Chat Memory** | Optimized JDBC, Redis, Elasticsearch | JDBC, Neo4j, Cassandra | Multiple implementations adapted |
 | **Observability** | Supported, can integrate with Alibaba Cloud ARMS | Supported | Partially supported |
 | **Workflow** | Supported, compatible with Dify, BAI DSL | None | None |
-| **Multi-agent** | Supported, official general agent implementation | None | None |
+| **Multi-Agent** | Supported, official general agent implementation | None | None |
 | **Model Evaluation** | Supported | Supported | Supported |
 | **Community Activity and Documentation Completeness** | Official community, high activity | Official community, high activity | Community initiated by individuals |
 | **Development Efficiency Components** | Rich, including debugging, code generation tools, etc. | None | None |

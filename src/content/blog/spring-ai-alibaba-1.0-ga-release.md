@@ -19,7 +19,7 @@ category: article
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img.png)
 
-<font style="color:rgb(53, 56, 65);">在 1.0 版本中，</font><font style="color:#080808;background-color:#ffffff;">Spring AI Alibaba 提供以下核心能力，让开发者可以快速构建自己的 Agent、Workflow 或 Multi-agent 应用。</font>
+<font style="color:rgb(53, 56, 65);">在 1.0 版本中，</font><font style="color:#080808;background-color:#ffffff;">Spring AI Alibaba 提供以下核心能力，让开发者可以快速构建自己的 Agent、Workflow 或 Multi-Agent 应用。</font>
 
 1. **<font style="color:rgb(23, 26, 29);">Graph 多智能体框架。</font>**<font style="color:rgb(23, 26, 29);">基于 Spring AI Alibaba Graph，开发者可快速构建工作流、多智能体应用，无需关心流程编排、上下文记忆管理等底层实现。通过 Graph 与低代码、自规划智能体结合，为开发者提供从低代码、高代码到零代码构建智能体的更灵活选择。</font>
 2. **<font style="color:rgb(23, 26, 29);">通过 AI 生态集成，解决企业智能体落地过程中关心的痛点问题。</font>**<font style="color:rgb(23, 26, 29);">Spring AI Alibaba 支持与百炼平台深度集成，提供模型接入、RAG 知识库解决方案；支持 ARMS、Langfuse 等可观测产品无缝接入；支持企业级的 MCP 集成，包括 Nacos MCP Registry 分布式注册与发现、自动 Router 路由等。</font>
@@ -95,14 +95,14 @@ Spring AI Alibaba 官方社区开发了一个**包含完整 “前端 UI+后端�
         * [MCP 服务器](https://java2ai.com/blog/spring-ai-100-ga-released/?spm=5176.29160081.0.0.2856aa5c2PwbQU#mcp-%E6%9C%8D%E5%8A%A1%E5%99%A8)
     - [MCP 和安全](https://java2ai.com/blog/spring-ai-100-ga-released/?spm=5176.29160081.0.0.2856aa5c2PwbQU#mcp-%E5%92%8C%E5%AE%89%E5%85%A8)
 
-### Multi-agent 多智能体框架
+### Multi-Agent 多智能体框架
 Graph 是 Spring AI Alibaba 社区核心实现之一，也是整个框架在设计理念上区别于 Spring AI 只做底层原子抽象的地方，Spring AI Alibaba 期望帮助开发者更容易地构建智能体应用。基于 Spring AI Alibaba Graph 开发者可以构建工作流、多智能体应用。Spring AI Alibaba Graph 在设计理念上借鉴 LangGraph，因此在一定程度上可以理解为是 Java 版的 LangGraph 实现，社区在此基础上增加了大量预置 Node、简化了 State 定义过程等，让开发者更容易编写对等低代码平台的工作流、多智能体等。
 
 
 
 Spring AI Alibaba Graph 核心能力：
 
-+ 支持 Multi-agent，内置 ReAct Agent、Supervisor 等常规智能体模式
++ 支持 Multi-Agent，内置 ReAct Agent、Supervisor 等常规智能体模式
 + 支持工作流，内置工作流节点，与主流低代码平台对齐
 + 原生支持 Streaming
 + Human-in-the-loop，通过人类确认节点，支持修改状态、恢复执行
@@ -201,7 +201,7 @@ StateGraph stateGraph = new StateGraph("Consumer Service Workflow Demo", stateFa
 			.addEdge("recorder", END);
 ```
 
-### 多智能体（Multi-agent）
+### 多智能体（Multi-Agent）
 复杂任务拆解的另一种解决方案是**多智能体**，相比于工作流，多智能体虽也遵循特定的流程，但是在整个决策、执行流程上具备更多的自主性和灵活性。多个子智能体间通过通信协作完成，最终完成任务解答，在业界，有多种常见的多智能体通信模型，如下图是几个典型示例：
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_5.png)

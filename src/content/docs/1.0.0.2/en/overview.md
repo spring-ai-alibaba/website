@@ -8,7 +8,7 @@ description: "Spring AI Alibaba is an AI framework based on Spring AI, deeply in
 
 ![spring ai alibaba architecture.png](/img/user/ai/overview/1.0.0/spring-ai-alibaba-architecture.png)
 
-<font style="color:rgb(53, 56, 65);">In version 1.0,</font><font style="color:#080808;background-color:#ffffff;">Spring AI Alibaba provides the following core capabilities, allowing developers to quickly build their own Agent, Workflow, or Multi-agent applications.</font>
+<font style="color:rgb(53, 56, 65);">In version 1.0,</font><font style="color:#080808;background-color:#ffffff;">Spring AI Alibaba provides the following core capabilities, allowing developers to quickly build their own Agent, Workflow, or Multi-Agent applications.</font>
 
 1. **<font style="color:rgb(23, 26, 29);">Graph multi-agent framework.</font>**<font style="color:rgb(23, 26, 29);">Based on Spring AI Alibaba Graph, developers can quickly build workflow and multi-agent applications without worrying about process orchestration, context memory management, and other underlying implementations. Through the combination of Graph with low-code and self-planning agents, it provides developers with more flexible options from low-code, high-code to zero-code for building agents.</font>
 2. **<font style="color:rgb(23, 26, 29);">Through AI ecosystem integration, solving pain points in enterprise agent deployment.</font>**<font style="color:rgb(23, 26, 29);">Spring AI Alibaba supports deep integration with the Bailian platform, providing model access and RAG knowledge base solutions; supports seamless integration with observability products like ARMS and Langfuse; supports enterprise-level MCP integration, including Nacos MCP Registry for distributed registration and discovery, automatic Router routing, etc.</font>
@@ -86,7 +86,7 @@ Spring AI Alibaba Graph is one of the community's core implementations and repre
 
 Spring AI Alibaba Graph core capabilities:
 
-+ Support for Multi-agent, with built-in ReAct Agent, Supervisor, and other conventional agent models
++ Support for Multi-Agent, with built-in ReAct Agent, Supervisor, and other conventional agent models
 + Support for workflows, with built-in workflow nodes aligned with mainstream low-code platforms
 + Native support for Streaming
 + Human-in-the-loop through human confirmation nodes, supporting state modification and execution recovery

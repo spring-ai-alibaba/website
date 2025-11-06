@@ -43,7 +43,7 @@ StateGraph stateGraph = new StateGraph("deep research", keyStrategyFactory,
 
 ## Core Features
 
-+ Supports Multi-agent, with built-in ReAct Agent, Supervisor, and other standard agent patterns
++ Supports Multi-Agent, with built-in ReAct Agent, Supervisor, and other standard agent patterns
 + Supports workflows, with built-in workflow nodes aligned with mainstream low-code platforms
 + Native Streaming support
 + Human-in-the-loop, supporting state modification and execution resumption through human confirmation nodes
