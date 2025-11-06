@@ -128,7 +128,7 @@ mvn clean package -DskipTests
 
 ### 4.2 基于 SSE 的 MCP 服务端实现
 
-基于SSE的MCP服务端通过HTTP协议与客户端通信，适用于作为独立服务部署的场景，可以被多个客户端远程调用。
+基于SSE的 MCP Server 通过HTTP协议与 Client 通信，适用于作为独立服务部署的场景，可以被多个 Client 远程调用。
 
 #### 添加依赖
 
@@ -147,14 +147,14 @@ mvn clean package -DskipTests
 
 ```yaml
 server:
-  port: 8080  # 服务器端口配置
+  port: 8080  # MCP Server 端口配置
 
 spring:
   ai:
     mcp:
       server:
-        name: my-weather-server    # MCP服务器名称
-        version: 0.0.1            # 服务器版本号
+        name: my-weather-server    # MCP Server 名称
+        version: 0.0.1            # MCP Server 版本号
 ```
 
 #### 实现 MCP 工具

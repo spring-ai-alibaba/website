@@ -1,12 +1,12 @@
 ---
-title: 使用 Spring AI MCP Client Starter 实现 MCP 客户端
+title: 使用 Spring AI MCP Client Starter 实现 MCP Client
 keywords: [Spring AI, MCP, 模型上下文协议, 智能体应用]
-description: "使用 Spring AI MCP Client Starter 实现 MCP 客户端"
+description: "使用 Spring AI MCP Client Starter 实现 MCP Client"
 ---
 
-## 案例3：使用 Spring AI MCP Client Starter 实现 MCP 客户端
+## 案例3：使用 Spring AI MCP Client Starter 实现 MCP Client
 
-在前面的案例中，我们看到了如何手动配置和初始化MCP客户端。Spring AI 提供了更简便的方式来使用MCP，通过starter可以大大简化MCP客户端的配置和使用。Spring AI MCP支持两种不同的传输层实现：基于stdio的实现和基于SSE的实现。
+在前面的案例中，我们看到了如何手动配置和初始化 MCP Client。Spring AI 提供了更简便的方式来使用 MCP，通过starter可以大大简化 MCP Client 的配置和使用。Spring AI MCP 支持两种不同的传输层实现：基于 stdio 的实现和基于 SSE 的实现。
 
 ### 传输层介绍
 
@@ -14,10 +14,10 @@ description: "使用 Spring AI MCP Client Starter 实现 MCP 客户端"
 
 stdio（标准输入输出）传输层是MCP最基本的传输实现方式。它通过进程间通信（IPC）实现，具体工作原理如下：
 
-1. **进程创建**：MCP客户端会启动一个子进程来运行MCP服务器
+1. **进程创建**：MCP Client 会启动一个子进程来运行 MCP Server
 2. **通信机制**：
-   - 使用标准输入（stdin）向MCP服务器发送请求
-   - 通过标准输出（stdout）接收MCP服务器的响应
+   - 使用标准输入（stdin）向 MCP Server 发送请求
+   - 通过标准输出（stdout）接收 MCP Server 的响应
    - 标准错误（stderr）用于日志和错误信息
 3. **优点**：
    - 简单可靠，无需网络配置
@@ -26,17 +26,17 @@ stdio（标准输入输出）传输层是MCP最基本的传输实现方式。它
 4. **缺点**：
    - 仅支持单机部署
    - 不支持跨网络访问
-   - 每个客户端需要独立启动服务器进程
+   - 每个 Client 需要独立启动 Server 进程
 
 #### SSE 传输层
 
-SSE（Server-Sent Events）传输层是基于HTTP的单向通信机制，专门用于服务器向客户端推送数据。其工作原理如下：
+SSE（Server-Sent Events）传输层是基于HTTP的单向通信机制，专门用于 Server 向 Client 推送数据。其工作原理如下：
 
 1. **连接建立**：
-   - 客户端通过HTTP建立与服务器的持久连接
+   - Client 通过HTTP建立与 Server 的持久连接
    - 使用`text/event-stream`内容类型
 2. **通信机制**：
-   - 服务器可以主动向客户端推送消息
+   - Server 可以主动向 Client 推送消息
    - 支持自动重连机制
    - 支持事件ID和自定义事件类型
 3. **优点**：
@@ -65,9 +65,9 @@ SSE（Server-Sent Events）传输层是基于HTTP的单向通信机制，专门�
 </dependency>
 ```
 
-#### 配置MCP服务器
+#### 配置 MCP Server
 
-在`application.yml`中配置MCP服务器：
+在`application.yml`中配置 MCP Server：
 
 ```yaml
 spring:
@@ -78,7 +78,7 @@ spring:
     mcp:
       client:
         stdio:
-          # 指定MCP服务器配置文件路径（推荐）
+          # 指定 MCP Server 配置文件路径（推荐）
           servers-configuration: classpath:/mcp-servers-config.json
           # 直接配置示例，和上边的配制二选一
           # connections:
@@ -89,12 +89,12 @@ spring:
           #       - /path/to/your/mcp-server.jar
 ```
 
-这个配置文件设置了 MCP 客户端的基本配置，包括API密钥和服务器配置文件的位置。你也可以选择直接在配置文件中定义服务器配置。
+这个配置文件设置了 MCP Client 的基本配置，包括 API 密钥和服务器配置文件的位置。你也可以选择直接在配置文件中定义服务器配置。
 
 ```json
 {
     "mcpServers": {
-        // 定义名为"weather"的MCP服务器
+        // 定义名为"weather"的 MCP Server
         "weather": {
             // 指定启动命令为java
             "command": "java",
@@ -112,7 +112,7 @@ spring:
 }
 ```
 
-这个 JSON 配置文件定义了 MCP 服务器的详细配置，包括如何启动服务器进程、需要传递的参数以及环境变量设置。
+这个 JSON 配置文件定义了 MCP Server 的详细配置，包括如何启动 Server 进程、需要传递的参数以及环境变量设置。
 
 ```java
 @SpringBootApplication
@@ -129,7 +129,7 @@ public class Application {
             ToolCallbackProvider tools,
             ConfigurableApplicationContext context) {
         return args -> {
-            // 构建ChatClient并注入MCP工具
+            // 构建ChatClient并注入MCP Tool
             var chatClient = chatClientBuilder
                     .defaultTools(tools)
                     .build();
@@ -149,15 +149,15 @@ public class Application {
 }
 ```
 
-这段代码展示了如何在 Spring Boot 应用中使用MCP客户端。它创建了一个命令行运行器，构建了 ChatClient 并注入了 MCP 工具，然后使用这个客户端发送查询并获取响应。
+这段代码展示了如何在 Spring Boot 应用中使用 MCP Client。它创建了一个命令行运行器，构建了 ChatClient 并注入了 MCP Tool，然后使用这个客户端发送查询并获取响应。
 
-### 3.2 基于 SSE 的 MCP 客户端实现
+### 3.2 基于 SSE 的 MCP Client 实现
 
-除了基于 stdio 的实现外，Spring AI Alibaba 还提供了基于 Server-Sent Events (SSE) 的 MCP 客户端实现。这种方式适用于远程部署的 MCP 服务器，可以通过 HTTP 协议与 MCP 服务器进行通信。
+除了基于 stdio 的实现外，Spring AI Alibaba 还提供了基于 Server-Sent Events (SSE) 的 MCP Client 实现。这种方式适用于远程部署的 MCP Server，可以通过 HTTP 协议与 MCP Server 进行通信。
 
 #### 添加依赖
 
-首先，在您的项目中添加Spring AI MCP starter依赖：
+首先，在您的项目中添加 Spring AI MCP Client Starter 依赖：
 
 ```xml
 <dependency>
@@ -167,9 +167,9 @@ public class Application {
 
 ```
 
-#### 配置 MCP 服务器
+#### 配置 MCP Client
 
-在`application.yml`中配置MCP服务器：
+在`application.yml`中配置 MCP Client：
 
 ```yaml
 spring:
@@ -219,11 +219,11 @@ public class Application {
 
 ### 3.3 总结
 
-使用Spring AI Alibaba提供的MCP starter，可以大大简化MCP客户端的配置和使用。您只需要添加相应的依赖，配置MCP服务器，然后注入`ToolCallbackProvider`和`ChatClient.Builder`即可使用MCP功能。
+使用Spring AI Alibaba 提供的 MCP Client Starter，可以大大简化 MCP Client 的配置和使用。您只需要添加相应的依赖，配置 MCP Server，然后注入`ToolCallbackProvider`和`ChatClient.Builder`即可使用 MCP 功能。
 
-根据您的部署需求，可以选择基于stdio的实现或基于SSE的实现。基于stdio的实现适用于本地部署的MCP服务器，而基于SSE的实现适用于远程部署的MCP服务器。
+根据您的部署需求，可以选择基于stdio的实现或基于SSE的实现。基于stdio的实现适用于本地部署的 MCP Server，而基于SSE的实现适用于远程部署的 MCP Server。
 
 > 完整示例代码可在以下链接查看：
-> - [基于 stdio 的实现](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-starter-example/client/mcp-stdio-client-example)
-> - [基于 SSE 的实现](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-starter-example/client/mcp-webflux-client-example)
+> - [基于 stdio 的实现](https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-starter-example/client/mcp-stdio-client-example)
+> - [基于 SSE 的实现](https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-starter-example/client/mcp-webflux-client-example)
 

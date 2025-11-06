@@ -81,7 +81,7 @@ var chatClient = chatClientBuilder.defaultFunctions(functionCallbacks).build();
 ```java
 @Bean
 public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
-    // 获取MCP服务器中的工具列表
+    // 获取 MCP Server 中的工具列表
     return mcpClient.listTools(null)
             // 将每个工具转换为Function Callback
             .tools()

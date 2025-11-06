@@ -1,7 +1,7 @@
 ---
 title: 第七章：MCP 使用范式
 keywords: [Spring AI, Spring AI Alibaba, 源码解读]
-description: "本章介绍了 MCP（Model Context Protocol），一个旨在标准化 AI 模型与外部工具及资源交互方式的协议。通过一个基于 WebFlux 的客户端-服务器（Client-Server） 示例，展示了其在 Spring AI 中的应用。对于 MCP 服务器端，展示了 `spring-ai-starter-mcp-server-webflux` 依赖、`application.yml` 中的服务器配置（包括服务器名称、版本、类型、指令、SSE 端点及声明的能力如工具、资源调用等），以及如何通过一个带有 `@Tool` 注解的 `TimeService` 来暴露工具功能，并在主应用类 `WebfluxServerApplication` 中注册为 `ToolCallbackProvider`。对于 MCP 客户端，展示了 `spring-ai-starter-mcp-client-webflux` 依赖、客户端 `application.yml` 配置（包括启用标志、客户端名称、版本、请求超时、类型及指向 MCP 服务器的 SSE 连接），以及一个 `WebfluxClientApplication` 示例，该示例通过 `ChatClient` 与 MCP 服务器通信，利用服务器提供的工具来响应用户输入。章节后续计划进行 MCP 的源码解读。 "
+description: "本章介绍了 MCP（Model Context Protocol），一个旨在标准化 AI 模型与外部工具及资源交互方式的协议。通过一个基于 WebFlux 的客户端-服务器（Client-Server） 示例，展示了其在 Spring AI 中的应用。对于 MCP 服务器端，展示了 `spring-ai-starter-mcp-server-webflux` 依赖、`application.yml` 中的服务器配置（包括服务器名称、版本、类型、指令、SSE 端点及声明的能力如工具、资源调用等），以及如何通过一个带有 `@Tool` 注解的 `TimeService` 来暴露工具功能，并在主应用类 `WebfluxServerApplication` 中注册为 `ToolCallbackProvider`。对于 MCP 客户端，展示了 `spring-ai-starter-mcp-client-webflux` 依赖、Client `application.yml` 配置（包括启用标志、客户端名称、版本、请求超时、类型及指向 MCP 服务器的 SSE 连接），以及一个 `WebfluxClientApplication` 示例，该示例通过 `ChatClient` 与 MCP 服务器通信，利用服务器提供的工具来响应用户输入。章节后续计划进行 MCP 的源码解读。 "
 ---
 
 - 作者：影子, Spring AI Alibaba Committer
@@ -7046,15 +7046,15 @@ public class McpServerStdioDisabledCondition extends AllNestedConditions {
 <tr>
 <td>stdioServerTransport<br/></td><td>提供McpServerTransportProvider的Bean，默认为STDIO传输<br/></td></tr>
 <tr>
-<td>capabilitiesBuilder<br/></td><td>提供McpSchema.ServerCapabilities.Builder的Bean，初始化MCP服务器的能力构建器<br/></td></tr>
+<td>capabilitiesBuilder<br/></td><td>提供McpSchema.ServerCapabilities.Builder的Bean，初始化 MCP Server 的能力构建器<br/></td></tr>
 <tr>
 <td>syncTools<br/></td><td>提供List<McpServerFeatures.SyncToolSpecification>的Bean，将 ToolCallback 转换为 SyncToolSpecification，支持同步工具调用<br/></td></tr>
 <tr>
 <td>asyncTools<br/></td><td>提供List<McpServerFeatures.AsyncToolSpecification>的Bean，将 ToolCallback 转换为 AsyncToolSpecification，支持异步工具调用<br/></td></tr>
 <tr>
-<td>mcpSyncServer<br/></td><td>提供McpSyncServer的Bean，创建同步模式的 MCP 服务器实例<br/></td></tr>
+<td>mcpSyncServer<br/></td><td>提供McpSyncServer的Bean，创建同步模式的 MCP Server 实例<br/></td></tr>
 <tr>
-<td>mcpAsyncServer<br/></td><td>提供McpAsyncServer的Bean，创建异步模式的 MCP 服务器实例<br/></td></tr>
+<td>mcpAsyncServer<br/></td><td>提供McpAsyncServer的Bean，创建异步模式的 MCP Server 实例<br/></td></tr>
 </table>
 
 

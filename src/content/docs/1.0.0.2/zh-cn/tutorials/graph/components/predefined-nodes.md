@@ -741,12 +741,12 @@ Map.of("param", "${state_value}")              // 参数中的变量
 
 ### McpNode
 
-**McpNode**提供Model Context Protocol (MCP)服务器调用功能，支持与外部MCP服务的集成。
+**McpNode**提供Model Context Protocol (MCP) Server 调用功能，支持与外部 MCP Server 的集成。
 
 #### 核心特性
 
-- **MCP协议支持**：完整的MCP客户端实现
-- **工具调用**：调用MCP服务器提供的工具
+- **MCP协议支持**：完整的 MCP Client 实现
+- **工具调用**：调用 MCP Server 提供的工具
 - **参数映射**：灵活的参数传递和映射
 - **连接管理**：自动的连接建立和清理
 - **错误处理**：完善的异常处理机制
