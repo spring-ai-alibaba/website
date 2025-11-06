@@ -2,31 +2,31 @@
 sidebar_position: 9
 ---
 
-# MCP 服务器启动器
+# MCP Server Starter
 
-Spring AI MCP（模型上下文协议）服务器启动器为在 Spring Boot 应用程序中设置 MCP 服务器提供自动配置。它使 MCP 服务器功能能够与 Spring Boot 的自动配置系统无缝集成。
+Spring AI MCP（模型上下文协议）Server Starter 为在 Spring Boot 应用程序中设置 MCP Server 提供自动配置。它使 MCP Server 功能能够与 Spring Boot 的自动配置系统无缝集成。
 
-MCP 服务器启动器提供：
+MCP Server Starter 提供：
 
-- MCP 服务器组件的自动配置
+- MCP Server 组件的自动配置
 
 - 支持同步和异步操作模式
 
 - 多种传输层选项
 
-- 灵活的工具、资源和提示规范
+- 灵活的 Tool、Resource 和 Prompt 规范
 
 - 变更通知功能
 
-### 启动器
+### Starter
 
->Spring AI 自动配置和启动器模块的构件名称发生了重大变化。 请参阅 [升级说明](https://docs.spring.io/spring-ai/reference/upgrade-notes.html) 了解更多信息。
+>Spring AI 自动配置和 Starter 模块的构件名称发生了重大变化。 请参阅 [升级说明](https://docs.spring.io/spring-ai/reference/upgrade-notes.html) 了解更多信息。
 
-根据您的传输需求选择以下启动器之一：
+根据您的传输需求选择以下 Server Starter 之一：
 
-#### 标准 MCP 服务器
+#### 标准 MCP Server
 
-具有 `STDIO` 服务器传输的完整 MCP 服务器功能支持。
+具有 `STDIO` Server 传输的完整 MCP Server 功能支持。
 
 ```xml
 <dependency>
@@ -39,11 +39,11 @@ MCP 服务器启动器提供：
 
 - 不需要额外的 Web 依赖项
 
-启动器激活 `McpServerAutoConfiguration` 自动配置，负责：
+Server Starter 激活 `McpServerAutoConfiguration` 自动配置，负责：
 
 - 配置基本服务器组件
 
-- 处理工具、资源和提示规范
+- 处理 Tool、Resource 和 Prompt 规范
 
 - 管理服务器功能和变更通知
 
@@ -51,7 +51,7 @@ MCP 服务器启动器提供：
 
 #### WebMVC 服务器传输
 
-具有基于 Spring MVC 的 `SSE`（服务器发送事件）服务器传输和可选的 `STDIO` 传输的完整 MCP 服务器功能支持。
+具有基于 Spring MVC 的 `SSE`（服务器发送事件）Server 传输和可选的 `STDIO` 传输的完整 MCP Server 功能支持。
 
 ```xml
 <dependency>
@@ -60,7 +60,7 @@ MCP 服务器启动器提供：
 </dependency>
 ```
 
-启动器激活 `McpWebMvcServerAutoConfiguration` 和 `McpServerAutoConfiguration` 自动配置，提供：
+Starter 激活 `McpWebMvcServerAutoConfiguration` 和 `McpServerAutoConfiguration` 自动配置，提供：
 
 使用 Spring MVC 的基于 HTTP 的传输（`WebMvcSseServerTransportProvider`）
 
@@ -81,7 +81,7 @@ MCP 服务器启动器提供：
 </dependency>
 ```
 
-启动器激活 `McpWebFluxServerAutoConfiguration` 和 `McpServerAutoConfiguration` 自动配置，提供：
+Starter 激活 `McpWebFluxServerAutoConfiguration` 和 `McpServerAutoConfiguration` 自动配置，提供：
 
 使用 Spring WebFlux 的反应式传输（`WebFluxSseServerTransportProvider`）
 
@@ -138,7 +138,7 @@ MCP 服务器支持四种主要功能类型，可以单独启用或禁用：
 
 ### 传输选项
 
-MCP 服务器支持三种传输机制，每种都有其专用的启动器：
+MCP 服务器支持三种传输机制，每种都有其专用的 Starter：
 
 - 标准输入/输出（STDIO）- `spring-ai-starter-mcp-server`
 
@@ -148,11 +148,11 @@ MCP 服务器支持三种传输机制，每种都有其专用的启动器：
 
 ### 特性和功能
 
-MCP 服务器启动器允许服务器向客户端暴露工具、资源和提示。 它自动将注册为 Spring bean 的自定义功能处理器转换为基于服务器类型的同步/异步规范：
+MCP 服务器 Starter 允许服务器向客户端暴露工具、资源和提示。 它自动将注册为 Spring bean 的自定义功能处理器转换为基于服务器类型的同步/异步规范：
 
 #### 工具
 
-允许服务器暴露可由语言模型调用的工具。MCP 服务器启动器提供：
+允许服务器暴露可由语言模型调用的工具。MCP 服务器 Starter 提供：
 
 - 变更通知支持
 

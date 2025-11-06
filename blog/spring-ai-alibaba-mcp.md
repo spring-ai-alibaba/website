@@ -252,7 +252,7 @@ mvn clean package -DskipTests
 
 #### 添加依赖
 
-首先，在您的项目中添加依赖：
+首先，在您的项目中添加 Spring AI MCP Server Starter 依赖：
 
 ```xml
 <dependency>
@@ -261,23 +261,23 @@ mvn clean package -DskipTests
 </dependency>
 ```
 
-#### 配置 MCP 服务端
+#### 配置 MCP Server
 
-在`application.yml`中配置 MCP 服务端：
+在`application.yml`中配置 MCP Server：
 
 ```yaml
 server:
-  port: 8080  # 服务器端口配置
+  port: 8080  # MCP Server 端口配置
 
 spring:
   ai:
     mcp:
       server:
-        name: my-weather-server    # MCP服务器名称
-        version: 0.0.1            # 服务器版本号
+        name: my-weather-server    # MCP Server 名称
+        version: 0.0.1            # MCP Server 版本号
 ```
 
-#### 实现 MCP 工具
+#### 实现 MCP Tool
 
 与基于 stdio 的实现完全相同：
 
@@ -454,7 +454,7 @@ spring:
     mcp:
       client:
         stdio:
-          # 指定MCP服务器配置文件路径（推荐）
+          # 指定 MCP Server 配置文件路径（推荐）
           servers-configuration: classpath:/mcp-servers-config.json
           # 直接配置示例，和上边的配制二选一
           # connections:
@@ -465,12 +465,12 @@ spring:
           #       - /path/to/your/mcp-server.jar
 ```
 
-这个配置文件设置了 MCP 客户端的基本配置，包括 API 密钥和服务器配置文件的位置。你也可以选择直接在配置文件中定义服务器配置，但是还是建议使用json文件管理 mcp 配置。在`resources`目录下创建`mcp-servers-config.json`配置文件：
+这个配置文件设置了 MCP Client 的基本配置，包括 API 密钥和服务器配置文件的位置。你也可以选择直接在配置文件中定义服务器配置，但是还是建议使用json文件管理 mcp 配置。在`resources`目录下创建`mcp-servers-config.json`配置文件：
 
 ```json
 {
     "mcpServers": {
-        // 定义名为"weather"的MCP服务器
+        // 定义名为"weather"的 MCP Server
         "weather": {
             // 指定启动命令为java
             "command": "java",
@@ -488,7 +488,7 @@ spring:
 }
 ```
 
-这个 JSON 配置文件定义了 MCP 服务器的详细配置，包括如何启动服务器进程、需要传递的参数以及环境变量设置，还是要注意引用的 jar 包必须是全路径的。
+这个 JSON 配置文件定义了 MCP Server 的详细配置，包括如何启动 Server 进程、需要传递的参数以及环境变量设置，还是要注意引用的 jar 包必须是全路径。
 
 ### 编写一个启动类进行测试：
 
@@ -527,7 +527,7 @@ public class Application {
 }
 ```
 
-这段代码展示了如何在 Spring Boot 应用中使用 MCP 客户端。它创建了一个命令行运行器，构建了 ChatClient 并注入了 MCP 工具，然后使用这个客户端发送查询并获取响应。在 Spring AI Alibaba 中使用 Mcp 工具非常简单，只需要把`ToolCallbackProvider`放到`chatClientBuilder`的`defaultTools`方法中，就可以自动的适配。
+这段代码展示了如何在 Spring Boot 应用中使用 MCP Client。它创建了一个命令行运行器，构建了 ChatClient 并注入了 MCP Tool，然后使用这个客户端发送查询并获取响应。在 Spring AI Alibaba 中使用 Mcp 工具非常简单，只需要把`ToolCallbackProvider`放到`chatClientBuilder`的`defaultTools`方法中，就可以自动的适配。
 
 通过命令启动程序进行测试：
 
@@ -535,7 +535,7 @@ public class Application {
 mvn spring-boot:run
 ```
 
-启动之后显示结果为，从日志可以看到我们自己编写的 mcp server 被调用了，返回了数据：
+启动之后显示结果为，从日志可以看到我们自己编写的 MCP Server 被调用了，返回了数据：
 
 ```
 >>> QUESTION: 北京的天气如何？
@@ -549,7 +549,7 @@ mvn spring-boot:run
 
 ### 添加依赖
 
-首先，在您的项目中添加 Spring AI MCP starter 依赖：
+首先，在您的项目中添加 Spring AI MCP Client Starter 依赖：
 
 ```xml
 <dependency>
@@ -560,7 +560,7 @@ mvn spring-boot:run
 
 ### 配置 MCP 服务器
 
-在`application.yml`中配置 MCP 服务器，这里需要指定 SSE 启动的服务地址，之前我们在 8080 端口上启动了对应的服务：
+在`application.yml`中配置 MCP Server，这里需要指定 SSE 启动的服务地址，之前我们在 8080 端口上启动了对应的服务：
 
 ```yaml
 spring:
@@ -575,7 +575,7 @@ spring:
               url: http://localhost:8080  #服务地址
 ```
 
-### 使用 MCP 客户端
+### 使用 MCP Client
 
 使用方式与基于 stdio 的实现相同，只需注入`ToolCallbackProvider`和`ChatClient.Builder`：
 
