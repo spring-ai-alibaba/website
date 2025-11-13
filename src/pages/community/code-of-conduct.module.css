@@ -1,0 +1,228 @@
+/* Code of Conduct Page Styles */
+.codePage {
+  padding: 3rem 0;
+  min-height: 80vh;
+  background: transparent;
+  position: relative;
+}
+
+/* Ensure consistent starry background in dark mode */
+[data-theme='dark'] .codePage {
+  background: transparent !important;
+}
+
+.codeHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.codeTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.codeDescription {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.codeContent {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.sectionContent {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.standards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.standardsColumn {
+  background: rgba(37, 99, 235, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+[data-theme='dark'] .standardsColumn {
+  background: rgba(96, 165, 250, 0.08);
+}
+
+.standardsTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.standardsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.standardsList li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 2rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.standardsList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  color: var(--ifm-color-primary);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.reportingCard {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.05));
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+[data-theme='dark'] .reportingCard {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.12), rgba(96, 165, 250, 0.06));
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.reportingContent h3 {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.contactMethods {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.contactMethod {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.contactMethod:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: white;
+}
+
+.reportingNote {
+  font-size: 0.95rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin-top: 1.5rem;
+}
+
+.attribution {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-light);
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
+
+.attribution a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.attribution a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .codePage {
+    padding: 2rem 0;
+  }
+
+  .codeTitle {
+    font-size: 2rem;
+  }
+
+  .codeDescription {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+    margin: 0 1rem 1.5rem;
+  }
+
+  .standards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .standardsColumn {
+    padding: 1rem;
+  }
+
+  .contactMethods {
+    flex-direction: column;
+  }
+
+  .contactMethod {
+    justify-content: center;
+    width: 100%;
+  }
+}

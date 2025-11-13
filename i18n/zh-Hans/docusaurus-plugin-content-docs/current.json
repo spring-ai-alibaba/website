@@ -1,0 +1,26 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.快速开始": {
+    "message": "快速开始",
+    "description": "The label for category 快速开始 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.API 参考": {
+    "message": "API 参考",
+    "description": "The label for category API 参考 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.使用示例": {
+    "message": "使用示例",
+    "description": "The label for category 使用示例 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.参与贡献": {
+    "message": "参与贡献",
+    "description": "The label for category 参与贡献 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.问题排查": {
+    "message": "问题排查",
+    "description": "The label for category 问题排查 in sidebar tutorialSidebar"
+  }
+}

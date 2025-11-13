@@ -1,25 +1,10 @@
-#
-# Copyright 2024-2026 the original author or authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
----
 ignore: |
   # This directory fails checks since many files
   # are templated. Instead, we run the linter
   # after running `make generate-manifests` which creates
   # the Install YAML in bin/
+  .github
+  node_modules
 
 rules:
   braces:
@@ -42,7 +27,7 @@ rules:
   comments:
     level: warning
     require-starting-space: true
-    min-spaces-from-content: 1
+    min-spaces-from-content: 2
   comments-indentation:
     level: warning
   document-end: disable
@@ -58,7 +43,7 @@ rules:
     max-spaces-after: 1
   indentation:
     spaces: 2
-    indent-sequences: consistent # be consistent: don't mix indentation styles in one file.
+    indent-sequences: consistent
     check-multi-line-strings: false
   key-duplicates: enable
   key-ordering: disable
@@ -67,5 +52,5 @@ rules:
     type: unix
   trailing-spaces: enable
   truthy:
-    check-keys: false # GitHub Actions uses "on:" as a key
+    check-keys: false
     level: warning

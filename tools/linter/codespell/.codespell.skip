@@ -1,2 +1,16 @@
 .git
 .idea
+*.png
+*.woff
+*.woff2
+*.eot
+*.ttf
+*.jpg
+*.ico
+*.svg
+./charts
+*.js
+./public/*
+./node_modules/*
+./package-lock.json
+./build/*

@@ -1,16 +1,36 @@
 {
-  "extends": "astro/tsconfigs/base",
+  "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["DOM", "DOM.Iterable", "ES6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
     "baseUrl": ".",
-	"paths": {
-		"@/*":["src/*"],
-		"@components/*": ["src/components/*"],
-		"@layouts/*": ["src/layouts/*"],
-		"@i18n/*": ["src/i18n/*"],
-		"@helpers/*": ["src/helpers/*"],
-		"@starlight/*": ["node_modules/@astrojs/starlight/*"],
-		"@style/*": ["src/style/*"],
-		"@utils/*": ["src/utils/*"],
-	}
-  }
+    "paths": {
+      "@site/*": ["./"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "docs/**/*",
+    "blog/**/*",
+    "docusaurus.config.js",
+    "sidebars.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    ".docusaurus"
+  ]
 }

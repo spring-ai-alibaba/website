@@ -1,0 +1,58 @@
+<svg width="280" height="70" viewBox="0 0 280 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 主绿色渐变 - 简约而有层次 -->
+    <linearGradient id="mainGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6db33f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5a9f34;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- 强调色渐变 -->
+    <linearGradient id="accentGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7fc24a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6db33f;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Spring AI 流畅艺术字体 - 主体 -->
+  <g id="spring-ai">
+    <!-- Spring -->
+    <text x="10" y="45"
+          font-family="'Brush Script MT', 'Lucida Handwriting', cursive"
+          font-size="36"
+          font-weight="normal"
+          fill="url(#mainGreen)"
+          font-style="italic"
+          letter-spacing="0">
+      Spring
+    </text>
+
+    <!-- AI - 调整样式使其更美观 -->
+    <text x="100" y="45"
+          font-family="'Brush Script MT', 'Lucida Handwriting', cursive"
+          font-size="36"
+          font-weight="normal"
+          fill="url(#accentGreen)"
+          font-style="italic"
+          letter-spacing="0">
+      AI
+    </text>
+  </g>
+
+  <!-- Alibaba - 艺术字样式 -->
+  <g id="alibaba">
+    <text x="155" y="45"
+          font-family="'Brush Script MT', 'Lucida Handwriting', cursive"
+          font-size="30"
+          font-weight="normal"
+          fill="url(#accentGreen)"
+          font-style="italic"
+          letter-spacing="1">
+      Alibaba
+    </text>
+  </g>
+
+  <!-- 简约点缀元素 - 代表AI的抽象概念 -->
+  <circle cx="150" cy="30" r="2.5" fill="#7fc24a" opacity="0.6"/>
+  <circle cx="158" cy="35" r="2" fill="#6db33f" opacity="0.5"/>
+  <circle cx="154" cy="42" r="1.8" fill="#5a9f34" opacity="0.7"/>
+</svg>

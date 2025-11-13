@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.agentsSidebar.category.DataAgent": {
+    "message": "DataAgent",
+    "description": "The label for category DataAgent in sidebar agentsSidebar"
+  },
+  "sidebar.agentsSidebar.category.JManus": {
+    "message": "JManus",
+    "description": "The label for category JManus in sidebar agentsSidebar"
+  },
+  "sidebar.agentsSidebar.category.DeepResearch": {
+    "message": "DeepResearch",
+    "description": "The label for category DeepResearch in sidebar agentsSidebar"
+  },
+  "sidebar.agentsSidebar.category.Copilot": {
+    "message": "Copilot",
+    "description": "The label for category Copilot in sidebar agentsSidebar"
+  }
+}

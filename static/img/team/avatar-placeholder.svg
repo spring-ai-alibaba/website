@@ -1,0 +1,12 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="60" fill="url(#bg)"/>
+  <circle cx="60" cy="45" r="20" fill="white" opacity="0.9"/>
+  <ellipse cx="60" cy="85" rx="25" ry="20" fill="white" opacity="0.9"/>
+  <text x="60" y="25" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle" opacity="0.7">团队成员</text>
+</svg>
