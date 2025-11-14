@@ -130,7 +130,7 @@ Spring AI Alibaba Nl2sql 模块可基于大模型的 ChatBI 技术，帮助用�
 
 4. **可观测与效果评估，加速智能体从 Demo 走向生产落地**
 
-Spring AI 在多个关键节点都做了 SDK 默认埋点，用来记录运行过程中的 metrics 与 tracing 信息，这包括模型调用、向量检索、工具调用等关键环节的调用情况。Spring AI tracing 信息兼容 OpenTelemetry，因此理论上可接入市面上主流的开源平台入 Langfuse，或者阿里云 ARMS。
+Spring AI 在多个关键节点都做了 SDK 默认埋点，用来记录运行过程中的 metrics 与 tracing 信息，这包括模型调用、向量检索、工具调用等关键环节的调用情况。Spring AI tracing 信息兼容 OpenTelemetry，因此理论上可接入市面上主流的开源平台 Langfuse，或者阿里云 ARMS。
 
 ## 从聊天机器人、工作流到多智能体
 ### 聊天机器人（ChatBot）
@@ -157,18 +157,18 @@ Flux<String> response = chatClient.prompt(query)
 <font style="color:rgb(38, 38, 38);">我们这里把 ChatClient 开发的 AI 应用叫做单智能体应用，这可能是我们最理想的智能体开发模式，它足够简单直接，即把所有的工具、上下文信息等给到模型，由模型持续决策、迭代直到最终完成任务解答。然而，事情远没有那么简单，模型的能力还远未达到我们想要的效果，当我们给模型的上下文、工具过多时，整体效果就会变差，有时事情的走向会严重偏离我们的预期。因此，我们考虑把复杂的问题拆解开来，当前有两种常用模式：</font>**<font style="color:rgb(38, 38, 38);">工作流和多智能体</font>**<font style="color:rgb(38, 38, 38);">。</font>
 
 ### 工作流（Workflow）
-**<font style="color:rgb(38, 38, 38);">工作流</font>**<font style="color:rgb(38, 38, 38);">是以相对固化的模式来人为的拆解任务，将一个大的任务拆解为一个固化的有多个分支的流程。工作流的优势是确定性强，模型作为流程中的一个结点起到的更多是一个分类决策的职责，因此它更适合意图识别等类别属性强的应用场景。工作流也有明显的劣势，它要求开发人员对业务流程有深刻的理解，整个流程是由人绘制的，模型在其中更多的只是内容生成、总结、分类识别的作用，并不能最大化利用模型的推理能力，因此很多人诟病这种模式是不够智能的。</font>
+**<font style="color:rgb(38, 38, 38);">工作流</font>**<font style="color:rgb(38, 38, 38);">是以相对固化的模式来人为的拆解任务，将一个大的任务拆解为一个固化的有多个分支的流程。工作流的优势是确定性强，模型作为流程中的一个节点起到的更多是一个分类决策的职责，因此它更适合意图识别等类别属性强的应用场景。工作流也有明显的劣势，它要求开发人员对业务流程有深刻的理解，整个流程是由人绘制的，模型在其中更多的只是内容生成、总结、分类识别的作用，并不能最大化利用模型的推理能力，因此很多人诟病这种模式是不够智能的。</font>
 
 <font style="color:rgb(38, 38, 38);"></font>
 
-<font style="color:rgb(38, 38, 38);">用 Spring AI Alibaba Graph 可以轻松开发工作流，声明不同的结点，并将结点串联成一个流程图。</font>
+<font style="color:rgb(38, 38, 38);">用 Spring AI Alibaba Graph 可以轻松开发工作流，声明不同的节点，并将节点串联成一个流程图。</font>
 
 
 ![spring ai alibaba workflow](/img/user/ai/overview/1.0.0/workflow.png)
 
 
 
-<font style="color:rgb(38, 38, 38);">值得注意的是，Spring AI Alibaba Graph 中提供大量预置结点，这些结点可以对标到市面上主流的如 Dify、百炼等低代码平台，典型结点包括 LlmNode（大模型节点）、QuestionClassifierNode（问题分类结点）、ToolNode（工具结点）等，为用户免去重复开发定义负担，只需要专注流程串联。</font>
+<font style="color:rgb(38, 38, 38);">值得注意的是，Spring AI Alibaba Graph 中提供大量预置节点，这些节点可以对标到市面上主流的如 Dify、百炼等低代码平台，典型节点包括 LlmNode（大模型节点）、QuestionClassifierNode（问题分类节点）、ToolNode（工具节点）等，为用户免去重复开发定义负担，只需要专注流程串联。</font>
 
 <font style="color:rgb(38, 38, 38);"></font>
 

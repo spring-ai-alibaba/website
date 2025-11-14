@@ -1,7 +1,7 @@
 ---
 title: 模型上下文协议（Model Context Protocol）
 keywords: [Spring AI, MCP, 模型上下文协议, 智能体应用]
-description: "模型上下文协议（Model Context Protocol）介绍"
+description: "Spring AI Alibaba模型上下文协议（Model Context Protocol）介绍"
 ---
 
 ## MCP 简介

@@ -1,7 +1,7 @@
 ---
 title: 提示词工程模式 (Prompt Engineering Patterns)
 keywords: [Spring AI,通义千问,百炼,智能体应用]
-description: "Spring AI 与通义千问集成，使用 Spring AI 开发 Java AI 应用。"
+description: "Spring AI Alibaba提示词工程模式 (Prompt Engineering Patterns)"
 ---
 基于全面的[提示工程指南](https://www.kaggle.com/whitepaper-prompt-engineering)，我们将对即时工程技术进行实际应用。该指南涵盖了有效即时工程的理论、原则和模式，
 并演示了如何使用 Spring AI 流畅的ChatClient API将这些概念转化为可运行的 Java 代码。

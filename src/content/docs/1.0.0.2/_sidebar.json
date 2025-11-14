@@ -46,7 +46,7 @@
 			{
 				"label": "可用组件列表与使用指南",
 				"translations": {
-					"en": "Basic Framework"
+					"en": "Available Components and Usage Guide"
 				},
 			    "link": "docs/1.0.0.2/tutorials/starters-and-quick-guide"
 			},
@@ -67,10 +67,126 @@
 					"en": "Graph"
 				},
 				"collapsed": true,
-				"autogenerate": {
-					"directory": "tutorials/graph"
-				},
-			    "items": []
+				"items": [
+					{
+						"label": "什么是Spring AI Alibaba Graph",
+						"translations": {
+							"en": "Introduction"
+						},
+						"link": "docs/1.0.0.2/tutorials/graph/whats-spring-ai-alibaba-graph"
+					},
+					{
+						"label": "核心概念",
+						"translations": {
+							"en": "Core Concepts"
+						},
+						"collapsed": true,
+						"items": [
+							{
+								"label": "StateGraph 状态图",
+								"translations": {
+									"en": "StateGraph"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/core-concepts/state-graph"
+							},
+							{
+								"label": "OverAllState 状态管理",
+								"translations": {
+									"en": "OverAllState"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/core-concepts/overall-state"
+							},
+							{
+								"label": "Node 节点体系",
+								"translations": {
+									"en": "Nodes"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/core-concepts/node"
+							},
+							{
+								"label": "Edge 边路由",
+								"translations": {
+									"en": "Edges"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/core-concepts/edge"
+							},
+							{
+								"label": "CompiledGraph 执行引擎",
+								"translations": {
+									"en": "CompiledGraph"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/core-concepts/compiled-graph"
+							}
+						]
+					},
+					{
+						"label": "预定义组件",
+						"translations": {
+							"en": "Components"
+						},
+						"collapsed": true,
+						"items": [
+							{
+								"label": "预定义节点",
+								"translations": {
+									"en": "Predefined Nodes"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/components/predefined-nodes"
+							},
+							{
+								"label": "智能体模式",
+								"translations": {
+									"en": "Agent Patterns"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/components/agent-patterns"
+							}
+						]
+					},
+					{
+						"label": "高级特性",
+						"translations": {
+							"en": "Advanced Features"
+						},
+						"collapsed": true,
+						"items": [
+							{
+								"label": "并行处理机制",
+								"translations": {
+									"en": "Parallel Processing"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/advanced-features/parallel-processing"
+							},
+							{
+								"label": "流式处理机制",
+								"translations": {
+									"en": "Streaming"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/advanced-features/streaming"
+							},
+							{
+								"label": "子图节点",
+								"translations": {
+									"en": "Subgraph Nodes"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/advanced-features/subgraph-nodes"
+							},
+							{
+								"label": "中断与恢复",
+								"translations": {
+									"en": "Interrupt & Resume"
+								},
+								"link": "docs/1.0.0.2/tutorials/graph/advanced-features/interrupt-resume"
+							}
+						]
+					},
+					{
+						"label": "总体架构",
+						"translations": {
+							"en": "Architecture"
+						},
+						"link": "docs/1.0.0.2/tutorials/graph/architecture"
+					}
+				]
 			}
 		]
 	},
@@ -142,6 +258,50 @@
 					"directory": "practices/mcp"
 				},
 			    "items": []
+			},
+			{
+				"label": "Graph 实践",
+				"translations": {
+					"en": "Graph Practices"
+				},
+				"collapsed": true,
+				"items": [
+					{
+						"label": "快速指南",
+						"translations": {
+							"en": "Quick Guide"
+						},
+						"link": "docs/1.0.0.2/practices/graph/quick-guide"
+					},
+					{
+						"label": "人机协作",
+						"translations": {
+							"en": "Human-in-the-Loop"
+						},
+						"link": "docs/1.0.0.2/practices/graph/human-in-the-loop"
+					},
+					{
+						"label": "MCP 节点",
+						"translations": {
+							"en": "MCP Node"
+						},
+						"link": "docs/1.0.0.2/practices/graph/mcp-node"
+					},
+					{
+						"label": "并行节点",
+						"translations": {
+							"en": "Parallel Node"
+						},
+						"link": "docs/1.0.0.2/practices/graph/parallel-node"
+					},
+					{
+						"label": "流式处理",
+						"translations": {
+							"en": "Streaming"
+						},
+						"link": "docs/1.0.0.2/practices/graph/streaming"
+					}
+				]
 			},
 			{
 				"label": "生态集成",

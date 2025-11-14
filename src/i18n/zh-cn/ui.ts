@@ -239,7 +239,7 @@ export default {
 	'rightSidebar.contributorGuides': '贡献者指南',
 	'rightSidebar.community': '社区',
 	'rightSidebar.readBlog': '阅读我们的博客',
-	'rightSidebar.github': 'GitHub 上的 SCA 文档',
+	'rightSidebar.github': 'GitHub 上的 SAA 文档',
 	// Feedback Fish widget
 	'feedback.button': '给予我们反馈',
 	'feedback.a11yLabel': '反馈表单',

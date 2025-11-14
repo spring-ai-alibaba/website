@@ -1,98 +1,221 @@
 ---
 title: 对话模型(Chat Model)
 keywords: [Spring AI,通义千问,百炼,智能体应用]
-description: "Spring AI 与通义千问集成，使用 Spring AI 开发 Java AI 应用。"
+description: "Spring AI Alibaba对话模型。"
 ---
+## Chat Model API
 
-对话模型（Chat Model）接收一系列消息（Message）作为输入，与模型 LLM 服务进行交互，并接收返回的聊天消息（Chat Message）作为输出。相比于普通的程序输入，模型的输入与输出消息（Message）不止支持纯字符文本，还支持包括语音、图片、视频等作为输入输出。同时，在 Spring AI Alibaba 中，消息中还支持包含不同的角色，帮助底层模型区分来自模型、用户和系统指令等的不同消息。
+### 概述
 
-Spring AI Alibaba 复用了 Spring AI 抽象的 Model API，并与通义系列大模型服务进行适配（如通义千问、通义万相等），目前支持纯文本聊天、文生图、文生语音、语音转文本等。以下是框架定义的几个核心 API：
-* ChatModel，文本聊天交互模型，支持纯文本格式作为输入，并将模型的输出以格式化文本形式返回。
-* ImageModel，接收用户文本输入，并将模型生成的图片作为输出返回。
-* AudioModel，接收用户文本输入，并将模型合成的语音作为输出返回。
+Chat Model API 为开发人员提供了将 AI 驱动的聊天完成功能集成到其应用程序中的能力。它利用预训练的语言模型，如 GPT（生成式预训练转换器），以自然语言生成对用户输入的人类般响应。
 
-Spring AI Alibaba 支持以上 Model 抽象与通义系列模型的适配，并通过 `spring-ai-alibaba-starter` AutoConfiguration 自动初始化了默认实例，因此我们可以在应用程序中直接注入 ChatModel、ImageModel 等 bean，当然在需要的时候也可以自定义 Model 实例。
+API 通常通过向 AI 模型发送提示或部分对话来工作，然后 AI 模型基于其训练数据和对自然语言模式的理解生成完成或对话的延续。完成的响应随后返回给应用程序，应用程序可以将其呈现给用户或用于进一步处理。
 
-## Chat Model
+`Spring AI Chat Model API` 设计为一个简单且可移植的接口，用于与各种 AI 模型交互，允许开发人员以最小的代码更改在不同模型之间切换。这种设计与 Spring 的模块化和可互换性理念保持一致。
 
-ChatModel API 让应用开发者可以非常方便的与 AI 模型进行文本交互，它抽象了应用与模型交互的过程，包括使用 `Prompt` 作为输入，使用 `ChatResponse` 作为输出等。ChatModel 的工作原理是接收 Prompt 或部分对话作为输入，将输入发送给后端大模型，模型根据其训练数据和对自然语言的理解生成对话响应，应用程序可以将响应呈现给用户或用于进一步处理。
+同时，借助 `Prompt` 用于输入封装和 `ChatResponse` 用于输出处理的配套类，Chat Model API 统一了与 AI 模型的通信。它管理请求准备和响应解析的复杂性，提供直接和简化的 API 交互。
 
-![chat-model](https://img.alicdn.com/imgextra/i2/O1CN01wyTDFO1kR2BJOn3fe_!!6000000004679-0-tps-2555-1565.jpg)
+您可以在可用实现部分找到更多关于可用实现的信息，以及在聊天模型比较部分找到详细的比较。
 
-### 使用示例
-开发完整的 ChatModel 示例应用，您需要添加 `spring-ai-alibaba-starter` 依赖，请参考快速开始中的项目配置说明了解详情，您还可以访问 [chatmodel-example](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-chat-example/dashscope-chat/dashscope-chat-model) 查看本示例完整源码。
+### API 概述
 
-以下是 ChatModel 基本使用示例，它可以接收 String 字符串作为输入：
+#### ChatModel
+
+这是 ChatModel 接口定义：
 
 ```java
-@RestController
-public class ChatModelController {
-	private final ChatModel chatModel;
+public interface ChatModel extends Model<Prompt, ChatResponse> {
 
-	public ChatModelController(ChatModel chatModel) {
-		this.chatModel = chatModel;
-	}
+    default String call(String message) {...}
 
-	@RequestMapping("/chat")
-	public String chat(String input) {
-		ChatResponse response = chatModel.call(new Prompt(input));
-		return response.getResult().getOutput().getContent();
-	}
+    @Override
+    ChatResponse call(Prompt prompt);
 }
 ```
 
-使用 Prompt 作为输入：
-```java
+带 `String` 参数的 `call()` 方法简化了初始使用，避免了更复杂的 `Prompt` 和 `ChatResponse` 类的复杂性。在实际应用程序中，更常见的是使用接受 `Prompt` 实例并返回 `ChatResponse` 的 `call()` 方法。
 
-```
+#### StreamingChatModel
 
-Streaming 示例：
-```java
-
-```
-
-通过 ChatOptions 在每次调用中调整模型参数：
-```java
-
-```
-
-## Image Model
-ImageModel API 抽象了应用程序通过模型调用实现“文生图”的交互过程，即应用程序接收文本，调用模型生成图片。ImageModel 的入参为包装类型 `ImagePrompt`，输出类型为 `ImageResponse`。
-
-### 使用示例
-
-`spring-ai-alibaba-starter` AutoConfiguration 默认初始化了 ImageModel 实例，我们可以选择直接注入并使用默认实例。
+这是 `StreamingChatModel` 接口定义：
 
 ```java
-@RestController
-public class ImageModelController {
-	private final ImageModel imageModel;
+public interface StreamingChatModel extends StreamingModel<Prompt, ChatResponse> {
 
-	ImageModelController(ImageModel imageModel) {
-		this.imageModel = imageModel;
-	}
+    default Flux<String> stream(String message) {...}
 
-	@RequestMapping("/image")
-	public String image(String input) {
-		ImageOptions options = ImageOptionsBuilder.builder()
-				.withModel("dall-e-3")
-				.build();
-
-		ImagePrompt imagePrompt = new ImagePrompt(input, options);
-		ImageResponse response = imageModel.call(imagePrompt);
-		String imageUrl = response.getResult().getOutput().getUrl();
-
-		return "redirect:" + imageUrl;
-	}
+    @Override
+    Flux<ChatResponse> stream(Prompt prompt);
 }
 ```
 
-通过 ImageOptions 在每次调用中调整模型参数：
-```java
+`stream()` 方法接受类似于 `ChatModel` 的 `String` 或 `Prompt` 参数，但它使用响应式 Flux API 流式传输响应。
 
+#### Prompt
+
+`Prompt` 是一个 `ModelRequest`，它封装了一个 `Message` 对象列表和可选的模型请求选项。以下列表显示了 `Prompt` 类的截断版本，不包括构造函数和其他实用方法：
+
+```java
+public class Prompt implements ModelRequest<List<Message>> {
+
+    private final List<Message> messages;
+
+    private ChatOptions modelOptions;
+
+    @Override
+    public ChatOptions getOptions() {...}
+
+    @Override
+    public List<Message> getInstructions() {...}
+
+    // constructors and utility methods omitted
+}
 ```
 
-## Audio Model
-当前，Spring AI Alibaba 支持以下两种通义语音模型的适配，分别是：
-1. 文本生成语音 SpeechModel，对应于 OpenAI 的 Text-To-Speech (TTS) API
-2. 录音文件生成文字 DashScopeAudioTranscriptionModel，对应于 OpenAI 的 Transcription API
+#### Message
+
+`Message` 接口封装了 `Prompt` 文本内容、元数据属性集合和称为 `MessageType` 的分类。
+
+接口定义如下：
+
+```java
+public interface Content {
+
+    String getText();
+
+    Map<String, Object> getMetadata();
+}
+
+public interface Message extends Content {
+
+    MessageType getMessageType();
+}
+```
+
+多模态消息类型还实现了 `MediaContent` 接口，提供 `Media` 内容对象列表。
+
+```java
+public interface MediaContent extends Content {
+
+    Collection<Media> getMedia();
+
+}
+```
+
+`Message` 接口有各种实现，对应于 AI 模型可以处理的消息类别。
+
+![img_11.png](../../../../../../../public/img/user/ai/tutorials/basics/img_11.png)
+
+聊天完成端点根据对话角色区分消息类别，有效地由 `MessageType` 映射。
+
+例如，OpenAI 识别不同对话角色的消息类别，如 `system`、`user`、`function` 或 `assistant`。
+
+虽然术语 `MessageType` 可能暗示特定的消息格式，但在这种情况下，它实际上指定了消息在对话中扮演的角色。
+
+对于不使用特定角色的 AI 模型，`UserMessage` 实现作为标准类别，通常表示用户生成的查询或指令。要了解 `Prompt` 和 `Message` 的实际应用和关系，特别是在这些角色或消息类别的上下文中，请参阅提示部分中的详细解释。
+
+#### Chat Options
+
+表示可以传递给 AI 模型的选项。`ChatOptions` 类是 `ModelOptions` 的子类，用于定义可以传递给 AI 模型的几个便携选项。`ChatOptions` 类定义如下：
+
+```java
+public interface ChatOptions extends ModelOptions {
+
+    String getModel();
+    Float getFrequencyPenalty();
+    Integer getMaxTokens();
+    Float getPresencePenalty();
+    List<String> getStopSequences();
+    Float getTemperature();
+    Integer getTopK();
+    Float getTopP();
+    ChatOptions copy();
+
+}
+```
+
+此外，每个特定于模型的 ChatModel/StreamingChatModel 实现都可以有自己的选项，可以传递给 AI 模型。例如，OpenAI Chat Completion 模型有自己的选项，如 `logitBias`、`seed` 和 `user`。
+
+这是一个强大的功能，允许开发人员在启动应用程序时使用特定于模型的选项，然后使用 `Prompt` 请求在运行时覆盖它们。
+
+Spring AI 提供了一个复杂的系统来配置和使用聊天模型。它允许在启动时设置默认配置，同时还提供了在每次请求的基础上覆盖这些设置的灵活性。这种方法使开发人员能够轻松地使用不同的 AI 模型并根据需要调整参数，所有这些都在 Spring AI 框架提供的一致接口内。
+
+以下是 Spring AI 处理聊天模型配置和执行的流程：
+
+![img_12.png](../../../../../../../public/img/user/ai/tutorials/basics/img_12.png)
+
+1. **启动配置**：ChatModel/StreamingChatModel 使用"启动"聊天选项初始化。这些选项在 ChatModel 初始化期间设置，旨在提供默认配置。
+2. **运行时配置**：对于每个请求，Prompt 可以包含运行时聊天选项：这些可以覆盖启动选项。
+3. **选项合并过程**："合并选项"步骤结合了启动和运行时选项。如果提供了运行时选项，它们优先于启动选项。
+4. **输入处理**："转换输入"步骤将输入指令转换为本机、特定于模型的格式。
+5. **输出处理**："转换输出"步骤将模型的响应转换为标准化的 `ChatResponse` 格式。
+
+启动和运行时选项的分离允许全局配置和请求特定的调整。
+
+#### ChatResponse
+
+`ChatResponse` 类的结构如下：
+
+```java
+public class ChatResponse implements ModelResponse<Generation> {
+
+    private final ChatResponseMetadata chatResponseMetadata;
+    private final List<Generation> generations;
+
+    @Override
+    public ChatResponseMetadata getMetadata() {...}
+
+    @Override
+    public List<Generation> getResults() {...}
+
+    // other methods omitted
+}
+```
+
+`ChatResponse` 类保存 AI 模型的输出，每个 `Generation` 实例包含来自单个提示的潜在多个输出之一。`ChatResponse` 类还携带有关 AI 模型响应的 `ChatResponseMetadata` 元数据。
+
+#### Generation
+
+[Generation](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/Generation.java) 类从 `ModelResult` 扩展，表示模型输出（助手消息）和相关元数据：
+
+```java
+public class Generation implements ModelResult<AssistantMessage> {
+
+    private final AssistantMessage assistantMessage;
+    private ChatGenerationMetadata chatGenerationMetadata;
+
+    @Override
+    public AssistantMessage getOutput() {...}
+
+    @Override
+    public ChatGenerationMetadata getMetadata() {...}
+
+    // other methods omitted
+}
+```
+
+### 可用实现
+
+此图说明了统一的接口 `ChatModel` 和 `StreamingChatModel` 用于与来自不同提供商的各种 AI 聊天模型交互，允许轻松集成和在不同 AI 服务之间切换，同时为客户端应用程序维护一致的 API。
+
+![img_13.png](../../../../../../../public/img/user/ai/tutorials/basics/img_13.png)
+
+可用的聊天模型实现包括：
+
+- OpenAI 聊天完成（支持流式传输、多模态和函数调用）
+- Microsoft Azure Open AI 聊天完成（支持流式传输和函数调用）
+- Ollama 聊天完成（支持流式传输、多模态和函数调用）
+- Hugging Face 聊天完成（不支持流式传输）
+- Google Vertex AI Gemini 聊天完成（支持流式传输、多模态和函数调用）
+- Amazon Bedrock
+- Mistral AI 聊天完成（支持流式传输和函数调用）
+- Anthropic 聊天完成（支持流式传输和函数调用）
+
+提示：在聊天模型比较部分找到可用聊天模型的详细比较。
+
+### Chat Model API
+
+Spring AI Chat Model API 构建在 Spring AI `Generic Model API` 之上，提供聊天特定的抽象和实现。这允许轻松集成和在不同 AI 服务之间切换，同时为客户端应用程序维护一致的 API。
+
+![img_15.png](../../../../../../../public/img/user/ai/tutorials/basics/img_15.png)
+

@@ -2,7 +2,7 @@
 title: 阿里云百炼开源面向 Java 开发者的 NL2SQL 智能体框架！
 keywords: [Spring AI, Spring AI Alibaba, NL2SQL, ChatBI, 自然语言转SQL]
 description: Spring AI Alibaba Nl2sql 是基于 Spring AI Alibaba 的一个智能体框架，致力于打造一套轻量、高效、可扩展的 NL2SQL 框架，让 Java 程序员可以快速构建和集成自然语言查询系统，降低数据问答场景下 AI 能力的接入门槛。
-author: 刘军
+author: 许起瑞, 李维, 刘军
 date: "2025-06-17"
 category: article
 ---

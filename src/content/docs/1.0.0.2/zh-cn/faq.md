@@ -4,6 +4,19 @@ keywords: [Spring AI Alibaba,FAQ]
 description: "Spring AI Alibaba 使用过程中的常见问题汇总与解决方案指引。"
 ---
 
+## Maven 构建过程中，`spring-ai` 依赖包下载失败
+在 1.0.0 版本及之前，由于 Spring AI 官方包尚未发布到中央仓库，而是发布到了 Spring 自己维护的仓库，因此需要做如下配置：
+
+```xml
+```
+
+如果您增加以上配置后仍旧报错，请检查 ~/.m2/settings.xml 中是否配置了 mirror 代理，有 mirror 代理的话加上类似如下配置：
+
+```xml
+<!-- ~/.m2/settings.xml -->
+
+```
+
 ## 怎么确定 Spring AI Alibaba 与 Spring AI、Spring Boot 版本的兼容关系
 Spring AI Alibaba 使用四位版本号的版本管理方式，前三位版本号与 Spring AI 主版本对应，Spring AI Alibaba 社区在前三位主版本基础上持续迭代第四位版本号。
 

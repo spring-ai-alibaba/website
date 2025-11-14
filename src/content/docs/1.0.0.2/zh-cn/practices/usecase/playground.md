@@ -10,7 +10,7 @@ Playground 代码地址：https://github.com/springaialibaba/spring-ai-alibaba-e
 
 项目首页预览：
 
-![image-20250607164742879](/img/user/ai/practices/playground/\image-20250607164742879.png)
+![image-20250607164742879](/img/user/ai/practices/playground/image-20250607164742879.png)
 
 本篇文章中，内容较多。涉及运行，项目介绍，配置介绍等。分为三个部分介绍 Spring AI Alibaba Playground，您可以根据自己的需要跳转到不同章节浏览。
 

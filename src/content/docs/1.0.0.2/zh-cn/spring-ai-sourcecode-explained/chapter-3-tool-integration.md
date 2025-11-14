@@ -2336,13 +2336,35 @@ ToolCallingManager 的默认实现类，负责管理 AI 聊天模型的工具调
 
 <table>
 <tr>
-<td>方法名称<br/></td><td>描述<br/></td></tr>
+<td>方法名称<br/></td>
+<td>描述<br/></td>
+</tr>
 <tr>
-<td>resolveToolDefinitions<br/></td><td>解析并返回当前会话可用的工具定义列表<br/></td></tr>
+<td>resolveToolDefinitions<br/></td>
+<td>解析并返回当前会话可用的工具定义列表<br/></td>
+</tr>
 <tr>
-<td>executeToolCalls<br/></td><td>1. 提取工具调用请求：从 chatResponse 的结果中查找包含工具调用（toolCalls）的 Generation<br/>2. 构建ToolContext：根据 prompt 和提取到的 AssistantMessage 构建工具上下文（ToolContext），包含上下文参数和对话历史<br/>3. 执行工具调用：调用私有方法 executeToolCall，对每个工具以此调用	1. 获取请求时的ToolCallback列表：若Prompt 的 options 是 ToolCallingChatOptions，则取出其中的工具回调列表（toolCallbacks），否则为空列表	2. 遍历所有工具调用请求：对 AssistantMessage 中的每个 ToolCall 依次处理		1. 查找对应的 ToolCallback：先在 toolCallbacks 里按名称查找，找不到则用 toolCallbackResolver 解析		2. 处理 returnDirect：第一次取当前工具的 returnDirect，后续与前面结果做 AND，确保所有工具都要求 returnDirect 才为 true		3. 构建观测上下文：用工具定义、元数据、调用参数构建 ToolCallingObservationContext，用于埋点观测		4. 执行工具调用并观测：通过 observation.observe 执行工具回调（toolCallback.call），如有异常则用异常处理器处理，并将结果写入观测上下文		5. 收集响应：将每个工具调用的结果封装为 ToolResponseMessage.ToolResponse，加入响应列表	3. 结果返回：将每个工具调用的结果封装为 ToolResponseMessage.ToolResponse，加入响应列表<br/>4. 构建新的对话历史：将原有对话、助手消息和工具响应消息合并，形成新的对话历史<br/>5. 结果返回：返回 ToolExecutionResult，包含新的对话历史和 returnDirect 标志<br/></td></tr>
+<td>executeToolCalls<br/></td>
+<td>
+一. 提取工具调用请求：从 chatResponse 的结果中查找包含工具调用（toolCalls）的 Generation；<br/>
+二. 构建ToolContext：根据 prompt 和提取到的 AssistantMessage 构建工具上下文（ToolContext），包含上下文参数和对话历史；<br/>
+三. 执行工具调用：调用私有方法 executeToolCall，对每个工具以此调用；<br/>
+1. 获取请求时的ToolCallback列表：若Prompt 的 options 是 ToolCallingChatOptions，则取出其中的工具回调列表（toolCallbacks），否则为空列表；<br/>	
+2. 遍历所有工具调用请求：对 AssistantMessage 中的每个 ToolCall 依次处理；<br/>
+1). 查找对应的 ToolCallback：先在 toolCallbacks 里按名称查找，找不到则用 toolCallbackResolver 解析；<br/>
+2). 处理 returnDirect：第一次取当前工具的 returnDirect，后续与前面结果做 AND，确保所有工具都要求 returnDirect 才为 true；<br/>
+3). 构建观测上下文：用工具定义、元数据、调用参数构建 ToolCallingObservationContext，用于埋点观测；<br/>		
+4) 执行工具调用并观测：通过 observation.observe 执行工具回调（toolCallback.call），如有异常则用异常处理器处理，并将结果写入观测上下文；<br/>		
+5). 收集响应：将每个工具调用的结果封装为 ToolResponseMessage.ToolResponse，加入响应列表；<br/>	
+3. 结果返回：将每个工具调用的结果封装为 ToolResponseMessage.ToolResponse，加入响应列表；<br/>
+四. 构建新的对话历史：将原有对话、助手消息和工具响应消息合并，形成新的对话历史；<br/>
+五. 结果返回：返回 ToolExecutionResult，包含新的对话历史和 returnDirect 标志；<br/>
+</td>
+</tr>
 <tr>
-<td>setObservationConvention<br/></td><td>设置自定义的观测约定<br/></td></tr>
+<td>setObservationConvention<br/></td>
+<td>设置自定义的观测约定<br/></td>
+</tr>
 </table>
 
 
