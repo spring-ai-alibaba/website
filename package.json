@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "docusaurus": "docusaurus",
+    "dev": "docusaurus start",
     "start": "docusaurus start",
     "start:en": "docusaurus start --locale en",
     "start:zh": "docusaurus start --locale zh-Hans",

@@ -8,7 +8,7 @@ keywords: [Studio, Agent Chat, UI, Spring AI Alibaba]
 
 Agent Chat UI provides a visualized way for developers to chat with any Spring AI Alibaba developed Agents.
 
-
+![Agent Chat UI](/img/chatui/agent-chat-ui.gif)
 
 ## Quick Experience
 

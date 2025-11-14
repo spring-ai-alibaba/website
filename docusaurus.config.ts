@@ -57,20 +57,6 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
 
   plugins: [
-    // 旧版本文档插件 - 保留文件但不显示在导航栏
-    // 用户仍可通过旧链接访问这些文档，避免404错误
-    // 注意：请先将旧版本文档文件拷贝到 docs/1.0.0.2 目录后再启用此配置
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'docs-1_0_0_2',
-        path: 'docs/1.0.0.2',
-        routeBasePath: 'docs/1.0.0.2',
-        // 不设置 sidebarPath，这样就不会在任何侧边栏显示
-        // 但用户仍可通过直接访问 URL 来查看这些文档
-        exclude: [], // 确保所有文档都可访问
-      },
-    ],
     [
       '@docusaurus/plugin-content-docs',
       {
