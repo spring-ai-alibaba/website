@@ -25,57 +25,57 @@ if [ ! -d "build" ]; then
 fi
 
 # 第一步：为每个版本创建根路径重定向
-echo "📝 步骤 1：创建根路径重定向..."
-for version in "${VERSIONS[@]}"; do
-  version_dir="build/docs/$version"
-  mkdir -p "$version_dir"
-
-  cat > "$version_dir/index.html" << 'ROOTEOF'
-<!DOCTYPE html>
-<html lang="zh-Hans">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/docs/overview">
-    <link rel="canonical" href="/docs/overview" />
-    <meta name="robots" content="noindex">
-    <title>页面已迁移</title>
-    <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f5f5f5;
-      }
-      .container {
-        text-align: center;
-        padding: 2rem;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      }
-      a { color: #1890ff; text-decoration: none; }
-      a:hover { text-decoration: underline; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>页面已迁移</h1>
-      <p>此页面已迁移到新地址</p>
-      <p>正在自动跳转...</p>
-      <p>如果没有自动跳转，请<a href="/docs/overview">点击这里</a></p>
-    </div>
-    <script>
-      window.location.href = '/docs/overview' + window.location.search + window.location.hash;
-    </script>
-  </body>
-</html>
-ROOTEOF
-
-  echo "  ✓ /docs/$version → /docs/overview"
-done
+#echo "📝 步骤 1：创建根路径重定向..."
+#for version in "${VERSIONS[@]}"; do
+#  version_dir="build/docs/$version"
+#  mkdir -p "$version_dir"
+#
+#  cat > "$version_dir/index.html" << 'ROOTEOF'
+#<!DOCTYPE html>
+#<html lang="zh-Hans">
+#  <head>
+#    <meta charset="UTF-8">
+#    <meta http-equiv="refresh" content="0; url=/docs/overview">
+#    <link rel="canonical" href="/docs/overview" />
+#    <meta name="robots" content="noindex">
+#    <title>页面已迁移</title>
+#    <style>
+#      body {
+#        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+#        display: flex;
+#        align-items: center;
+#        justify-content: center;
+#        height: 100vh;
+#        margin: 0;
+#        background-color: #f5f5f5;
+#      }
+#      .container {
+#        text-align: center;
+#        padding: 2rem;
+#        background: white;
+#        border-radius: 8px;
+#        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+#      }
+#      a { color: #1890ff; text-decoration: none; }
+#      a:hover { text-decoration: underline; }
+#    </style>
+#  </head>
+#  <body>
+#    <div class="container">
+#      <h1>页面已迁移</h1>
+#      <p>此页面已迁移到新地址</p>
+#      <p>正在自动跳转...</p>
+#      <p>如果没有自动跳转，请<a href="/docs/overview">点击这里</a></p>
+#    </div>
+#    <script>
+#      window.location.href = '/docs/overview' + window.location.search + window.location.hash;
+#    </script>
+#  </body>
+#</html>
+#ROOTEOF
+#
+#  echo "  ✓ /docs/$version → /docs/overview"
+#done
 
 # 第二步：创建智能 404 页面
 echo ""
