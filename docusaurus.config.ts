@@ -1,6 +1,7 @@
 import type { Config } from '@docusaurus/types'
 import type { Options as PresetClassicOptions, ThemeConfig } from '@docusaurus/preset-classic'
 import { themes } from 'prism-react-renderer'
+import path from 'path'
 import projectConfig, { getGitHubUrls } from './project.config'
 
 const lightCodeTheme = themes.github
@@ -57,6 +58,48 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
 
   plugins: [
+    // 重定向插件配置（适用于 OSS 等静态托管）
+    // 策略：
+    // 1. createRedirects 自动为新文档中存在的路径创建旧版本重定向（生成 HTML 重定向页面）
+    // 2. redirects 数组手动配置旧文档中存在但新文档中不存在的路径
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          // 旧版本根路径重定向到 overview
+          {
+            to: '/docs/overview',
+            from: ['/docs/1.0.0.2', '/docs/1.0.0-M6.1', '/docs/1.0.0-M5.1', '/docs/1.0.0-M3.2'],
+          },
+          // 如果发现旧文档中存在但新文档中不存在的路径，可以在这里手动添加
+          // 例如：
+          // {
+          //   to: '/docs/overview',
+          //   from: [
+          //     '/docs/1.0.0.2/get-started/workflow',
+          //     '/docs/1.0.0-M6.1/get-started/workflow',
+          //   ],
+          // },
+        ],
+        // 为所有现有文档路径自动创建旧版本重定向
+        createRedirects(existingPath) {
+          // 只处理 /docs/ 开头的路径
+          if (existingPath.startsWith('/docs/') && existingPath !== '/docs/') {
+            // 获取 /docs/ 后面的路径部分
+            const pathAfterDocs = existingPath.replace('/docs/', '')
+
+            // 为所有旧版本创建重定向
+            return [
+              `/docs/1.0.0.2/${pathAfterDocs}`,
+              `/docs/1.0.0-M6.1/${pathAfterDocs}`,
+              `/docs/1.0.0-M5.1/${pathAfterDocs}`,
+              `/docs/1.0.0-M3.2/${pathAfterDocs}`,
+            ]
+          }
+          return undefined
+        },
+      },
+    ],
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -67,6 +110,24 @@ const config: Config = {
         editUrl: githubUrls.editDocs,
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'ecosystem',
+        path: 'ecosystem',
+        routeBasePath: 'ecosystem',
+        sidebarPath: './sidebars/sidebars-ecosystem.ts',
+      },
+    ],
+    // [
+    //   '@docusaurus/plugin-content-docs',
+    //   {
+    //     id: 'studio',
+    //     path: 'studio',
+    //     routeBasePath: 'studio',
+    //     sidebarPath: './sidebars/sidebars-studio.ts',
+    //   },
+    // ],
   ],
 
   presets: [
@@ -122,6 +183,13 @@ const config: Config = {
           docsPluginId: 'agents',
           position: 'left',
           label: '智能体',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'ecosystemSidebar',
+          docsPluginId: 'ecosystem',
+          position: 'left',
+          label: '生态',
         },
         {
           to: '/blog',
@@ -187,7 +255,7 @@ const config: Config = {
           items: [
             {
               label: 'Agent Framework',
-              to: '/docs/frameworks/agent-framework/quick-start',
+              to: '/docs/quick-start',
             },
             {
               label: 'Graph Core',
@@ -195,11 +263,11 @@ const config: Config = {
             },
             {
               label: 'Admin',
-              to: '/docs/frameworks/admin/quick-start',
+              to: '/ecosystem/admin/quick-start',
             },
             {
               label: 'Spring AI',
-              to: '/docs/frameworks/spring-ai/reference/concepts',
+              to: '/ecosystem/spring-ai/reference/concepts',
             },
           ],
         },

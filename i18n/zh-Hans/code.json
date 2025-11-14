@@ -562,11 +562,11 @@
     "description": "Graph framework description"
   },
   "ecosystem.framework.graphCommunity.name": {
-    "message": "Spring AI Alibaba Graph Community",
-    "description": "Graph Community name"
+    "message": "Spring AI Alibaba Studio",
+    "description": "Agent Chat UI"
   },
   "ecosystem.framework.graphCommunity.description": {
-    "message": "Spring AI Alibaba Graph 社区版。",
+    "message": "为使用 Spring AI Alibaba 开发的 Agent 提供可视化的聊天窗口，可以看到 Agent 推理与工具执行细节。",
     "description": "Graph Community description"
   },
   "ecosystem.framework.admin.name": {

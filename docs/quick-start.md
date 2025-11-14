@@ -283,7 +283,7 @@ AssistantMessage response = agent.call("what is the weather in San Francisco tod
 AssistantMessage response = agent.call("How about the weather tomorrow", runnableConfig);
 ```
 
-**注意**: 在生产环境中，使用持久化的 CheckPointer 将数据保存到数据库。更多详情参见 [内存管理](./tutorials/memory/) 文档。
+**注意**: 在生产环境中，使用持久化的 CheckPointer 将数据保存到数据库。更多详情参见 [内存管理](/docs/frameworks/agent-framework/tutorials/memory/) 文档。
 
 ### 6. 创建和运行 Agent
 

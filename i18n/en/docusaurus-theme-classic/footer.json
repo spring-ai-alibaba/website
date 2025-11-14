@@ -53,7 +53,7 @@
   },
   "link.item.label.Agent Framework": {
     "message": "Agent Framework",
-    "description": "The label of footer link with label=Agent Framework linking to /docs/frameworks/agent-framework/quick-start"
+    "description": "The label of footer link with label=Agent Framework linking to /docs/quick-start"
   },
   "link.item.label.Graph Core": {
     "message": "Graph Core",
@@ -61,11 +61,11 @@
   },
   "link.item.label.Admin": {
     "message": "Admin",
-    "description": "The label of footer link with label=Admin linking to /docs/frameworks/admin/quick-start"
+    "description": "The label of footer link with label=Admin linking to /ecosystem/admin/quick-start"
   },
   "link.item.label.Extensions": {
     "message": "Extensions",
-    "description": "The label of footer link with label=Extensions linking to /docs/frameworks/extensions/quick-start"
+    "description": "The label of footer link with label=Extensions linking to /ecosystem/quick-start"
   },
   "link.item.label.DataAgent": {
     "message": "DataAgent",

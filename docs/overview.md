@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Spring AI Alibaba 概览
+# 概览
 
 > **我们非常高兴的宣布，Spring AI Alibaba 1.1 正式发布!**
 
@@ -12,13 +12,16 @@ Spring AI Alibaba 是构建 Agent 智能体应用最简单的方式，只需不�
 
 Spring AI Alibaba 项目从架构上包含如下三层：
 
-* Aegnt Framework，是一个以 ReactAgent 设计理念为核心的 Agent 开发框架，使开发者能够构建具备自动上下文工程和人机交互等核心能力的Agent。
-* Graph，graph 是一个低级别的工作流和多代理协调框架，能够帮助开发者实现复杂的应用程序编排，它具备丰富的预置节点和简化的图状态定义，Graph 是 Agent Framework 的底层运行时基座。
-* Augmented LLM，以 Spring AI 框架底层原子抽象为基础，为构建大型语言模型（LLM）应用提供基础抽象，例如模型（Model）、工具（Tool）、多模态组件（MCP）、消息（Message）、向量存储（Vector Store）等。
+* **Agent Framework**，是一个以 ReactAgent 设计理念为核心的 Agent 开发框架，使开发者能够构建具备自动上下文工程和人机交互等核心能力的Agent。
+* **Graph**，graph 是一个低级别的工作流和多代理协调框架，能够帮助开发者实现复杂的应用程序编排，它具备丰富的预置节点和简化的图状态定义，Graph 是 Agent Framework 的底层运行时基座。
+* **Augmented LLM**，以 Spring AI 框架底层原子抽象为基础，为构建大型语言模型（LLM）应用提供基础抽象，例如模型（Model）、工具（Tool）、多模态组件（MCP）、消息（Message）、向量存储（Vector Store）等。
 
 ## 设计原则
-我们推荐您使用 Agent Framework 内置的 ReactAgent 抽象快速构建 Agent 应用，对于需要更复杂流程控制的场景，Agent Framework 还预置了如 SequentialAgent（顺序代理）、ParallelAgent（并行代理）、RoutingAgent（路由代理）和LoopAgent（循环代理）等基础工作流模式。
-对于一些开发场景而言，直接使用 Graph API 也是可行的，它能为应用开发提供更灵活的编排、更直接的状态控制，适用于需要超高可靠性、大量自定义逻辑、需要精确控制延迟时的场景。
+我们推荐您使用 Agent Framework 内置的 `ReactAgent` 抽象快速构建 Agent 应用。
+
+如果您需要组合 Multi-agent，Agent Framework 还预置了如 `SequentialAgent（顺序代理）` 、`ParallelAgent（并行代理）` 、`RoutingAgent（路由代理）` 和 `LoopAgent（循环代理）` 等基础多智能体工作流模式。
+
+对于一些开发场景而言，直接使用 `Graph API` 也是可行的，它能为应用开发提供更灵活的编排、更直接的状态控制，适用于需要超高可靠性、大量自定义逻辑、需要精确控制延迟时的场景。
 
 ## 安装
 
@@ -26,7 +29,13 @@ Spring AI Alibaba 项目从架构上包含如下三层：
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.0.0-M4-SNAPSHOT</version>
+    <version>1.1.0.0-M4</version>
+</dependency>
+
+<dependency>
+    <groupId>com.alibaba.cloud.ai</groupId>
+    <artifactId>spring-ai-alibaba-starter-agentscope</artifactId>
+    <version>1.1.0.0-M4</version>
 </dependency>
 ```
 
@@ -59,7 +68,7 @@ public class AgentExample {
             .build();
 
         // 运行 Agent
-        agent.invoke("what is the weather in sf?");
+        agent.call("what is the weather in Hangzhou?");
     }
 }
 ```

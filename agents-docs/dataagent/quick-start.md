@@ -2,13 +2,13 @@
 
 这是一个基于Spring AI Alibaba的自然语言转SQL项目，能让你用自然语言直接查询数据库，不需要写复杂的SQL。
 
-> （提示：文档可能有滞后，请以仓库实际代码为准，开发者正在抽空完善文档中……）
+> Github repository: https://github.com/spring-ai-alibaba/dataagent
 
 ### 替换chat-model、embedding-model和vector-store的实现类
 
 本项目的`ChatModel`和`EmbeddingModel`默认使用`DashScope`的实现，`VectorStore`默认使用内存向量，你可以替换成其他模型实现。
 
-在[根pom](./pom.xml)中的`dependencies`中可以替换`ChatModel`，`EmbeddingModel`和`VectorStore`的实现starter，以替换掉项目默认使用的实现：
+在项目根 pom.xml 中的 `dependencies` 中可以替换`ChatModel`，`EmbeddingModel`和`VectorStore`的实现starter，以替换掉项目默认使用的实现：
 
 ```xml
     <dependencies>

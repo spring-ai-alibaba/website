@@ -4,7 +4,9 @@
 
 JManus is a Java implementation of Manus, currently used in many applications within Alibaba Group. It is primarily used for handling exploratory tasks that require a certain degree of determinism, such as quickly finding data from massive datasets and converting it into a single row in a database, or analyzing logs and issuing alerts.
 
-JManus also provides HTTP service invocation capabilities, making it suitable for integration into existing projects. For details, please refer to the [developer quick start guide](./README-dev-en.md).
+JManus also provides HTTP service invocation capabilities, making it suitable for integration into existing projects. For details, please refer to the [developer quick start guide](https://github.com/spring-ai-alibaba/JManus/blob/main/README-dev.md).
+
+> Github repository: https://github.com/spring-ai-alibaba/jmanus
 
 ## 🎯 JManus Product Features
 
