@@ -12,11 +12,11 @@ Hooks 和 Interceptors 提供了一种更精细控制 Agent 内部行为的方�
 
 核心 Agent 循环涉及调用模型、让其选择要执行的工具，直到不需要调用工具时完成。
 
-![reactagent](/img/agent/hooks/reactagent.png)
+<img src="/img/agent/agents/reactagent.png" alt="reactagent" width="360" />
 
 Hooks 和 Interceptors 在这些步骤的前后暴露了钩子点，允许你：
 
-![reactagent](/img/agent/hooks/reactagent-hook.png)
+<img src="/img/agent/hooks/reactagent-hook.png" alt="reactagent" width="450" />
 
 - **监控**: 通过日志、分析和调试跟踪 Agent 行为
 - **修改**: 转换提示、工具选择和输出格式

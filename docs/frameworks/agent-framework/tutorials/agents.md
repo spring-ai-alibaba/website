@@ -41,7 +41,7 @@ Spring AI Alibaba 中的`ReactAgent` 基于 **Graph 运行时**构建。Graph �
 
 ReactAgent 的核心执行流程：
 
-![reactagent](/img/agent/agents/reactagent.png)
+<img src="/img/agent/agents/reactagent.png" alt="reactagent" width="360" />
 
 ### Graph 架构
 
