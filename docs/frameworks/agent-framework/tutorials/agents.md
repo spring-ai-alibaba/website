@@ -43,31 +43,6 @@ ReactAgent 的核心执行流程：
 
 <img src="/img/agent/agents/reactagent.png" alt="reactagent" width="360" />
 
-### Graph 架构
-
-ReactAgent 内部使用 `StateGraph` 来管理执行流程，其核心实现的伪代码如下：
-
-```java
-StateGraph graph = new StateGraph(name, keyStrategyFactory);
-
-// 添加核心节点
-graph.addNode("model", modelNode);
-graph.addNode("tool", toolNode);
-
-// 添加条件边：模型决定下一步
-graph.addConditionalEdges("model", routingLogic,
-    Map.of("tool", "tool", "end", END));
-
-// 工具执行后返回模型
-graph.addEdge("tool", "model");
-```
-
-这个架构确保了：
-- **状态管理**：所有消息和上下文在节点间传递
-- **条件路由**：基于模型输出动态决定下一步
-- **循环控制**：防止无限循环的迭代限制
-- **可扩展性**：通过 Hooks 和 Interceptors 扩展功能
-
 ## 核心组件
 
 ### Model（模型）
