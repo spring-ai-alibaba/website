@@ -468,7 +468,7 @@ public class MessageSummarizationHook extends ModelHook {
             new Prompt(new UserMessage(summaryPrompt))
         );
 
-        return response.getResult().getOutput().getContent();
+        return response.getResult().getOutput().getText();
     }
 
 }
@@ -595,7 +595,7 @@ public class DynamicPromptInterceptor extends ModelInterceptor {
 				.systemMessage(enhancedSystemMessage)
 				.build();
 
-        return handler.call(request);
+        return handler.call(enhancedRequest);
     }
 
     @Override

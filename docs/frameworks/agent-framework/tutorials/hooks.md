@@ -610,8 +610,8 @@ ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .hooks(hook1, hook2, hook3)
-    .modelInterceptors(interceptor1, interceptor2)
-    .toolInterceptors(toolInterceptor1, toolInterceptor2)
+    .interceptors(interceptor1, interceptor2)
+    .interceptors(toolInterceptor1, toolInterceptor2)
     .build();
 ```
 

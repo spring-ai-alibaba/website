@@ -276,7 +276,7 @@ import org.springframework.ai.chat.messages.ToolResponseMessage.ToolResponse;
 
 // 在模型进行工具调用后
 AssistantMessage aiMessage = AssistantMessage.builder()
-    .text("")
+    .content("")
     .toolCalls(List.of(
         new AssistantMessage.ToolCall(
             "call_123",

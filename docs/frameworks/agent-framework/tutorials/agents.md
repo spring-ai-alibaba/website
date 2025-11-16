@@ -93,9 +93,9 @@ ReactAgent agent = ReactAgent.builder()
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(DashScopeChatOptions.builder()
-        .temperature(0.7)      // 控制随机性
-        .maxTokens(2000)       // 最大输出长度
-        .topP(0.9)            // 核采样参数
+        .withTemperature(0.7)    // 控制随机性
+        .withMaxToken(2000)      // 最大输出长度
+        .withTopP(0.9)           // 核采样参数
         .build())
     .build();`}
 </Code>
@@ -119,52 +119,31 @@ ChatModel chatModel = DashScopeChatModel.builder()
 >
 {`import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
+import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.ai.chat.model.ToolContext;
 import java.util.function.BiFunction;
 
-// 定义工具
+// 定义工具（示例：仅一个搜索工具）
 public class SearchTool implements BiFunction<String, ToolContext, String> {
-    @Override
-    public String apply(
-        @ToolParam(description = "搜索关键词") String query,
-        ToolContext toolContext) {
-        return "搜索结果：" + query;
-    }
-}
-
-// 创建工具回调
-ToolCallback searchTool = FunctionToolCallback
-    .builder("search", new SearchTool())
-    .description("搜索信息的工具")
-    .inputType(String.class)
-    .build();
-
-// 使用多个工具
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .tools(searchTool, weatherTool, calculatorTool)
-    .build();`}
-</Code>
-
-#### 工具错误处理
-
-使用 `ToolInterceptor` 统一处理工具错误：
-
-<Code
-  language="java"
+{`import org.springframework.ai.tool.ToolCallback;
   title="ToolErrorInterceptor 工具错误处理"
   sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/interceptor/ToolInterceptor.java"
 >
 {`public class ToolErrorInterceptor extends ToolInterceptor {
-	@Override
-	public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
-		try {
-			return handler.call(request);
-		} catch (Exception e) {
-			return ToolCallResponse.of(request.getToolCallId(), request.getToolName(),
-					"Tool failed: " + e.getMessage());
-		}
-	}
+    @Override
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
+        try {
+            return handler.call(request);
+        } catch (Exception e) {
+            return ToolCallResponse.of(request.getToolCallId(), request.getToolName(),
+                "Tool failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String getName() {
+        return "ToolErrorInterceptor";
+    }
 }
 
 ReactAgent agent = ReactAgent.builder()
@@ -240,23 +219,30 @@ ReactAgent agent = ReactAgent.builder()
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelCallHandler;
+import org.springframework.ai.chat.messages.SystemMessage;
 
 public class DynamicPromptInterceptor extends ModelInterceptor {
     @Override
     public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
-        // 基于用户角色动态调整提示
-        List<Message> messages = request.getMessages();
-        Map<String, Object> context = request.getContext();
+        // 基于上下文构建动态 system prompt
+        String userRole = (String) request.getContext().getOrDefault("user_role", "default");
+        String dynamicPrompt = switch (userRole) {
+            case "expert" -> "你正在与技术专家对话。\n- 使用专业术语\n- 深入技术细节";
+            case "beginner" -> "你正在与初学者对话。\n- 使用简单语言\n- 解释基础概念";
+            default -> "你是一个专业的助手，保持友好和专业。";
+        };
 
-        // do anything with messages to adjust prompt, history messages, user request dynamically
+        SystemMessage enhancedSystemMessage;
+        if (request.getSystemMessage() == null) {
+            enhancedSystemMessage = new SystemMessage(dynamicPrompt);
+        } else {
+            enhancedSystemMessage = new SystemMessage(request.getSystemMessage().getText() + "\n\n" + dynamicPrompt);
+        }
 
-        // create modified request
-        ModelRequest modifiedRequest = ModelRequest.builder()
-                .messages(messages)
-                .options(request.getOptions())
-                .tools(request.getTools())
-                .build();
-        return handler.call(modifiedRequest);
+        ModelRequest modified = ModelRequest.builder(request)
+            .systemMessage(enhancedSystemMessage)
+            .build();
+        return handler.call(modified);
     }
 
     @Override
@@ -422,7 +408,7 @@ AssistantMessage response = agent.call("分析这段文本：春天来了，万�
 
 ### Memory（记忆）
 
-Agent 通过状态自动维护对话历史。使用 `CompileConfig` 配置持久化存储。
+Agent 通过状态自动维护对话历史。使用 `MemorySaver` 配置持久化存储。
 
 <Code
   language="java"
@@ -464,28 +450,21 @@ Hooks 允许在 Agent 执行的关键点插入自定义逻辑。
 {`import com.alibaba.cloud.ai.graph.agent.hook.*;
 
 // 1. AgentHook - 在 Agent 开始/结束时执行，每次Agent调用只会运行一次
-public class LoggingHook implements AgentHook {
+@HookPositions({HookPosition.BEFORE_AGENT, HookPosition.AFTER_AGENT})
+public class LoggingHook extends AgentHook {
     @Override
     public String getName() { return "logging"; }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{
-            HookPosition.BEFORE_AGENT,
-            HookPosition.AFTER_AGENT
-        };
-    }
-
-    @Override
-    public Map<String, Object> beforeAgent(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> beforeAgent(OverAllState state, RunnableConfig config) {
         System.out.println("Agent 开始执行");
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
 
     @Override
-    public Map<String, Object> afterAgent(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> afterAgent(OverAllState state, RunnableConfig config) {
         System.out.println("Agent 执行完成");
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
 }
 
@@ -543,7 +522,7 @@ Interceptors 提供更细粒度的控制，可以拦截和修改模型调用和�
 // ModelInterceptor - 内容安全检查
 public class GuardrailInterceptor extends ModelInterceptor {
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler handler) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 前置：检查输入
         if (containsSensitiveContent(request.getMessages())) {
             return ModelResponse.blocked("检测到不适当的内容");
@@ -560,7 +539,7 @@ public class GuardrailInterceptor extends ModelInterceptor {
 // ToolInterceptor - 监控和错误处理
 public class ToolMonitoringInterceptor extends ToolInterceptor {
     @Override
-    public ToolCallResponse intercept(ToolCallRequest request, ToolCallHandler handler) {
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
         long startTime = System.currentTimeMillis();
         try {
             ToolCallResponse response = handler.call(request);
@@ -670,7 +649,7 @@ ReactAgent agent = ReactAgent.builder()
 >
 {`import reactor.core.publisher.Flux;
 
-Flux<GraphResponse> stream = agent.stream("复杂任务");
+Flux<NodeOutput> stream = agent.stream("复杂任务");
 stream.subscribe(
     response -> System.out.println("进度: " + response),
     error -> System.err.println("错误: " + error),

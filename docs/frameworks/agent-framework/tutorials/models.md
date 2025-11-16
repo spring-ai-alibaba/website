@@ -288,7 +288,7 @@ Prompt prompt = new Prompt(new UserMessage("解释什么是微服务架构"));
 
 // 调用并获取响应
 ChatResponse response = chatModel.call(prompt);
-String answer = response.getResult().getOutput().getContent();
+String answer = response.getResult().getOutput().getText();
 System.out.println(answer);
 ```
 
@@ -300,10 +300,10 @@ System.out.println(answer);
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 
 DashScopeChatOptions options = DashScopeChatOptions.builder()
-    .model("qwen-plus")           // 模型名称
-    .temperature(0.7)              // 温度参数
-    .maxTokens(2000)               // 最大令牌数
-    .topP(0.9)                     // Top-P 采样
+    .withModel("qwen-plus")           // 模型名称
+    .withTemperature(0.7)              // 温度参数
+    .withMaxToken(2000)                // 最大令牌数
+    .withTopP(0.9)                     // Top-P 采样
     .build();
 
 ChatModel chatModel = DashScopeChatModel.builder()
@@ -317,8 +317,8 @@ ChatModel chatModel = DashScopeChatModel.builder()
 ```java
 // 创建带有特定选项的 Prompt
 DashScopeChatOptions runtimeOptions = DashScopeChatOptions.builder()
-    .temperature(0.3)  // 更低的温度，更确定的输出
-    .maxTokens(500)
+    .withTemperature(0.3)  // 更低的温度，更确定的输出
+    .withMaxToken(500)
     .build();
 
 Prompt prompt = new Prompt(
@@ -344,7 +344,7 @@ responseStream.subscribe(
     chatResponse -> {
         String content = chatResponse.getResult()
             .getOutput()
-            .getContent();
+            .getText();
         System.out.print(content);
     },
     error -> System.err.println("错误: " + error.getMessage()),
@@ -387,11 +387,11 @@ DashScopeChatModel 支持函数调用（Function Calling），允许模型调用
 
 ```java
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.model.function.FunctionCallback;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;
 
-// 定义函数
-FunctionCallback weatherFunction = FunctionCallback.builder()
-    .function("getWeather", (city) -> {
+// 定义函数工具
+ToolCallback weatherFunction = FunctionToolCallback.builder("getWeather", (String city) -> {
         // 实际的天气查询逻辑
         return "晴朗，25°C";
     })
@@ -401,7 +401,7 @@ FunctionCallback weatherFunction = FunctionCallback.builder()
 
 // 使用函数
 DashScopeChatOptions options = DashScopeChatOptions.builder()
-    .functions(List.of(weatherFunction))
+    .withToolCallbacks(List.of(weatherFunction))
     .build();
 
 Prompt prompt = new Prompt("北京的天气怎么样?", options);

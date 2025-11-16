@@ -212,6 +212,8 @@ ToolCallback searchTool = FunctionToolCallback
     .build();
 
 System.out.println(searchTool.getName());  // web_search
+// 推荐：使用 ToolDefinition 提取名称
+System.out.println(searchTool.getToolDefinition().name());  // web_search
 ```
 
 #### 自定义工具描述
@@ -408,8 +410,8 @@ public class AccountInfoTool implements BiFunction<String, ToolContext, String> 
     	// 在agent调用时设置 user_id，在工具中可以拿到参数
     	// RunnableConfig config = RunnableConfig.builder().addMetadata("user_id", "1");
     	// agent.call("", config);
-        RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
-        String userId = (String) config.metadata("user_id");
+                RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
+                String userId = (String) config.metadata("user_id").orElse(null);
 
         if (userId == null) {
             return "User ID not provided";

@@ -175,7 +175,6 @@ ChatOptions options = DashScopeChatOptions.builder()
 同时，Spring AI Alibaba 框架会增强系统 Prompt，引导模型输出格式化内容
 
 ```java
-```java
 // In AgentLlmNode.augmentUserMessage() method
 public void augmentUserMessage(List<Message> messages, String outputSchema) {
     if (!StringUtils.hasText(outputSchema)) {
@@ -192,7 +191,6 @@ public void augmentUserMessage(List<Message> messages, String outputSchema) {
         }
     }
 }
-```
 ```
 
 > 注意，相比于 DashScope 模型是通过增强 Prompt 提示词实现最终的 JSON 格式，实现的是一个尽最大努力的效果，OpenAI 模型则是在模型 API 层面支持 Json 格式，提供格式的严格保证支持。
