@@ -1,0 +1,66 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.快速开始": {
+    "message": "Getting Started",
+    "description": "The label for category Getting Started in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.API 参考": {
+    "message": "API Reference",
+    "description": "The label for category API Reference in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.使用示例": {
+    "message": "Examples",
+    "description": "The label for category Examples in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.参与贡献": {
+    "message": "Contributing",
+    "description": "The label for category Contributing in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.问题排查": {
+    "message": "Troubleshooting",
+    "description": "The label for category Troubleshooting in sidebar tutorialSidebar"
+  },
+  "sidebar.docsSidebar.category.开发框架": {
+    "message": "Frameworks",
+    "description": "The label for category 开发框架 in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Agent Framework": {
+    "message": "Agent Framework",
+    "description": "The label for category Agent Framework in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Graph Core": {
+    "message": "Graph Core",
+    "description": "The label for category Graph Core in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Admin": {
+    "message": "Admin",
+    "description": "The label for category Admin in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Extensions": {
+    "message": "Spring AI",
+    "description": "The label for category Extensions in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.智能体": {
+    "message": "Agents",
+    "description": "The label for category 智能体 in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.DataAgent": {
+    "message": "DataAgent",
+    "description": "The label for category DataAgent in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.部署": {
+    "message": "Deployment",
+    "description": "The label for category 部署 in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.JManus": {
+    "message": "JManus",
+    "description": "The label for category JManus in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.DeepResearch": {
+    "message": "DeepResearch",
+    "description": "The label for category DeepResearch in sidebar docsSidebar"
+  }
+}

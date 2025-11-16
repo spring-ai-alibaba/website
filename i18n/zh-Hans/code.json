@@ -1,0 +1,1168 @@
+{
+  "theme.ErrorPageContent.title": {
+    "message": "页面已崩溃。",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.blog.archive.title": {
+    "message": "历史博文",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.archive.description": {
+    "message": "历史博文",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "博文列表分页导航",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "较新的博文",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "较旧的博文",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "回到顶部",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "博文分页导航",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "较新一篇",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "较旧一篇",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "查看所有标签",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "system mode",
+    "description": "The name for the system color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "浅色模式",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "暗黑模式",
+    "description": "The name for the dark color mode"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "切换浅色/暗黑模式（当前为{mode}）",
+    "description": "The ARIA label for the color mode toggle"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "页面路径",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "{count} 个项目",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "文件选项卡",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "上一页",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.paginator.next": {
+    "message": "下一页",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "{count} 篇文档带有标签",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged}「{tagName}」",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "版本：{versionLabel}"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "此为 {siteTitle} {versionLabel} 版尚未发行的文档。",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "此为 {siteTitle} {versionLabel} 版的文档，现已不再积极维护。",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "最新的文档请参阅 {latestVersionLink} ({versionLabel})。",
+    "description": "The label used to tell the user to check the latest version"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "最新版本",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.common.editThisPage": {
+    "message": "编辑此页",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "{heading}的直接链接",
+    "description": "Title for link to heading"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": "于 {date} ",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": "由 {user} ",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "最后{byUser}{atDate}更新",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.NotFound.title": {
+    "message": "找不到页面",
+    "description": "The title of the 404 page"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "选择版本",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "标签：",
+    "description": "The label alongside a tag list"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "关闭",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.admonition.caution": {
+    "message": "警告",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.danger": {
+    "message": "危险",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "信息",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.note": {
+    "message": "备注",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "提示",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.warning": {
+    "message": "注意",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "最近博文导航",
+    "description": "The ARIA label for recent posts in the blog sidebar"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "展开侧边栏分类 '{label}'",
+    "description": "The ARIA label to expand the sidebar category"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "折叠侧边栏分类 '{label}'",
+    "description": "The ARIA label to collapse the sidebar category"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "主导航",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "选择语言",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "本页总览",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "theme.NotFound.p1": {
+    "message": "我们找不到您要找的页面。",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "请联系原始链接来源网站的所有者，并告知他们链接已损坏。",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.blog.post.readMore": {
+    "message": "阅读更多",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "阅读 {title} 的全文",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "阅读需 {readingTime} 分钟",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "复制",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "复制成功",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "复制代码到剪贴板",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "主页面",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "切换自动换行",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "收起侧边栏",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "收起侧边栏",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "文档侧边栏",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "关闭导航栏",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "切换导航栏",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← 回到主菜单",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
+    "message": "Expand the dropdown",
+    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
+    "message": "Collapse the dropdown",
+    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "展开侧边栏",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "展开侧边栏",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "没有找到任何文档"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "查看“{context}”以外的全部结果"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "查看“{context}”以内的全部结果"
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "查看全部结果"
+  },
+  "theme.SearchBar.label": {
+    "message": "搜索",
+    "description": "The ARIA label and placeholder for search button"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "“{query}”的搜索结果",
+    "description": "The search page title for non-empty query"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "搜索文档",
+    "description": "The search page title for empty query"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "所有"
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "共找到 {count} 篇文档",
+    "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "没有找到任何文档",
+    "description": "The paragraph for empty search result"
+  },
+  "theme.blog.post.plurals": {
+    "message": "{count} 篇博文",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} 含有标签「{tagName}」",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.blog.author.pageTitle": {
+    "message": "{authorName} - {nPosts}",
+    "description": "The title of the page for a blog author"
+  },
+  "theme.blog.authorsList.pageTitle": {
+    "message": "作者",
+    "description": "The title of the authors page"
+  },
+  "theme.blog.authorsList.viewAll": {
+    "message": "查看所有作者",
+    "description": "The label of the link targeting the blog authors page"
+  },
+  "theme.blog.author.noPosts": {
+    "message": "该作者尚未撰写任何文章。",
+    "description": "The text for authors with 0 blog post"
+  },
+  "theme.contentVisibility.unlistedBanner.title": {
+    "message": "未列出页",
+    "description": "The unlisted content banner title"
+  },
+  "theme.contentVisibility.unlistedBanner.message": {
+    "message": "此页面未列出。搜索引擎不会对其索引，只有拥有直接链接的用户才能访问。",
+    "description": "The unlisted content banner message"
+  },
+  "theme.contentVisibility.draftBanner.title": {
+    "message": "草稿页",
+    "description": "The draft content banner title"
+  },
+  "theme.contentVisibility.draftBanner.message": {
+    "message": "此页面是草稿，仅在开发环境中可见，不会包含在正式版本中。",
+    "description": "The draft content banner message"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "重试",
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "跳到主要内容",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "标签",
+    "description": "The title of the tag list page"
+  },
+  "homepage.quickStart": {
+    "message": "快速开始",
+    "description": "Quick Start button text"
+  },
+  "homepage.viewOnGithub": {
+    "message": "在 GitHub 查看",
+    "description": "View on GitHub button text"
+  },
+  "homepage.codeTitle": {
+    "message": "快速开始.ts",
+    "description": "Code title"
+  },
+  "homepage.description": {
+    "message": "基于 Docusaurus 3 构建的双主题文档网站模板",
+    "description": "The homepage description"
+  },
+  "homepage.title": {
+    "message": "欢迎使用项目名称",
+    "description": "The homepage title"
+  },
+  "homepage.features.docs.title": {
+    "message": "📚 丰富文档",
+    "description": "Feature title for rich documentation"
+  },
+  "homepage.features.docs.description": {
+    "message": "包含示例、教程和 API 参考的全面文档。 您需要的一切，从入门到精通您的项目。",
+    "description": "Feature description for rich documentation"
+  },
+  "homepage.features.theme.title": {
+    "message": "🎨 精美主题",
+    "description": "Feature title for beautiful themes"
+  },
+  "homepage.features.theme.description": {
+    "message": "支持双主题，优雅的纸张米白色亮色主题和绚丽的 星空黑色暗色主题。在主题间无缝切换。",
+    "description": "Feature description for beautiful themes"
+  },
+  "homepage.features.fast.title": {
+    "message": "⚡ 快速现代",
+    "description": "Feature title for fast and modern"
+  },
+  "homepage.features.fast.description": {
+    "message": "使用现代技术构建，实现闪电般的快速性能。 响应式设计，在所有设备上都能完美工作。",
+    "description": "Feature description for fast and modern"
+  },
+  "homepage.features.customizable.title": {
+    "message": "🔧 易于定制",
+    "description": "Feature title for easy customization"
+  },
+  "homepage.features.customizable.description": {
+    "message": "高度可定制的组件和主题。易于修改颜色、 字体、布局，并添加您自己的品牌元素。",
+    "description": "Feature description for easy customization"
+  },
+  "homepage.features.mobile.title": {
+    "message": "📱 移动优先",
+    "description": "Feature title for mobile first"
+  },
+  "homepage.features.mobile.description": {
+    "message": "响应式设计，在手机、平板和桌面设备上都很美观。 触摸友好的导航和交互体验。",
+    "description": "Feature description for mobile first"
+  },
+  "homepage.features.search.title": {
+    "message": "🔍 搜索功能",
+    "description": "Feature title for search functionality"
+  },
+  "homepage.features.search.description": {
+    "message": "内置搜索功能，帮助用户快速找到内容。 智能搜索，具有自动完成和建议功能。",
+    "description": "Feature description for search functionality"
+  },
+  "homepage.features.title": {
+    "message": "✨ 强大功能",
+    "description": "Features section title"
+  },
+  "homepage.features.subtitle": {
+    "message": "创建精美文档网站所需的一切功能",
+    "description": "Features section subtitle"
+  },
+  "homepage.architecture.title": {
+    "message": "帮助 Java 开发者步入 AI Native 时代",
+    "description": "Architecture section title"
+  },
+  "homepage.features.springIntegration.title": {
+    "message": "Spring 生态无缝集成",
+    "description": "Spring integration feature title"
+  },
+  "homepage.features.springIntegration.description": {
+    "message": "基于 Spring AI 构建，完美融入 Spring Boot 生态系统，开箱即用",
+    "description": "Spring integration feature description"
+  },
+  "homepage.features.tongyi.title": {
+    "message": "通义大模型支持",
+    "description": "Tongyi model feature title"
+  },
+  "homepage.features.tongyi.description": {
+    "message": "深度集成阿里云通义千问系列模型，提供强大的 AI 能力",
+    "description": "Tongyi model feature description"
+  },
+  "homepage.features.performance.title": {
+    "message": "高性能异步处理",
+    "description": "Performance feature title"
+  },
+  "homepage.features.performance.description": {
+    "message": "支持流式响应和异步调用，满足高并发场景需求",
+    "description": "Performance feature description"
+  },
+  "homepage.features.configuration.title": {
+    "message": "灵活的配置选项",
+    "description": "Configuration feature title"
+  },
+  "homepage.features.configuration.description": {
+    "message": "丰富的配置项和扩展点，满足不同业务场景的定制需求",
+    "description": "Configuration feature description"
+  },
+  "homepage.features.multimodal.title": {
+    "message": "多模态 AI 能力",
+    "description": "Multimodal feature title"
+  },
+  "homepage.features.multimodal.description": {
+    "message": "支持文本、图像、语音等多种模态的 AI 处理能力",
+    "description": "Multimodal feature description"
+  },
+  "homepage.features.observability.title": {
+    "message": "可观测性支持",
+    "description": "Observability feature title"
+  },
+  "homepage.features.observability.description": {
+    "message": "内置监控指标和追踪能力，轻松掌握 AI 应用运行状态",
+    "description": "Observability feature description"
+  },
+  "homepage.acknowledgments.title": {
+    "message": "致谢",
+    "description": "Acknowledgments section title"
+  },
+  "homepage.acknowledgments.subtitle": {
+    "message": "Spring AI Alibaba 的成功离不开开源社区和合作伙伴的支持",
+    "description": "Acknowledgments section subtitle"
+  },
+  "homepage.acknowledgments.springai.description": {
+    "message": "感谢 Spring AI 团队提供的优秀框架，为 AI 应用开发提供了坚实的基础",
+    "description": "Spring AI acknowledgment"
+  },
+  "homepage.acknowledgments.bailian.name": {
+    "message": "阿里云百炼大模型服务平台",
+    "description": "Bailian name"
+  },
+  "homepage.acknowledgments.bailian.description": {
+    "message": "感谢阿里云百炼平台提供强大的大模型能力和完善的服务支持",
+    "description": "Bailian acknowledgment"
+  },
+  "homepage.acknowledgments.viewOnGithub": {
+    "message": "访问 GitHub",
+    "description": "View on GitHub"
+  },
+  "homepage.acknowledgments.learnMore": {
+    "message": "了解更多",
+    "description": "Learn more"
+  },
+  "ecosystem.title": {
+    "message": "Spring AI Alibaba 生态系统",
+    "description": "Ecosystem section title"
+  },
+  "ecosystem.subtitle": {
+    "message": "构建智能应用程序的完整生态系统",
+    "description": "Ecosystem section subtitle"
+  },
+  "ecosystem.framework.title": {
+    "message": "核心框架",
+    "description": "Framework section title"
+  },
+  "ecosystem.framework.description": {
+    "message": "构建 AI 应用程序的基础框架",
+    "description": "Framework section description"
+  },
+  "ecosystem.product.title": {
+    "message": "基于 Spring AI Alibaba 构建",
+    "description": "Product section title"
+  },
+  "ecosystem.product.description": {
+    "message": "由我们的框架支持的生产级应用程序",
+    "description": "Product section description"
+  },
+  "ecosystem.viewOnGithub": {
+    "message": "在 GitHub 查看",
+    "description": "View on GitHub link text"
+  },
+  "ecosystem.viewDocs": {
+    "message": "查看文档",
+    "description": "View documentation link text"
+  },
+  "ecosystem.framework.agent.name": {
+    "message": "Spring AI Alibaba Agent Framework",
+    "description": "Agent framework name"
+  },
+  "ecosystem.framework.agent.description": {
+    "message": "用于构建 Agent 和多 Agent 应用程序的框架，内置上下文工程支持。",
+    "description": "Agent framework description"
+  },
+  "ecosystem.framework.graph.name": {
+    "message": "Spring AI Alibaba Graph",
+    "description": "Graph framework name"
+  },
+  "ecosystem.framework.graph.description": {
+    "message": "用于构建、管理和部署长期运行的有状态 Agent 的低级编排框架和运行时。",
+    "description": "Graph framework description"
+  },
+  "ecosystem.framework.graphCommunity.name": {
+    "message": "Spring AI Alibaba Studio",
+    "description": "Agent Chat UI"
+  },
+  "ecosystem.framework.graphCommunity.description": {
+    "message": "为使用 Spring AI Alibaba 开发的 Agent 提供可视化的聊天窗口，可以看到 Agent 推理与工具执行细节。",
+    "description": "Graph Community description"
+  },
+  "ecosystem.framework.admin.name": {
+    "message": "Spring AI Alibaba Admin",
+    "description": "Admin tool name"
+  },
+  "ecosystem.framework.admin.description": {
+    "message": "用于开发 Agent 应用程序的本地可视化工具包，支持项目管理、运行时可视化、追踪和 Agent 评估。",
+    "description": "Admin tool description"
+  },
+  "ecosystem.framework.extensions.name": {
+    "message": "Spring AI",
+    "description": "Spring AI Framework"
+  },
+  "ecosystem.framework.extensions.description": {
+    "message": "Spring AI 核心概念的扩展实现，包括 DashScopeChatModel、Tool、C ha t MMCP 注册中心等。",
+    "description": "Spring AI Framework"
+  },
+  "ecosystem.product.examples.name": {
+    "message": "Spring AI Alibaba Examples",
+    "description": "Examples name"
+  },
+  "ecosystem.product.examples.description": {
+    "message": "Spring AI Alibaba 示例项目集合。",
+    "description": "Examples description"
+  },
+  "ecosystem.product.jmanus.name": {
+    "message": "JManus",
+    "description": "JManus name"
+  },
+  "ecosystem.product.jmanus.description": {
+    "message": "基于 Spring AI Alibaba 构建的 Manus 的 Java 实现，目前在阿里巴巴集团的许多应用中使用。",
+    "description": "JManus description"
+  },
+  "ecosystem.product.dataagent.name": {
+    "message": "DataAgent",
+    "description": "DataAgent name"
+  },
+  "ecosystem.product.dataagent.description": {
+    "message": "基于 Spring AI Alibaba 的自然语言转 SQL 项目，让您可以直接使用自然语言查询数据库，无需编写复杂的 SQL。",
+    "description": "DataAgent description"
+  },
+  "ecosystem.product.deepresearch.name": {
+    "message": "DeepResearch",
+    "description": "DeepResearch name"
+  },
+  "ecosystem.product.deepresearch.description": {
+    "message": "基于 spring-ai-alibaba-graph 实现的深度研究工具。",
+    "description": "DeepResearch description"
+  },
+  "ecosystem.product.copilot.name": {
+    "message": "Copilot",
+    "description": "Copilot name"
+  },
+  "ecosystem.product.copilot.description": {
+    "message": "基于 Spring AI Alibaba 构建的 AI 编程助手智能体，帮助开发者更快地编写更好的代码。",
+    "description": "Copilot description"
+  },
+  "codeOfConduct.title": {
+    "message": "行为准则",
+    "description": "The page title for code of conduct"
+  },
+  "codeOfConduct.description": {
+    "message": "我们社区的行为准则和价值观",
+    "description": "The page description for code of conduct"
+  },
+  "codeOfConduct.pageTitle": {
+    "message": "贡献者行为准则",
+    "description": "Code of conduct page title"
+  },
+  "codeOfConduct.pageDescription": {
+    "message": "我们致力于为每个人提供友善、安全和欢迎的环境，无论性别、性取向、残疾、民族、宗教或其他个人特征。",
+    "description": "Code of conduct page description"
+  },
+  "codeOfConduct.ourCommitment": {
+    "message": "我们的承诺",
+    "description": "Our commitment section title"
+  },
+  "codeOfConduct.commitmentText": {
+    "message": "为了营造开放、欢迎的环境，我们作为贡献者和维护者承诺：让参与我们项目和社区的每个人都不受骚扰，无论年龄、体型、残疾、民族、性别特征、性别认同、经验水平、教育程度、社会经济地位、国籍、个人形象、种族、宗教或性取向如何。",
+    "description": "Our commitment text"
+  },
+  "codeOfConduct.ourStandards": {
+    "message": "我们的标准",
+    "description": "Our standards section title"
+  },
+  "codeOfConduct.positiveBehavior": {
+    "message": "积极行为包括：",
+    "description": "Positive behavior title"
+  },
+  "codeOfConduct.welcomingLanguage": {
+    "message": "使用欢迎和包容性语言",
+    "description": "Using welcoming language"
+  },
+  "codeOfConduct.respectingViewpoints": {
+    "message": "尊重不同的观点和经历",
+    "description": "Respecting differing viewpoints"
+  },
+  "codeOfConduct.acceptingCriticism": {
+    "message": "优雅地接受建设性批评",
+    "description": "Gracefully accepting criticism"
+  },
+  "codeOfConduct.focusingCommunity": {
+    "message": "专注于对社区最有利的事情",
+    "description": "Focusing on community"
+  },
+  "codeOfConduct.showingEmpathy": {
+    "message": "对其他社区成员表示同理心",
+    "description": "Showing empathy"
+  },
+  "codeOfConduct.unacceptableBehavior": {
+    "message": "不可接受的行为包括：",
+    "description": "Unacceptable behavior title"
+  },
+  "codeOfConduct.sexualizedLanguage": {
+    "message": "使用色情化语言或图像",
+    "description": "Using sexualized language"
+  },
+  "codeOfConduct.trollingInsults": {
+    "message": "恶意评论、侮辱或人身攻击",
+    "description": "Trolling and insulting comments"
+  },
+  "codeOfConduct.harassment": {
+    "message": "公开或私下骚扰",
+    "description": "Public or private harassment"
+  },
+  "codeOfConduct.publishingInfo": {
+    "message": "发布他人隐私信息",
+    "description": "Publishing private information"
+  },
+  "codeOfConduct.otherConduct": {
+    "message": "其他不合适的专业行为",
+    "description": "Other inappropriate conduct"
+  },
+  "codeOfConduct.enforcement": {
+    "message": "执行责任",
+    "description": "Enforcement section title"
+  },
+  "codeOfConduct.enforcementText": {
+    "message": "项目维护者有责任澄清可接受行为的标准，并采取适当和公平的纠正措施来回应任何不可接受的行为。项目维护者有权删除、编辑或拒绝与此行为准则不符的评论、提交、代码、wiki编辑、问题和其他贡献。",
+    "description": "Enforcement responsibility text"
+  },
+  "codeOfConduct.reporting": {
+    "message": "报告",
+    "description": "Reporting section title"
+  },
+  "codeOfConduct.howToReport": {
+    "message": "如何报告不当行为",
+    "description": "How to report title"
+  },
+  "codeOfConduct.reportingInstructions": {
+    "message": "如果遇到或目睹了不当行为，请联系项目团队：",
+    "description": "Reporting instructions"
+  },
+  "codeOfConduct.confidentiality": {
+    "message": "所有投诉都将被审查和调查，并将产生被认为必要和适合情况的回应。项目团队有义务为事件报告者保密。",
+    "description": "Confidentiality note"
+  },
+  "codeOfConduct.enforcementTitle": {
+    "message": "执行",
+    "description": "Enforcement title"
+  },
+  "codeOfConduct.consequences": {
+    "message": "不遵循或执行行为准则的项目维护者可能面临项目领导层其他成员确定的临时或永久后果。",
+    "description": "Enforcement consequences"
+  },
+  "codeOfConduct.attribution": {
+    "message": "此行为准则改编自",
+    "description": "Code of conduct attribution"
+  },
+  "codeOfConduct.contributorCovenant": {
+    "message": "贡献者公约",
+    "description": "Contributor Covenant link text"
+  },
+  "codeOfConduct.version": {
+    "message": "，版本 2.0，可在",
+    "description": "Version info"
+  },
+  "codeOfConduct.available": {
+    "message": "获取。",
+    "description": "Available text"
+  },
+  "contributing.title": {
+    "message": "贡献指南",
+    "description": "The page title for contributing guide"
+  },
+  "contributing.description": {
+    "message": "了解如何为项目做贡献",
+    "description": "The page description for contributing guide"
+  },
+  "contributing.pageTitle": {
+    "message": "贡献指南",
+    "description": "Contributing page title"
+  },
+  "contributing.pageDescription": {
+    "message": "感谢考虑为我们的项目做贡献！每一个贡献都是有价值的，无论大小，我们都深表感谢。",
+    "description": "Contributing page description"
+  },
+  "contributing.quickStart": {
+    "message": "快速开始",
+    "description": "Quick start section title"
+  },
+  "contributing.step1": {
+    "message": "Fork 项目仓库",
+    "description": "Fork repository step"
+  },
+  "contributing.step2": {
+    "message": "创建功能分支",
+    "description": "Create branch step"
+  },
+  "contributing.step3": {
+    "message": "提交更改",
+    "description": "Commit changes step"
+  },
+  "contributing.step4": {
+    "message": "推送到分支",
+    "description": "Push branch step"
+  },
+  "contributing.step5": {
+    "message": "开启一个 Pull Request",
+    "description": "Open PR step"
+  },
+  "contributing.contributionTypes": {
+    "message": "贡献类型",
+    "description": "Contribution types section title"
+  },
+  "contributing.bugFixes": {
+    "message": "错误修复",
+    "description": "Bug fixes card title"
+  },
+  "contributing.bugFixesDesc": {
+    "message": "帮助修复项目中的错误和问题",
+    "description": "Bug fixes description"
+  },
+  "contributing.newFeatures": {
+    "message": "新功能",
+    "description": "New features card title"
+  },
+  "contributing.newFeaturesDesc": {
+    "message": "添加新功能或改进现有功能",
+    "description": "New features description"
+  },
+  "contributing.documentation": {
+    "message": "文档",
+    "description": "Documentation card title"
+  },
+  "contributing.documentationDesc": {
+    "message": "改进文档、教程和示例",
+    "description": "Documentation description"
+  },
+  "contributing.design": {
+    "message": "设计",
+    "description": "Design card title"
+  },
+  "contributing.designDesc": {
+    "message": "改进用户界面和用户体验",
+    "description": "Design description"
+  },
+  "contributing.developmentSetup": {
+    "message": "开发设置",
+    "description": "Development setup section title"
+  },
+  "contributing.cloneRepo": {
+    "message": "克隆仓库",
+    "description": "Clone repository comment"
+  },
+  "contributing.enterDirectory": {
+    "message": "进入项目目录",
+    "description": "Enter directory comment"
+  },
+  "contributing.installDeps": {
+    "message": "安装依赖",
+    "description": "Install dependencies comment"
+  },
+  "contributing.startDev": {
+    "message": "启动开发服务器",
+    "description": "Start development server comment"
+  },
+  "contributing.codeOfConduct": {
+    "message": "行为准则",
+    "description": "Code of conduct section title"
+  },
+  "contributing.codeOfConductText": {
+    "message": "参与此项目即表示同意遵守我们的",
+    "description": "Code of conduct reference text"
+  },
+  "contributing.codeOfConductLink": {
+    "message": "行为准则",
+    "description": "Code of conduct link text"
+  },
+  "contributing.friendlyInteraction": {
+    "message": "。请确保互动保持友善、尊重和包容。",
+    "description": "Friendly interaction reminder"
+  },
+  "contributing.needHelp": {
+    "message": "需要帮助？",
+    "description": "Need help section title"
+  },
+  "contributing.githubDiscussions": {
+    "message": "GitHub 讨论",
+    "description": "GitHub discussions link"
+  },
+  "contributing.reportIssue": {
+    "message": "报告问题",
+    "description": "Report issue link"
+  },
+  "contributing.contactTeam": {
+    "message": "联系团队",
+    "description": "Contact team link"
+  },
+  "team.title": {
+    "message": "我们的团队",
+    "description": "The page title for team page"
+  },
+  "team.description": {
+    "message": "认识这个项目背后的优秀人才",
+    "description": "The page description for team page"
+  },
+  "team.pageTitle": {
+    "message": "认识我们的团队",
+    "description": "Team page title"
+  },
+  "team.pageDescription": {
+    "message": "我们是一群充满激情的开发者、设计师和开源爱好者，致力于为社区构建卓越的工具。",
+    "description": "Team page description"
+  },
+  "team.yourName": {
+    "message": "您的姓名",
+    "description": "Your name placeholder"
+  },
+  "team.creatorRole": {
+    "message": "项目创建者 & 主要开发者",
+    "description": "Creator and main developer role"
+  },
+  "team.creatorBio": {
+    "message": "热衷于创建精美的文档和开发者体验。",
+    "description": "Creator bio"
+  },
+  "team.contributorName": {
+    "message": "贡献者姓名",
+    "description": "Contributor name placeholder"
+  },
+  "team.contributorRole": {
+    "message": "核心贡献者",
+    "description": "Core contributor role"
+  },
+  "team.contributorBio": {
+    "message": "喜欢构建能帮助开发者提高效率的工具。",
+    "description": "Contributor bio"
+  },
+  "team.joinUs": {
+    "message": "想要加入我们吗？",
+    "description": "Join us title"
+  },
+  "team.joinDescription": {
+    "message": "我们一直在寻找充满激情的贡献者来帮助改进这个项目。无论您是开发者、设计师、作者，还是只是热爱开源的人，我们的团队都有您的位置！",
+    "description": "Join team description"
+  },
+  "team.contributingGuide": {
+    "message": "贡献指南",
+    "description": "Contributing guide button"
+  },
+  "team.viewIssues": {
+    "message": "查看社区 Issue",
+    "description": "View issues button"
+  },
+  "team.rolesSection": {
+    "message": "社区贡献者角色",
+    "description": "Roles section title"
+  },
+  "team.rolesSectionDescription": {
+    "message": "Spring AI Alibaba 社区采用分层的角色体系，每个角色都有明确的职责和晋升标准",
+    "description": "Roles section description"
+  },
+  "team.pmc.title": {
+    "message": "Project Management Committee",
+    "description": "PMC section title"
+  },
+  "team.pmc.intro": {
+    "message": "Project Management 作为 Spring AI Alibaba 项目的项目管理委员会，其成员是对 Spring AI Alibaba 项目的演进和发展做出显著贡献的个人，包含以下的标准：",
+    "description": "PMC introduction"
+  },
+  "team.pmc.coreDevTitle": {
+    "message": "核心开发能力",
+    "description": "PMC core development title"
+  },
+  "team.pmc.coreDev1": {
+    "message": "完成多个关键模块或者工程的设计与开发",
+    "description": "PMC core development requirement 1"
+  },
+  "team.pmc.coreDev2": {
+    "message": "是项目的核心开发人员",
+    "description": "PMC core development requirement 2"
+  },
+  "team.pmc.commitmentTitle": {
+    "message": "持续投入",
+    "description": "PMC commitment title"
+  },
+  "team.pmc.commitment1": {
+    "message": "持续的投入和激情",
+    "description": "PMC commitment requirement 1"
+  },
+  "team.pmc.commitment2": {
+    "message": "积极参与社区、官网、Issue、PR等项目维护",
+    "description": "PMC commitment requirement 2"
+  },
+  "team.pmc.influenceTitle": {
+    "message": "社区影响力",
+    "description": "PMC influence title"
+  },
+  "team.pmc.influence1": {
+    "message": "在社区中具有有目共睹的影响力",
+    "description": "PMC influence requirement 1"
+  },
+  "team.pmc.influence2": {
+    "message": "能够代表 Spring AI Alibaba 参加重要会议和活动",
+    "description": "PMC influence requirement 2"
+  },
+  "team.pmc.mentoringTitle": {
+    "message": "人才培养",
+    "description": "PMC mentoring title"
+  },
+  "team.pmc.mentoring1": {
+    "message": "具有培养 Committer 和 Contributor 的意识",
+    "description": "PMC mentoring requirement 1"
+  },
+  "team.pmc.mentoring2": {
+    "message": "具备培养人才的能力",
+    "description": "PMC mentoring requirement 2"
+  },
+  "team.pmc.election": {
+    "message": "Project Management Member 在资深 Committer 中产生，由 Project Management 所有成员讨论以及投票产生，需要获得总人数的半数票以上才能当选。",
+    "description": "PMC election process"
+  },
+  "team.committer.title": {
+    "message": "Committer",
+    "description": "Committer section title"
+  },
+  "team.committer.intro": {
+    "message": "Committer 是具有仓库写权限的个人，包含以下的标准：",
+    "description": "Committer introduction"
+  },
+  "team.committer.contributionTitle": {
+    "message": "持续贡献",
+    "description": "Committer contribution title"
+  },
+  "team.committer.contribution1": {
+    "message": "能够在长时间内做持续贡献",
+    "description": "Committer contribution requirement 1"
+  },
+  "team.committer.contribution2": {
+    "message": "持续贡献 Issue、PR 的个人",
+    "description": "Committer contribution requirement 2"
+  },
+  "team.committer.featureTitle": {
+    "message": "重要功能贡献",
+    "description": "Committer feature title"
+  },
+  "team.committer.feature1": {
+    "message": "对社区做出了重要 Feature 贡献",
+    "description": "Committer feature requirement"
+  },
+  "team.committer.participationTitle": {
+    "message": "社区参与",
+    "description": "Committer participation title"
+  },
+  "team.committer.participation1": {
+    "message": "参与 Issue 列表的维护",
+    "description": "Committer participation requirement 1"
+  },
+  "team.committer.participation2": {
+    "message": "重要 Feature 的讨论",
+    "description": "Committer participation requirement 2"
+  },
+  "team.committer.participation3": {
+    "message": "社区周会主持与参与社区周会分享",
+    "description": "Committer participation requirement 3"
+  },
+  "team.committer.quarterlyTitle": {
+    "message": "季度计划参与",
+    "description": "Committer quarterly title"
+  },
+  "team.committer.quarterly1": {
+    "message": "参加过至少 1 次的社区季度活跃贡献者计划",
+    "description": "Committer quarterly requirement"
+  },
+  "team.committer.reviewTitle": {
+    "message": "代码审查",
+    "description": "Committer review title"
+  },
+  "team.committer.review1": {
+    "message": "参与 code review",
+    "description": "Committer review requirement"
+  },
+  "team.committer.election": {
+    "message": "Committer 由 Steering Committee 成员提名投票产生，至少获得 3 票同意才能当选。",
+    "description": "Committer election process"
+  },
+  "team.contributor.title": {
+    "message": "Contributor",
+    "description": "Contributor section title"
+  },
+  "team.contributor.intro": {
+    "message": "Contributor 是对项目有贡献的个人，标准为：提交过 PR 并被合并。",
+    "description": "Contributor introduction"
+  },
+  "team.governanceSection": {
+    "message": "项目治理人员",
+    "description": "Governance section title"
+  },
+  "team.governanceSectionDescription": {
+    "message": "以下是 Spring AI Alibaba 项目的治理团队成员，他们负责项目的日常运营和重要决策",
+    "description": "Governance section description"
+  },
+  "team.pmcMembersTitle": {
+    "message": "Project Management Committee (PMC) Members",
+    "description": "PMC members title"
+  },
+  "team.committersTitle": {
+    "message": "Committers",
+    "description": "Committers title"
+  },
+  "team.organization": {
+    "message": "所属组织",
+    "description": "Organization label"
+  },
+  "team.termStart": {
+    "message": "任期开始",
+    "description": "Term start label"
+  },
+  "contributing.welcomeTitle": {
+    "message": "欢迎贡献",
+    "description": "Welcome contribution title"
+  },
+  "contributing.contributionTypesTitle": {
+    "message": "贡献类型",
+    "description": "Contribution types title"
+  },
+  "contributing.codeDevelopment": {
+    "message": "代码开发",
+    "description": "Code development title"
+  },
+  "contributing.codeDevelopmentText": {
+    "message": "开发自己的功能，开发完毕后建议使用 mvn clean package 命令确保能修改后的代码能在本地编译通过。执行该命令的同时还能以 spring 的方式自动格式化代码。然后再提交代码，提交代码之前请注意创建一个新的有关本特性的分支，用该分支进行代码提交。",
+    "description": "Code development description"
+  },
+  "contributing.qualityCheck": {
+    "message": "代码质量检查",
+    "description": "Quality check title"
+  },
+  "contributing.qualityCheckText": {
+    "message": "本地 boe 环境开发完成后，强烈建议在提交 PR 之前执行项目 tools/make 提供的 make 命令进行本地持续集成（CI）检查，以确保代码符合项目的标准和规范。如果对于本地CI有任何疑问，可以在控制台输入 make help 了解具体信息。",
+    "description": "Quality check description"
+  },
+  "contributing.codeStandards": {
+    "message": "代码规范",
+    "description": "Code standards title"
+  },
+  "contributing.codeStandardsText": {
+    "message": "为了减少一些不必要的代码风格问题，Spring AI Alibaba 提供了本地 Checkstyle 检查功能。可以在项目根目录下执行 mvn checkstyle:check 命令来检查代码风格是否符合规范。",
+    "description": "Code standards description"
+  },
+  "contributing.codeCleaning": {
+    "message": "代码清理",
+    "description": "Code cleaning title"
+  },
+  "contributing.codeCleaningText": {
+    "message": "为了确保代码的整洁，请删除 Java 文件中未使用的导入。可以通过执行 mvn spotless:apply 命令来自动删除未使用的导入。",
+    "description": "Code cleaning description"
+  },
+  "contributing.codeCommit": {
+    "message": "代码提交",
+    "description": "Code commit title"
+  },
+  "contributing.codeCommitText": {
+    "message": "在编码完成之后，需要基于 pr 规范 [lint-pr-title.yml](.github/workflows/lint-pr-title.yml) 对提交信息进行 format & check，确保提交信息符合规范。",
+    "description": "Code commit description"
+  },
+  "contributing.commitFormat": {
+    "message": "Commit 规范: git commit -m \"类型(模块): 空格 符合规范的提交信息\"，例如 feat(docs): contribute-zh 更新",
+    "description": "Commit format example"
+  },
+  "contributing.prSubmission": {
+    "message": "PR 提交",
+    "description": "PR submission title"
+  },
+  "contributing.prSubmissionText": {
+    "message": "提交 PR，根据 Pull request template 写明修改点和实现的功能，等待 code review 和 合并，成为 Spring AI Alibaba Contributor，为更好用的 Spring AI Alibaba 做出贡献。",
+    "description": "PR submission description"
+  },
+  "contributing.codeMerge": {
+    "message": "代码合并",
+    "description": "Code merge title"
+  },
+  "contributing.codeOfConductTitle": {
+    "message": "行为准则",
+    "description": "Code of conduct title"
+  }
+}

@@ -1,0 +1,243 @@
+/* 图片容器样式 */
+.imageContainer {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  max-width: 100%;
+}
+
+.imageContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.imageContainer:hover .image {
+  filter: brightness(0.95);
+}
+
+/* 放大按钮样式 */
+.zoomButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #374151;
+}
+
+.imageContainer:hover .zoomButton {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.zoomButton:hover {
+  background: rgba(37, 99, 235, 0.95);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* 模态框覆盖层 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 模态框内容 */
+.modalContent {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: scaleIn 0.3s ease;
+}
+
+/* 关闭按钮 */
+.closeButton {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #374151;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+}
+
+.closeButton:hover {
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* 放大后的图片 */
+.zoomedImage {
+  max-width: 100%;
+  max-height: calc(90vh - 100px);
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* 图片描述 */
+.imageCaption {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  color: #374151;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 80%;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 深色主题适配 */
+[data-theme='dark'] .zoomButton {
+  background: rgba(31, 41, 55, 0.95);
+  color: #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .zoomButton:hover {
+  background: rgba(37, 99, 235, 0.95);
+  color: white;
+}
+
+[data-theme='dark'] .closeButton {
+  background: rgba(31, 41, 55, 0.95);
+  color: #d1d5db;
+}
+
+[data-theme='dark'] .closeButton:hover {
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
+}
+
+[data-theme='dark'] .imageCaption {
+  background: rgba(31, 41, 55, 0.95);
+  color: #d1d5db;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 1rem;
+  }
+  
+  .modalContent {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .zoomedImage {
+    max-height: calc(95vh - 80px);
+  }
+  
+  .closeButton {
+    top: -40px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .zoomButton {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+  }
+  
+  .zoomButton svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .imageCaption {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    max-width: 90%;
+  }
+}
+
+/* 防止滚动穿透 */
+.modalOpen {
+  overflow: hidden;
+}
+
+/* 键盘导航支持 */
+.closeButton:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.5);
+  outline-offset: 2px;
+}
+
+.zoomButton:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.5);
+  outline-offset: 2px;
+}

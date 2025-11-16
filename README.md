@@ -1,68 +1,27 @@
-# Spring AI Alibaba Website
+# Spring AI Alibaba Documentation Website
 
-[简体中文](README.zh.md) | English
+The official documentation website for the Spring AI Alibaba project, built with Docusaurus.
 
-## 🚀 Project Structure
+## Quick Start
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+Ensure npm is installed locally. Then run `make install && make preview`.
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   ├── docs/
-│   │   └── config.ts
-│   └── env.d.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-```
+## Starting in Chinese or English
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+Default (Chinese): `make preview`
+English: `make preview-en`
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+## Build and Serve
 
-Static assets, like favicons, can be placed in the `public/` directory.
+`make build && make serve`
 
-## Local Development
+## Before Committing
 
-Clone source code:
+Before committing, run `make npm-lint && make markdown` to ensure the GitHub CI passes successfully.
+(PS: You may need to install CI tools. Run `make help` to view fix commands and install formatting tools.)
 
-```shell
-git clone https://github.com/springaialibaba/spring-ai-alibaba-website.git
-cd spring-ai-alibaba-website
-```
+## Useful Tips
 
-Run the following command to start server locally:
-
-```shell
-npm install
-npm run dev
-```
-
-Open browser, visit `http://localhost:4321`.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-> For users who encounter problems when running `npm install`, please run the following command first and try again:
-> ``` shell
->   brew install vips
->   npm install --unsafe-perm
-> ```
-
-## 👀 Want to learn more?
-
-Check out [Starlight's docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+1. Docusaurus Markdown features - use them appropriately to make documentation structure better and more readable: https://docusaurus.io/docs/markdown-features/react
+2. `make pangu-lint f=${file path}`: Automatically adds Pangu spacing for clearer and more readable document formatting
+3. Chinese documentation writing guide: https://github.com/stars/yuluo-yx/lists/docs

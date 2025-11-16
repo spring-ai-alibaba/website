@@ -1,0 +1,82 @@
+{
+  "link.title.文档": {
+    "message": "Documentation",
+    "description": "The title of the footer links column with title=文档 in the footer"
+  },
+  "link.title.开发框架": {
+    "message": "Frameworks",
+    "description": "The title of the footer links column with title=开发框架 in the footer"
+  },
+  "link.title.智能体": {
+    "message": "Agents",
+    "description": "The title of the footer links column with title=智能体 in the footer"
+  },
+  "link.title.社区": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=社区 in the footer"
+  },
+  "link.title.更多": {
+    "message": "More",
+    "description": "The title of the footer links column with title=更多 in the footer"
+  },
+  "link.item.label.快速开始": {
+    "message": "Quick Start",
+    "description": "The label of footer link with label=快速开始 linking to /docs/intro"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/alibaba/spring-ai-alibaba"
+  },
+  "link.item.label.讨论": {
+    "message": "Discussions",
+    "description": "The label of footer link with label=讨论 linking to https://github.com/alibaba/spring-ai-alibaba/discussions"
+  },
+  "link.item.label.贡献": {
+    "message": "Contributing",
+    "description": "The label of footer link with label=贡献 linking to https://github.com/alibaba/spring-ai-alibaba/blob/main/CONTRIBUTING.md"
+  },
+  "link.item.label.许可证": {
+    "message": "License",
+    "description": "The label of footer link with label=许可证 linking to https://github.com/alibaba/spring-ai-alibaba/blob/main/LICENSE"
+  },
+  "link.item.label.博客": {
+    "message": "Blog",
+    "description": "The label of footer link with label=博客 linking to /blog"
+  },
+  "link.item.label.团队": {
+    "message": "Team",
+    "description": "The label of footer link with label=团队 linking to /community/team"
+  },
+  "copyright": {
+    "message": "Copyright © 2025 Spring AI Alibaba. Built with Docusaurus.",
+    "description": "The footer copyright"
+  },
+  "link.item.label.Agent Framework": {
+    "message": "Agent Framework",
+    "description": "The label of footer link with label=Agent Framework linking to /docs/quick-start"
+  },
+  "link.item.label.Graph Core": {
+    "message": "Graph Core",
+    "description": "The label of footer link with label=Graph Core linking to /docs/frameworks/graph-core/quick-start"
+  },
+  "link.item.label.Admin": {
+    "message": "Admin",
+    "description": "The label of footer link with label=Admin linking to /ecosystem/admin/quick-start"
+  },
+  "link.item.label.Extensions": {
+    "message": "Extensions",
+    "description": "The label of footer link with label=Extensions linking to /ecosystem/quick-start"
+  },
+  "link.item.label.DataAgent": {
+    "message": "DataAgent",
+    "description": "The label of footer link with label=DataAgent linking to /docs/agents/dataagent/quick-start"
+  },
+  "link.item.label.JManus": {
+    "message": "JManus",
+    "description": "The label of footer link with label=JManus linking to /docs/agents/jmanus/quick-start"
+  },
+  "link.item.label.DeepResearch": {
+    "message": "DeepResearch",
+    "description": "The label of footer link with label=DeepResearch linking to /docs/agents/deepresearch/quick-start"
+  }
+}
