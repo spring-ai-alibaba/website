@@ -17,12 +17,7 @@ description: "在构建agent工作流中，人类反馈是很常见的场景，�
 
 ### pom.xml
 
-这里使用 1.0.0.3-SNAPSHOT。在定义 StateGraph 方面和 1.0.0.2 有些变动
-
 ```xml
-<properties>
-    <spring-ai-alibaba.version>1.0.0.3-SNAPSHOT</spring-ai-alibaba.version>
-</properties>
 
 <dependencies>
 
