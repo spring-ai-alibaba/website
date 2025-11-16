@@ -161,10 +161,10 @@ import java.net.URL;
 // 从 URL 创建图像
 UserMessage userMsg = UserMessage.builder()
     .text("描述这张图片的内容。")
-    .media(new Media(
-        MimeTypeUtils.IMAGE_JPEG,
-        new URL("https://example.com/image.jpg")
-    ))
+    .media(Media.builder()
+        .mimeType(MimeTypeUtils.IMAGE_JPEG)
+        .data(new URL("https://example.com/image.jpg"))
+        .build())
     .build();
 ```
 
@@ -238,7 +238,7 @@ ChatResponseMetadata metadata = response.getMetadata();
 // 访问使用信息
 if (metadata != null && metadata.getUsage() != null) {
     System.out.println("Input tokens: " + metadata.getUsage().getPromptTokens());
-    System.out.println("Output tokens: " + metadata.getUsage().getGenerationTokens());
+    System.out.println("Output tokens: " + metadata.getUsage().getCompletionTokens());
     System.out.println("Total tokens: " + metadata.getUsage().getTotalTokens());
 }
 ```
@@ -327,10 +327,10 @@ import java.net.URL;
 // 从 URL
 UserMessage message = UserMessage.builder()
     .text("描述这张图片的内容。")
-    .media(new Media(
-        MimeTypeUtils.IMAGE_JPEG,
-        new URL("https://example.com/path/to/image.jpg")
-    ))
+    .media(Media.builder()
+        .mimeType(MimeTypeUtils.IMAGE_JPEG)
+        .data(new URL("https://example.com/image.jpg"))
+        .build())
     .build();
 
 // 从本地文件
@@ -368,10 +368,10 @@ import org.springframework.util.MimeTypeUtils;
 
 UserMessage message = UserMessage.builder()
     .text("描述这段视频的内容。")
-    .media(new Media(
-        MimeTypeUtils.parseMimeType("video/mp4"),
-        new URL("https://example.com/path/to/video.mp4")
-    ))
+    .media(Media.builder()
+        .mimeType(MimeTypeUtils.parseMimeType("video/mp4"))
+        .data(new URL("https://example.com/path/to/video.mp4"))
+        .build())
     .build();
 ```
 
@@ -430,7 +430,7 @@ SystemMessage systemMsg = SystemMessage.builder()
 
 // AssistantMessage with builder
 AssistantMessage assistantMsg = AssistantMessage.builder()
-    .text("我很乐意帮助你学习 Spring AI Alibaba！")
+    .content("我很乐意帮助你学习 Spring AI Alibaba！")
     .build();
 ```
 

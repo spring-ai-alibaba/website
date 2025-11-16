@@ -306,7 +306,7 @@ public class ConversationSummaryTool implements BiFunction<String, ToolContext, 
         OverAllState state = (OverAllState) toolContext.getContext().get("state");
         RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
         // update to `extraState` will be returned to the Agent loop.
-        Map<String, Object> config = (Map<String, Object>) toolContext.getContext().get("extraState");
+        Map<String, Object> extraState = (Map<String, Object>) toolContext.getContext().get("extraState");
 
         // 从state中获取消息
         List<Message> messages = (List<Message>) state.get("messages", new ArrayList<>());
@@ -349,18 +349,30 @@ ToolCallback summaryTool = FunctionToolCallback
 ```java
 // 在 Hook 中更新状态
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
+import java.util.concurrent.CompletableFuture;
 
-public class UpdateStateHook implements ModelHook {
+public class UpdateStateHook extends ModelHook {
 
     @Override
-    public Map<String, Object> afterModel(OverAllState state, RunnableConfig config) {
+    public String getName() {
+        return "update_state";
+    }
+
+    @Override
+    public HookPosition[] getHookPositions() {
+        return new HookPosition[]{HookPosition.AFTER_MODEL};
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
         // 更新状态
-        return Map.of(
+        return CompletableFuture.completedFuture(Map.of(
             "user_name", "Alice",
             "last_updated", System.currentTimeMillis()
-        );
+        ));
     }
 }
 ```
@@ -444,9 +456,8 @@ agent.call("question", config);
 ```java
 import com.alibaba.cloud.ai.graph.checkpoint.savers.RedisSaver;
 
-
 // 配置持久化存储
-RedisSaver redisSaver = new RedisSaver(redisConnectionFactory);
+RedisSaver redisSaver = new RedisSaver(redissonClient);
 
 // 创建带有持久化记忆的 Agent
 ReactAgent agent = ReactAgent.builder()
