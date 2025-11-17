@@ -45,7 +45,7 @@ Just add the following dependency to your agent project:
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
 	<artifactId>spring-ai-alibaba-studio</artifactId>
-	<version>1.1.0.0-M4</version>
+	<version>1.1.0.0-M5</version>
 </dependency>
 ```
 

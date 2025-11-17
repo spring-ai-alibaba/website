@@ -29,13 +29,13 @@ Spring AI Alibaba 项目从架构上包含如下三层：
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.0.0-M4</version>
+    <version>1.1.0.0-M5</version>
 </dependency>
 
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.0.0-M4</version>
+    <version>1.1.0.0-M5</version>
 </dependency>
 ```
 
