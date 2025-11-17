@@ -203,8 +203,8 @@ DashScopeApi dashScopeApi = DashScopeApi.builder()
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(DashScopeChatOptions.builder()
-        .temperature(0.5)
-        .maxTokens(1000)
+        .withTemperature(0.5)
+        .withMaxToken(1000)
         .build())
     .build();
 ```
