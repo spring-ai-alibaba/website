@@ -304,7 +304,7 @@ ReactAgent agent = ReactAgent.builder()
     .systemPrompt(SYSTEM_PROMPT)
     .tools(getUserLocationTool, getWeatherTool)
     .outputType(ResponseFormat.class)
-    .saver(new MemorySaver()
+    .saver(new MemorySaver())
     .build();
 
 // threadId 是给定对话的唯一标识符
