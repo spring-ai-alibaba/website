@@ -25,8 +25,11 @@ Hooks 和 Interceptors 在这些步骤的前后暴露了钩子点，允许你：
 
 通过将它们传递给 `ReactAgent.builder()` 来添加 Hooks 和 Interceptors：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="添加 Hooks 和 Interceptors 到 ReactAgent" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.*;
 import com.alibaba.cloud.ai.graph.agent.interceptor.*;
 
@@ -36,8 +39,8 @@ ReactAgent agent = ReactAgent.builder()
     .tools(tools)
     .hooks(loggingHook, messageTrimmingHook)
     .interceptors(guardrailInterceptor, retryInterceptor)
-    .build();
-```
+    .build();`}
+</Code>
 
 ## Hooks 和 Interceptors 能做什么？
 
@@ -62,8 +65,11 @@ Spring AI Alibaba 为常见用例提供了预构建的 Hooks 和 Interceptors �
 * 具有大量历史记录的多轮对话
 * 需要保留完整对话上下文的应用程序
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.summarization.SummarizationHook;
+<Code
+  language="java"
+  title="SummarizationHook 消息压缩示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.summarization.SummarizationHook;
 
 // 创建消息压缩 Hook
 SummarizationHook summarizationHook = SummarizationHook.builder()
@@ -77,8 +83,8 @@ ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .hooks(summarizationHook)
-    .build();
-```
+    .build();`}
+</Code>
 
 **配置选项**：
 - `model`: 用于生成摘要的 ChatModel
@@ -94,8 +100,11 @@ ReactAgent agent = ReactAgent.builder()
 * 人工监督是强制性的合规工作流程
 * 长期对话，使用人工反馈引导 Agent
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
+<Code
+  language="java"
+  title="HumanInTheLoopHook 人机协同示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.ToolConfig;
 
 // 创建 Human-in-the-Loop Hook
@@ -110,8 +119,8 @@ ReactAgent agent = ReactAgent.builder()
     .tools(sendEmailTool, deleteDataTool)
     .hooks(humanReviewHook)
     .saver(new RedisSaver())
-    .build();
-```
+    .build();`}
+</Code>
 
 **重要提示**：Human-in-the-loop Hook 需要 checkpointer 来维护跨中断的状态。示例中我们演示用了 `RedisSaver`。
 
@@ -124,45 +133,17 @@ ReactAgent agent = ReactAgent.builder()
 * 在生产部署中强制执行成本控制
 * 在特定调用预算内测试 Agent 行为
 
-```java
-ReactAgent agent = ReactAgent.builder()
+<Code
+  language="java"
+  title="ModelCallLimitHook 模型调用限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
-    .maxIterations(10)  // 最多 10 次迭代（默认为 10）
+    .hooks(ModelCallLimitHook.builder().runLimit(5).build())  // 限制模型调用次数为5次
     .saver(new MemorySaver())
-    .build();
-```
-
-### 工具调用限制（Tool Call Limit）
-
-使用自定义停止条件限制工具调用：
-
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
-import java.util.function.Function;
-
-Function<OverAllState, Boolean> customStopCondition = state -> {
-    // 如果找到答案或错误过多则停止
-    Optional<Object> foundAnswer = state.value("answer_found");
-    if (foundAnswer.isPresent() && (Boolean) foundAnswer.get()) {
-        return false;  // 停止执行
-    }
-
-    Optional<Object> errorCount = state.value("error_count");
-    if (errorCount.isPresent() && (Integer) errorCount.get() > 3) {
-        return false;  // 停止执行
-    }
-
-    return true;  // 继续执行
-};
-
-ReactAgent agent = ReactAgent.builder()
-    .name("controlled_agent")
-    .model(chatModel)
-    .shouldContinueFunction(customStopCondition)
-    .saver(new MemorySaver())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### PII 检测（Personally Identifiable Information）
 
@@ -173,16 +154,27 @@ ReactAgent agent = ReactAgent.builder()
 * 需要清理日志的客户服务 Agent
 * 任何处理敏感用户数据的应用程序
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.PIIDetectionInterceptor;
+<Code
+  language="java"
+  title="PIIDetectionHook PII 检测示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIDetectionHook;
+import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIType;
+import com.alibaba.cloud.ai.graph.agent.hook.pii.RedactionStrategy;
+
+PIIDetectionHook pii = PIIDetectionHook.builder()
+    .piiType(PIIType.EMAIL)
+    .strategy(RedactionStrategy.REDACT)
+    .applyToInput(true)
+    .build();
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
     .name("secure_agent")
     .model(chatModel)
-    .modelInterceptors(new PIIDetectionInterceptor())
-    .build();
-```
+    .hooks(pii)
+    .build();`}
+</Code>
 
 ### 工具重试（Tool Retry）
 
@@ -193,22 +185,24 @@ ReactAgent agent = ReactAgent.builder()
 * 提高依赖网络的工具的可靠性
 * 构建优雅处理临时错误的弹性 Agent
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ToolRetryInterceptor;
+<Code
+  language="java"
+  title="ToolRetryInterceptor 工具重试示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.toolretry.ToolRetryInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
     .name("resilient_agent")
     .model(chatModel)
     .tools(searchTool, databaseTool)
-    .toolInterceptors(new ToolRetryInterceptor(3, 1000, 2.0))
-    .build();
-```
+    .interceptors(ToolRetryInterceptor.builder()
+        .maxRetries(2)
+        .onFailure(ToolRetryInterceptor.OnFailureBehavior.RETURN_MESSAGE)
+        .build())
+    .build();`}
+</Code>
 
-**配置选项**：
-- `maxRetries`: 最大重试次数（默认 3）
-- `initialDelayMs`: 初始延迟毫秒数（默认 1000）
-- `backoffMultiplier`: 退避倍数（默认 2.0）
 
 ### Planning（规划）
 
@@ -219,17 +213,20 @@ ReactAgent agent = ReactAgent.builder()
 *   通过在执行前显示 Agent 的计划来提高透明度
 *   通过检查建议的计划来调试错误
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.PlanningHook;
+<Code
+  language="java"
+  title="TodoListInterceptor 规划示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.todolist.TodoListInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
     .name("planning_agent")
     .model(chatModel)
     .tools(myTool)
-    .hooks(new PlanningHook())
-    .build();
-```
+    .interceptors(TodoListInterceptor.builder().build())
+    .build();`}
+</Code>
 
 ### LLM Tool Selector（LLM 工具选择器）
 
@@ -240,19 +237,20 @@ ReactAgent agent = ReactAgent.builder()
 *   需要根据细微的上下文差异进行工具选择
 *   动态选择最适合特定输入的工具
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.LLMToolSelectorInterceptor;
-import org.springframework.ai.chat.model.ChatModel;
+<Code
+  language="java"
+  title="ToolSelectionInterceptor LLM 工具选择器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.toolselection.ToolSelectionInterceptor;
 
 // 使用
-ChatModel selectorModel = ...; // 用于选择的另一个ChatModel
 ReactAgent agent = ReactAgent.builder()
     .name("smart_selector_agent")
     .model(chatModel)
     .tools(tool1, tool2)
-    .toolInterceptors(new LLMToolSelectorInterceptor(selectorModel))
-    .build();
-```
+    .interceptors(ToolSelectionInterceptor.builder().build())
+    .build();`}
+</Code>
 
 ### LLM Tool Emulator（LLM 工具模拟器）
 
@@ -263,17 +261,20 @@ ReactAgent agent = ReactAgent.builder()
 *   在开发过程中为工具提供占位符行为
 *   在不产生实际成本或副作用的情况下测试 Agent 逻辑
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ToolEmulatorInterceptor;
+<Code
+  language="java"
+  title="ToolEmulatorInterceptor LLM 工具模拟器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.toolemulator.ToolEmulatorInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
     .name("emulator_agent")
     .model(chatModel)
     .tools(simulatedTool)
-    .toolInterceptors(new ToolEmulatorInterceptor(chatModel))
-    .build();
-```
+    .interceptors(ToolEmulatorInterceptor.builder().model(chatModel).build())
+    .build();`}
+</Code>
 
 ### Context Editing（上下文编辑）
 
@@ -284,16 +285,19 @@ ReactAgent agent = ReactAgent.builder()
 *   从对话历史中删除不相关或冗余的信息
 *   动态修改上下文以引导 Agent 的行为
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.ContextEditingHook;
+<Code
+  language="java"
+  title="ContextEditingInterceptor 上下文编辑示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.contextediting.ContextEditingInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
     .name("context_aware_agent")
     .model(chatModel)
-    .hooks(new ContextEditingHook("Remember to be polite and helpful."))
-    .build();
-```
+    .interceptors(ContextEditingInterceptor.builder().trigger(120000).clearAtLeast(60000).build())
+    .build();`}
+</Code>
 
 ## 自定义 Hooks 和 Interceptors
 
@@ -310,11 +314,17 @@ ReactAgent agent = ReactAgent.builder()
 
 在模型调用前后执行自定义逻辑：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+<Code
+  language="java"
+  title="CustomModelHook 自定义 ModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import java.util.concurrent.CompletableFuture;
 
-public class CustomModelHook implements ModelHook {
+@HookPositions({HookPosition.BEFORE_MODEL, HookPosition.AFTER_MODEL})
+public class CustomModelHook extends ModelHook {
 
     @Override
     public String getName() {
@@ -322,43 +332,41 @@ public class CustomModelHook implements ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{
-            HookPosition.BEFORE_MODEL,
-            HookPosition.AFTER_MODEL
-        };
-    }
-
-    @Override
-    public Map<String, Object> beforeModel(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
         // 在模型调用前执行
         System.out.println("准备调用模型...");
 
         // 可以修改状态
         // 例如：添加额外的上下文
-        return Map.of("extra_context", "某些额外信息");
+        return CompletableFuture.completedFuture(Map.of("extra_context", "某些额外信息"));
     }
 
     @Override
-    public Map<String, Object> afterModel(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
         // 在模型调用后执行
         System.out.println("模型调用完成");
 
         // 可以记录响应信息
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
-}
-```
+}`}
+</Code>
 
 ### AgentHook
 
 在 Agent 整体执行的开始和结束时执行：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
+<Code
+  language="java"
+  title="CustomAgentHook 自定义 AgentHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import java.util.concurrent.CompletableFuture;
 
-public class CustomAgentHook implements AgentHook {
+@HookPositions({HookPosition.BEFORE_AGENT, HookPosition.AFTER_AGENT})
+public class CustomAgentHook extends AgentHook {
 
     @Override
     public String getName() {
@@ -366,22 +374,14 @@ public class CustomAgentHook implements AgentHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{
-            HookPosition.BEFORE_AGENT,
-            HookPosition.AFTER_AGENT
-        };
-    }
-
-    @Override
-    public Map<String, Object> beforeAgent(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> beforeAgent(OverAllState state, RunnableConfig config) {
         System.out.println("Agent 开始执行");
         // 可以初始化资源、记录开始时间等
-        return Map.of("start_time", System.currentTimeMillis());
+        return CompletableFuture.completedFuture(Map.of("start_time", System.currentTimeMillis()));
     }
 
     @Override
-    public Map<String, Object> afterAgent(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> afterAgent(OverAllState state, RunnableConfig config) {
         System.out.println("Agent 执行完成");
         // 可以清理资源、计算执行时间等
         Optional<Object> startTime = state.value("start_time");
@@ -389,32 +389,35 @@ public class CustomAgentHook implements AgentHook {
             long duration = System.currentTimeMillis() - (Long) startTime.get();
             System.out.println("执行耗时: " + duration + "ms");
         }
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
-}
-```
+}`}
+</Code>
 
 ### ModelInterceptor
 
 拦截和修改模型请求和响应：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
+<Code
+  language="java"
+  title="LoggingInterceptor 自定义 ModelInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelCallHandler;
 
-public class LoggingInterceptor implements ModelInterceptor {
+public class LoggingInterceptor extends ModelInterceptor {
 
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler handler) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 请求前记录
         System.out.println("发送请求到模型: " + request.getMessages().size() + " 条消息");
 
         long startTime = System.currentTimeMillis();
 
         // 执行实际调用
-        ModelResponse response = handler.handle(request);
+        ModelResponse response = handler.call(request);
 
         // 响应后记录
         long duration = System.currentTimeMillis() - startTime;
@@ -422,30 +425,38 @@ public class LoggingInterceptor implements ModelInterceptor {
 
         return response;
     }
-}
-```
+
+    @Override
+    public String getName() {
+        return "LoggingInterceptor";
+    }
+}`}
+</Code>
 
 ### ToolInterceptor
 
 拦截和修改工具调用：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
+<Code
+  language="java"
+  title="ToolMonitoringInterceptor 自定义 ToolInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallResponse;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallHandler;
 
-public class ToolMonitoringInterceptor implements ToolInterceptor {
+public class ToolMonitoringInterceptor extends ToolInterceptor {
 
     @Override
-    public ToolCallResponse intercept(ToolCallRequest request, ToolCallHandler handler) {
-        String toolName = request.getToolCall().name();
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
+        String toolName = request.getToolName();
         long startTime = System.currentTimeMillis();
 
         System.out.println("执行工具: " + toolName);
 
         try {
-            ToolCallResponse response = handler.handle(request);
+            ToolCallResponse response = handler.call(request);
 
             long duration = System.currentTimeMillis() - startTime;
             System.out.println("工具 " + toolName + " 执行成功 (耗时: " + duration + "ms)");
@@ -455,28 +466,208 @@ public class ToolMonitoringInterceptor implements ToolInterceptor {
             long duration = System.currentTimeMillis() - startTime;
             System.err.println("工具 " + toolName + " 执行失败 (耗时: " + duration + "ms): " + e.getMessage());
 
-            return ToolCallResponse.error(
-                request.getToolCall(),
+            return ToolCallResponse.of(
+                request.getToolCallId(),
+                request.getToolName(),
                 "工具执行失败: " + e.getMessage()
             );
         }
     }
-}
-```
+
+    @Override
+    public String getName() {
+        return "ToolMonitoringInterceptor";
+    }
+}`}
+</Code>
+
+### 使用 RunnableConfig 跨调用共享数据
+
+`RunnableConfig` 提供了一个 `context()` 方法，允许你在同一个执行流程中的多个 Hook 调用、多轮模型或工具调用之间共享数据。这对于实现计数器、累积统计信息或跨多次调用维护状态非常有用。
+
+**适用场景**：
+* 跟踪模型或工具调用次数
+* 累积性能指标（总耗时、平均响应时间等）
+* 在 before/after Hook 之间传递临时数据
+* 实现基于计数的限流或断路器
+
+**示例：使用 RunnableConfig.context() 实现调用计数器**
+
+<Code
+  language="java"
+  title="ModelCallCounterHook 调用计数器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import java.util.concurrent.CompletableFuture;
+import java.util.Map;
+
+@HookPositions({HookPosition.BEFORE_MODEL, HookPosition.AFTER_MODEL})
+public class ModelCallCounterHook extends ModelHook {
+
+    private static final String CALL_COUNT_KEY = "__model_call_count__";
+    private static final String TOTAL_TIME_KEY = "__total_model_time__";
+    private static final String START_TIME_KEY = "__call_start_time__";
+
+    @Override
+    public String getName() {
+        return "model_call_counter";
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
+        // 从 context 读取当前计数（如果不存在则默认为 0）
+        int currentCount = config.context().containsKey(CALL_COUNT_KEY)
+                ? (int) config.context().get(CALL_COUNT_KEY) : 0;
+
+        System.out.println("模型调用 #" + (currentCount + 1));
+
+        // 记录开始时间
+        config.context().put(START_TIME_KEY, System.currentTimeMillis());
+
+        return CompletableFuture.completedFuture(Map.of());
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
+        // 读取当前计数并递增
+        int currentCount = config.context().containsKey(CALL_COUNT_KEY)
+                ? (int) config.context().get(CALL_COUNT_KEY) : 0;
+        config.context().put(CALL_COUNT_KEY, currentCount + 1);
+
+        // 计算本次调用耗时并累加到总耗时
+        if (config.context().containsKey(START_TIME_KEY)) {
+            long startTime = (long) config.context().get(START_TIME_KEY);
+            long duration = System.currentTimeMillis() - startTime;
+
+            long totalTime = config.context().containsKey(TOTAL_TIME_KEY)
+                    ? (long) config.context().get(TOTAL_TIME_KEY) : 0L;
+            config.context().put(TOTAL_TIME_KEY, totalTime + duration);
+
+            // 输出统计信息
+            int newCount = currentCount + 1;
+            long newTotalTime = totalTime + duration;
+            System.out.println("模型调用完成: " + duration + "ms");
+            System.out.println("累计统计 - 调用次数: " + newCount + ", 总耗时: " + newTotalTime + "ms, 平均: " + (newTotalTime / newCount) + "ms");
+        }
+
+        return CompletableFuture.completedFuture(Map.of());
+    }
+}`}
+</Code>
+
+**示例：基于 context 实现调用次数限制**
+
+<Code
+  language="java"
+  title="ModelCallLimiterHook 调用次数限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import java.util.List;
+import java.util.ArrayList;
+
+@HookPositions({HookPosition.BEFORE_MODEL, HookPosition.AFTER_MODEL})
+public class ModelCallLimiterHook extends ModelHook {
+
+    private static final String CALL_COUNT_KEY = "__model_call_count__";
+    private final int maxCalls;
+
+    public ModelCallLimiterHook(int maxCalls) {
+        this.maxCalls = maxCalls;
+    }
+
+    @Override
+    public String getName() {
+        return "model_call_limiter";
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
+        // 读取当前调用次数
+        int callCount = config.context().containsKey(CALL_COUNT_KEY)
+                ? (int) config.context().get(CALL_COUNT_KEY) : 0;
+
+        // 检查是否超过限制
+        if (callCount >= maxCalls) {
+            System.out.println("达到模型调用次数限制: " + maxCalls);
+
+            // 添加终止消息
+            List<Message> messages = new ArrayList<>(
+                (List<Message>) state.value("messages").orElse(new ArrayList<>())
+            );
+            messages.add(new AssistantMessage(
+                "已达到模型调用次数限制 (" + callCount + "/" + maxCalls + ")，Agent 执行终止。"
+            ));
+
+            // 返回更新并跳转到结束
+            return CompletableFuture.completedFuture(Map.of("messages", messages));
+        }
+
+        return CompletableFuture.completedFuture(Map.of());
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
+        // 递增计数器
+        int callCount = config.context().containsKey(CALL_COUNT_KEY)
+                ? (int) config.context().get(CALL_COUNT_KEY) : 0;
+        config.context().put(CALL_COUNT_KEY, callCount + 1);
+
+        return CompletableFuture.completedFuture(Map.of());
+    }
+
+    @Override
+    public List<JumpTo> canJumpTo() {
+        return List.of(JumpTo.end);
+    }
+}`}
+</Code>
+
+**使用示例**：
+
+<Code
+  language="java"
+  title="使用 ModelCallCounterHook 和 ModelCallLimiterHook" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
+    .name("limited_agent")
+    .model(chatModel)
+    .tools(tools)
+    .hooks(new ModelCallCounterHook())  // 监控调用统计
+    .hooks(new ModelCallLimiterHook(5)) // 限制最多调用 5 次
+    .build();`}
+</Code>
+
+**关键要点**：
+
+* **context() 是共享的**: 同一个执行流程中的所有 Hook 共享同一个 context
+* **数据持久性**: context 中的数据在整个 Agent 执行期间保持有效
+* **类型安全**: 需要自己管理 context 中数据的类型转换
+* **命名约定**: 建议使用双下划线前缀命名 context key（如 `__model_call_count__`）以避免与用户数据冲突
 
 ## 执行顺序
 
 使用多个 Hooks 和 Interceptors 时，理解执行顺序很重要：
 
-```java
-ReactAgent agent = ReactAgent.builder()
+<Code
+  language="java"
+  title="多个 Hooks 和 Interceptors 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .hooks(hook1, hook2, hook3)
-    .modelInterceptors(interceptor1, interceptor2)
-    .toolInterceptors(toolInterceptor1, toolInterceptor2)
-    .build();
-```
+    .interceptors(interceptor1, interceptor2)
+    .interceptors(toolInterceptor1, toolInterceptor2)
+    .build();`}
+</Code>
 
 **执行流程**：
 
@@ -567,17 +758,20 @@ ReactAgent agent = ReactAgent.builder()
 
 ### 示例 1：内容审核 Interceptor
 
-```java
-public class ContentModerationInterceptor implements ModelInterceptor {
+<Code
+  language="java"
+  title="ContentModerationInterceptor 内容审核示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`public class ContentModerationInterceptor extends ModelInterceptor {
 
     private static final List<String> BLOCKED_WORDS =
         List.of("敏感词1", "敏感词2", "敏感词3");
 
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler handler) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 检查输入
         for (Message msg : request.getMessages()) {
-            String content = msg.getContent().toLowerCase();
+            String content = msg.getText().toLowerCase();
             for (String blocked : BLOCKED_WORDS) {
                 if (content.contains(blocked)) {
                     return ModelResponse.blocked(
@@ -588,7 +782,7 @@ public class ContentModerationInterceptor implements ModelInterceptor {
         }
 
         // 执行模型调用
-        ModelResponse response = handler.handle(request);
+        ModelResponse response = handler.call(request);
 
         // 检查输出
         String output = response.getContent();
@@ -602,56 +796,100 @@ public class ContentModerationInterceptor implements ModelInterceptor {
 
         return response;
     }
-}
-```
-
-### 示例 2：性能监控 Hook
-
-```java
-public class PerformanceMonitoringHook implements AgentHook {
-
-    private Map<String, Long> metrics = new HashMap<>();
 
     @Override
     public String getName() {
-        return "performance_monitoring";
+        return "ContentModerationInterceptor";
+    }
+}`}
+</Code>
+
+### 示例 2：性能监控 - 使用 Interceptor
+
+使用 `ModelInterceptor` 和 `ToolInterceptor` 监控模型和工具调用的性能：
+
+<Code
+  language="java"
+  title="性能监控 Interceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`// 模型调用性能监控
+public class ModelPerformanceInterceptor extends ModelInterceptor {
+
+    @Override
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
+        // 请求前记录
+        System.out.println("发送请求到模型: " + request.getMessages().size() + " 条消息");
+
+        long startTime = System.currentTimeMillis();
+
+        // 执行实际调用
+        ModelResponse response = handler.call(request);
+
+        // 响应后记录
+        long duration = System.currentTimeMillis() - startTime;
+        System.out.println("模型响应耗时: " + duration + "ms");
+
+        return response;
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{
-            HookPosition.BEFORE_AGENT,
-            HookPosition.AFTER_AGENT
-        };
-    }
-
-    @Override
-    public Map<String, Object> beforeAgent(OverAllState state, RunnableConfig config) {
-        metrics.put("start_time", System.currentTimeMillis());
-        metrics.put("model_calls", 0L);
-        metrics.put("tool_calls", 0L);
-        return Map.of();
-    }
-
-    @Override
-    public Map<String, Object> afterAgent(OverAllState state, RunnableConfig config) {
-        long duration = System.currentTimeMillis() - metrics.get("start_time");
-
-        System.out.println("===== 性能报告 =====");
-        System.out.println("总耗时: " + duration + "ms");
-        System.out.println("模型调用次数: " + metrics.get("model_calls"));
-        System.out.println("工具调用次数: " + metrics.get("tool_calls"));
-        System.out.println("==================");
-
-        return Map.of();
+    public String getName() {
+        return "ModelPerformanceInterceptor";
     }
 }
-```
+
+// 工具调用性能监控
+public class ToolPerformanceInterceptor extends ToolInterceptor {
+
+    @Override
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
+        String toolName = request.getToolName();
+        long startTime = System.currentTimeMillis();
+
+        System.out.println("执行工具: " + toolName);
+
+        try {
+            ToolCallResponse response = handler.call(request);
+
+            long duration = System.currentTimeMillis() - startTime;
+            System.out.println("工具 " + toolName + " 执行成功 (耗时: " + duration + "ms)");
+
+            return response;
+        } catch (Exception e) {
+            long duration = System.currentTimeMillis() - startTime;
+            System.err.println("工具 " + toolName + " 执行失败 (耗时: " + duration + "ms): " + e.getMessage());
+
+            return ToolCallResponse.of(
+                request.getToolCallId(),
+                request.getToolName(),
+                "工具执行失败: " + e.getMessage()
+            );
+        }
+    }
+
+    @Override
+    public String getName() {
+        return "ToolPerformanceInterceptor";
+    }
+}
+
+// 使用示例
+ReactAgent agent = ReactAgent.builder()
+    .name("monitored_agent")
+    .model(chatModel)
+    .tools(tools)
+    .interceptors(new ModelPerformanceInterceptor())
+    .interceptors(new ToolPerformanceInterceptor())
+    .build();`}
+</Code>
 
 ### 示例 3：工具缓存 Interceptor
 
-```java
-public class ToolCacheInterceptor implements ToolInterceptor {
+<Code
+  language="java"
+  title="ToolCacheInterceptor 工具缓存示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`public class ToolCacheInterceptor extends ToolInterceptor {
 
     private Map<String, ToolCallResponse> cache = new ConcurrentHashMap<>();
     private final long ttlMs;
@@ -661,18 +899,18 @@ public class ToolCacheInterceptor implements ToolInterceptor {
     }
 
     @Override
-    public ToolCallResponse intercept(ToolCallRequest request, ToolCallHandler handler) {
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
         String cacheKey = generateCacheKey(request);
 
         // 检查缓存
         ToolCallResponse cached = cache.get(cacheKey);
         if (cached != null && !isExpired(cached)) {
-            System.out.println("缓存命中: " + request.getToolCall().name());
+            System.out.println("缓存命中: " + request.getToolName());
             return cached;
         }
 
         // 执行工具
-        ToolCallResponse response = handler.handle(request);
+        ToolCallResponse response = handler.call(request);
 
         // 缓存结果
         cache.put(cacheKey, response);
@@ -680,17 +918,22 @@ public class ToolCacheInterceptor implements ToolInterceptor {
         return response;
     }
 
+    @Override
+    public String getName() {
+        return "ToolCacheInterceptor";
+    }
+
     private String generateCacheKey(ToolCallRequest request) {
-        return request.getToolCall().name() + ":" +
-               request.getToolCall().arguments();
+        return request.getToolName() + ":" +
+               request.getArguments();
     }
 
     private boolean isExpired(ToolCallResponse response) {
         // 实现 TTL 检查逻辑
         return false;
     }
-}
-```
+}`}
+</Code>
 
 ## 总结
 

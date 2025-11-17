@@ -6,7 +6,7 @@ keywords: [ReactAgent, 快速开始, Quick Start, Spring AI Alibaba, Agent Frame
 
 # ReactAgent 快速开始
 
-跟随快速开始，学习如果开发一个具备完整功能的 ReactAgent 智能体。
+跟随快速开始，学习如何开发一个具备完整功能的 ReactAgent 智能体。
 
 ## 前置条件
 
@@ -26,14 +26,14 @@ keywords: [ReactAgent, 快速开始, Quick Start, Spring AI Alibaba, Agent Frame
   <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.0.0-M4</version>
+    <version>1.1.0.0-M5</version>
   </dependency>
 
   <!-- DashScope ChatModel 支持（如果使用其他模型，请参考文档选择对应的 starter） -->
   <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.0.0-M4</version>
+    <version>1.1.0.0-M5</version>
   </dependency>
 </dependencies>
 ```
@@ -216,7 +216,7 @@ ChatModel chatModel = DashScopeChatModel.builder()
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
 	<artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-	<version>1.1.0.0-M4</version>
+	<version>1.1.0.0-M5</version>
 </dependency>
 
 <!-- OpenAI-->

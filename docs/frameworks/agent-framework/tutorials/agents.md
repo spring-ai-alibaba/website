@@ -53,8 +53,11 @@ Model 是 Agent 的推理引擎。Spring AI Alibaba 支持多种配置方式。
 
 最直接的方式是使用 `ChatModel` 实例：
 
-```java
-import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+<Code
+  language="java"
+  title="ReactAgent 基础配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 
@@ -72,25 +75,28 @@ ChatModel chatModel = DashScopeChatModel.builder()
 ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 高级模型配置
 
 通过 `ChatOptions` 可以精细控制模型行为：
 
-```java
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+<Code
+  language="java"
+  title="DashScopeChatModel 高级配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(DashScopeChatOptions.builder()
-        .temperature(0.7)      // 控制随机性
-        .maxTokens(2000)       // 最大输出长度
-        .topP(0.9)            // 核采样参数
+        .withTemperature(0.7)    // 控制随机性
+        .withMaxToken(2000)      // 最大输出长度
+        .withTopP(0.9)           // 核采样参数
         .build())
-    .build();
-```
+    .build();`}
+</Code>
 
 **常用参数说明**：
 - `temperature`：控制输出的随机性（0.0-1.0），值越高越有创造性
@@ -104,57 +110,72 @@ ChatModel chatModel = DashScopeChatModel.builder()
 
 #### 定义和使用工具
 
-```java
-import org.springframework.ai.tool.ToolCallback;
+<Code
+  language="java"
+  title="SearchTool 自定义工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
+import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.ai.chat.model.ToolContext;
 import java.util.function.BiFunction;
 
-// 定义工具
+// 定义工具（示例：仅一个搜索工具）
 public class SearchTool implements BiFunction<String, ToolContext, String> {
     @Override
-    public String apply(
-        @ToolParam(description = "搜索关键词") String query,
-        ToolContext toolContext) {
-        return "搜索结果：" + query;
+    public String apply(String query, ToolContext context) {
+        // 实现搜索逻辑
+        return "搜索结果: " + query;
     }
 }
 
 // 创建工具回调
-ToolCallback searchTool = FunctionToolCallback
-    .builder("search", new SearchTool())
-    .description("搜索信息的工具")
-    .inputType(String.class)
+ToolCallback searchTool = FunctionToolCallback.builder("search", new SearchTool())
+    .description("搜索工具")
     .build();
 
-// 使用多个工具
+// 在Agent中使用
 ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
+    .name("search_agent")
     .model(chatModel)
-    .tools(searchTool, weatherTool, calculatorTool)
-    .build();
-```
+    .tools(searchTool)
+    .build();`}
+</Code>
 
 #### 工具错误处理
 
-使用 `ToolInterceptor` 统一处理工具错误：
+<Code
+  language="java"
+  title="ToolErrorInterceptor 工具错误处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallRequest;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallResponse;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallHandler;
 
-```java
 public class ToolErrorInterceptor extends ToolInterceptor {
-	@Override
-	public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
-		try {
-			return handler.call(request);
-		} catch (Exception e) {
-			return ToolCallResponse.of(request.getToolCallId(), request.getToolName(),
-					"Tool failed: " + e.getMessage());
-		}
-	}
+    @Override
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
+        try {
+            return handler.call(request);
+        } catch (Exception e) {
+            return ToolCallResponse.of(request.getToolCallId(), request.getToolName(),
+                "Tool failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String getName() {
+        return "ToolErrorInterceptor";
+    }
 }
 
 ReactAgent agent = ReactAgent.builder()
-    .interceptors(ToolErrorHandler.builder().build())
-    .build();
-```
+    .name("my_agent")
+    .model(chatModel)
+    .interceptors(new ToolErrorInterceptor())
+    .build();`}
+</Code>
 
 **ReAct 循环示例**：Agent 自动交替进行推理和工具调用，直到获得最终答案。
 
@@ -173,20 +194,26 @@ System Prompt 塑造 Agent 处理任务的方式。
 
 通过 `systemPrompt` 参数提供字符串：
 
-```java
-ReactAgent agent = ReactAgent.builder()
+<Code
+  language="java"
+  title="系统提示基础配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .systemPrompt("你是一个专业的技术助手。请准确、简洁地回答问题。")
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 使用 instruction
 
 对于更详细的指令，使用 `instruction` 参数：
 
-```java
-String instruction = """
+<Code
+  language="java"
+  title="使用 instruction 提供详细指令" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`String instruction = """
     你是一个经验丰富的软件架构师。
 
     在回答问题时，请：
@@ -202,43 +229,59 @@ ReactAgent agent = ReactAgent.builder()
     .name("architect_agent")
     .model(chatModel)
     .instruction(instruction)
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 动态 System Prompt
 
 使用 `ModelInterceptor` 实现基于上下文的动态提示：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
+<Code
+  language="java"
+  title="DynamicPromptInterceptor 动态提示拦截器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ModelCallHandler;
+import org.springframework.ai.chat.messages.SystemMessage;
 
-public class DynamicPromptInterceptor implements ModelInterceptor {
+public class DynamicPromptInterceptor extends ModelInterceptor {
     @Override
-	public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
-		// 基于用户角色动态调整提示
-		List<Message> messages = request.getMessages();
-		Map<String, Object> context = request.getContext();// this is the context set in RunnableConfig
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
+        // 基于上下文构建动态 system prompt
+        String userRole = (String) request.getContext().getOrDefault("user_role", "default");
+        String dynamicPrompt = switch (userRole) {
+            case "expert" -> "你正在与技术专家对话。\n- 使用专业术语\n- 深入技术细节";
+            case "beginner" -> "你正在与初学者对话。\n- 使用简单语言\n- 解释基础概念";
+            default -> "你是一个专业的助手，保持友好和专业。";
+        };
 
-		// do anything with messages to adjust prompt, history messages, user request dynamically
+        SystemMessage enhancedSystemMessage;
+        if (request.getSystemMessage() == null) {
+            enhancedSystemMessage = new SystemMessage(dynamicPrompt);
+        } else {
+            enhancedSystemMessage = new SystemMessage(request.getSystemMessage().getText() + "\n\n" + dynamicPrompt);
+        }
 
-		// create modified request
-		ModelRequest modifiedRequest = ModelRequest.builder()
-				.messages(messages)
-				.options(request.getOptions())
-				.tools(request.getTools())
-				.build();
-		return handler.call(modifiedRequest);
-	}
+        ModelRequest modified = ModelRequest.builder(request)
+            .systemMessage(enhancedSystemMessage)
+            .build();
+        return handler.call(modified);
+    }
+
+    @Override
+    public String getName() {
+        return "DynamicPromptInterceptor";
+    }
 }
 
 ReactAgent agent = ReactAgent.builder()
     .name("adaptive_agent")
     .model(chatModel)
     .interceptors(new DynamicPromptInterceptor())
-    .build();
-```
+    .build();`}
+</Code>
 
 ## 调用 Agent
 
@@ -246,8 +289,11 @@ ReactAgent agent = ReactAgent.builder()
 
 使用 `call` 方法获取最终响应：
 
-```java
-import org.springframework.ai.chat.messages.AssistantMessage;
+<Code
+  language="java"
+  title="Agent 基础调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import org.springframework.ai.chat.messages.AssistantMessage;
 
 // 字符串输入
 AssistantMessage response = agent.call("杭州的天气怎么样？");
@@ -262,15 +308,18 @@ List<Message> messages = List.of(
     new UserMessage("我想了解 Java 多线程"),
     new UserMessage("特别是线程池的使用")
 );
-AssistantMessage response = agent.call(messages);
-```
+AssistantMessage response = agent.call(messages);`}
+</Code>
 
 ### 获取完整状态
 
 使用 `invoke` 方法获取完整的执行状态：
 
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
+<Code
+  language="java"
+  title="使用 invoke 获取完整状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
 import java.util.Optional;
 
 Optional<OverAllState> result = agent.invoke("帮我写一首诗");
@@ -286,23 +335,27 @@ if (result.isPresent()) {
     Optional<Object> customData = state.value("custom_key");
 
     System.out.println("完整状态：" + state);
-}
-```
+}`}
+</Code>
 
 ### 使用配置
 
 通过 `RunnableConfig` 传递运行时配置：
 
-```java
-import com.alibaba.cloud.ai.graph.RunnableConfig;
+<Code
+  language="java"
+  title="使用 RunnableConfig 传递配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.RunnableConfig;
 
+String threadId = "thread_123";
 RunnableConfig runnableConfig = RunnableConfig.builder()
-	.threadId(threadId)
-	.addMetadata("key", "value")
-	.build();
+    .threadId(threadId)
+    .addMetadata("key", "value")
+    .build();
 
-AssistantMessage response = agent.call("你的问题", config);
-```
+AssistantMessage response = agent.call("你的问题", runnableConfig);`}
+</Code>
 
 ## 高级特性
 
@@ -314,8 +367,11 @@ AssistantMessage response = agent.call("你的问题", config);
 
 通过 Java 类定义输出结构，Agent 会自动生成对应的 JSON Schema：
 
-```java
-public class PoemOutput {
+<Code
+  language="java"
+  title="PoemOutput 结构化输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`public class PoemOutput {
     private String title;
     private String content;
     private String style;
@@ -340,15 +396,18 @@ ReactAgent agent = ReactAgent.builder()
 
 AssistantMessage response = agent.call("写一首关于春天的诗");
 // 输出会遵循 PoemOutput 的结构
-System.out.println(response.getText());
-```
+System.out.println(response.getText());`}
+</Code>
 
 #### 使用 outputSchema
 
 直接提供 JSON Schema 字符串进行更灵活的控制：
 
-```java
-String customSchema = """
+<Code
+  language="java"
+  title="使用 outputSchema 自定义输出格式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`String customSchema = """
     请严格按照以下JSON格式返回结果：
     {
         "summary": "内容摘要",
@@ -365,8 +424,8 @@ ReactAgent agent = ReactAgent.builder()
     .saver(new MemorySaver())
     .build();
 
-AssistantMessage response = agent.call("分析这段文本：春天来了，万物复苏。");
-```
+AssistantMessage response = agent.call("分析这段文本：春天来了，万物复苏。");`}
+</Code>
 
 **选择建议**：
 - `outputType`：类型安全，适合结构固定的场景
@@ -374,10 +433,13 @@ AssistantMessage response = agent.call("分析这段文本：春天来了，万�
 
 ### Memory（记忆）
 
-Agent 通过状态自动维护对话历史。使用 `CompileConfig` 配置持久化存储。
+Agent 通过状态自动维护对话历史。使用 `MemorySaver` 配置持久化存储。
 
-```java
-import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
+<Code
+  language="java"
+  title="Memory 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.constant.SaverEnum;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 
@@ -394,8 +456,8 @@ RunnableConfig config = RunnableConfig.builder()
     .build();
 
 agent.call("我叫张三", config);
-agent.call("我叫什么名字？", config);  // 输出: "你叫张三"
-```
+agent.call("我叫什么名字？", config);  // 输出: "你叫张三"`}
+</Code>
 
 **生产环境**：使用 `RedisSaver`、`MongoSaver` 等持久化存储替代 `MemorySaver`。
 
@@ -405,52 +467,64 @@ Hooks 允许在 Agent 执行的关键点插入自定义逻辑。
 
 #### Hook 类型与使用
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.*;
+<Code
+  language="java"
+  title="Hook 使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.*;
 
 // 1. AgentHook - 在 Agent 开始/结束时执行，每次Agent调用只会运行一次
-public class LoggingHook implements AgentHook {
+@HookPositions({HookPosition.BEFORE_AGENT, HookPosition.AFTER_AGENT})
+public class LoggingHook extends AgentHook {
     @Override
     public String getName() { return "logging"; }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{
-            HookPosition.BEFORE_AGENT,
-            HookPosition.AFTER_AGENT
-        };
-    }
-
-    @Override
-    public Map<String, Object> beforeAgent(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> beforeAgent(OverAllState state, RunnableConfig config) {
         System.out.println("Agent 开始执行");
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
 
     @Override
-    public Map<String, Object> afterAgent(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> afterAgent(OverAllState state, RunnableConfig config) {
         System.out.println("Agent 执行完成");
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
 }
 
 // 2. ModelHook - 在模型调用前后执行（例如：消息修剪），区别于AgentHook，ModelHook在一次agent调用中可能会调用多次，也就是每次 reasoning-acting 迭代都会执行
-public class MessageTrimmingHook implements ModelHook {
+public class MessageTrimmingHook extends ModelHook {
     private static final int MAX_MESSAGES = 10;
 
     @Override
-    public Map<String, Object> beforeModel(OverAllState state, RunnableConfig config) {
+    public String getName() {
+        return "message_trimming";
+    }
+
+    @Override
+    public HookPosition[] getHookPositions() {
+        return new HookPosition[]{HookPosition.BEFORE_MODEL};
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
         Optional<Object> messagesOpt = state.value("messages");
         if (messagesOpt.isPresent()) {
             List<Message> messages = (List<Message>) messagesOpt.get();
             if (messages.size() > MAX_MESSAGES) {
-                return Map.of("messages",
-                    messages.subList(messages.size() - MAX_MESSAGES, messages.size()));
+                return CompletableFuture.completedFuture(Map.of("messages",
+                    messages.subList(messages.size() - MAX_MESSAGES, messages.size())));
             }
         }
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
-}
+
+    @Override
+    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
+        return CompletableFuture.completedFuture(Map.of());
+    }
+}`}
+</Code>
 
 **Hook 执行位置**：
 - `BEFORE_AGENT` / `AFTER_AGENT`：Agent 整体执行前后
@@ -462,13 +536,16 @@ Interceptors 提供更细粒度的控制，可以拦截和修改模型调用和�
 
 #### 使用示例
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.*;
+<Code
+  language="java"
+  title="Interceptor 使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.*;
 
 // ModelInterceptor - 内容安全检查
-public class GuardrailInterceptor implements ModelInterceptor {
+public class GuardrailInterceptor extends ModelInterceptor {
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler handler) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 前置：检查输入
         if (containsSensitiveContent(request.getMessages())) {
             return ModelResponse.blocked("检测到不适当的内容");
@@ -483,9 +560,9 @@ public class GuardrailInterceptor implements ModelInterceptor {
 }
 
 // ToolInterceptor - 监控和错误处理
-public class ToolMonitoringInterceptor implements ToolInterceptor {
+public class ToolMonitoringInterceptor extends ToolInterceptor {
     @Override
-    public ToolCallResponse intercept(ToolCallRequest request, ToolCallHandler handler) {
+    public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
         long startTime = System.currentTimeMillis();
         try {
             ToolCallResponse response = handler.call(request);
@@ -505,8 +582,8 @@ ReactAgent agent = ReactAgent.builder()
     .model(chatModel)
     .interceptors(new GuardrailInterceptor(), new LoggingInterceptor(), new ToolMonitoringInterceptor())
     .saver(new MemorySaver())
-    .build();
-```
+    .build();`}
+</Code>
 
 **常见用途**：
 - **ModelInterceptor**：内容安全、动态提示、日志记录、性能监控
@@ -516,36 +593,91 @@ ReactAgent agent = ReactAgent.builder()
 
 #### 迭代控制
 
-```java
-// 设置最大迭代次数
+通过 Hooks 控制 Agent 的执行迭代，防止无限循环或过度成本。
+
+<Code
+  language="java"
+  title="使用 ModelCallLimitHook 限制模型调用次数" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.modelcalllimit.ModelCallLimitHook;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+
+// 使用内置的 ModelCallLimitHook 限制模型调用次数
 ReactAgent agent = ReactAgent.builder()
-    .maxIterations(5)  // 默认 10
-    .build();
+    .name("my_agent")
+    .model(chatModel)
+    .hooks(ModelCallLimitHook.builder().runLimit(5).build())  // 限制最多调用 5 次
+    .saver(new MemorySaver())
+    .build();`}
+</Code>
 
-// 自定义停止条件
-Function<OverAllState, Boolean> stopCondition = state -> {
-    // 找到答案或错误过多时停止
-    return !state.value("answer_found").orElse(false)
-        && (Integer) state.value("error_count").orElse(0) <= 3;
-};
+<Code
+  language="java"
+  title="自定义停止条件 Hook" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
+import org.springframework.ai.chat.messages.AssistantMessage;
 
-agent = ReactAgent.builder()
-    .shouldContinueFunction(stopCondition)
-    .build();
-```
+// 自定义停止条件：基于状态判断是否继续
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class CustomStopConditionHook extends ModelHook {
+
+    @Override
+    public String getName() {
+        return "custom_stop_condition";
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
+        // 检查是否找到答案，展示使用 OverAllState
+        boolean answerFound = (Boolean) state.value("answer_found").orElse(false);
+        // 检查错误次数，展示使用 RunnableConfig
+        int errorCount = (Integer) config.context().get("error_count").orElse(0);
+
+        // 找到答案或错误过多时停止
+        if (answerFound || errorCount > 3) {
+            List<Message> messages = new ArrayList<>(
+                (List<Message>) state.value("messages").orElse(new ArrayList<>())
+            );
+            messages.add(new AssistantMessage(
+                answerFound ? "已找到答案，Agent 执行完成。"
+                            : "错误次数过多 (" + errorCount + ")，Agent 执行终止。"
+            ));
+            return CompletableFuture.completedFuture(Map.of("messages", messages));
+        }
+
+        return CompletableFuture.completedFuture(Map.of());
+    }
+
+}
+
+// 使用自定义停止条件
+ReactAgent agent = ReactAgent.builder()
+    .name("my_agent")
+    .model(chatModel)
+    .hooks(new CustomStopConditionHook())
+    .saver(new MemorySaver())
+    .build();`}
+</Code>
 
 #### 流式输出
 
-```java
-import reactor.core.publisher.Flux;
+<Code
+  language="java"
+  title="流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+>
+{`import reactor.core.publisher.Flux;
 
-Flux<GraphResponse> stream = agent.stream("复杂任务");
+Flux<NodeOutput> stream = agent.stream("复杂任务");
 stream.subscribe(
     response -> System.out.println("进度: " + response),
     error -> System.err.println("错误: " + error),
     () -> System.out.println("完成")
-);
-```
+);`}
+</Code>
 
 ## 下一步
 

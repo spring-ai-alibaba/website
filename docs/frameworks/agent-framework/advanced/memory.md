@@ -50,8 +50,11 @@ Spring AI Alibaba 将长期记忆以 JSON 文档的形式存储在 Store 中。
 
 这种结构支持记忆的层次化组织。通过内容过滤器支持跨命名空间搜索。
 
-```java
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
+<Code
+  language="java"
+  title="MemoryStore 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
 import com.alibaba.cloud.ai.graph.store.StoreItem;
 
 import java.util.*;
@@ -81,15 +84,18 @@ Optional<StoreItem> retrievedItem = store.getItem(namespace, "a-memory");
 List<StoreItem> items = store.searchItems(
     namespace,
     Map.of("my-key", "my-value")
-);
-```
+);`}
+</Code>
 
 ## 在工具中读取长期记忆
 
 下面的示例展示了如何创建一个工具，让 Agent 能够查询用户信息。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="在工具中读取长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
@@ -147,15 +153,18 @@ RunnableConfig config = RunnableConfig.builder()
     .addMetadata("user_id", "user_123")
     .build();
 
-agent.invoke("查询用户信息，namespace=['users'], key='user_123'", config);
-```
+agent.invoke("查询用户信息，namespace=['users'], key='user_123'", config);`}
+</Code>
 
 ## 在工具中写入长期记忆
 
 下面的示例展示了如何创建一个更新用户信息的工具。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="在工具中写入长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
@@ -209,15 +218,18 @@ agent.invoke(
 
 // 可以直接访问存储获取值
 Optional<StoreItem> savedItem = store.getItem(List.of("users"), "user_123");
-Map<String, Object> savedValue = savedItem.get().getValue();
-```
+Map<String, Object> savedValue = savedItem.get().getValue();`}
+</Code>
 
 ## 使用 ModelHook 管理长期记忆
 
 下面的示例展示了如何使用 ModelHook 在模型调用前后自动加载和保存长期记忆。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="使用 ModelHook 管理长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
@@ -252,10 +264,6 @@ ModelHook memoryInterceptor = new ModelHook() {
         return "memory_interceptor";
     }
 
-    @Override
-    public List<JumpTo> canJumpTo() {
-        return List.of();
-    }
 
     @Override
     public HookPosition[] getHookPositions() {
@@ -284,11 +292,49 @@ ModelHook memoryInterceptor = new ModelHook() {
                 profileData.get("preferences")
             );
 
-            // 添加包含用户上下文的系统消息
+            // 获取消息列表
             List<Message> messages = (List<Message>) state.value("messages").orElse(new ArrayList<>());
             List<Message> newMessages = new ArrayList<>();
-            newMessages.add(new SystemMessage(userContext));
-            newMessages.addAll(messages);
+
+            // 查找是否已存在 SystemMessage
+            SystemMessage existingSystemMessage = null;
+            int systemMessageIndex = -1;
+            for (int i = 0; i < messages.size(); i++) {
+                Message msg = messages.get(i);
+                if (msg instanceof SystemMessage) {
+                    existingSystemMessage = (SystemMessage) msg;
+                    systemMessageIndex = i;
+                    break;
+                }
+            }
+
+            // 如果找到 SystemMessage，更新它；否则创建新的
+            SystemMessage enhancedSystemMessage;
+            if (existingSystemMessage != null) {
+                // 更新现有的 SystemMessage
+                enhancedSystemMessage = new SystemMessage(
+                    existingSystemMessage.getText() + "\n\n" + userContext
+                );
+            } else {
+                // 创建新的 SystemMessage
+                enhancedSystemMessage = new SystemMessage(userContext);
+            }
+
+            // 构建新的消息列表
+            if (systemMessageIndex >= 0) {
+                // 如果找到了 SystemMessage，替换它
+                for (int i = 0; i < messages.size(); i++) {
+                    if (i == systemMessageIndex) {
+                        newMessages.add(enhancedSystemMessage);
+                    } else {
+                        newMessages.add(messages.get(i));
+                    }
+                }
+            } else {
+                // 如果没有找到 SystemMessage，在开头添加新的
+                newMessages.add(enhancedSystemMessage);
+                newMessages.addAll(messages);
+            }
 
             return CompletableFuture.completedFuture(Map.of("messages", newMessages));
         }
@@ -317,15 +363,18 @@ RunnableConfig config = RunnableConfig.builder()
     .build();
 
 // Agent会自动加载用户画像信息
-agent.invoke("请介绍一下我的信息。", config);
-```
+agent.invoke("请介绍一下我的信息。", config);`}
+</Code>
 
 ## 结合短期和长期记忆
 
 短期记忆用于存储对话上下文，长期记忆用于存储持久化数据。下面的示例展示了如何同时使用两种记忆。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="结合短期和长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -357,10 +406,6 @@ ModelHook combinedMemoryHook = new ModelHook() {
         return "combined_memory";
     }
 
-    @Override
-    public List<JumpTo> canJumpTo() {
-        return List.of();
-    }
 
     @Override
     public HookPosition[] getHookPositions() {
@@ -385,11 +430,49 @@ ModelHook combinedMemoryHook = new ModelHook() {
         String contextInfo = String.format("长期记忆：用户 %s, 职业: %s",
             profile.get("name"), profile.get("occupation"));
 
-        // 注入到消息中
+        // 获取消息列表
         List<Message> messages = (List<Message>) state.value("messages").orElse(new ArrayList<>());
         List<Message> newMessages = new ArrayList<>();
-        newMessages.add(new SystemMessage(contextInfo));
-        newMessages.addAll(messages);
+
+        // 查找是否已存在 SystemMessage
+        SystemMessage existingSystemMessage = null;
+        int systemMessageIndex = -1;
+        for (int i = 0; i < messages.size(); i++) {
+            Message msg = messages.get(i);
+            if (msg instanceof SystemMessage) {
+                existingSystemMessage = (SystemMessage) msg;
+                systemMessageIndex = i;
+                break;
+            }
+        }
+
+        // 如果找到 SystemMessage，更新它；否则创建新的
+        SystemMessage enhancedSystemMessage;
+        if (existingSystemMessage != null) {
+            // 更新现有的 SystemMessage
+            enhancedSystemMessage = new SystemMessage(
+                existingSystemMessage.getText() + "\n\n" + contextInfo
+            );
+        } else {
+            // 创建新的 SystemMessage
+            enhancedSystemMessage = new SystemMessage(contextInfo);
+        }
+
+        // 构建新的消息列表
+        if (systemMessageIndex >= 0) {
+            // 如果找到了 SystemMessage，替换它
+            for (int i = 0; i < messages.size(); i++) {
+                if (i == systemMessageIndex) {
+                    newMessages.add(enhancedSystemMessage);
+                } else {
+                    newMessages.add(messages.get(i));
+                }
+            }
+        } else {
+            // 如果没有找到 SystemMessage，在开头添加新的
+            newMessages.add(enhancedSystemMessage);
+            newMessages.addAll(messages);
+        }
 
         return CompletableFuture.completedFuture(Map.of("messages", newMessages));
     }
@@ -413,15 +496,18 @@ agent.invoke("我今天在做一个 Spring 项目。", config);
 
 // 提出需要同时使用两种记忆的问题
 agent.invoke("根据我的职业和今天的工作，给我一些建议。", config);
-// 响应会同时使用长期记忆（职业）和短期记忆（Spring项目）
-```
+// 响应会同时使用长期记忆（职业）和短期记忆（Spring项目）`}
+</Code>
 
 ## 跨会话记忆
 
 同一用户在不同会话中应该能够访问相同的长期记忆。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="跨会话记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
@@ -484,15 +570,18 @@ agent.invoke(
     "我的密码是什么？用 getMemory 获取，namespace=['credentials'], key='user_003_password'。",
     session2
 );
-// 长期记忆在不同会话间持久化
-```
+// 长期记忆在不同会话间持久化`}
+</Code>
 
 ## 用户偏好学习
 
 Agent 可以随着时间的推移学习并存储用户偏好。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="用户偏好学习示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -513,10 +602,6 @@ ModelHook preferenceLearningHook = new ModelHook() {
         return "preference_learning";
     }
 
-    @Override
-    public List<JumpTo> canJumpTo() {
-        return List.of();
-    }
 
     @Override
     public HookPosition[] getHookPositions() {
@@ -581,6 +666,6 @@ agent.invoke("我偏好早上运动。", config);
 
 // 验证偏好已被存储
 Optional<StoreItem> savedPrefs = memoryStore.getItem(List.of("user_data"), "user_004_preferences");
-// 偏好应该被保存到长期记忆中
-```
+// 偏好应该被保存到长期记忆中`}
+</Code>
 
