@@ -62,8 +62,11 @@ Multi-agent设计的核心是**上下文工程**——决定每个Agent看到什
 
 下面是一个最小示例，其中主Agent通过工具定义访问单个子Agent：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="AgentTool 基础示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
 import org.springframework.ai.chat.model.ChatModel;
 
@@ -84,8 +87,8 @@ ReactAgent blogAgent = ReactAgent.builder()
     .build();
 
 // 使用
-Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的散文");
-```
+Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的散文");`}
+</Code>
 
 在这种模式中：
 
@@ -111,8 +114,11 @@ Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的
 
 #### 使用 inputSchema
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="使用 inputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
 
 // 定义子Agent的输入Schema
@@ -139,15 +145,18 @@ ReactAgent coordinatorAgent = ReactAgent.builder()
     .tools(AgentTool.getFunctionToolCallback(writerAgent))
     .build();
 
-Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于春天的散文，大约150字");
-```
+Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于春天的散文，大约150字");`}
+</Code>
 
 #### 使用 inputType
 
 使用 Java 类型定义输入，框架会自动生成 JSON Schema：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="使用 inputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
 
 // 定义输入类型
@@ -172,8 +181,8 @@ ReactAgent coordinatorAgent = ReactAgent.builder()
     .tools(AgentTool.getFunctionToolCallback(writerAgent))
     .build();
 
-Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于秋天的现代诗，大约100字");
-```
+Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于秋天的现代诗，大约100字");`}
+</Code>
 
 ### 控制子Agent的输出
 
@@ -186,8 +195,11 @@ Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于秋�
 
 #### 使用 outputSchema
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="使用 outputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
 
 // 定义输出Schema
@@ -215,15 +227,18 @@ ReactAgent coordinatorAgent = ReactAgent.builder()
     .tools(AgentTool.getFunctionToolCallback(writerAgent))
     .build();
 
-Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于冬天的短文");
-```
+Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于冬天的短文");`}
+</Code>
 
 #### 使用 outputType
 
 使用 Java 类型定义输出，框架会自动生成输出 schema：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
 
 // 定义输出类型
@@ -250,15 +265,18 @@ ReactAgent coordinatorAgent = ReactAgent.builder()
     .tools(AgentTool.getFunctionToolCallback(writerAgent))
     .build();
 
-Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于夏天的小诗");
-```
+Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于夏天的小诗");`}
+</Code>
 
 ### 完整类型化示例
 
 同时使用 `inputType` 和 `outputType` 进行完整的类型化Agent工具调用：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="完整类型化示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
 
 // 定义输入和输出类型
@@ -306,7 +324,7 @@ ReactAgent orchestratorAgent = ReactAgent.builder()
     )
     .build();
 
-Optional<OverAllState> result = orchestratorAgent.invoke("请写一篇关于友谊的散文，约200字，需要评审");
-```
+Optional<OverAllState> result = orchestratorAgent.invoke("请写一篇关于友谊的散文，约200字，需要评审");`}
+</Code>
 
 

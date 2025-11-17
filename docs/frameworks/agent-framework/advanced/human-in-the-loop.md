@@ -44,8 +44,11 @@ Hook 定义了三种人工响应中断的内置方式：
 
 你可以配置哪些工具需要人工审批，以及为每个工具允许哪些决策类型。
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="HumanInTheLoopHook 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.ToolConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
@@ -70,8 +73,8 @@ ReactAgent agent = ReactAgent.builder()
     .tools(writeFileTool, executeSqlTool, readDataTool)
     .hooks(List.of(humanInTheLoopHook)) // [!code highlight]
     .saver(memorySaver) // [!code highlight]
-    .build();
-```
+    .build();`}
+</Code>
 
 :::info
 你必须配置检查点保存器来在中断期间持久化图状态。
@@ -84,8 +87,11 @@ ReactAgent agent = ReactAgent.builder()
 
 当你调用 Agent 时，它会一直运行直到完成或触发中断。当工具调用匹配你在 `approvalOn` 中配置的策略时会触发中断。在这种情况下，调用结果将返回 `InterruptionMetadata`，其中包含需要审查的操作。你可以将这些操作呈现给审查者，并在提供决策后恢复执行。
 
-```java
-import com.alibaba.cloud.ai.graph.RunnableConfig;
+<Code
+  language="java"
+  title="响应中断示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.NodeOutput;
 import com.alibaba.cloud.ai.graph.action.InterruptionMetadata;
 
@@ -121,8 +127,8 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     // 工具: execute_sql
     // 参数: {"query": "DELETE FROM records WHERE created_at < NOW() - INTERVAL '30 days';"}
     // 描述: SQL执行操作需要审批
-}
-```
+}`}
+</Code>
 
 ### 决策类型
 
@@ -132,8 +138,11 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     使用 `approve` 批准工具调用原样执行，不做任何更改。
 
 ```
-```java
-    // 构建批准反馈
+<Code
+  language="java"
+  title="approve - 批准示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+>
+{`    // 构建批准反馈
     InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
         .nodeId(interruptionMetadata.node())
         .state(interruptionMetadata.state());
@@ -156,7 +165,8 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
         .build();
 
     // 第二次调用以恢复执行
-    Optional<NodeOutput> finalResult = agent.invokeAndGetOutput("", resumeConfig);
+    Optional<NodeOutput> finalResult = agent.invokeAndGetOutput("", resumeConfig);`}
+</Code>
     ```
   </Tab>
 
@@ -164,8 +174,11 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     使用 `edit` 在执行前修改工具调用。
     提供编辑后的操作，包括新的工具参数。
 
-    ```java
-    // 构建编辑反馈
+    <Code
+      language="java"
+      title="edit - 编辑示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+    >
+    {`    // 构建编辑反馈
     InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
         .nodeId(interruptionMetadata.node())
         .state(interruptionMetadata.state());
@@ -191,8 +204,8 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
         .addMetadata(RunnableConfig.HUMAN_FEEDBACK_METADATA_KEY, editMetadata)
         .build();
 
-    Optional<NodeOutput> finalResult = agent.invokeAndGetOutput("", resumeConfig);
-    ```
+    Optional<NodeOutput> finalResult = agent.invokeAndGetOutput("", resumeConfig);`}
+    </Code>
 
     <Tip>
       当**编辑**工具参数时，请保守地进行更改。对原始参数的重大修改可能会导致模型重新评估其方法，并可能多次执行工具或采取意外操作。
@@ -202,8 +215,11 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
   <Tab title="❌ reject - 拒绝">
     使用 `reject` 拒绝工具调用并提供反馈而不是执行。
 
-    ```java
-    // 构建拒绝反馈
+    <Code
+      language="java"
+      title="reject - 拒绝示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+    >
+    {`    // 构建拒绝反馈
     InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
         .nodeId(interruptionMetadata.node())
         .state(interruptionMetadata.state());
@@ -225,8 +241,8 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
         .addMetadata(RunnableConfig.HUMAN_FEEDBACK_METADATA_KEY, rejectMetadata)
         .build();
 
-    Optional<NodeOutput> finalResult = agent.invokeAndGetOutput("", resumeConfig);
-    ```
+    Optional<NodeOutput> finalResult = agent.invokeAndGetOutput("", resumeConfig);`}
+    </Code>
 
     `description` 消息将被添加到对话中作为反馈，帮助Agent理解为什么操作被拒绝以及应该做什么。
 
@@ -236,8 +252,11 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
 
     当多个操作需要审查时，为每个操作提供决策：
 
-    ```java
-    InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
+    <Code
+      language="java"
+      title="多个决策示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+    >
+    {`    InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
         .nodeId(interruptionMetadata.node())
         .state(interruptionMetadata.state());
 
@@ -264,8 +283,8 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
             .result(InterruptionMetadata.ToolFeedback.FeedbackResult.REJECTED)
             .description("不允许此操作")
             .build()
-    );
-    ```
+    );`}
+    </Code>
   </Tab>
 </Tabs>
 ``` -->
@@ -282,8 +301,11 @@ Hook 定义了一个在模型生成响应后但在执行任何工具调用之前
 
 ## 完整示例
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="HumanInTheLoop 完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.ToolConfig;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -369,15 +391,18 @@ public class HumanInTheLoopExample {
             }
         }
     }
-}
-```
+}`}
+</Code>
 
 ## 实用工具方法
 
 为了简化人工介入的处理，你可以创建实用方法：
 
-```java
-public class HITLHelper {
+<Code
+  language="java"
+  title="HITLHelper 实用工具方法示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+>
+{`public class HITLHelper {
 
     /**
      * 批准所有工具调用
@@ -459,8 +484,8 @@ InterruptionMetadata editMetadata = HITLHelper.editTool(
     interruptionMetadata,
     "execute_sql",
     "{\"query\": \"SELECT * FROM records LIMIT 10\"}"
-);
-```
+);`}
+</Code>
 
 ## 最佳实践
 

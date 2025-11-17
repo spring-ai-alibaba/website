@@ -94,48 +94,60 @@ RAG 可以以多种方式实现，具体取决于你的系统需求。我们在�
 
 #### Java 实现示例
 
-```java
-import org.springframework.ai.document.Document;
+<Code
+  language="java"
+  title="两步RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+>
+{`import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.model.ChatModel;
+import java.util.List;
+import java.util.stream.Collectors;
 
 // 假设你已经有一个配置好的向量存储
 VectorStore vectorStore = ...; // 配置你的向量存储（如Milvus、Pinecone等）
 
-// 创建带有RAG功能的ChatClient
-ChatClient chatClient = ChatClient.builder(chatModel)
-    .defaultAdvisors(
-        new QuestionAnswerAdvisor(vectorStore) // [!code highlight]
-    )
-    .build();
-
 // 两步RAG：检索 -> 生成
 String userQuestion = "Spring AI Alibaba支持哪些模型？";
 
-String answer = chatClient.prompt()
-    .user(userQuestion)
-    .call()
-    .content(); // [!code highlight]
+// Step 1: 检索相关文档
+List<Document> relevantDocs = vectorStore.similaritySearch(userQuestion);
 
-System.out.println("答案: " + answer);
-```
+// Step 2: 构建上下文
+String context = relevantDocs.stream()
+    .map(Document::getText)
+    .collect(Collectors.joining("\n\n"));
+
+// Step 3: 使用上下文生成答案
+ChatClient chatClient = ChatClient.builder(chatModel).build();
+String answer = chatClient.prompt()
+    .user(u -> u.text("基于以下上下文回答问题：\n\n上下文：\n" + context + "\n\n问题：" + userQuestion))
+    .call()
+    .content();
+
+System.out.println("答案: " + answer);`}
+</Code>
 
 在这个例子中：
 
-1. `QuestionAnswerAdvisor` 自动从向量存储检索相关文档
-2. 检索到的文档作为上下文添加到提示中
+1. 从向量存储检索相关文档
+2. 将检索到的文档合并为上下文
 3. ChatModel 使用增强的上下文生成答案
 
 #### 构建知识库
 
-```java
-import org.springframework.ai.document.Document;
+<Code
+  language="java"
+  title="构建知识库示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+>
+{`import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import java.util.List;
 
 // 1. 加载文档
 Resource resource = new FileSystemResource("path/to/document.txt");
@@ -147,11 +159,11 @@ TokenTextSplitter splitter = new TokenTextSplitter();
 List<Document> chunks = splitter.apply(documents);
 
 // 3. 将块添加到向量存储
-vectorStore.add(chunks); // [!code highlight]
+vectorStore.add(chunks);
 
 // 现在你可以使用向量存储进行检索
-List<Document> results = vectorStore.similaritySearch("查询文本");
-```
+List<Document> results = vectorStore.similaritySearch("查询文本");`}
+</Code>
 
 ### Agentic RAG
 
@@ -165,15 +177,21 @@ Agent 启用 RAG 行为所需的唯一条件是访问一个或多个可以获取
 
 #### Java 实现示例
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="Agentic RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
-import java.util.function.Function;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+import org.springframework.ai.vectorstore.VectorStore;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 // 创建文档检索工具
-public class DocumentSearchTool implements Function<DocumentSearchTool.Request, DocumentSearchTool.Response> {
-
+class DocumentSearchTool {
     private final VectorStore vectorStore;
 
     public DocumentSearchTool(VectorStore vectorStore) {
@@ -183,26 +201,26 @@ public class DocumentSearchTool implements Function<DocumentSearchTool.Request, 
     public record Request(String query) {}
     public record Response(String content) {}
 
-    @Override
-    public Response apply(Request request) {
+    public Response search(Request request) {
         // 从向量存储检索相关文档
-        List<Document> docs = vectorStore.similaritySearch(request.query()); // [!code highlight]
+        List<Document> docs = vectorStore.similaritySearch(request.query());
 
         // 合并文档内容
         String combinedContent = docs.stream()
-            .map(Document::getContent)
+            .map(Document::getText)
             .collect(Collectors.joining("\n\n"));
 
         return new Response(combinedContent);
     }
 }
 
-// 创建工具回调
 DocumentSearchTool searchTool = new DocumentSearchTool(vectorStore);
-ToolCallback searchCallback = ToolCallback.builder()
-    .name("search_documents")
+
+// 创建工具回调
+ToolCallback searchCallback = FunctionToolCallback.builder("search_documents",
+    (Function<DocumentSearchTool.Request, DocumentSearchTool.Response>)
+    request -> searchTool.search(request))
     .description("搜索文档以查找相关信息")
-    .function(searchTool)
     .inputType(DocumentSearchTool.Request.class)
     .build();
 
@@ -210,15 +228,14 @@ ToolCallback searchCallback = ToolCallback.builder()
 ReactAgent ragAgent = ReactAgent.builder()
     .name("rag_agent")
     .model(chatModel)
-    .systemPrompt("你是一个智能助手。当需要查找信息时，使用search_documents工具。" +
-                  "基于检索到的信息回答用户的问题，并引用相关片段。")
-    .tools(searchCallback) // [!code highlight]
+    .instruction("你是一个智能助手。当需要查找信息时，使用search_documents工具。" +
+               "基于检索到的信息回答用户的问题，并引用相关片段。")
+    .tools(searchCallback)
     .build();
 
 // Agent会自动决定何时调用检索工具
-AssistantMessage response = ragAgent.call("Spring AI Alibaba支持哪些向量数据库？");
-System.out.println(response.getText());
-```
+ragAgent.invoke("Spring AI Alibaba支持哪些向量数据库？");`}
+</Code>
 
 在这个例子中：
 
@@ -230,45 +247,96 @@ System.out.println(response.getText());
 
 #### 多工具 Agentic RAG
 
-```java
+<Code
+  language="java"
+  title="多工具Agentic RAG示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+import org.springframework.ai.vectorstore.VectorStore;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 // 创建多个检索工具
-ToolCallback webSearchTool = ToolCallback.builder()
-    .name("web_search")
+class WebSearchTool {
+    public record Request(String query) {}
+    public record Response(String content) {}
+    
+    public Response search(Request request) {
+        return new Response("从网络搜索到的信息: " + request.query());
+    }
+}
+
+class DatabaseQueryTool {
+    public record Request(String query) {}
+    public record Response(String content) {}
+    
+    public Response query(Request request) {
+        return new Response("从数据库查询到的信息: " + request.query());
+    }
+}
+
+class DocumentSearchTool {
+    private final VectorStore vectorStore;
+    
+    public DocumentSearchTool(VectorStore vectorStore) {
+        this.vectorStore = vectorStore;
+    }
+    
+    public record Request(String query) {}
+    public record Response(String content) {}
+    
+    public Response search(Request request) {
+        List<Document> docs = vectorStore.similaritySearch(request.query());
+        String content = docs.stream()
+            .map(Document::getText)
+            .collect(Collectors.joining("\n\n"));
+        return new Response(content);
+    }
+}
+
+WebSearchTool webSearchTool = new WebSearchTool();
+DatabaseQueryTool dbQueryTool = new DatabaseQueryTool();
+DocumentSearchTool docSearchTool = new DocumentSearchTool(vectorStore);
+
+ToolCallback webSearchCallback = FunctionToolCallback.builder("web_search",
+    (Function<WebSearchTool.Request, WebSearchTool.Response>)
+    req -> webSearchTool.search(req))
     .description("搜索互联网以获取最新信息")
-    .function(webSearchFunction)
-    .inputType(WebSearchRequest.class)
+    .inputType(WebSearchTool.Request.class)
     .build();
 
-ToolCallback databaseQueryTool = ToolCallback.builder()
-    .name("database_query")
+ToolCallback databaseQueryCallback = FunctionToolCallback.builder("database_query",
+    (Function<DatabaseQueryTool.Request, DatabaseQueryTool.Response>)
+    req -> dbQueryTool.query(req))
     .description("查询内部数据库")
-    .function(dbQueryFunction)
-    .inputType(DatabaseQueryRequest.class)
+    .inputType(DatabaseQueryTool.Request.class)
     .build();
 
-ToolCallback documentSearchTool = ToolCallback.builder()
-    .name("document_search")
+ToolCallback documentSearchCallback = FunctionToolCallback.builder("document_search",
+    (Function<DocumentSearchTool.Request, DocumentSearchTool.Response>)
+    req -> docSearchTool.search(req))
     .description("搜索文档库")
-    .function(docSearchFunction)
-    .inputType(DocumentSearchRequest.class)
+    .inputType(DocumentSearchTool.Request.class)
     .build();
 
 // Agent可以访问多个检索源
 ReactAgent multiSourceAgent = ReactAgent.builder()
     .name("multi_source_rag_agent")
     .model(chatModel)
-    .systemPrompt("你可以访问多个信息源：" +
-                  "1. web_search - 用于最新的互联网信息\n" +
-                  "2. database_query - 用于内部数据\n" +
-                  "3. document_search - 用于文档库\n" +
-                  "根据问题选择最合适的工具。")
-    .tools(webSearchTool, databaseQueryTool, documentSearchTool) // [!code highlight]
+    .instruction("你可以访问多个信息源：" +
+               "1. web_search - 用于最新的互联网信息\n" +
+               "2. database_query - 用于内部数据\n" +
+               "3. document_search - 用于文档库\n" +
+               "根据问题选择最合适的工具。")
+    .tools(webSearchCallback, databaseQueryCallback, documentSearchCallback)
     .build();
 
-AssistantMessage response = multiSourceAgent.call(
-    "比较我们的产品文档中的功能和最新的市场趋势"
-);
-```
+multiSourceAgent.invoke("比较我们的产品文档中的功能和最新的市场趋势");`}
+</Code>
 
 ### 混合 RAG
 
@@ -286,17 +354,29 @@ AssistantMessage response = multiSourceAgent.call(
 
 #### Java 实现示例（概念性）
 
-```java
-public class HybridRAGSystem {
+<Code
+  language="java"
+  title="混合RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+>
+{`import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
+import java.util.List;
+import java.util.stream.Collectors;
 
+class HybridRAGSystem {
     private final ChatModel chatModel;
     private final VectorStore vectorStore;
-    private final QueryEnhancer queryEnhancer;
-    private final AnswerValidator answerValidator;
+
+    public HybridRAGSystem(ChatModel chatModel, VectorStore vectorStore) {
+        this.chatModel = chatModel;
+        this.vectorStore = vectorStore;
+    }
 
     public String answer(String userQuestion) {
         // 1. 查询增强
-        String enhancedQuery = queryEnhancer.enhance(userQuestion);
+        String enhancedQuery = enhanceQuery(userQuestion);
 
         int maxAttempts = 3;
         for (int attempt = 0; attempt < maxAttempts; attempt++) {
@@ -313,7 +393,7 @@ public class HybridRAGSystem {
             String answer = generateAnswer(userQuestion, docs);
 
             // 5. 答案验证
-            ValidationResult validation = answerValidator.validate(answer, docs);
+            ValidationResult validation = validateAnswer(answer, docs);
             if (validation.isValid()) {
                 return answer;
             }
@@ -329,24 +409,58 @@ public class HybridRAGSystem {
         return "无法生成满意的答案";
     }
 
+    private String enhanceQuery(String query) {
+        return query; // 实现查询增强逻辑
+    }
+
     private boolean isRetrievalSufficient(List<Document> docs) {
-        // 实现检索质量评估逻辑
         return !docs.isEmpty() && calculateRelevanceScore(docs) > 0.7;
+    }
+
+    private double calculateRelevanceScore(List<Document> docs) {
+        return 0.8; // 实现相关性评分逻辑
+    }
+
+    private String refineQuery(String query, List<Document> docs) {
+        return query; // 实现查询优化逻辑
     }
 
     private String generateAnswer(String question, List<Document> docs) {
         String context = docs.stream()
-            .map(Document::getContent)
+            .map(Document::getText)
             .collect(Collectors.joining("\n\n"));
 
-        return chatClient.prompt()
+        ChatClient client = ChatClient.builder(chatModel).build();
+        return client.prompt()
             .system("基于以下上下文回答问题：\n" + context)
             .user(question)
             .call()
             .content();
     }
-}
-```
+
+    private ValidationResult validateAnswer(String answer, List<Document> docs) {
+        // 实现答案验证逻辑
+        return new ValidationResult(true, false);
+    }
+
+    private String refineBasedOnValidation(String query, ValidationResult validation) {
+        return query; // 基于验证结果优化查询
+    }
+
+    class ValidationResult {
+        private boolean valid;
+        private boolean shouldRetry;
+
+        public ValidationResult(boolean valid, boolean shouldRetry) {
+            this.valid = valid;
+            this.shouldRetry = shouldRetry;
+        }
+
+        public boolean isValid() { return valid; }
+        public boolean shouldRetry() { return shouldRetry; }
+    }
+}`}
+</Code>
 
 这种架构适用于：
 
@@ -389,8 +503,11 @@ public class HybridRAGSystem {
 
 Spring AI Alibaba 提供了构建 RAG 系统的核心组件：
 
-```java
-// 文档加载和处理
+<Code
+  language="java"
+  title="RAG核心组件导入" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+>
+{`// 文档加载和处理
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
@@ -402,9 +519,16 @@ import org.springframework.ai.vectorstore.SimpleVectorStore;
 // 嵌入模型
 import org.springframework.ai.embedding.EmbeddingModel;
 
-// RAG Advisor
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
-```
+// ChatClient
+import org.springframework.ai.chat.client.ChatClient;
+
+// Agent
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+
+// 工具
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;`}
+</Code>
 
 ## 相关文档
 

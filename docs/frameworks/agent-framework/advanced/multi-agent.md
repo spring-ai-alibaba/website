@@ -68,8 +68,11 @@ Multi-agent设计的核心是**上下文工程**——决定每个Agent看到什
 
 #### 实现
 
-```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.SequentialAgent;
+<Code
+  language="java"
+  title="SequentialAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.flow.agent.SequentialAgent;
 import com.alibaba.cloud.ai.graph.OverAllState;
 
 // 创建专业化的子Agent
@@ -111,8 +114,8 @@ if (result.isPresent()) {
     // 访问第二个Agent的输出
     AssistantMessage reviewedArticle = (AssistantMessage) state.value("reviewed_article").get();
     System.out.println("评审后文章: " + reviewedArticle.getText());
-}
-```
+}`}
+</Code>
 
 #### 关键特性
 
@@ -123,8 +126,11 @@ if (result.isPresent()) {
 
 #### 控制推理内容
 
-```java
-ReactAgent writerAgent = ReactAgent.builder()
+<Code
+  language="java"
+  title="控制推理内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_agent")
     .model(chatModel)
     .returnReasoningContents(true) // [!code highlight]
@@ -149,8 +155,8 @@ Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的
 
 // 消息历史将包含所有工具调用和推理过程
 List<Message> messages = (List<Message>) result.get().value("messages").get();
-System.out.println("消息数量: " + messages.size()); // 包含所有中间步骤
-```
+System.out.println("消息数量: " + messages.size()); // 包含所有中间步骤`}
+</Code>
 
 ### 并行执行（Parallel Agent）
 
@@ -166,8 +172,11 @@ System.out.println("消息数量: " + messages.size()); // 包含所有中间步
 
 #### 实现
 
-```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.ParallelAgent;
+<Code
+  language="java"
+  title="ParallelAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.flow.agent.ParallelAgent;
 
 // 创建多个专业化Agent
 ReactAgent proseWriterAgent = ReactAgent.builder()
@@ -224,15 +233,18 @@ if (result.isPresent()) {
     // 访问合并后的结果
     Object mergedResults = state.value("merged_results").get();
     System.out.println("合并结果: " + mergedResults);
-}
-```
+}`}
+</Code>
 
 #### 自定义合并策略
 
 你可以实现自定义的合并策略来控制如何组合多个Agent的输出：
 
-```java
-public class CustomMergeStrategy implements ParallelAgent.MergeStrategy {
+<Code
+  language="java"
+  title="自定义合并策略完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`public class CustomMergeStrategy implements ParallelAgent.MergeStrategy {
 
     @Override
     public Map<String, Object> merge(List<OverAllState> results) {
@@ -262,8 +274,8 @@ ParallelAgent parallelAgent = ParallelAgent.builder()
     .name("parallel_agent")
     .subAgents(List.of(agent1, agent2, agent3))
     .mergeStrategy(new CustomMergeStrategy()) // [!code highlight]
-    .build();
-```
+    .build();`}
+</Code>
 
 ### 路由（LlmRoutingAgent）
 
@@ -280,8 +292,11 @@ ParallelAgent parallelAgent = ParallelAgent.builder()
 
 #### 实现
 
-```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.LlmRoutingAgent;
+<Code
+  language="java"
+  title="LlmRoutingAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.flow.agent.LlmRoutingAgent;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 
 // 创建专业化的子Agent
@@ -314,7 +329,7 @@ ReactAgent translatorAgent = ReactAgent.builder()
 LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
     .name("content_routing_agent")
     .description("根据用户需求智能路由到合适的专家Agent")
-    .chatModel(chatModel) // [!code highlight]
+    .model(chatModel) // [!code highlight]
     .subAgents(List.of(writerAgent, reviewerAgent, translatorAgent)) // [!code highlight]
     .build();
 
@@ -326,8 +341,8 @@ Optional<OverAllState> result2 = routingAgent.invoke("请帮我修改这篇文�
 // LLM会路由到 reviewerAgent
 
 Optional<OverAllState> result3 = routingAgent.invoke("请将以下内容翻译成英文：春暖花开");
-// LLM会路由到 translatorAgent
-```
+// LLM会路由到 translatorAgent`}
+</Code>
 
 #### 关键特性
 
@@ -340,8 +355,11 @@ Optional<OverAllState> result3 = routingAgent.invoke("请将以下内容翻译�
 
 为了提高路由的准确性，需要注意以下几点：
 
-```java
-// 1. 提供清晰明确的Agent描述
+<Code
+  language="java"
+  title="优化路由准确性示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`// 1. 提供清晰明确的Agent描述
 ReactAgent codeAgent = ReactAgent.builder()
     .name("code_agent")
     .model(chatModel)
@@ -362,10 +380,10 @@ ReactAgent businessAgent = ReactAgent.builder()
 // 3. 使用不同领域的Agent避免重叠
 LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
     .name("multi_domain_router")
-    .chatModel(chatModel)
+    .model(chatModel)
     .subAgents(List.of(codeAgent, businessAgent, writerAgent))
-    .build();
-```
+    .build();`}
+</Code>
 
 ### 自定义（Customized）
 
@@ -375,8 +393,11 @@ Spring AI Alibaba 提供了 `FlowAgent` 抽象类，允许你创建自定义的A
 
 `FlowAgent` 是所有流程型Agent（如 `SequentialAgent`、`ParallelAgent`、`LlmRoutingAgent`）的基类，它提供了以下核心能力：
 
-```java
-public abstract class FlowAgent extends Agent {
+<Code
+  language="java"
+  title="FlowAgent 架构示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`public abstract class FlowAgent extends Agent {
 
     protected List<Agent> subAgents;  // 子Agent列表
     protected CompileConfig compileConfig;  // 编译配置
@@ -389,15 +410,18 @@ public abstract class FlowAgent extends Agent {
     // 提供给子类使用的工具方法
     public List<Agent> subAgents() { return this.subAgents; }
     public CompileConfig compileConfig() { return compileConfig; }
-}
-```
+}`}
+</Code>
 
 #### 实现自定义FlowAgent
 
 下面展示如何创建一个自定义的 `ConditionalAgent`，它根据条件选择不同的Agent分支：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.flow.agent.FlowAgent;
+<Code
+  language="java"
+  title="实现自定义FlowAgent示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.flow.agent.FlowAgent;
 import com.alibaba.cloud.ai.graph.agent.flow.builder.FlowAgentBuilder;
 import com.alibaba.cloud.ai.graph.agent.flow.builder.FlowGraphBuilder;
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -479,13 +503,16 @@ public class ConditionalAgent extends FlowAgent {
             return this;
         }
     }
-}
-```
+}`}
+</Code>
 
 #### 使用自定义Agent
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="使用自定义Agent示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import java.util.Map;
 
 // 创建两个分支Agent
@@ -528,15 +555,18 @@ Optional<OverAllState> result1 = conditionalAgent.invoke("这是一个紧急问�
 // 会路由到 urgentAgent
 
 Optional<OverAllState> result2 = conditionalAgent.invoke("请帮我分析一下这个问题");
-// 会路由到 normalAgent
-```
+// 会路由到 normalAgent`}
+</Code>
 
 #### 实现复杂的循环Agent
 
 你还可以创建更复杂的自定义Agent，例如带有循环逻辑的 `LoopAgent`：
 
-```java
-/**
+<Code
+  language="java"
+  title="循环Agent实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`/**
  * 循环Agent：重复执行直到满足退出条件
  */
 public class CustomLoopAgent extends FlowAgent {
@@ -575,8 +605,8 @@ CustomLoopAgent refinementAgent = CustomLoopAgent.builder()
         return score != null && (int) score >= 8;
     })
     .maxIterations(5) // 最多循环5次
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 关键要点
 
@@ -594,8 +624,11 @@ CustomLoopAgent refinementAgent = CustomLoopAgent.builder()
 
 你可以组合不同的模式创建复杂的工作流：
 
-```java
-// 1. 创建研究Agent（作为工具）
+<Code
+  language="java"
+  title="混合模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+>
+{`// 1. 创建研究Agent（作为工具）
 ReactAgent researchAgent = ReactAgent.builder()
     .name("research_agent")
     .model(chatModel)
@@ -641,8 +674,8 @@ SequentialAgent complexWorkflow = SequentialAgent.builder()
     .build();
 
 // 使用
-Optional<OverAllState> result = complexWorkflow.invoke("创作关于'人工智能'的内容");
-```
+Optional<OverAllState> result = complexWorkflow.invoke("创作关于'人工智能'的内容");`}
+</Code>
 
 ## 相关文档
 

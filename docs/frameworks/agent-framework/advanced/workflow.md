@@ -51,15 +51,18 @@ Spring AI Alibaba 同时提供了声明式的 Agentic API 与底层原子化的 
 
 自定义 Node 需要实现 `NodeAction` 或 `NodeActionWithConfig` 接口：
 
-```java
-public interface NodeAction {
+<Code
+  language="java"
+  title="Node 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`public interface NodeAction {
     Map<String, Object> apply(OverAllState state) throws Exception;
 }
 
 public interface NodeActionWithConfig {
     Map<String, Object> apply(OverAllState state, RunnableConfig config) throws Exception;
-}
-```
+}`}
+</Code>
 
 **主要区别**：
 - `NodeAction`：只接收状态作为参数，适用于简单的业务逻辑
@@ -69,8 +72,11 @@ public interface NodeActionWithConfig {
 
 以下是一个简单的文本处理 Node：
 
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
+<Code
+  language="java"
+  title="基础 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,15 +96,18 @@ public class TextProcessorNode implements NodeAction {
         result.put("processed_text", processedText);
         return result;
     }
-}
-```
+}`}
+</Code>
 
 ### 高级 Node 示例：带配置的 AI Node
 
 以下示例展示如何创建一个调用 LLM 的 Node：
 
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
+<Code
+  language="java"
+  title="高级 Node 示例：带配置的 AI Node" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.action.NodeActionWithConfig;
 import org.springframework.ai.chat.client.ChatClient;
@@ -144,15 +153,18 @@ public class QueryExpanderNode implements NodeActionWithConfig {
         output.put("queryVariants", List.of(variants));
         return output;
     }
-}
-```
+}`}
+</Code>
 
 ### 条件评估 Node
 
 用于工作流中的条件分支判断：
 
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
+<Code
+  language="java"
+  title="条件评估 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
 
 import java.util.HashMap;
@@ -180,15 +192,18 @@ public class ConditionEvaluatorNode implements NodeAction {
         result.put("_condition_result", route);
         return result;
     }
-}
-```
+}`}
+</Code>
 
 ### 并行结果聚合 Node
 
 用于收集和聚合并行执行的多个 Node 的结果：
 
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
+<Code
+  language="java"
+  title="并行结果聚合 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
 
 import java.util.*;
@@ -218,13 +233,16 @@ public class ParallelResultAggregatorNode implements NodeAction {
         output.put(outputKey, aggregatedResult);
         return output;
     }
-}
-```
+}`}
+</Code>
 
 ### 集成自定义 Node 到 StateGraph
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="集成自定义 Node 到 StateGraph 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 import org.springframework.context.annotation.Bean;
@@ -273,8 +291,8 @@ public class WorkflowConfiguration {
 
         return graph;
     }
-}
-```
+}`}
+</Code>
 
 ### Node 开发最佳实践
 
@@ -284,8 +302,11 @@ public class WorkflowConfiguration {
 4. **日志记录**：添加适当的日志以便调试和监控
 5. **参数验证**：在处理前验证从状态中获取的参数
 
-```java
-public class RobustNode implements NodeAction {
+<Code
+  language="java"
+  title="RobustNode 最佳实践示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`public class RobustNode implements NodeAction {
     private static final Logger logger = LoggerFactory.getLogger(RobustNode.class);
 
     @Override
@@ -318,8 +339,8 @@ public class RobustNode implements NodeAction {
         // 具体业务逻辑
         return input;
     }
-}
-```
+}`}
+</Code>
 
 ## Agent作为Node
 
@@ -327,10 +348,13 @@ public class RobustNode implements NodeAction {
 
 ### ReactAgent 作为 SubGraph Node
 
-`ReactAgent` 可以通过 `asSubGraphNode()` 方法转换为可以嵌入到父 Graph 中的 Node：
+`ReactAgent` 可以通过 `asNode()` 方法转换为可以嵌入到父 Graph 中的 Node：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="ReactAgent 作为 SubGraph Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.StateGraph;
 import org.springframework.ai.chat.model.ChatModel;
 
@@ -357,20 +381,16 @@ public class AgentWorkflowExample {
         StateGraph workflow = new StateGraph("multi_agent_workflow", keyStrategyFactory);
 
         // 将 Agent 作为 SubGraph Node 添加
-        workflow.addNode("analysis", analysisAgent.asSubGraphNode(
-            "analysis_node",          // Node ID
+        workflow.addNode("analysis", analysisAgent.asNode(
             true,                     // includeContents: 是否传递父图的消息历史
             false,                    // returnReasoningContents: 是否返回推理过程
-            "analysis_result",        // outputKeyToParent: 输出键名
-            "请分析以下数据"            // instruction: 给 Agent 的指令
+            "analysis_result"         // outputKeyToParent: 输出键名
         ));
 
-        workflow.addNode("reporting", reportAgent.asSubGraphNode(
-            "report_node",
+        workflow.addNode("reporting", reportAgent.asNode(
             true,
             false,
-            "final_report",
-            "请根据分析结果生成报告"
+            "final_report"
         ));
 
         // 定义流程
@@ -380,27 +400,28 @@ public class AgentWorkflowExample {
 
         return workflow;
     }
-}
-```
+}`}
+</Code>
 
 ### SubGraph Node 参数说明
 
-`asSubGraphNode()` 方法支持以下参数配置：
+`asNode()` 方法支持以下参数配置：
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| `nodeId` | String | Node 的唯一标识符 |
 | `includeContents` | boolean | 是否将父图的 messages 传递给子 Agent（默认 true） |
 | `returnReasoningContents` | boolean | 是否返回完整的推理过程，false 则只返回最终结果（默认 false） |
 | `outputKeyToParent` | String | 子 Agent 结果在父图状态中的键名 |
-| `instruction` | String | 传递给子 Agent 的额外指令 |
 
 ### 多 Agent 协作工作流示例
 
 以下示例展示了一个完整的多 Agent 协作场景：
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="多 Agent 协作工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.CompileConfig;
 import org.springframework.ai.chat.model.ChatModel;
@@ -442,32 +463,23 @@ public class MultiAgentWorkflow {
         StateGraph workflow = new StateGraph("research_workflow", keyStrategyFactory);
 
         // 添加 Agent 节点
-        workflow.addNode("research",
-            researchAgent.asSubGraphNode(
-                "research_node",
-                true,    // 包含历史消息
-                false,   // 不返回推理过程
-                "research_data",
-                "请收集关于给定主题的相关信息"
-            ));
+        workflow.addNode("research", researchAgent.asNode(
+            true,    // 包含历史消息
+            false,   // 不返回推理过程
+            "research_data"
+        ));
 
-        workflow.addNode("analysis",
-            analysisAgent.asSubGraphNode(
-                "analysis_node",
-                true,
-                false,
-                "analysis_result",
-                "请分析研究数据并提取关键洞察"
-            ));
+        workflow.addNode("analysis", analysisAgent.asNode(
+            true,
+            false,
+            "analysis_result"
+        ));
 
-        workflow.addNode("summary",
-            summaryAgent.asSubGraphNode(
-                "summary_node",
-                true,
-                true,    // 返回完整推理过程
-                "final_summary",
-                "请将分析结果总结为执行摘要"
-            ));
+        workflow.addNode("summary", summaryAgent.asNode(
+            true,
+            true,    // 返回完整推理过程
+            "final_summary"
+        ));
 
         // 定义顺序执行流程
         workflow.addEdge(StateGraph.START, "research");
@@ -477,15 +489,18 @@ public class MultiAgentWorkflow {
 
         return workflow;
     }
-}
-```
+}`}
+</Code>
 
 ### Agent Node 与普通 Node 混合使用
 
 在实际应用中，可以将 Agent Node 和自定义 Node 混合使用，充分发挥各自优势：
 
-```java
-public class HybridWorkflow {
+<Code
+  language="java"
+  title="Agent Node 与普通 Node 混合使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`public class HybridWorkflow {
 
     public StateGraph buildHybridWorkflow(ChatModel chatModel) {
         // 创建 Agent
@@ -517,12 +532,10 @@ public class HybridWorkflow {
         workflow.addNode("validate", node_async(validator));
 
         // 添加 Agent Node
-        workflow.addNode("qa", qaAgent.asSubGraphNode(
-            "qa_node",
+        workflow.addNode("qa", qaAgent.asNode(
             true,
             false,
-            "qa_result",
-            null
+            "qa_result"
         ));
 
         // 定义流程：预处理 -> Agent处理 -> 验证
@@ -539,13 +552,16 @@ public class HybridWorkflow {
 
         return workflow;
     }
-}
-```
+}`}
+</Code>
 
 ### 执行工作流
 
-```java
-import com.alibaba.cloud.ai.graph.CompiledGraph;
+<Code
+  language="java"
+  title="执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 
@@ -580,8 +596,8 @@ public class WorkflowExecutor {
             System.out.println("最终总结: " + state.value("final_summary").orElse("无"));
         });
     }
-}
-```
+}`}
+</Code>
 
 ### Agent Node 最佳实践
 
@@ -601,14 +617,17 @@ public class WorkflowExecutor {
 3. **超时控制**：为每个 Agent 设置合理的超时时间
 4. **资源管理**：合理配置 ChatModel 的连接池和并发参数
 
-```java
-// 并行执行示例
+<Code
+  language="java"
+  title="并行执行示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`// 并行执行示例
 workflow.addNode("parallel_start", node_async(new TransparentNode()));
 
 // 添加多个并行 Agent
-workflow.addNode("agent1", agent1.asSubGraphNode(...));
-workflow.addNode("agent2", agent2.asSubGraphNode(...));
-workflow.addNode("agent3", agent3.asSubGraphNode(...));
+workflow.addNode("agent1", agent1.asNode(true, false, "result1"));
+workflow.addNode("agent2", agent2.asNode(true, false, "result2"));
+workflow.addNode("agent3", agent3.asNode(true, false, "result3"));
 
 // 聚合结果
 workflow.addNode("aggregator", node_async(new ParallelResultAggregatorNode("merged_result")));
@@ -617,8 +636,8 @@ workflow.addNode("aggregator", node_async(new ParallelResultAggregatorNode("merg
 workflow.addEdge(StateGraph.START, "parallel_start");
 workflow.addEdge("parallel_start", List.of("agent1", "agent2", "agent3"));
 workflow.addEdge(List.of("agent1", "agent2", "agent3"), "aggregator");
-workflow.addEdge("aggregator", StateGraph.END);
-```
+workflow.addEdge("aggregator", StateGraph.END);`}
+</Code>
 
 ## 与Dify低代码平台集成
 使用 Spring AI Alibaba Admin 平台，可以实现 Dify DSL 到 Spring AI Alibaba 高代码工程的导出。

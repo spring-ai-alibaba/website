@@ -6,7 +6,7 @@ keywords: [ReactAgent, 快速开始, Quick Start, Spring AI Alibaba, Agent Frame
 
 # ReactAgent 快速开始
 
-跟随快速开始，学习如果开发一个具备完整功能的 ReactAgent 智能体。
+跟随快速开始，学习如何开发一个具备完整功能的 ReactAgent 智能体。
 
 ## 前置条件
 

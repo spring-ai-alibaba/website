@@ -22,15 +22,18 @@ ChatModel API 为开发者提供了将 AI 驱动的聊天补全功能集成到�
 
 以下是 [ChatModel](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/ChatModel.java) 接口定义：
 
-```java
-public interface ChatModel extends Model<Prompt, ChatResponse>, StreamingChatModel {
+<Code
+  language="java"
+  title="ChatModel 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface ChatModel extends Model<Prompt, ChatResponse>, StreamingChatModel {
 
     default String call(String message) {...}
 
     @Override
     ChatResponse call(Prompt prompt);
-}
-```
+}`}
+</Code>
 
 带有 `String` 参数的 `call()` 方法简化了初始使用，避免了更复杂的 `Prompt` 和 `ChatResponse` 类的复杂性。在实际应用中，更常见的是使用接受 `Prompt` 实例并返回 `ChatResponse` 的 `call()` 方法。
 
@@ -38,15 +41,18 @@ public interface ChatModel extends Model<Prompt, ChatResponse>, StreamingChatMod
 
 以下是 [StreamingChatModel](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/StreamingChatModel.java) 接口定义：
 
-```java
-public interface StreamingChatModel extends StreamingModel<Prompt, ChatResponse> {
+<Code
+  language="java"
+  title="StreamingChatModel 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface StreamingChatModel extends StreamingModel<Prompt, ChatResponse> {
 
     default Flux<String> stream(String message) {...}
 
     @Override
     Flux<ChatResponse> stream(Prompt prompt);
-}
-```
+}`}
+</Code>
 
 `stream()` 方法接受 `String` 或 `Prompt` 参数，类似于 `ChatModel`，但使用响应式 Flux API 流式传输响应。
 
@@ -54,8 +60,11 @@ public interface StreamingChatModel extends StreamingModel<Prompt, ChatResponse>
 
 [Prompt](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-client-chat/src/main/java/org/springframework/ai/chat/prompt/Prompt.java) 是一个封装了 [Message](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/messages/Message.java) 对象列表和可选模型请求选项的 `ModelRequest`。以下是 `Prompt` 类的简化版本，排除了构造函数和其他实用方法：
 
-```java
-public class Prompt implements ModelRequest<List<Message>> {
+<Code
+  language="java"
+  title="Prompt 类定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public class Prompt implements ModelRequest<List<Message>> {
 
     private final List<Message> messages;
 
@@ -68,8 +77,8 @@ public class Prompt implements ModelRequest<List<Message>> {
     public List<Message> getInstructions() {...}
 
     // 构造函数和实用方法省略
-}
-```
+}`}
+</Code>
 
 #### Message
 
@@ -77,8 +86,11 @@ public class Prompt implements ModelRequest<List<Message>> {
 
 接口定义如下：
 
-```java
-public interface Content {
+<Code
+  language="java"
+  title="Message 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface Content {
 
     String getText();
 
@@ -88,17 +100,20 @@ public interface Content {
 public interface Message extends Content {
 
     MessageType getMessageType();
-}
-```
+}`}
+</Code>
 
 多模态消息类型还实现了 `MediaContent` 接口，提供 `Media` 内容对象列表。
 
-```java
-public interface MediaContent extends Content {
+<Code
+  language="java"
+  title="MediaContent 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface MediaContent extends Content {
 
     Collection<Media> getMedia();
-}
-```
+}`}
+</Code>
 
 `Message` 接口有多种实现，对应于 AI 模型可以处理的消息类别：
 
@@ -120,8 +135,11 @@ public interface MediaContent extends Content {
 
 表示可以传递给 AI 模型的选项。`ChatOptions` 类是 `ModelOptions` 的子类，用于定义可以传递给 AI 模型的少数可移植选项。`ChatOptions` 类定义如下：
 
-```java
-public interface ChatOptions extends ModelOptions {
+<Code
+  language="java"
+  title="ChatOptions 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface ChatOptions extends ModelOptions {
 
     String getModel();
     Float getFrequencyPenalty();
@@ -132,8 +150,8 @@ public interface ChatOptions extends ModelOptions {
     Integer getTopK();
     Float getTopP();
     ChatOptions copy();
-}
-```
+}`}
+</Code>
 
 **常用选项说明**：
 
@@ -170,8 +188,11 @@ Spring AI 提供了一个复杂的系统来配置和使用 ChatModels。它允�
 
 `ChatResponse` 类的结构如下：
 
-```java
-public class ChatResponse implements ModelResponse<Generation> {
+<Code
+  language="java"
+  title="ChatResponse 类定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public class ChatResponse implements ModelResponse<Generation> {
 
     private final ChatResponseMetadata chatResponseMetadata;
     private final List<Generation> generations;
@@ -183,8 +204,8 @@ public class ChatResponse implements ModelResponse<Generation> {
     public List<Generation> getResults() {...}
 
     // 其他方法省略
-}
-```
+}`}
+</Code>
 
 [ChatResponse](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/ChatResponse.java) 类保存 AI 模型的输出，每个 `Generation` 实例包含单个提示可能产生的多个输出之一。
 
@@ -194,8 +215,11 @@ public class ChatResponse implements ModelResponse<Generation> {
 
 最后，[Generation](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/Generation.java) 类从 `ModelResult` 扩展，表示模型输出（助手消息）和相关元数据：
 
-```java
-public class Generation implements ModelResult<AssistantMessage> {
+<Code
+  language="java"
+  title="Generation 类定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public class Generation implements ModelResult<AssistantMessage> {
 
     private final AssistantMessage assistantMessage;
     private ChatGenerationMetadata chatGenerationMetadata;
@@ -207,8 +231,8 @@ public class Generation implements ModelResult<AssistantMessage> {
     public ChatGenerationMetadata getMetadata() {...}
 
     // 其他方法省略
-}
-```
+}`}
+</Code>
 
 ## 可用实现
 
@@ -252,8 +276,11 @@ DashScope 是阿里云提供的大模型服务平台，提供通义千问等多�
 
 #### 创建 ChatModel
 
-```java
-import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+<Code
+  language="java"
+  title="创建 DashScopeChatModel" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import org.springframework.ai.chat.model.ChatModel;
 
@@ -265,21 +292,27 @@ DashScopeApi dashScopeApi = DashScopeApi.builder()
 // 创建 ChatModel
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 简单调用
 
-```java
-// 使用字符串直接调用
+<Code
+  language="java"
+  title="简单调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`// 使用字符串直接调用
 String response = chatModel.call("介绍一下Spring框架");
-System.out.println(response);
-```
+System.out.println(response);`}
+</Code>
 
 #### 使用 Prompt
 
-```java
-import org.springframework.ai.chat.prompt.Prompt;
+<Code
+  language="java"
+  title="使用 Prompt 调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 
@@ -289,15 +322,18 @@ Prompt prompt = new Prompt(new UserMessage("解释什么是微服务架构"));
 // 调用并获取响应
 ChatResponse response = chatModel.call(prompt);
 String answer = response.getResult().getOutput().getText();
-System.out.println(answer);
-```
+System.out.println(answer);`}
+</Code>
 
 ### 配置选项
 
 #### 使用 ChatOptions
 
-```java
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+<Code
+  language="java"
+  title="DashScopeChatOptions 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 
 DashScopeChatOptions options = DashScopeChatOptions.builder()
     .withModel("qwen-plus")           // 模型名称
@@ -309,13 +345,16 @@ DashScopeChatOptions options = DashScopeChatOptions.builder()
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(options)
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 运行时覆盖选项
 
-```java
-// 创建带有特定选项的 Prompt
+<Code
+  language="java"
+  title="运行时覆盖选项示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`// 创建带有特定选项的 Prompt
 DashScopeChatOptions runtimeOptions = DashScopeChatOptions.builder()
     .withTemperature(0.3)  // 更低的温度，更确定的输出
     .withMaxToken(500)
@@ -326,13 +365,16 @@ Prompt prompt = new Prompt(
     runtimeOptions
 );
 
-ChatResponse response = chatModel.call(prompt);
-```
+ChatResponse response = chatModel.call(prompt);`}
+</Code>
 
 ### 流式响应
 
-```java
-import reactor.core.publisher.Flux;
+<Code
+  language="java"
+  title="流式响应示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import reactor.core.publisher.Flux;
 
 // 使用流式 API
 Flux<ChatResponse> responseStream = chatModel.stream(
@@ -349,13 +391,16 @@ responseStream.subscribe(
     },
     error -> System.err.println("错误: " + error.getMessage()),
     () -> System.out.println("\n流式响应完成")
-);
-```
+);`}
+</Code>
 
 ### 多轮对话
 
-```java
-import org.springframework.ai.chat.messages.Message;
+<Code
+  language="java"
+  title="多轮对话示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import java.util.List;
@@ -369,8 +414,8 @@ List<Message> messages = List.of(
 );
 
 Prompt prompt = new Prompt(messages);
-ChatResponse response = chatModel.call(prompt);
-```
+ChatResponse response = chatModel.call(prompt);`}
+</Code>
 
 ### 支持的模型
 
@@ -385,8 +430,11 @@ DashScope 支持多个模型，包括：
 
 DashScopeChatModel 支持函数调用（Function Calling），允许模型调用外部函数：
 
-```java
-import org.springframework.ai.chat.prompt.Prompt;
+<Code
+  language="java"
+  title="函数调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 
@@ -405,15 +453,18 @@ DashScopeChatOptions options = DashScopeChatOptions.builder()
     .build();
 
 Prompt prompt = new Prompt("北京的天气怎么样?", options);
-ChatResponse response = chatModel.call(prompt);
-```
+ChatResponse response = chatModel.call(prompt);`}
+</Code>
 
 ## 与 ReactAgent 集成
 
 在 Spring AI Alibaba Agent Framework 中使用 DashScopeChatModel：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="与 ReactAgent 集成示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 
 ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
@@ -422,8 +473,8 @@ ReactAgent agent = ReactAgent.builder()
     .build();
 
 // 调用 Agent
-AssistantMessage response = agent.call("帮我分析这个问题");
-```
+AssistantMessage response = agent.call("帮我分析这个问题");`}
+</Code>
 
 详细的 Agent 使用方法请参考 [Agents 文档](./agents.md)。
 

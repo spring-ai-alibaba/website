@@ -25,8 +25,11 @@ Hooks 和 Interceptors 在这些步骤的前后暴露了钩子点，允许你：
 
 通过将它们传递给 `ReactAgent.builder()` 来添加 Hooks 和 Interceptors：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="添加 Hooks 和 Interceptors 到 ReactAgent" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.*;
 import com.alibaba.cloud.ai.graph.agent.interceptor.*;
 
@@ -36,8 +39,8 @@ ReactAgent agent = ReactAgent.builder()
     .tools(tools)
     .hooks(loggingHook, messageTrimmingHook)
     .interceptors(guardrailInterceptor, retryInterceptor)
-    .build();
-```
+    .build();`}
+</Code>
 
 ## Hooks 和 Interceptors 能做什么？
 
@@ -62,8 +65,11 @@ Spring AI Alibaba 为常见用例提供了预构建的 Hooks 和 Interceptors �
 * 具有大量历史记录的多轮对话
 * 需要保留完整对话上下文的应用程序
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.summarization.SummarizationHook;
+<Code
+  language="java"
+  title="SummarizationHook 消息压缩示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.summarization.SummarizationHook;
 
 // 创建消息压缩 Hook
 SummarizationHook summarizationHook = SummarizationHook.builder()
@@ -77,8 +83,8 @@ ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .hooks(summarizationHook)
-    .build();
-```
+    .build();`}
+</Code>
 
 **配置选项**：
 - `model`: 用于生成摘要的 ChatModel
@@ -94,8 +100,11 @@ ReactAgent agent = ReactAgent.builder()
 * 人工监督是强制性的合规工作流程
 * 长期对话，使用人工反馈引导 Agent
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
+<Code
+  language="java"
+  title="HumanInTheLoopHook 人机协同示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.ToolConfig;
 
 // 创建 Human-in-the-Loop Hook
@@ -110,8 +119,8 @@ ReactAgent agent = ReactAgent.builder()
     .tools(sendEmailTool, deleteDataTool)
     .hooks(humanReviewHook)
     .saver(new RedisSaver())
-    .build();
-```
+    .build();`}
+</Code>
 
 **重要提示**：Human-in-the-loop Hook 需要 checkpointer 来维护跨中断的状态。示例中我们演示用了 `RedisSaver`。
 
@@ -124,14 +133,17 @@ ReactAgent agent = ReactAgent.builder()
 * 在生产部署中强制执行成本控制
 * 在特定调用预算内测试 Agent 行为
 
-```java
-ReactAgent agent = ReactAgent.builder()
+<Code
+  language="java"
+  title="ModelCallLimitHook 模型调用限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .hooks(ModelCallLimitHook.builder().runLimit(5).build())  // 限制模型调用次数为5次
     .saver(new MemorySaver())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### PII 检测（Personally Identifiable Information）
 
@@ -142,8 +154,11 @@ ReactAgent agent = ReactAgent.builder()
 * 需要清理日志的客户服务 Agent
 * 任何处理敏感用户数据的应用程序
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIDetectionHook;
+<Code
+  language="java"
+  title="PIIDetectionHook PII 检测示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIDetectionHook;
 import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIType;
 import com.alibaba.cloud.ai.graph.agent.hook.pii.RedactionStrategy;
 
@@ -158,8 +173,8 @@ ReactAgent agent = ReactAgent.builder()
     .name("secure_agent")
     .model(chatModel)
     .hooks(pii)
-    .build();
-```
+    .build();`}
+</Code>
 
 ### 工具重试（Tool Retry）
 
@@ -170,8 +185,11 @@ ReactAgent agent = ReactAgent.builder()
 * 提高依赖网络的工具的可靠性
 * 构建优雅处理临时错误的弹性 Agent
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.toolretry.ToolRetryInterceptor;
+<Code
+  language="java"
+  title="ToolRetryInterceptor 工具重试示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.toolretry.ToolRetryInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
@@ -182,8 +200,8 @@ ReactAgent agent = ReactAgent.builder()
         .maxRetries(2)
         .onFailure(ToolRetryInterceptor.OnFailureBehavior.RETURN_MESSAGE)
         .build())
-    .build();
-```
+    .build();`}
+</Code>
 
 
 ### Planning（规划）
@@ -195,8 +213,11 @@ ReactAgent agent = ReactAgent.builder()
 *   通过在执行前显示 Agent 的计划来提高透明度
 *   通过检查建议的计划来调试错误
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.todolist.TodoListInterceptor;
+<Code
+  language="java"
+  title="TodoListInterceptor 规划示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.todolist.TodoListInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
@@ -204,8 +225,8 @@ ReactAgent agent = ReactAgent.builder()
     .model(chatModel)
     .tools(myTool)
     .interceptors(TodoListInterceptor.builder().build())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### LLM Tool Selector（LLM 工具选择器）
 
@@ -216,8 +237,11 @@ ReactAgent agent = ReactAgent.builder()
 *   需要根据细微的上下文差异进行工具选择
 *   动态选择最适合特定输入的工具
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.toolselection.ToolSelectionInterceptor;
+<Code
+  language="java"
+  title="ToolSelectionInterceptor LLM 工具选择器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.toolselection.ToolSelectionInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
@@ -225,8 +249,8 @@ ReactAgent agent = ReactAgent.builder()
     .model(chatModel)
     .tools(tool1, tool2)
     .interceptors(ToolSelectionInterceptor.builder().build())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### LLM Tool Emulator（LLM 工具模拟器）
 
@@ -237,8 +261,11 @@ ReactAgent agent = ReactAgent.builder()
 *   在开发过程中为工具提供占位符行为
 *   在不产生实际成本或副作用的情况下测试 Agent 逻辑
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.toolemulator.ToolEmulatorInterceptor;
+<Code
+  language="java"
+  title="ToolEmulatorInterceptor LLM 工具模拟器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.toolemulator.ToolEmulatorInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
@@ -246,8 +273,8 @@ ReactAgent agent = ReactAgent.builder()
     .model(chatModel)
     .tools(simulatedTool)
     .interceptors(ToolEmulatorInterceptor.builder().model(chatModel).build())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### Context Editing（上下文编辑）
 
@@ -258,16 +285,19 @@ ReactAgent agent = ReactAgent.builder()
 *   从对话历史中删除不相关或冗余的信息
 *   动态修改上下文以引导 Agent 的行为
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.contextediting.ContextEditingInterceptor;
+<Code
+  language="java"
+  title="ContextEditingInterceptor 上下文编辑示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.contextediting.ContextEditingInterceptor;
 
 // 使用
 ReactAgent agent = ReactAgent.builder()
     .name("context_aware_agent")
     .model(chatModel)
     .interceptors(ContextEditingInterceptor.builder().trigger(120000).clearAtLeast(60000).build())
-    .build();
-```
+    .build();`}
+</Code>
 
 ## 自定义 Hooks 和 Interceptors
 
@@ -284,8 +314,11 @@ ReactAgent agent = ReactAgent.builder()
 
 在模型调用前后执行自定义逻辑：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+<Code
+  language="java"
+  title="CustomModelHook 自定义 ModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
 import java.util.concurrent.CompletableFuture;
@@ -316,15 +349,18 @@ public class CustomModelHook extends ModelHook {
         // 可以记录响应信息
         return CompletableFuture.completedFuture(Map.of());
     }
-}
-```
+}`}
+</Code>
 
 ### AgentHook
 
 在 Agent 整体执行的开始和结束时执行：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
+<Code
+  language="java"
+  title="CustomAgentHook 自定义 AgentHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
 import java.util.concurrent.CompletableFuture;
@@ -355,15 +391,18 @@ public class CustomAgentHook extends AgentHook {
         }
         return CompletableFuture.completedFuture(Map.of());
     }
-}
-```
+}`}
+</Code>
 
 ### ModelInterceptor
 
 拦截和修改模型请求和响应：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
+<Code
+  language="java"
+  title="LoggingInterceptor 自定义 ModelInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelCallHandler;
@@ -391,15 +430,18 @@ public class LoggingInterceptor extends ModelInterceptor {
     public String getName() {
         return "LoggingInterceptor";
     }
-}
-```
+}`}
+</Code>
 
 ### ToolInterceptor
 
 拦截和修改工具调用：
 
-```java
-import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
+<Code
+  language="java"
+  title="ToolMonitoringInterceptor 自定义 ToolInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallResponse;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallHandler;
@@ -436,8 +478,8 @@ public class ToolMonitoringInterceptor extends ToolInterceptor {
     public String getName() {
         return "ToolMonitoringInterceptor";
     }
-}
-```
+}`}
+</Code>
 
 ### 使用 RunnableConfig 跨调用共享数据
 
@@ -451,8 +493,11 @@ public class ToolMonitoringInterceptor extends ToolInterceptor {
 
 **示例：使用 RunnableConfig.context() 实现调用计数器**
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+<Code
+  language="java"
+  title="ModelCallCounterHook 调用计数器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -511,13 +556,16 @@ public class ModelCallCounterHook extends ModelHook {
 
         return CompletableFuture.completedFuture(Map.of());
     }
-}
-```
+}`}
+</Code>
 
 **示例：基于 context 实现调用次数限制**
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+<Code
+  language="java"
+  title="ModelCallLimiterHook 调用次数限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
 import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
@@ -579,20 +627,23 @@ public class ModelCallLimiterHook extends ModelHook {
     public List<JumpTo> canJumpTo() {
         return List.of(JumpTo.end);
     }
-}
-```
+}`}
+</Code>
 
 **使用示例**：
 
-```java
-ReactAgent agent = ReactAgent.builder()
+<Code
+  language="java"
+  title="使用 ModelCallCounterHook 和 ModelCallLimiterHook" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
     .name("limited_agent")
     .model(chatModel)
     .tools(tools)
     .hooks(new ModelCallCounterHook())  // 监控调用统计
     .hooks(new ModelCallLimiterHook(5)) // 限制最多调用 5 次
-    .build();
-```
+    .build();`}
+</Code>
 
 **关键要点**：
 
@@ -605,15 +656,18 @@ ReactAgent agent = ReactAgent.builder()
 
 使用多个 Hooks 和 Interceptors 时，理解执行顺序很重要：
 
-```java
-ReactAgent agent = ReactAgent.builder()
+<Code
+  language="java"
+  title="多个 Hooks 和 Interceptors 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
     .hooks(hook1, hook2, hook3)
     .interceptors(interceptor1, interceptor2)
     .interceptors(toolInterceptor1, toolInterceptor2)
-    .build();
-```
+    .build();`}
+</Code>
 
 **执行流程**：
 
@@ -704,8 +758,11 @@ ReactAgent agent = ReactAgent.builder()
 
 ### 示例 1：内容审核 Interceptor
 
-```java
-public class ContentModerationInterceptor extends ModelInterceptor {
+<Code
+  language="java"
+  title="ContentModerationInterceptor 内容审核示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`public class ContentModerationInterceptor extends ModelInterceptor {
 
     private static final List<String> BLOCKED_WORDS =
         List.of("敏感词1", "敏感词2", "敏感词3");
@@ -744,15 +801,18 @@ public class ContentModerationInterceptor extends ModelInterceptor {
     public String getName() {
         return "ContentModerationInterceptor";
     }
-}
-```
+}`}
+</Code>
 
 ### 示例 2：性能监控 - 使用 Interceptor
 
 使用 `ModelInterceptor` 和 `ToolInterceptor` 监控模型和工具调用的性能：
 
-```java
-// 模型调用性能监控
+<Code
+  language="java"
+  title="性能监控 Interceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`// 模型调用性能监控
 public class ModelPerformanceInterceptor extends ModelInterceptor {
 
     @Override
@@ -820,13 +880,16 @@ ReactAgent agent = ReactAgent.builder()
     .tools(tools)
     .interceptors(new ModelPerformanceInterceptor())
     .interceptors(new ToolPerformanceInterceptor())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### 示例 3：工具缓存 Interceptor
 
-```java
-public class ToolCacheInterceptor extends ToolInterceptor {
+<Code
+  language="java"
+  title="ToolCacheInterceptor 工具缓存示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`public class ToolCacheInterceptor extends ToolInterceptor {
 
     private Map<String, ToolCallResponse> cache = new ConcurrentHashMap<>();
     private final long ttlMs;
@@ -869,8 +932,8 @@ public class ToolCacheInterceptor extends ToolInterceptor {
         // 实现 TTL 检查逻辑
         return false;
     }
-}
-```
+}`}
+</Code>
 
 ## 总结
 

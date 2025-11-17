@@ -127,18 +127,20 @@ keywords:
 
 #### 基于状态的动态提示
 
-```java
-import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+<Code
+  language="java"
+  title="基于状态的动态提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
 import org.springframework.ai.chat.messages.Message;
 
 // 创建一个模型拦截器，根据对话长度调整系统提示
-public class StateAwarePromptInterceptor implements ModelInterceptor {
-
+class StateAwarePromptInterceptor extends ModelInterceptor {
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
         List<Message> messages = request.getMessages();
         int messageCount = messages.size();
 
@@ -150,20 +152,27 @@ public class StateAwarePromptInterceptor implements ModelInterceptor {
             basePrompt += "\n这是一个长对话 - 请尽量保持精准简捷。";
         }
 
-        // 更新系统消息
-        messages = updateSystemMessage(messages, basePrompt);
+        // 更新系统消息（参考 TodoListInterceptor 的实现方式）
+        SystemMessage enhancedSystemMessage;
+        if (request.getSystemMessage() == null) {
+            enhancedSystemMessage = new SystemMessage(basePrompt);
+        } else {
+            enhancedSystemMessage = new SystemMessage(
+                request.getSystemMessage().getText() + "\n\n" + basePrompt
+            );
+        }
 
         // 创建新的请求并继续
         ModelRequest updatedRequest = ModelRequest.builder(request)
-            .messages(messages)
+            .systemMessage(enhancedSystemMessage)
             .build();
 
         return next.call(updatedRequest);
     }
 
-    private List<Message> updateSystemMessage(List<Message> messages, String newPrompt) {
-        // 实现更新系统消息的逻辑
-        return messages;
+    @Override
+    public String getName() {
+        return "";
     }
 }
 
@@ -172,15 +181,17 @@ ReactAgent agent = ReactAgent.builder()
     .name("context_aware_agent")
     .model(chatModel)
     .interceptors(new StateAwarePromptInterceptor())
-    .build();
-```
+    .build();`}
+</Code>
 
 #### 基于存储的个性化提示
 
-```java
-// 从长期记忆加载用户偏好
-public class PersonalizedPromptInterceptor implements ModelInterceptor {
-
+<Code
+  language="java"
+  title="基于存储的个性化提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`// 从长期记忆加载用户偏好
+class PersonalizedPromptInterceptor extends ModelInterceptor {
     private final UserPreferenceStore store;
 
     public PersonalizedPromptInterceptor(UserPreferenceStore store) {
@@ -188,27 +199,36 @@ public class PersonalizedPromptInterceptor implements ModelInterceptor {
     }
 
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
         // 从运行时上下文获取用户ID
-        String userId = getUserIdFromContext(request.context());
+        String userId = getUserIdFromContext(request);
 
         // 从存储加载用户偏好
         UserPreferences prefs = store.getPreferences(userId);
 
         // 构建个性化提示
-        String systemPrompt = buildPersonalizedPrompt(prefs);
+        String personalizedPrompt = buildPersonalizedPrompt(prefs);
 
-        // 更新请求
-        List<Message> updatedMessages = updateSystemMessage(
-            request.getMessages(),
-            systemPrompt
-        );
+        // 更新系统消息（参考 TodoListInterceptor 的实现方式）
+        SystemMessage enhancedSystemMessage;
+        if (request.getSystemMessage() == null) {
+            enhancedSystemMessage = new SystemMessage(personalizedPrompt);
+        } else {
+            enhancedSystemMessage = new SystemMessage(
+                request.getSystemMessage().getText() + "\n\n" + personalizedPrompt
+            );
+        }
 
         ModelRequest updatedRequest = ModelRequest.builder(request)
-            .messages(updatedMessages)
+            .systemMessage(enhancedSystemMessage)
             .build();
 
         return next.call(updatedRequest);
+    }
+
+    private String getUserIdFromContext(ModelRequest request) {
+        // 从请求上下文提取用户ID
+        return "user_001"; // 简化示例
     }
 
     private String buildPersonalizedPrompt(UserPreferences prefs) {
@@ -228,8 +248,13 @@ public class PersonalizedPromptInterceptor implements ModelInterceptor {
 
         return prompt.toString();
     }
-}
-```
+
+    @Override
+    public String getName() {
+        return "PersonalizedPromptInterceptor";
+    }
+}`}
+</Code>
 
 ### 消息历史（Messages）
 
@@ -241,9 +266,11 @@ public class PersonalizedPromptInterceptor implements ModelInterceptor {
 
 #### 消息过滤
 
-```java
-public class MessageFilterInterceptor implements ModelInterceptor {
-
+<Code
+  language="java"
+  title="MessageFilterInterceptor 消息过滤示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`class MessageFilterInterceptor extends ModelInterceptor {
     private final int maxMessages;
 
     public MessageFilterInterceptor(int maxMessages) {
@@ -251,12 +278,11 @@ public class MessageFilterInterceptor implements ModelInterceptor {
     }
 
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
         List<Message> messages = request.getMessages();
 
         // 只保留最近的N条消息
         if (messages.size() > maxMessages) {
-            // 保留系统消息和最近的用户消息
             List<Message> filtered = new ArrayList<>();
 
             // 添加系统消息
@@ -266,10 +292,8 @@ public class MessageFilterInterceptor implements ModelInterceptor {
                 .ifPresent(filtered::add);
 
             // 添加最近的消息
-            filtered.addAll(messages.subList(
-                messages.size() - maxMessages + 1,
-                messages.size()
-            ));
+            int startIndex = Math.max(0, messages.size() - maxMessages + 1);
+            filtered.addAll(messages.subList(startIndex, messages.size()));
 
             messages = filtered;
         }
@@ -280,8 +304,13 @@ public class MessageFilterInterceptor implements ModelInterceptor {
 
         return next.call(updatedRequest);
     }
-}
-```
+
+    @Override
+    public String getName() {
+        return "MessageFilterInterceptor";
+    }
+}`}
+</Code>
 
 > **瞬时消息更新 VS 持久消息更新**
 >
@@ -294,13 +323,19 @@ public class MessageFilterInterceptor implements ModelInterceptor {
 
 #### 基于上下文的工具选择
 
-```java
-public class ContextualToolInterceptor implements ModelInterceptor {
-
+<Code
+  language="java"
+  title="ContextualToolInterceptor 基于上下文的工具选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`class ContextualToolInterceptor extends ModelInterceptor {
     private final Map<String, List<ToolCallback>> roleBasedTools;
 
+    public ContextualToolInterceptor(Map<String, List<ToolCallback>> roleBasedTools) {
+        this.roleBasedTools = roleBasedTools;
+    }
+
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
         // 从上下文获取用户角色
         String userRole = getUserRole(request);
 
@@ -310,16 +345,21 @@ public class ContextualToolInterceptor implements ModelInterceptor {
             Collections.emptyList()
         );
 
-        // 更新工具选项
-        ToolCallingChatOptions updatedOptions = ToolCallingChatOptions.builder()
-            .toolCallbacks(allowedTools)
-            .build();
+        // 更新工具选项（注：实际实现需要根据框架API调整）
+        // 这里展示概念性代码
+        System.out.println("为角色 " + userRole + " 选择了 " + allowedTools.size() + " 个工具");
 
-        ModelRequest updatedRequest = ModelRequest.builder(request)
-            .options(updatedOptions)
-            .build();
+        return next.call(request);
+    }
 
-        return next.call(updatedRequest);
+    private String getUserRole(ModelRequest request) {
+        // 从请求上下文提取用户角色
+        return "user"; // 简化示例
+    }
+
+    @Override
+    public String getName() {
+        return "ContextualToolInterceptor";
     }
 }
 
@@ -334,21 +374,28 @@ ReactAgent agent = ReactAgent.builder()
     .name("role_based_agent")
     .model(chatModel)
     .interceptors(new ContextualToolInterceptor(roleTools))
-    .build();
-```
+    .build();`}
+</Code>
 
 ### 模型选择（Model）
 
 根据任务复杂度或用户偏好动态选择模型。
 
-```java
-public class DynamicModelInterceptor implements ModelInterceptor {
-
+<Code
+  language="java"
+  title="DynamicModelInterceptor 动态模型选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`class DynamicModelInterceptor extends ModelInterceptor {
     private final ChatModel simpleModel;
     private final ChatModel complexModel;
 
+    public DynamicModelInterceptor(ChatModel simpleModel, ChatModel complexModel) {
+        this.simpleModel = simpleModel;
+        this.complexModel = complexModel;
+    }
+
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
         // 分析任务复杂度
         boolean isComplexTask = analyzeComplexity(request.getMessages());
 
@@ -366,15 +413,23 @@ public class DynamicModelInterceptor implements ModelInterceptor {
         // 例如：检查消息长度、关键词等
         return messages.size() > 5;
     }
-}
-```
+
+    @Override
+    public String getName() {
+        return "DynamicModelInterceptor";
+    }
+}`}
+</Code>
 
 ### 响应格式（Response Format）
 
 使用结构化输出控制模型响应格式。
 
-```java
-// 在Agent级别设置输出格式
+<Code
+  language="java"
+  title="响应格式控制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`// 在Agent级别设置输出格式
 ReactAgent agent = ReactAgent.builder()
     .name("structured_agent")
     .model(chatModel)
@@ -382,10 +437,9 @@ ReactAgent agent = ReactAgent.builder()
     .build();
 
 // 也可以在Interceptor中动态调整
-public class DynamicFormatInterceptor implements ModelInterceptor {
-
+class DynamicFormatInterceptor extends ModelInterceptor {
     @Override
-    public ModelResponse intercept(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
         // 根据请求内容决定输出格式
         String outputSchema = determineOutputSchema(request);
 
@@ -401,8 +455,23 @@ public class DynamicFormatInterceptor implements ModelInterceptor {
 
         return next.call(updatedRequest);
     }
-}
-```
+
+    private String determineOutputSchema(ModelRequest request) {
+        // 实现输出格式决定逻辑
+        return "";
+    }
+
+    private List<Message> addFormatInstructions(List<Message> messages, String schema) {
+        // 实现格式说明添加逻辑
+        return messages;
+    }
+
+    @Override
+    public String getName() {
+        return "DynamicFormatInterceptor";
+    }
+}`}
+</Code>
 
 ## 工具上下文（Tool Context）
 
@@ -410,9 +479,11 @@ public class DynamicFormatInterceptor implements ModelInterceptor {
 
 ### 工具中访问状态
 
-```java
-public class StatefulTool implements Function<StatefulTool.Request, StatefulTool.Response> {
-
+<Code
+  language="java"
+  title="StatefulTool 工具中访问状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`class StatefulTool implements Function<StatefulTool.Request, StatefulTool.Response> {
     public record Request(String query) {}
     public record Response(String result) {}
 
@@ -423,30 +494,37 @@ public class StatefulTool implements Function<StatefulTool.Request, StatefulTool
         // 'messages' can be any key persisted in short memory
         Optional<Object> messages = currentState.value("messages");
 
-		// 从 Agent 运行上下文读取信息
-		RunnableConfig config = (OverAllState) toolContext.getContext().get("config");
-		Optional<Object> userContext = config.metadata("user_context_key");
+        // 从 Agent 运行上下文读取信息
+        RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
+        Optional<Object> userContext = config.metadata("user_context_key");
 
         // 使用状态信息处理请求
         String result = processWithContext(request.query(), messages, userContext);
 
         return new Response(result);
     }
-}
-```
+
+    private String processWithContext(String query, Optional<Object> messages, Optional<Object> userContext) {
+        // 实现处理逻辑
+        return "处理结果";
+    }
+}`}
+</Code>
 
 ### 工具修改状态
 
-```java
-public class StateModifyingTool implements Function<StateModifyingTool.Request, StateModifyingTool.Response> {
-
+<Code
+  language="java"
+  title="StateModifyingTool 工具修改状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`class StateModifyingTool implements Function<StateModifyingTool.Request, StateModifyingTool.Response> {
     public record Request(String data) {}
     public record Response(String status) {}
 
     @Override
-    public Response apply(Request request) {
-    	// 从 Agent 持久状态读取信息
-		Map<String, Object> extraState = (OverAllState) toolContext.getContext().get("extraState");
+    public Response apply(Request request, ToolContext toolContext) {
+        // 从 Agent 持久状态读取信息
+        Map<String, Object> extraState = (Map<String, Object>) toolContext.getContext().get("extraState");
 
         // 处理数据
         String processed = process(request.data());
@@ -456,8 +534,13 @@ public class StateModifyingTool implements Function<StateModifyingTool.Request, 
 
         return new Response("数据已处理并保存到状态");
     }
-}
-```
+
+    private String process(String data) {
+        // 实现处理逻辑
+        return "处理后的数据";
+    }
+}`}
+</Code>
 
 ## 生命周期上下文（Lifecycle Context）
 
@@ -474,13 +557,15 @@ Spring AI Alibaba 支持以下 Hook 位置：
 
 ### 自定义 Hook 示例
 
-```java
-import com.alibaba.cloud.ai.graph.agent.hook.Hook;
+<Code
+  language="java"
+  title="LoggingHook 自定义Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.Hook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 
-public class LoggingHook implements ModelHook {
-
+class LoggingHook extends ModelHook {
     @Override
     public String getName() {
         return "logging_hook";
@@ -495,18 +580,18 @@ public class LoggingHook implements ModelHook {
     }
 
     @Override
-    public Map<String, Object> beforeModel(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
         // 在模型调用前记录
-        System.out.println("模型调用前 - 消息数: " +
-            ((List<?>) state.value("messages").get()).size());
-        return Map.of();
+        List<?> messages = (List<?>) state.value("messages").orElse(List.of());
+        System.out.println("模型调用前 - 消息数: " + messages.size());
+        return CompletableFuture.completedFuture(Map.of());
     }
 
     @Override
-    public Map<String, Object> afterModel(OverAllState state, RunnableConfig config) {
+    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
         // 在模型调用后记录
         System.out.println("模型调用后 - 响应已生成");
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
 }
 
@@ -515,50 +600,101 @@ ReactAgent agent = ReactAgent.builder()
     .name("logged_agent")
     .model(chatModel)
     .hooks(new LoggingHook())
-    .build();
-```
+    .build();`}
+</Code>
 
 ### 消息摘要 Hook
 
-```java
-public class SummarizationHook implements ModelHook {
-
+<Code
+  language="java"
+  title="SummarizationHook 消息摘要Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+>
+{`class SummarizationHook extends ModelHook {
     private final ChatModel summarizationModel;
     private final int triggerLength;
 
+    public SummarizationHook(ChatModel model, int triggerLength) {
+        this.summarizationModel = model;
+        this.triggerLength = triggerLength;
+    }
+
     @Override
-    public Map<String, Object> beforeModel(OverAllState state, RunnableConfig config) {
-        List<Message> messages = (List<Message>) state.value("messages").get();
+    public String getName() {
+        return "summarization_hook";
+    }
+
+    @Override
+    public HookPosition[] getHookPositions() {
+        return new HookPosition[]{HookPosition.BEFORE_MODEL};
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
+        List<Message> messages = (List<Message>) state.value("messages").orElse(List.of());
 
         if (messages.size() > triggerLength) {
             // 生成对话摘要
             String summary = generateSummary(messages);
 
-            // 用摘要替换旧消息
-            List<Message> newMessages = new ArrayList<>();
-            newMessages.add(new SystemMessage("之前对话摘要：" + summary));
-            newMessages.addAll(messages.subList(messages.size() - 5, messages.size()));
+            // 查找是否已存在 SystemMessage
+            SystemMessage existingSystemMessage = null;
+            int systemMessageIndex = -1;
+            for (int i = 0; i < messages.size(); i++) {
+                Message msg = messages.get(i);
+                if (msg instanceof SystemMessage) {
+                    existingSystemMessage = (SystemMessage) msg;
+                    systemMessageIndex = i;
+                    break;
+                }
+            }
 
-            return Map.of("messages", newMessages);
+            // 创建摘要 SystemMessage
+            String summaryText = "之前对话摘要：" + summary;
+            SystemMessage summarySystemMessage;
+            if (existingSystemMessage != null) {
+                // 如果存在 SystemMessage，追加摘要信息
+                summarySystemMessage = new SystemMessage(
+                    existingSystemMessage.getText() + "\n\n" + summaryText
+                );
+            } else {
+                // 如果不存在，创建新的
+                summarySystemMessage = new SystemMessage(summaryText);
+            }
+
+            // 保留最近的几条消息
+            int recentCount = Math.min(5, messages.size());
+            List<Message> recentMessages = messages.subList(
+                messages.size() - recentCount,
+                messages.size()
+            );
+
+            // 构建新的消息列表
+            List<Message> newMessages = new ArrayList<>();
+            newMessages.add(summarySystemMessage);
+            // 添加最近的消息，排除旧的 SystemMessage（如果存在）
+            for (Message msg : recentMessages) {
+                if (msg != existingSystemMessage) {
+                    newMessages.add(msg);
+                }
+            }
+
+            return CompletableFuture.completedFuture(Map.of("messages", newMessages));
         }
 
-        return Map.of();
+        return CompletableFuture.completedFuture(Map.of());
     }
 
     private String generateSummary(List<Message> messages) {
         // 使用另一个模型生成摘要
         String conversation = messages.stream()
-            .map(Message::getContent)
+            .map(Message::getText)
             .collect(Collectors.joining("\n"));
 
-        return chatClient.prompt()
-            .system("请总结以下对话的要点")
-            .user(conversation)
-            .call()
-            .content();
+        // 简化示例：返回固定摘要
+        return "之前讨论了多个主题...";
     }
-}
-```
+}`}
+</Code>
 
 ## 相关文档
 

@@ -55,8 +55,7 @@ Model 是 Agent 的推理引擎。Spring AI Alibaba 支持多种配置方式。
 
 <Code
   language="java"
-  title="ReactAgent 基础配置示例"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/ReactAgent.java"
+  title="ReactAgent 基础配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
@@ -85,8 +84,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="DashScopeChatModel 高级配置"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/spring-ai-alibaba-core/src/main/java/com/alibaba/cloud/ai/dashscope/chat/DashScopeChatModel.java"
+  title="DashScopeChatModel 高级配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 
@@ -114,8 +112,7 @@ ChatModel chatModel = DashScopeChatModel.builder()
 
 <Code
   language="java"
-  title="SearchTool 自定义工具示例"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/2024-main/community/function-calling"
+  title="SearchTool 自定义工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
@@ -125,11 +122,38 @@ import java.util.function.BiFunction;
 
 // 定义工具（示例：仅一个搜索工具）
 public class SearchTool implements BiFunction<String, ToolContext, String> {
-{`import org.springframework.ai.tool.ToolCallback;
-  title="ToolErrorInterceptor 工具错误处理"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/interceptor/ToolInterceptor.java"
+    @Override
+    public String apply(String query, ToolContext context) {
+        // 实现搜索逻辑
+        return "搜索结果: " + query;
+    }
+}
+
+// 创建工具回调
+ToolCallback searchTool = FunctionToolCallback.builder("search", new SearchTool())
+    .description("搜索工具")
+    .build();
+
+// 在Agent中使用
+ReactAgent agent = ReactAgent.builder()
+    .name("search_agent")
+    .model(chatModel)
+    .tools(searchTool)
+    .build();`}
+</Code>
+
+#### 工具错误处理
+
+<Code
+  language="java"
+  title="ToolErrorInterceptor 工具错误处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
-{`public class ToolErrorInterceptor extends ToolInterceptor {
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallRequest;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallResponse;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallHandler;
+
+public class ToolErrorInterceptor extends ToolInterceptor {
     @Override
     public ToolCallResponse interceptToolCall(ToolCallRequest request, ToolCallHandler handler) {
         try {
@@ -147,6 +171,8 @@ public class SearchTool implements BiFunction<String, ToolContext, String> {
 }
 
 ReactAgent agent = ReactAgent.builder()
+    .name("my_agent")
+    .model(chatModel)
     .interceptors(new ToolErrorInterceptor())
     .build();`}
 </Code>
@@ -170,7 +196,7 @@ System Prompt 塑造 Agent 处理任务的方式。
 
 <Code
   language="java"
-  title="系统提示基础配置"
+  title="系统提示基础配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
@@ -185,7 +211,7 @@ System Prompt 塑造 Agent 处理任务的方式。
 
 <Code
   language="java"
-  title="使用 instruction 提供详细指令"
+  title="使用 instruction 提供详细指令" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`String instruction = """
     你是一个经验丰富的软件架构师。
@@ -212,8 +238,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="DynamicPromptInterceptor 动态提示拦截器"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/interceptor/ModelInterceptor.java"
+  title="DynamicPromptInterceptor 动态提示拦截器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
@@ -266,7 +291,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="Agent 基础调用示例"
+  title="Agent 基础调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import org.springframework.ai.chat.messages.AssistantMessage;
 
@@ -292,7 +317,7 @@ AssistantMessage response = agent.call(messages);`}
 
 <Code
   language="java"
-  title="使用 invoke 获取完整状态"
+  title="使用 invoke 获取完整状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import java.util.Optional;
@@ -319,7 +344,7 @@ if (result.isPresent()) {
 
 <Code
   language="java"
-  title="使用 RunnableConfig 传递配置"
+  title="使用 RunnableConfig 传递配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 
@@ -344,7 +369,7 @@ AssistantMessage response = agent.call("你的问题", runnableConfig);`}
 
 <Code
   language="java"
-  title="PoemOutput 结构化输出示例"
+  title="PoemOutput 结构化输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`public class PoemOutput {
     private String title;
@@ -380,7 +405,7 @@ System.out.println(response.getText());`}
 
 <Code
   language="java"
-  title="使用 outputSchema 自定义输出格式"
+  title="使用 outputSchema 自定义输出格式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`String customSchema = """
     请严格按照以下JSON格式返回结果：
@@ -412,7 +437,7 @@ Agent 通过状态自动维护对话历史。使用 `MemorySaver` 配置持久�
 
 <Code
   language="java"
-  title="Memory 配置示例"
+  title="Memory 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.constant.SaverEnum;
@@ -444,8 +469,7 @@ Hooks 允许在 Agent 执行的关键点插入自定义逻辑。
 
 <Code
   language="java"
-  title="Hook 使用示例"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/hook/"
+  title="Hook 使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.*;
 
@@ -514,8 +538,7 @@ Interceptors 提供更细粒度的控制，可以拦截和修改模型调用和�
 
 <Code
   language="java"
-  title="Interceptor 使用示例"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/interceptor/"
+  title="Interceptor 使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.*;
 
@@ -574,7 +597,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="使用 ModelCallLimitHook 限制模型调用次数"
+  title="使用 ModelCallLimitHook 限制模型调用次数" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.modelcalllimit.ModelCallLimitHook;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
@@ -590,7 +613,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="自定义停止条件 Hook"
+  title="自定义停止条件 Hook" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -644,8 +667,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="流式输出示例"
-  sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/2024-main/community/graph/graph-agent/src/main/java/com/alibaba/cloud/ai/graph/agent/ReactAgent.java"
+  title="流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import reactor.core.publisher.Flux;
 
