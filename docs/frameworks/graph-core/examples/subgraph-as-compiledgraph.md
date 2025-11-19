@@ -21,14 +21,28 @@ keywords: [子图, Subgraph, CompiledGraph, 编译, 性能优化, Graph复用]
 
 ### 创建并编译子图
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
-import com.alibaba.cloud.ai.graph.CompiledGraph;
+<Code
+  language="java"
+  title="创建并编译子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
 import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
-import java.util.Map;
-import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 
-// 创建子图 KeyStrategyFactory
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+/**
+ * 创建并编译子图
+ */
+public static CompiledGraph createAndCompileSubGraph() throws GraphStateException {
 KeyStrategyFactory subKeyFactory = () -> {
     HashMap<String, KeyStrategy> strategies = new HashMap<>();
     strategies.put("input", new ReplaceStrategy());
@@ -38,26 +52,36 @@ KeyStrategyFactory subKeyFactory = () -> {
 
 // 定义并编译子图
 StateGraph subGraphDef = new StateGraph(subKeyFactory)
-    .addNode("process", nodeasync(state -> {
+            .addNode("process", node_async(state -> {
         String input = (String) state.value("input").orElse("");
         String output = "Processed: " + input.toUpperCase();
         return Map.of("output", output);
     }))
-    .addEdge(StateGraph.START, "process")
-    .addEdge("process", StateGraph.END);
+            .addEdge(START, "process")
+            .addEdge("process", END);
 
 // 编译子图
-CompiledGraph compiledSubGraph = subGraphDef.compile();
-```
+    return subGraphDef.compile();
+}`}
+</Code>
 
 ### 在节点中使用 CompiledGraph
 
-```java
-import com.alibaba.cloud.ai.graph.action.NodeAction;
+<Code
+  language="java"
+  title="在节点中使用 CompiledGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
 
-// 包装 CompiledGraph 为 NodeAction
-public class CompiledSubGraphNode implements NodeAction {
+import java.util.Map;
+
+/**
+ * 在节点中使用 CompiledGraph
+ */
+public static class CompiledSubGraphNode implements NodeAction {
 
     private final CompiledGraph compiledGraph;
 
@@ -72,19 +96,32 @@ public class CompiledSubGraphNode implements NodeAction {
 
         // 执行编译好的子图
         Map<String, Object> subInput = Map.of("input", input);
-        OverAllState subResult = compiledGraph.invoke(subInput);
+        OverAllState subResult = compiledGraph.invoke(subInput, RunnableConfig.builder().build()).orElseThrow();
 
         // 提取子图输出
         String output = (String) subResult.value("output").orElse("");
         return Map.of("result", output);
     }
-}
-```
+}`}
+</Code>
 
 ### 在父图中使用
 
-```java
-// 创建父图，集成编译后的子图
+<Code
+  language="java"
+  title="在父图中使用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.StateGraph;
+
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+/**
+ * 在父图中使用
+ */
+public static CompiledGraph useInParentGraph(CompiledGraph compiledSubGraph) throws GraphStateException {
 KeyStrategyFactory parentKeyFactory = () -> {
     HashMap<String, KeyStrategy> strategies = new HashMap<>();
     strategies.put("data", new ReplaceStrategy());
@@ -92,31 +129,54 @@ KeyStrategyFactory parentKeyFactory = () -> {
     return strategies;
 };
 
-CompiledSubGraphNode subNode = new CompiledSubGraphNode(compiledSubGraph);
-
 StateGraph parentGraph = new StateGraph(parentKeyFactory)
-    .addNode("prepare", nodeasync(state ->
+            .addNode("prepare", node_async(state ->
         Map.of("data", "hello world")))
-    .addNode("subgraph", nodeasync(subNode))
-    .addNode("finalize", nodeasync(state -> {
+            .addNode("subgraph", compiledSubGraph)
+            .addNode("finalize", node_async(state -> {
         String result = (String) state.value("result").orElse("");
         return Map.of("final", "Done: " + result);
     }))
-    .addEdge(StateGraph.START, "prepare")
+            .addEdge(START, "prepare")
     .addEdge("prepare", "subgraph")
     .addEdge("subgraph", "finalize")
-    .addEdge("finalize", StateGraph.END);
+            .addEdge("finalize", END);
 
-CompiledGraph compiledParent = parentGraph.compile();
-```
+    return parentGraph.compile();
+}`}
+</Code>
 
 ## 多个子图复用
 
 同一个 CompiledGraph 可以在多个地方复用：
 
-```java
-// 编译一次
-CompiledGraph dataProcessor = createDataProcessorGraph().compile();
+<Code
+  language="java"
+  title="多个子图复用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`/**
+ * 多个子图复用
+ */
+public static CompiledGraph reuseMultipleSubGraphs(CompiledGraph dataProcessor) throws GraphStateException {
+    KeyStrategyFactory keyFactory = () -> {
+        HashMap<String, KeyStrategy> strategies = new HashMap<>();
+        strategies.put("data", new ReplaceStrategy());
+        strategies.put("result", new ReplaceStrategy());
+        return strategies;
+    };
+
+    // 在多个节点中复用
+    StateGraph mainGraph = new StateGraph(keyFactory)
+            .addNode("process1", dataProcessor)
+            .addNode("process2", dataProcessor)
+            .addNode("process3", dataProcessor)
+            .addEdge(START, "process1")
+            .addEdge("process1", "process2")
+            .addEdge("process2", "process3")
+            .addEdge("process3", END);
+
+    return mainGraph.compile();
+}
 
 // 在多个节点中复用
 StateGraph mainGraph = new StateGraph(keyFactory)
@@ -126,15 +186,18 @@ StateGraph mainGraph = new StateGraph(keyFactory)
     .addEdge(StateGraph.START, "process1")
     .addEdge("process1", "process2")
     .addEdge("process2", "process3")
-    .addEdge("process3", StateGraph.END);
-```
+    .addEdge("process3", StateGraph.END);`}
+</Code>
 
 ## 带配置的子图
 
 ### 可配置的 CompiledGraph 包装器
 
-```java
-public class ConfigurableCompiledSubGraph implements NodeAction {
+<Code
+  language="java"
+  title="可配置的 CompiledGraph 包装器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`public class ConfigurableCompiledSubGraph implements NodeAction {
 
     private final CompiledGraph compiledGraph;
     private final Map<String, String> inputMapping;
@@ -186,13 +249,16 @@ NodeAction node2 = new ConfigurableCompiledSubGraph(
     processor,
     Map.of("rawData", "input"),        // rawData -> input
     Map.of("output", "cleanedData")    // output -> cleanedData
-);
-```
+);`}
+</Code>
 
 ## 并行执行多个 CompiledGraph
 
-```java
-import java.util.concurrent.CompletableFuture;
+<Code
+  language="java"
+  title="并行执行多个 CompiledGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`import java.util.concurrent.CompletableFuture;
 import java.util.List;
 
 public class ParallelCompiledGraphNode implements NodeAction {
@@ -234,15 +300,18 @@ CompiledGraph graph3 = createGraph3().compile();
 
 NodeAction parallelNode = new ParallelCompiledGraphNode(
     List.of(graph1, graph2, graph3)
-);
-```
+);`}
+</Code>
 
 ## 带 Checkpoint 的子图
 
 CompiledGraph 可以有自己独立的 checkpoint：
 
-```java
-import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
+<Code
+  language="java"
+  title="带 Checkpoint 的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
 import com.alibaba.cloud.ai.graph.CompileConfig;
 
 // 子图使用独立的 checkpoint
@@ -284,15 +353,18 @@ public class CheckpointedSubGraphNode implements NodeAction {
 
         return Map.of("output", result.value("output").orElse(""));
     }
-}
-```
+}`}
+</Code>
 
 ## 性能优化
 
 ### 预编译策略
 
-```java
-// 服务启动时预编译所有子图
+<Code
+  language="java"
+  title="预编译策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`// 服务启动时预编译所有子图
 @Configuration
 public class GraphConfiguration {
 
@@ -334,13 +406,16 @@ public class WorkflowService {
         var result2 = transformGraph.invoke(Map.of("input", data));
         var result3 = aggregationGraph.invoke(Map.of("input", data));
     }
-}
-```
+}`}
+</Code>
 
 ## 完整示例
 
-```java
-// 1. 定义数据验证子图
+<Code
+  language="java"
+  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+>
+{`// 1. 定义数据验证子图
 public CompiledGraph createValidationGraph() {
     KeyStrategyFactory keyFactory = () -> {
         HashMap<String, KeyStrategy> strategies = new HashMap<>();
@@ -409,8 +484,8 @@ CompiledGraph main = mainGraph.compile();
 
 // 执行
 OverAllState result = main.invoke(Map.of("input", "test data"));
-System.out.println("Output: " + result.value("output").orElse(""));
-```
+System.out.println("Output: " + result.value("output").orElse(""));`}
+</Code>
 
 ## 附图
 ![png](/img/graph/examples/subgraph-as-compiledgraph_files/subgraph-as-compiledgraph_15_0.png)

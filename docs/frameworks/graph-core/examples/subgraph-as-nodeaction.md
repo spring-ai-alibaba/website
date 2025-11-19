@@ -20,37 +20,63 @@ keywords: [子图, Subgraph, NodeAction, 模块化, 工作流组合, Graph嵌套
 
 ### 定义子图
 
-```java
+<Code
+  language="java"
+  title="定义子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 import com.alibaba.cloud.ai.graph.StateGraph;
-import com.alibaba.cloud.ai.graph.CompiledGraph;
-import com.alibaba.cloud.ai.graph.action.NodeAction;
-import java.util.Map;
-import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 
-// 创建子图 - 简单的两步处理
-public CompiledGraph createSubGraph(KeyStrategyFactory keyStrategyFactory) {
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+/**
+ * 定义子图
+ */
+public static CompiledGraph createSubGraph(KeyStrategyFactory keyStrategyFactory) throws GraphStateException {
     StateGraph subGraph = new StateGraph(keyStrategyFactory)
-        .addNode("substep1", nodeasync(state -> {
+            .addNode("substep1", node_async(state -> {
             String input = (String) state.value("input").orElse("");
             return Map.of("result", "SubStep1:" + input);
         }))
-        .addNode("substep2", nodeasync(state -> {
+            .addNode("substep2", node_async(state -> {
             String prev = (String) state.value("result").orElse("");
             return Map.of("result", prev + "->SubStep2");
         }))
-        .addEdge(StateGraph.START, "substep1")
+            .addEdge(START, "substep1")
         .addEdge("substep1", "substep2")
-        .addEdge("substep2", StateGraph.END);
+            .addEdge("substep2", END);
 
     return subGraph.compile();
-}
-```
+}`}
+</Code>
 
 ### 将子图包装为 NodeAction
 
-```java
-// 将 CompiledGraph 包装为 NodeAction
-public class SubGraphNode implements NodeAction {
+<Code
+  language="java"
+  title="将子图包装为 NodeAction" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
+
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * 将子图包装为 NodeAction
+ */
+public static class SubGraphNode implements NodeAction {
 
     private final CompiledGraph subGraph;
 
@@ -65,53 +91,72 @@ public class SubGraphNode implements NodeAction {
 
         // 执行子图
         Map<String, Object> subInput = Map.of("input", input);
-        OverAllState subResult = subGraph.invoke(subInput);
+        Optional<OverAllState> subResult = subGraph.invoke(subInput, RunnableConfig.builder().build());
 
         // 返回结果给父图
-        String result = (String) subResult.value("result").orElse("");
+        String result = (String) subResult.get().value("result").orElse("");
         return Map.of("processed", result);
     }
-}
-```
+}`}
+</Code>
 
 ### 在父图中使用
 
-```java
-// 创建父图
-CompiledGraph subGraph = createSubGraph(keyStrategyFactory);
+<Code
+  language="java"
+  title="在父图中使用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.StateGraph;
+
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+/**
+ * 在父图中使用
+ */
+public static CompiledGraph useInParentGraph(KeyStrategyFactory keyStrategyFactory, CompiledGraph subGraph) throws GraphStateException {
 SubGraphNode subGraphNode = new SubGraphNode(subGraph);
 
 StateGraph parentGraph = new StateGraph(keyStrategyFactory)
-    .addNode("prepare", nodeasync(state -> {
+            .addNode("prepare", node_async(state -> {
         return Map.of("data", "Input Data");
     }))
-    .addNode("process", nodeasync(subGraphNode))  // 使用子图作为节点
-    .addNode("finalize", nodeasync(state -> {
+            .addNode("process", node_async(subGraphNode))  // 使用子图作为节点
+            .addNode("finalize", node_async(state -> {
         String processed = (String) state.value("processed").orElse("");
         return Map.of("final", "Final:" + processed);
     }))
-    .addEdge(StateGraph.START, "prepare")
+            .addEdge(START, "prepare")
     .addEdge("prepare", "process")
     .addEdge("process", "finalize")
-    .addEdge("finalize", StateGraph.END);
+            .addEdge("finalize", END);
 
-CompiledGraph compiledParent = parentGraph.compile();
-```
+    return parentGraph.compile();
+}`}
+</Code>
 
 ### 执行父图
 
-```java
-// 执行
+<Code
+  language="java"
+  title="执行父图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+>
+{`// 执行
 OverAllState result = compiledParent.invoke(Map.of());
 System.out.println("Final result: " + result.value("final").orElse(""));
 
-// 输出: Final result: Final:SubStep1:Input Data->SubStep2
-```
+// 输出: Final result: Final:SubStep1:Input Data->SubStep2`}
+</Code>
 
 ## 高级示例 - 带参数的子图
 
-```java
-// 可配置的子图节点
+<Code
+  language="java"
+  title="带参数的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+>
+{`// 可配置的子图节点
 public class ConfigurableSubGraphNode implements NodeAction {
 
     private final CompiledGraph subGraph;
@@ -148,15 +193,18 @@ NodeAction configurableNode = new ConfigurableSubGraphNode(
     subGraph,
     "userInput",    // 从父状态读取 userInput
     "processedOutput"  // 写入 processedOutput
-);
-```
+);`}
+</Code>
 
 ## 状态映射
 
 处理父子图之间的状态映射：
 
-```java
-public class SubGraphNodeWithMapping implements NodeAction {
+<Code
+  language="java"
+  title="状态映射" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+>
+{`public class SubGraphNodeWithMapping implements NodeAction {
 
     private final CompiledGraph subGraph;
     private final Function<OverAllState, Map<String, Object>> inputMapper;
@@ -183,8 +231,8 @@ public class SubGraphNodeWithMapping implements NodeAction {
         // 使用 mapper 转换子状态到父状态
         return outputMapper.apply(parentState, subResult);
     }
-}
-```
+}`}
+</Code>
 
 ## 应用场景
 

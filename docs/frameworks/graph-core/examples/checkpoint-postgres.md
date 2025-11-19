@@ -54,54 +54,69 @@ implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-graph-checkpoint-postgres
 
 PostgreSqlSaver 使用构建器模式进行配置。您需要提供数据库连接参数。
 
-```java
+<Code
+  language="java"
+  title="初始化 PostgreSqlSaver" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.PostgreSqlSaver;
-import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.constant.SaverConstant;
 
+// 初始化 PostgreSQL Saver
 PostgreSqlSaver saver = new PostgreSqlSaver(
-    "jdbc:postgresql://localhost:5432/graphdb",  // JDBC URL
-    "username",                                    // 用户名
-    "password"                                     // 密码
+        "jdbc:postgresql://localhost:5432/graphdb",  // JDBC URL
+        "username",                                    // 用户名
+        "password"                                     // 密码
 );
 
 // 配置 Saver
 SaverConfig saverConfig = SaverConfig.builder()
-    .register(SaverConstant.POSTGRES, saver)
-    .build();
-```
+        .register(saver)
+        .build();`}
+</Code>
 
 ### 完整示例
 
 以下是如何使用 PostgreSQL 检查点持久化来保存、重新加载和验证工作流状态的完整示例：
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
-import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.PostgreSqlSaver;
+import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.constant.SaverConstant;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.PostgreSqlSaver;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
 import com.alibaba.cloud.ai.graph.state.StateSnapshot;
-import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
 
 public class PostgresCheckpointExample {
 
     public void testCheckpointWithPostgreSQL() throws Exception {
-
         // 初始化 PostgreSQL Saver
         PostgreSqlSaver saver = new PostgreSqlSaver(
-            "jdbc:postgresql://localhost:5432/graphdb",
-            "admin",
-            "password"
+                "jdbc:postgresql://localhost:5432/graphdb",
+                "admin",
+                "password"
         );
 
         SaverConfig saverConfig = SaverConfig.builder()
-            .register(SaverConstant.POSTGRES, saver)
-            .build();
+                .register(saver)
+                .build();
 
         // 定义状态策略
         KeyStrategyFactory keyStrategyFactory = () -> {
@@ -113,78 +128,71 @@ public class PostgresCheckpointExample {
 
         // 定义节点
         var agent1 = node_async(state -> {
-            log.info("agent_1 执行中");
+            System.out.println("agent_1 执行中");
             return Map.of("agent_1:prop1", "agent_1:test");
         });
 
         // 构建图
         StateGraph stateGraph = new StateGraph(keyStrategyFactory)
-            .addNode("agent_1", agent1)
-            .addEdge(START, "agent_1")
-            .addEdge("agent_1", END);
+                .addNode("agent_1", agent1)
+                .addEdge(START, "agent_1")
+                .addEdge("agent_1", END);
 
         // 使用检查点编译图
         CompiledGraph workflow = stateGraph.compile(
-            CompileConfig.builder()
-                .saverConfig(saverConfig)
-                .build()
+                CompileConfig.builder()
+                        .saverConfig(saverConfig)
+                        .build()
         );
 
         // 执行工作流
         RunnableConfig runnableConfig = RunnableConfig.builder()
-            .threadId("test-thread-1")
-            .build();
+                .threadId("test-thread-1")
+                .build();
 
         Map<String, Object> inputs = Map.of("input", "test1");
-        Map<String, Object> result = workflow.invoke(inputs, runnableConfig);
+        OverAllState result = workflow.invoke(inputs, runnableConfig).orElseThrow();
 
         // 获取检查点历史
-        List<StateSnapshot> history = workflow.getStateHistory(runnableConfig);
+        List<StateSnapshot> history = (List<StateSnapshot>) workflow.getStateHistory(runnableConfig);
 
-        assertFalse(history.isEmpty());
-        assertEquals(2, history.size());
+        System.out.println("检查点历史数量: " + history.size());
 
         // 获取最后保存的检查点
         StateSnapshot lastSnapshot = workflow.getState(runnableConfig);
 
-        assertNotNull(lastSnapshot);
-        assertEquals("agent_1", lastSnapshot.next().get(0));
+        System.out.println("最后检查点节点: " + lastSnapshot.node());
 
         // 测试从数据库重新加载检查点
-
         // 创建新的 saver（重置缓存）
         PostgreSqlSaver newSaver = new PostgreSqlSaver(
-            "jdbc:postgresql://localhost:5432/graphdb",
-            "admin",
-            "password"
+                "jdbc:postgresql://localhost:5432/graphdb",
+                "admin",
+                "password"
         );
 
         SaverConfig newSaverConfig = SaverConfig.builder()
-            .register(SaverConstant.POSTGRES, newSaver)
-            .build();
+                .register(newSaver)
+                .build();
 
         // 重新编译图
         CompiledGraph reloadedWorkflow = stateGraph.compile(
-            CompileConfig.builder()
-                .saverConfig(newSaverConfig)
-                .build()
+                CompileConfig.builder()
+                        .saverConfig(newSaverConfig)
+                        .build()
         );
 
         // 使用相同的 threadId 获取历史
         RunnableConfig reloadConfig = RunnableConfig.builder()
-            .threadId("test-thread-1")
-            .build();
+                .threadId("test-thread-1")
+                .build();
 
-        List<StateSnapshot> reloadedHistory = reloadedWorkflow.getStateHistory(reloadConfig);
+        Collection<StateSnapshot> reloadedHistory = reloadedWorkflow.getStateHistory(reloadConfig);
 
-        assertFalse(reloadedHistory.isEmpty());
-        assertEquals(2, reloadedHistory.size());
-
-        StateSnapshot reloadedLastSnapshot = reloadedWorkflow.getState(reloadConfig);
-        assertNotNull(reloadedLastSnapshot);
+        System.out.println("重新加载的检查点历史数量: " + reloadedHistory.size());
     }
-}
-```
+}`}
+</Code>
 
 ### Spring Boot 配置
 
@@ -201,8 +209,11 @@ spring:
 
 然后在配置类中创建 PostgreSqlSaver Bean：
 
-```java
-import org.springframework.context.annotation.Bean;
+<Code
+  language="java"
+  title="Spring Boot 配置类" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -226,11 +237,11 @@ public class GraphCheckpointConfig {
     @Bean
     public SaverConfig saverConfig(PostgreSqlSaver postgreSqlSaver) {
         return SaverConfig.builder()
-            .register(SaverConstant.POSTGRES, postgreSqlSaver)
-            .build();
+                .register(postgreSqlSaver)
+                .build();
     }
-}
-```
+}`}
+</Code>
 
 ## 数据库 Schema
 
@@ -245,41 +256,68 @@ PostgreSQL 检查点器会自动创建以下表来存储工作流状态：
 
 从 PostgreSQL 恢复工作流非常简单：
 
-```java
+<Code
+  language="java"
+  title="恢复工作流" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+
+import java.util.Map;
+
 // 使用相同的 threadId
 RunnableConfig config = RunnableConfig.builder()
-    .threadId("original-thread-id")
-    .build();
+        .threadId("original-thread-id")
+        .build();
 
 // 从上次检查点继续执行
-Map<String, Object> result = workflow.invoke(null, config);
-```
+workflow.invoke(Map.of(), config);`}
+</Code>
 
 ### 查询历史状态
 
-```java
+<Code
+  language="java"
+  title="查询历史状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.state.StateSnapshot;
+
+import java.util.List;
+
 // 获取所有历史状态
-List<StateSnapshot> history = workflow.getStateHistory(config);
+List<StateSnapshot> history = (List<StateSnapshot>) workflow.getStateHistory(config);
 
 // 遍历历史
 for (StateSnapshot snapshot : history) {
-    System.out.println("节点: " + snapshot.next());
+    System.out.println("节点: " + snapshot.node());
     System.out.println("状态: " + snapshot.state());
-}
-```
+    System.out.println("Checkpoint ID: " + snapshot.config().checkPointId());
+}`}
+</Code>
 
 ### 从特定检查点恢复
 
-```java
+<Code
+  language="java"
+  title="从特定检查点恢复" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+
+import java.util.Map;
+
 // 获取特定检查点
 RunnableConfig checkpointConfig = RunnableConfig.builder()
-    .threadId("thread-id")
-    .checkpointId("specific-checkpoint-id")
-    .build();
+        .threadId("thread-id")
+        .checkPointId("specific-checkpoint-id")
+        .build();
 
 // 从该检查点继续
-Map<String, Object> result = workflow.invoke(null, checkpointConfig);
-```
+workflow.invoke(Map.of(), checkpointConfig);
+System.out.println("从检查点恢复执行完成");`}
+</Code>
 
 ## 性能优化
 
@@ -294,16 +332,19 @@ Map<String, Object> result = workflow.invoke(null, checkpointConfig);
 
 确保 PostgreSQL 数据库可访问且连接参数正确：
 
-```java
-// 测试连接
+<Code
+  language="java"
+  title="测试连接" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointPostgresExample.java"
+>
+{`// 测试连接
 try {
     Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
     System.out.println("连接成功！");
     conn.close();
 } catch (SQLException e) {
     System.err.println("连接失败: " + e.getMessage());
-}
-```
+}`}
+</Code>
 
 ### Schema 问题
 
