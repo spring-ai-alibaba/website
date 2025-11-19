@@ -79,8 +79,11 @@ spring:
 
 node 配置对应 mcp 服务的映射类
 
-```java
-package com.spring.ai.tutorial.graph.mcp.config;
+<Code
+  language="java"
+  title="McpNodeProperties" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+>
+{`package com.spring.ai.tutorial.graph.mcp.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -101,15 +104,18 @@ public class McpNodeProperties {
     public void setNode2servers(Map<String, Set<String>> node2servers) {
         this.node2servers = node2servers;
     }
-}
-```
+}`}
+</Code>
 
 #### McpGaphConfiguration
 
 注入 McpClientToolCallbackProvider，提供给 McpNode
 
-```java
-package com.spring.ai.tutorial.graph.mcp.config;
+<Code
+  language="java"
+  title="McpGaphConfiguration" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+>
+{`package com.spring.ai.tutorial.graph.mcp.config;
 
 import com.alibaba.cloud.ai.graph.GraphRepresentation;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -166,8 +172,8 @@ public class McpGaphConfiguration {
 
         return stateGraph;
     }
-}
-```
+}`}
+</Code>
 
 ### tool
 
@@ -175,8 +181,11 @@ public class McpGaphConfiguration {
 
 根据节点名称，匹配对应的 MCP 提供的 ToolCallback
 
-```java
-package com.spring.ai.tutorial.graph.mcp.tool;
+<Code
+  language="java"
+  title="McpClientToolCallbackProvider" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+>
+{`package com.spring.ai.tutorial.graph.mcp.tool;
 
 import com.spring.ai.tutorial.graph.mcp.config.McpNodeProperties;
 import org.apache.commons.compress.utils.Lists;
@@ -236,50 +245,46 @@ public class McpClientToolCallbackProvider {
         }
         return defineCallback;
     }
-}
-```
+}`}
+</Code>
 
 ### node
 
 #### McpNode
 
-通过 McpClientToolCallbackProvider 找到当前节点的 ToolCallback
+通过 ToolCallbacks 为节点配置 MCP 工具
 
-```java
-package com.spring.ai.tutorial.graph.mcp.node;
-
-import com.alibaba.cloud.ai.graph.OverAllState;
+<Code
+  language="java"
+  title="McpNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
-import com.spring.ai.tutorial.graph.mcp.tool.McpClientToolCallbackProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.ToolCallback;
-import reactor.core.publisher.Flux;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class McpNode implements NodeAction {
+import reactor.core.publisher.Flux;
 
-    private static final Logger logger = LoggerFactory.getLogger(McpNode.class);
-    
+/**
+ * MCP 节点实现
+ */
+public static class McpNode implements NodeAction {
+
     private static final String NODENAME = "mcp-node";
 
     private final ChatClient chatClient;
 
-    public McpNode(ChatClient.Builder chatClientBuilder, McpClientToolCallbackProvider mcpClientToolCallbackProvider) {
-        Set<ToolCallback> toolCallbacks = mcpClientToolCallbackProvider.findToolCallbacks(NODENAME);
-        for (ToolCallback toolCallback : toolCallbacks) {
-            logger.info("Mcp Node load ToolCallback: " + toolCallback.getToolDefinition().name());
-        }
-
+    public McpNode(ChatClient.Builder chatClientBuilder, Set<ToolCallback> toolCallbacks) {
+        // 为节点配置 MCP 工具
         this.chatClient = chatClientBuilder
                 .defaultToolCallbacks(toolCallbacks.toArray(ToolCallback[]::new))
                 .build();
     }
-
 
     @Override
     public Map<String, Object> apply(OverAllState state) {
@@ -292,15 +297,40 @@ public class McpNode implements NodeAction {
 
         return resultMap;
     }
-}
-```
+}`}
+</Code>
+
+#### 配置 MCP 节点
+
+<Code
+  language="java"
+  title="配置 MCP 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.ToolCallback;
+
+import java.util.Set;
+
+/**
+ * 配置 MCP 节点
+ */
+public static void configureMcpNode(ChatClient.Builder chatClientBuilder, Set<ToolCallback> toolCallbacks) {
+    McpNode mcpNode = new McpNode(chatClientBuilder, toolCallbacks);
+    System.out.println("MCP node configured successfully");
+}`}
+</Code>
 
 ### controller
 
 #### McpController
 
-```java
-package com.spring.ai.tutorial.graph.mcp.controller;
+<Code
+  language="java"
+  title="McpController" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+>
+{`package com.spring.ai.tutorial.graph.mcp.controller;
 
 import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -341,8 +371,8 @@ public class McpController {
         return invoke.map(OverAllState::data).orElse(new HashMap<>());
     }
 
-}
-```
+}`}
+</Code>
 
 ### MCP Server 服务提供
 

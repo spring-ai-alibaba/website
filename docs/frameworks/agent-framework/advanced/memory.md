@@ -126,6 +126,8 @@ store.putItem(userItem);
 // 创建获取用户信息的工具
 BiFunction<GetMemoryRequest, ToolContext, MemoryResponse> getUserInfoFunction =
     (request, context) -> {
+        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
+        Store store = runnableConfig.store();
         Optional<StoreItem> itemOpt = store.getItem(request.namespace(), request.key());
         if (itemOpt.isPresent()) {
             Map<String, Object> value = itemOpt.get().getValue();
@@ -147,10 +149,21 @@ ReactAgent agent = ReactAgent.builder()
     .saver(new MemorySaver())
     .build();
 
+// 创建内存存储
+MemoryStore store = new MemoryStore();
+// 向存储中写入示例数据
+Map<String, Object> userData = new HashMap<>();
+userData.put("name", "张三");
+userData.put("language", "中文");
+
+StoreItem userItem = StoreItem.of(List.of("users"), "user_123", userData);
+store.putItem(userItem);
+
 // 运行Agent
 RunnableConfig config = RunnableConfig.builder()
     .threadId("session_001")
     .addMetadata("user_id", "user_123")
+    .store(store)
     .build();
 
 agent.invoke("查询用户信息，namespace=['users'], key='user_123'", config);`}
@@ -187,6 +200,8 @@ MemoryStore store = new MemoryStore();
 // 创建保存用户信息的工具
 BiFunction<SaveMemoryRequest, ToolContext, MemoryResponse> saveUserInfoFunction =
     (request, context) -> {
+        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
+        Store store = runnableConfig.store();
         StoreItem item = StoreItem.of(request.namespace(), request.key(), request.value());
         store.putItem(item);
         return new MemoryResponse("成功保存用户信息", request.value());
@@ -205,12 +220,15 @@ ReactAgent agent = ReactAgent.builder()
     .saver(new MemorySaver())
     .build();
 
-// 运行Agent
+// 创建内存存储
+MemoryStore store = new MemoryStore();
 RunnableConfig config = RunnableConfig.builder()
     .threadId("session_001")
     .addMetadata("user_id", "user_123")
+    .store(store)
     .build();
 
+// 运行Agent
 agent.invoke(
     "我叫张三，请保存我的信息。使用 saveUserInfo 工具，namespace=['users'], key='user_123', value={'name': '张三'}",
     config
@@ -218,7 +236,9 @@ agent.invoke(
 
 // 可以直接访问存储获取值
 Optional<StoreItem> savedItem = store.getItem(List.of("users"), "user_123");
-Map<String, Object> savedValue = savedItem.get().getValue();`}
+if (savedItem.isPresent()) {
+    Map<String, Object> savedValue = savedItem.get().getValue();
+}`}
 </Code>
 
 ## 使用 ModelHook 管理长期记忆
@@ -244,19 +264,6 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-// 创建内存存储
-MemoryStore memoryStore = new MemoryStore();
-
-// 预先填充用户画像
-Map<String, Object> profileData = new HashMap<>();
-profileData.put("name", "王小明");
-profileData.put("age", 28);
-profileData.put("email", "wang@example.com");
-profileData.put("preferences", List.of("喜欢咖啡", "喜欢阅读"));
-
-StoreItem profileItem = StoreItem.of(List.of("user_profiles"), "user_001", profileData);
-memoryStore.putItem(profileItem);
-
 // 创建记忆拦截器
 ModelHook memoryInterceptor = new ModelHook() {
     @Override
@@ -278,18 +285,19 @@ ModelHook memoryInterceptor = new ModelHook() {
             return CompletableFuture.completedFuture(Map.of());
         }
 
+        Store store = config.store();
         // 从记忆存储中加载用户画像
-        Optional<StoreItem> itemOpt = memoryStore.getItem(List.of("user_profiles"), userId);
+        Optional<StoreItem> itemOpt = store.getItem(List.of("user_profiles"), userId);
         if (itemOpt.isPresent()) {
-            Map<String, Object> profileData = itemOpt.get().getValue();
+            Map<String, Object> profile = itemOpt.get().getValue();
 
             // 将用户上下文注入系统消息
             String userContext = String.format(
                 "用户信息：姓名=%s, 年龄=%s, 邮箱=%s, 偏好=%s",
-                profileData.get("name"),
-                profileData.get("age"),
-                profileData.get("email"),
-                profileData.get("preferences")
+                profile.get("name"),
+                profile.get("age"),
+                profile.get("email"),
+                profile.get("preferences")
             );
 
             // 获取消息列表
@@ -357,9 +365,23 @@ ReactAgent agent = ReactAgent.builder()
     .saver(new MemorySaver())
     .build();
 
+// 创建内存存储
+MemoryStore memoryStore = new MemoryStore();
+
+// 模拟数据，预先填充用户画像
+Map<String, Object> profileData = new HashMap<>();
+profileData.put("name", "王小明");
+profileData.put("age", 28);
+profileData.put("email", "wang@example.com");
+profileData.put("preferences", List.of("喜欢咖啡", "喜欢阅读"));
+
+StoreItem profileItem = StoreItem.of(List.of("user_profiles"), "user_001", profileData);
+memoryStore.putItem(profileItem);
+
 RunnableConfig config = RunnableConfig.builder()
     .threadId("session_001")
     .addMetadata("user_id", "user_001")
+    .store(memoryStore)
     .build();
 
 // Agent会自动加载用户画像信息
@@ -380,6 +402,7 @@ import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.store.Store;
 import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
 import com.alibaba.cloud.ai.graph.store.StoreItem;
 import org.springframework.ai.chat.messages.Message;
@@ -387,17 +410,6 @@ import org.springframework.ai.chat.messages.SystemMessage;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-
-// 创建记忆存储
-MemoryStore memoryStore = new MemoryStore();
-
-// 设置长期记忆
-Map<String, Object> userProfile = new HashMap<>();
-userProfile.put("name", "李工程师");
-userProfile.put("occupation", "软件工程师");
-
-StoreItem profileItem = StoreItem.of(List.of("profiles"), "user_002", userProfile);
-memoryStore.putItem(profileItem);
 
 // 创建组合记忆Hook
 ModelHook combinedMemoryHook = new ModelHook() {
@@ -420,6 +432,7 @@ ModelHook combinedMemoryHook = new ModelHook() {
         }
         String userId = (String) userIdOpt.get();
 
+        Store memoryStore = config.store();
         // 从长期记忆加载
         Optional<StoreItem> profileOpt = memoryStore.getItem(List.of("profiles"), userId);
         if (profileOpt.isEmpty()) {
@@ -486,9 +499,20 @@ ReactAgent agent = ReactAgent.builder()
     .saver(new MemorySaver()) // 短期记忆
     .build();
 
+// 创建记忆存储
+MemoryStore memoryStore = new MemoryStore();
+// 设置长期记忆
+Map<String, Object> userProfile = new HashMap<>();
+userProfile.put("name", "李工程师");
+userProfile.put("occupation", "软件工程师");
+
+StoreItem profileItem = StoreItem.of(List.of("profiles"), "user_002", userProfile);
+memoryStore.putItem(profileItem);
+
 RunnableConfig config = RunnableConfig.builder()
     .threadId("combined_thread")
     .addMetadata("user_id", "user_002")
+    .store(memoryStore)
     .build();
 
 // 短期记忆：在对话中记住
@@ -510,20 +534,30 @@ agent.invoke("根据我的职业和今天的工作，给我一些建议。", con
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.store.Store;
 import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
 import com.alibaba.cloud.ai.graph.store.StoreItem;
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 
 import java.util.*;
+import java.util.function.BiFunction;
+
+// 定义请求和响应记录
+record SaveMemoryRequest(List<String> namespace, String key, Map<String, Object> value) {}
+record GetMemoryRequest(List<String> namespace, String key) {}
+record MemoryResponse(String message, Map<String, Object> value) {}
 
 // 创建记忆存储和工具
 MemoryStore memoryStore = new MemoryStore();
 
 ToolCallback saveMemoryTool = FunctionToolCallback.builder("saveMemory",
-    (SaveMemoryRequest request, context) -> {
+    (BiFunction<SaveMemoryRequest, ToolContext, MemoryResponse>) (request, context) -> {
         StoreItem item = StoreItem.of(request.namespace(), request.key(), request.value());
-        memoryStore.putItem(item);
+        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
+        Store store = runnableConfig.store();
+        store.putItem(item);
         return new MemoryResponse("已保存", request.value());
     })
     .description("保存到长期记忆")
@@ -531,8 +565,10 @@ ToolCallback saveMemoryTool = FunctionToolCallback.builder("saveMemory",
     .build();
 
 ToolCallback getMemoryTool = FunctionToolCallback.builder("getMemory",
-    (GetMemoryRequest request, context) -> {
-        Optional<StoreItem> itemOpt = memoryStore.getItem(request.namespace(), request.key());
+    (BiFunction<GetMemoryRequest, ToolContext, MemoryResponse>) (request, context) -> {
+        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
+        Store store = runnableConfig.store();
+        Optional<StoreItem> itemOpt = store.getItem(request.namespace(), request.key());
         return new MemoryResponse(
             itemOpt.isPresent() ? "找到" : "未找到",
             itemOpt.map(StoreItem::getValue).orElse(Map.of())
@@ -553,6 +589,7 @@ ReactAgent agent = ReactAgent.builder()
 RunnableConfig session1 = RunnableConfig.builder()
     .threadId("session_morning")
     .addMetadata("user_id", "user_003")
+    .store(memoryStore)
     .build();
 
 agent.invoke(
@@ -564,6 +601,7 @@ agent.invoke(
 RunnableConfig session2 = RunnableConfig.builder()
     .threadId("session_afternoon")
     .addMetadata("user_id", "user_003")
+    .store(memoryStore)
     .build();
 
 agent.invoke(
@@ -658,6 +696,7 @@ ReactAgent agent = ReactAgent.builder()
 RunnableConfig config = RunnableConfig.builder()
     .threadId("learning_thread")
     .addMetadata("user_id", "user_004")
+    .store(memoryStore)
     .build();
 
 // 用户表达偏好
@@ -666,6 +705,8 @@ agent.invoke("我偏好早上运动。", config);
 
 // 验证偏好已被存储
 Optional<StoreItem> savedPrefs = memoryStore.getItem(List.of("user_data"), "user_004_preferences");
-// 偏好应该被保存到长期记忆中`}
+if (savedPrefs.isPresent()) {
+    // 偏好应该被保存到长期记忆中
+}`}
 </Code>
 

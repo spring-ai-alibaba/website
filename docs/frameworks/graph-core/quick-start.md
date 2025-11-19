@@ -95,13 +95,13 @@ flowchart TD
 
 #### 文档搜索节点
 * **参数**：从意图和主题构建的查询
-* **重试策略**：是，对瞬时故障使用指数退避
-* **缓存**：可以缓存常见查询以减少 API 调用
+* **错误处理**：捕获异常并存储错误信息，继续执行流程
+* **缓存**：可以缓存常见查询以减少 API 调用（本示例中未实现）
 
 #### 客户历史查询
 * **参数**：来自状态的客户邮箱或 ID
-* **重试策略**：是，但如果不可用则回退到基本信息
-* **缓存**：是，使用生存时间来平衡新鲜度和性能
+* **错误处理**：如果不可用则回退到基本信息（本示例中未实现）
+* **缓存**：是，使用生存时间来平衡新鲜度和性能（本示例中未实现）
 
 ### 操作步骤
 
@@ -109,12 +109,12 @@ flowchart TD
 
 #### 发送回复节点
 * **何时执行**：批准后（人工或自动）
-* **重试策略**：是，对网络问题使用指数退避
+* **错误处理**：让异常冒泡以进行调试（本示例中未实现重试逻辑）
 * **不应缓存**：每次发送都是唯一操作
 
 #### Bug跟踪节点
 * **何时执行**：当意图是"bug"时总是执行
-* **重试策略**：是，不丢失 bug 报告至关重要
+* **错误处理**：直接执行，不丢失 bug 报告至关重要（本示例中未实现重试逻辑）
 * **返回**：要包含在响应中的票据 ID
 
 ### 用户输入步骤
@@ -161,96 +161,92 @@ flowchart TD
 
 让我们定义状态：
 
-```java
-import com.alibaba.cloud.ai.graph.OverAllState;
-import com.alibaba.cloud.ai.graph.KeyStrategy;
+<Code
+  language="java"
+  title="定义状态和状态键策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/QuickStartExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.KeyStrategy;
 import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 import com.alibaba.cloud.ai.graph.state.strategy.AppendStrategy;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
 
 // 邮件分类结构
-public class EmailClassification {
+public static class EmailClassification {
     private String intent;      // "question", "bug", "billing", "feature", "complex"
     private String urgency;     // "low", "medium", "high", "critical"
     private String topic;
     private String summary;
 
-    // Getters and setters
-    public String getIntent() { return intent; }
-    public void setIntent(String intent) { this.intent = intent; }
-
-    public String getUrgency() { return urgency; }
-    public void setUrgency(String urgency) { this.urgency = urgency; }
-
-    public String getTopic() { return topic; }
-    public void setTopic(String topic) { this.topic = topic; }
-
-    public String getSummary() { return summary; }
-    public void setSummary(String summary) { this.summary = summary; }
-}
-
-// 邮件代理状态
-public class EmailAgentState extends OverAllState {
-
-    public EmailAgentState(Map<String, Object> initData) {
-        super(initData);
+    public EmailClassification() {
     }
 
-    // 原始邮件数据
-    public Optional<String> emailContent() {
-        return value("email_content");
+    public EmailClassification(String intent, String urgency, String topic, String summary) {
+        this.intent = intent;
+        this.urgency = urgency;
+        this.topic = topic;
+        this.summary = summary;
     }
 
-    public Optional<String> senderEmail() {
-        return value("sender_email");
+    public String getIntent() {
+        return intent;
     }
 
-    public Optional<String> emailId() {
-        return value("email_id");
+    public void setIntent(String intent) {
+        this.intent = intent;
     }
 
-    // 分类结果
-    public Optional<EmailClassification> classification() {
-        return value("classification");
+    public String getUrgency() {
+        return urgency;
     }
 
-    // 原始搜索/API结果
-    public Optional<List<String>> searchResults() {
-        return value("search_results");
+    public void setUrgency(String urgency) {
+        this.urgency = urgency;
     }
 
-    public Optional<Map<String, Object>> customerHistory() {
-        return value("customer_history");
+    public String getTopic() {
+        return topic;
     }
 
-    // 生成的内容
-    public Optional<String> draftResponse() {
-        return value("draft_response");
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
-    public Optional<List<String>> messages() {
-        return value("messages");
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("EmailClassification{intent='%s', urgency='%s', topic='%s', summary='%s'}", 
+                intent, urgency, topic, summary);
     }
 }
 
 // 配置状态键策略
-KeyStrategyFactory keyStrategyFactory = () -> {
-    HashMap<String, KeyStrategy> strategies = new HashMap<>();
-    strategies.put("email_content", new ReplaceStrategy());
-    strategies.put("sender_email", new ReplaceStrategy());
-    strategies.put("email_id", new ReplaceStrategy());
-    strategies.put("classification", new ReplaceStrategy());
-    strategies.put("search_results", new ReplaceStrategy());
-    strategies.put("customer_history", new ReplaceStrategy());
-    strategies.put("draft_response", new ReplaceStrategy());
-    strategies.put("messages", new AppendStrategy());
-    return strategies;
-};
-```
+public static KeyStrategyFactory createKeyStrategyFactory() {
+    return () -> {
+        HashMap<String, KeyStrategy> strategies = new HashMap<>();
+        strategies.put("email_content", new ReplaceStrategy());
+        strategies.put("sender_email", new ReplaceStrategy());
+        strategies.put("email_id", new ReplaceStrategy());
+        strategies.put("classification", new ReplaceStrategy());
+        strategies.put("search_results", new ReplaceStrategy());
+        strategies.put("customer_history", new ReplaceStrategy());
+        strategies.put("draft_response", new ReplaceStrategy());
+        strategies.put("messages", new AppendStrategy());
+        strategies.put("next_node", new ReplaceStrategy());
+        strategies.put("status", new ReplaceStrategy());
+        strategies.put("review_data", new ReplaceStrategy());
+        return strategies;
+    };
+}`}
+</Code>
 
 注意状态只包含原始数据 - 没有提示模板、没有格式化字符串、没有指令。分类输出直接从 LLM 存储为单个对象。
 
@@ -266,38 +262,34 @@ KeyStrategyFactory keyStrategyFactory = () -> {
 |---------|---------|------|---------|
 | 瞬时错误（网络问题、速率限制） | 系统（自动） | 重试策略 | 通常会在重试时解决的临时故障 |
 | LLM可恢复错误（工具失败、解析问题） | LLM | 将错误存储在状态中并循环回去 | LLM可以看到错误并调整其方法 |
-| 用户可修复错误（缺少信息、不清楚的指令） | 人工 | 使用 `interrupt()` 暂停 | 需要用户输入才能继续 |
+| 用户可修复错误（缺少信息、不清楚的指令） | 人工 | 使用 `interruptBefore` 暂停 | 需要用户输入才能继续 |
 | 意外错误 | 开发者 | 让它们冒泡 | 需要调试的未知问题 |
 
-#### 瞬时错误
-添加重试策略以自动重试网络问题和速率限制：
-
-```java
-import com.alibaba.cloud.ai.graph.CompileConfig;
-import com.alibaba.cloud.ai.graph.RetryPolicy;
-
-// 为可能有瞬时故障的节点添加重试策略
-var compileConfig = CompileConfig.builder()
-    .retryPolicy("search_documentation",
-        RetryPolicy.builder()
-            .maxAttempts(3)
-            .initialInterval(1000L)
-            .build())
-    .build();
-```
+**注意**：本示例代码中主要展示了基本的错误处理模式。在实际应用中，您可以根据需要添加重试策略、错误恢复机制等。本示例中的 `SearchDocumentationNode` 展示了基本的错误处理：捕获异常并存储错误信息，然后继续执行流程。
 
 #### LLM可恢复错误
 将错误存储在状态中并循环回去，以便 LLM 可以看到出错的地方并重试：
 
-```java
-import com.alibaba.cloud.ai.graph.action.NodeAction;
+**注意**：以下是一个示例，展示如何处理 LLM 可恢复的错误。本示例代码不在 `QuickStartExample.java` 中，仅用于说明错误处理模式：
 
+<Code
+  language="java"
+  title="LLM可恢复错误处理示例"
+>
+{`import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import java.util.Map;
+
+// 示例：处理工具调用错误，让 LLM 可以重试
 public class ExecuteToolNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
         try {
-            String result = runTool(state.value("tool_call").orElse(""));
+            String toolCall = state.value("tool_call")
+                    .map(v -> (String) v)
+                    .orElse("");
+            String result = runTool(toolCall);
             return Map.of(
                 "tool_result", result,
                 "next_node", "agent"
@@ -310,20 +302,30 @@ public class ExecuteToolNode implements NodeAction {
             );
         }
     }
-}
-```
+}`}
+</Code>
 
 #### 用户可修复错误
 在需要时暂停并从用户那里收集信息（如账户 ID、订单号或澄清）：
 
-```java
-import com.alibaba.cloud.ai.graph.checkpoint.Checkpoint;
+**注意**：以下是一个示例，展示如何处理需要用户输入的情况。本示例代码不在 `QuickStartExample.java` 中，仅用于说明错误处理模式。在实际应用中，使用 `interruptBefore` 配置来暂停执行：
 
+<Code
+  language="java"
+  title="用户可修复错误处理示例"
+>
+{`import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import java.util.Map;
+
+// 示例：处理缺少用户输入的情况
 public class LookupCustomerHistory implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        String customerId = (String) state.value("customer_id").orElse(null);
+        String customerId = state.value("customer_id")
+                .map(v -> (String) v)
+                .orElse(null);
 
         if (customerId == null) {
             // 暂停执行，等待用户输入
@@ -346,29 +348,38 @@ public class LookupCustomerHistory implements NodeAction {
         // 实际的客户历史查询逻辑
         return Map.of("tier", "premium", "since", "2020-01-01");
     }
-}
-```
+}`}
+</Code>
 
 #### 意外错误
 让它们冒泡以进行调试。不要捕获您无法处理的内容：
 
-```java
-public class SendReplyNode implements NodeAction {
+**注意**：以下是一个示例，展示如何处理意外错误。实际的 `SendReplyNode` 实现更简单，直接让异常冒泡：
+
+<Code
+  language="java"
+  title="意外错误处理示例"
+>
+{`import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import java.util.Map;
+
+// 示例：如果需要在发送前验证数据，可以这样做
+public class SendReplyNodeExample implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        try {
-            String response = (String) state.value("draft_response")
+        // 直接获取值，如果缺少必要数据，让异常自然冒泡
+        String response = state.value("draft_response")
+                .map(v -> (String) v)
                 .orElseThrow(() -> new IllegalStateException("No draft response"));
 
-            emailService.send(response);
-            return Map.of("status", "sent");
-        } catch (Exception e) {
-            // 让意外错误冒泡
-            throw e;
-        }
+        // 执行发送操作，任何异常都会冒泡
+        emailService.send(response);
+        return Map.of("status", "sent");
     }
-}
+}`}
+</Code>
 
 ### 实现我们的邮件代理节点
 
@@ -376,27 +387,32 @@ public class SendReplyNode implements NodeAction {
 
 #### 读取和分类节点
 
-```java
-import com.alibaba.cloud.ai.graph.action.NodeAction;
+<Code
+  language="java"
+  title="读取和分类节点实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/QuickStartExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-private static final Logger log = LoggerFactory.getLogger("EmailAgent");
+private static final Logger log = LoggerFactory.getLogger(QuickStartExample.class);
 
 // 读取邮件节点
-public class ReadEmailNode implements NodeAction {
+public static class ReadEmailNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        EmailAgentState emailState = (EmailAgentState) state;
-
         // 在生产环境中，这将连接到您的邮件服务
-        String emailContent = emailState.emailContent().orElse("");
+        String emailContent = state.value("email_content")
+                .map(v -> (String) v)
+                .orElse("");
 
         log.info("Processing email: {}", emailContent);
 
@@ -408,7 +424,7 @@ public class ReadEmailNode implements NodeAction {
 }
 
 // 分类意图节点
-public class ClassifyIntentNode implements NodeAction {
+public static class ClassifyIntentNode implements NodeAction {
 
     private final ChatClient chatClient;
 
@@ -418,32 +434,33 @@ public class ClassifyIntentNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        EmailAgentState emailState = (EmailAgentState) state;
-
-        String emailContent = emailState.emailContent()
-            .orElseThrow(() -> new IllegalStateException("No email content"));
-        String senderEmail = emailState.senderEmail().orElse("unknown");
+        String emailContent = state.value("email_content")
+                .map(v -> (String) v)
+                .orElseThrow(() -> new IllegalStateException("No email content"));
+        String senderEmail = state.value("sender_email")
+                .map(v -> (String) v)
+                .orElse("unknown");
 
         // 按需格式化提示，不存储在状态中
         String classificationPrompt = String.format("""
-            分析这封客户邮件并进行分类：
+                分析这封客户邮件并进行分类：
 
-            邮件: %s
-            发件人: %s
+                邮件: %s
+                发件人: %s
 
-            提供分类，包括意图、紧急程度、主题和摘要。
+                提供分类，包括意图、紧急程度、主题和摘要。
 
-            意图应该是以下之一: question, bug, billing, feature, complex
-            紧急程度应该是以下之一: low, medium, high, critical
+                意图应该是以下之一: question, bug, billing, feature, complex
+                紧急程度应该是以下之一: low, medium, high, critical
 
-            以JSON格式返回: {"intent": "...", "urgency": "...", "topic": "...", "summary": "..."}
-            """, emailContent, senderEmail);
+                以JSON格式返回: {"intent": "...", "urgency": "...", "topic": "...", "summary": "..."}
+                """, emailContent, senderEmail);
 
         // 获取结构化响应
         String response = chatClient.prompt()
-            .user(classificationPrompt)
-            .call()
-            .content();
+                .user(classificationPrompt)
+                .call()
+                .content();
 
         // 解析为 EmailClassification 对象
         EmailClassification classification = parseClassification(response);
@@ -451,7 +468,7 @@ public class ClassifyIntentNode implements NodeAction {
         // 根据分类确定下一个节点
         String nextNode;
         if ("billing".equals(classification.getIntent()) ||
-            "critical".equals(classification.getUrgency())) {
+                "critical".equals(classification.getUrgency())) {
             nextNode = "human_review";
         } else if (List.of("question", "feature").contains(classification.getIntent())) {
             nextNode = "search_documentation";
@@ -463,61 +480,113 @@ public class ClassifyIntentNode implements NodeAction {
 
         // 将分类作为单个对象存储在状态中
         return Map.of(
-            "classification", classification,
-            "next_node", nextNode
+                "classification", classification,
+                "next_node", nextNode
         );
     }
 
+    /**
+     * 简化的JSON解析（实际应用中使用Jackson或Gson）
+     */
     private EmailClassification parseClassification(String jsonResponse) {
-        // 简化的JSON解析（实际应用中使用Jackson或Gson）
         EmailClassification classification = new EmailClassification();
-        // 解析逻辑...
+
+        // 简单的正则表达式解析
+        Pattern intentPattern = Pattern.compile("\"intent\"\\s*:\\s*\"([^\"]+)\"");
+        Pattern urgencyPattern = Pattern.compile("\"urgency\"\\s*:\\s*\"([^\"]+)\"");
+        Pattern topicPattern = Pattern.compile("\"topic\"\\s*:\\s*\"([^\"]+)\"");
+        Pattern summaryPattern = Pattern.compile("\"summary\"\\s*:\\s*\"([^\"]+)\"");
+
+        Matcher matcher = intentPattern.matcher(jsonResponse);
+        if (matcher.find()) {
+            classification.setIntent(matcher.group(1));
+        }
+
+        matcher = urgencyPattern.matcher(jsonResponse);
+        if (matcher.find()) {
+            classification.setUrgency(matcher.group(1));
+        }
+
+        matcher = topicPattern.matcher(jsonResponse);
+        if (matcher.find()) {
+            classification.setTopic(matcher.group(1));
+        }
+
+        matcher = summaryPattern.matcher(jsonResponse);
+        if (matcher.find()) {
+            classification.setSummary(matcher.group(1));
+        }
+
+        // 如果解析失败，设置默认值
+        if (classification.getIntent() == null) {
+            classification.setIntent("question");
+        }
+        if (classification.getUrgency() == null) {
+            classification.setUrgency("medium");
+        }
+        if (classification.getTopic() == null) {
+            classification.setTopic("general");
+        }
+        if (classification.getSummary() == null) {
+            classification.setSummary("需要处理的客户邮件");
+        }
+
         return classification;
     }
-}
-```
+}`}
+</Code>
 
 #### 搜索和跟踪节点
 
-```java
+<Code
+  language="java"
+  title="搜索和跟踪节点实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/QuickStartExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import java.util.Map;
+import java.util.List;
+
 // 文档搜索节点
-public class SearchDocumentationNode implements NodeAction {
+public static class SearchDocumentationNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        EmailAgentState emailState = (EmailAgentState) state;
-
         // 从分类构建搜索查询
-        EmailClassification classification = emailState.classification()
-            .orElse(new EmailClassification());
+        EmailClassification classification = state.value("classification")
+                .map(v -> (EmailClassification) v)
+                .orElse(new EmailClassification());
         String query = classification.getIntent() + " " + classification.getTopic();
 
         try {
             // 实现您的搜索逻辑
             // 存储原始搜索结果，而不是格式化的文本
             List<String> searchResults = List.of(
-                "通过设置 > 安全 > 更改密码重置密码",
-                "密码必须至少12个字符",
-                "包含大写字母、小写字母、数字和符号"
+                    "通过设置 > 安全 > 更改密码重置密码",
+                    "密码必须至少12个字符",
+                    "包含大写字母、小写字母、数字和符号"
             );
 
+            log.info("Searching documentation for: {}", query);
+
             return Map.of(
-                "search_results", searchResults,
-                "next_node", "draft_response"
+                    "search_results", searchResults,
+                    "next_node", "draft_response"
             );
         } catch (Exception e) {
             // 对于可恢复的搜索错误，存储错误并继续
+            log.warn("Search error: {}", e.getMessage());
             List<String> errorResult = List.of("搜索暂时不可用: " + e.getMessage());
             return Map.of(
-                "search_results", errorResult,
-                "next_node", "draft_response"
+                    "search_results", errorResult,
+                    "next_node", "draft_response"
             );
         }
     }
 }
 
 // Bug跟踪节点
-public class BugTrackingNode implements NodeAction {
+public static class BugTrackingNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
@@ -527,19 +596,31 @@ public class BugTrackingNode implements NodeAction {
         log.info("Created bug ticket: {}", ticketId);
 
         return Map.of(
-            "search_results", List.of("已创建Bug票据 " + ticketId),
-            "current_step", "bug_tracked",
-            "next_node", "draft_response"
+                "search_results", List.of("已创建Bug票据 " + ticketId),
+                "current_step", "bug_tracked",
+                "next_node", "draft_response"
         );
     }
-}
-```
+}`}
+</Code>
 
 #### 响应节点
 
-```java
+<Code
+  language="java"
+  title="响应节点实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/QuickStartExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import org.springframework.ai.chat.client.ChatClient;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 // 起草回复节点
-public class DraftResponseNode implements NodeAction {
+public static class DraftResponseNode implements NodeAction {
 
     private final ChatClient chatClient;
 
@@ -549,119 +630,129 @@ public class DraftResponseNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        EmailAgentState emailState = (EmailAgentState) state;
-
-        EmailClassification classification = emailState.classification()
-            .orElse(new EmailClassification());
-        String emailContent = emailState.emailContent().orElse("");
+        EmailClassification classification = state.value("classification")
+                .map(v -> (EmailClassification) v)
+                .orElse(new EmailClassification());
+        String emailContent = state.value("email_content")
+                .map(v -> (String) v)
+                .orElse("");
 
         // 从原始状态数据按需格式化上下文
         List<String> contextSections = new ArrayList<>();
 
-        if (emailState.searchResults().isPresent()) {
+        Optional<List<String>> searchResults = state.value("search_results")
+                .map(v -> (List<String>) v);
+        if (searchResults.isPresent()) {
             // 为提示格式化搜索结果
-            List<String> docs = emailState.searchResults().get();
+            List<String> docs = searchResults.get();
             String formattedDocs = docs.stream()
-                .map(doc -> "- " + doc)
-                .collect(Collectors.joining("\n"));
+                    .map(doc -> "- " + doc)
+                    .collect(Collectors.joining("\n"));
             contextSections.add("相关文档:\n" + formattedDocs);
         }
 
-        if (emailState.customerHistory().isPresent()) {
+        Optional<Map<String, Object>> customerHistory = state.value("customer_history")
+                .map(v -> (Map<String, Object>) v);
+        if (customerHistory.isPresent()) {
             // 为提示格式化客户数据
-            Map<String, Object> history = emailState.customerHistory().get();
+            Map<String, Object> history = customerHistory.get();
             contextSections.add("客户等级: " + history.getOrDefault("tier", "standard"));
         }
 
         // 使用格式化的上下文构建提示
         String draftPrompt = String.format("""
-            为这封客户邮件起草回复:
-            %s
+                为这封客户邮件起草回复:
+                %s
 
-            邮件意图: %s
-            紧急程度: %s
+                邮件意图: %s
+                紧急程度: %s
 
-            %s
+                %s
 
-            指南:
-            - 专业且有帮助
-            - 解决他们的具体问题
-            - 在相关时使用提供的文档
-            """,
-            emailContent,
-            classification.getIntent(),
-            classification.getUrgency(),
-            String.join("\n", contextSections)
+                指南:
+                - 专业且有帮助
+                - 解决他们的具体问题
+                - 在相关时使用提供的文档
+                """,
+                emailContent,
+                classification.getIntent(),
+                classification.getUrgency(),
+                String.join("\n", contextSections)
         );
 
         String response = chatClient.prompt()
-            .user(draftPrompt)
-            .call()
-            .content();
+                .user(draftPrompt)
+                .call()
+                .content();
 
         // 根据紧急程度和意图确定是否需要人工审核
         boolean needsReview =
-            List.of("high", "critical").contains(classification.getUrgency()) ||
-            "complex".equals(classification.getIntent());
+                List.of("high", "critical").contains(classification.getUrgency()) ||
+                        "complex".equals(classification.getIntent());
 
         // 路由到适当的下一个节点
         String nextNode = needsReview ? "human_review" : "send_reply";
 
         return Map.of(
-            "draft_response", response,  // 仅存储原始响应
-            "next_node", nextNode
+                "draft_response", response,  // 仅存储原始响应
+                "next_node", nextNode
         );
     }
 }
 
 // 人工审核节点
-public class HumanReviewNode implements NodeAction {
+// 注意：在 interruptBefore 模式下，中断是在编译配置中设置的（见 createEmailAgentGraph 方法）。
+// 节点本身不需要做任何特殊处理，只需要正常返回状态即可。
+// 当执行到此节点前时，Graph 会自动中断，等待人工输入。
+public static class HumanReviewNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        EmailAgentState emailState = (EmailAgentState) state;
+        EmailClassification classification = state.value("classification")
+                .map(v -> (EmailClassification) v)
+                .orElse(new EmailClassification());
 
-        EmailClassification classification = emailState.classification()
-            .orElse(new EmailClassification());
-
-        // interrupt() 必须首先 - 它之前的任何代码在恢复时都会重新运行
-        // 在 Spring AI Alibaba 中，使用 interruptBefore 配置来实现中断
-
+        // 准备审核数据
         Map<String, Object> reviewData = Map.of(
-            "email_id", emailState.emailId().orElse(""),
-            "original_email", emailState.emailContent().orElse(""),
-            "draft_response", emailState.draftResponse().orElse(""),
-            "urgency", classification.getUrgency(),
-            "intent", classification.getIntent(),
-            "action", "请审核并批准/编辑此响应"
+                "email_id", state.value("email_id").map(v -> (String) v).orElse(""),
+                "original_email", state.value("email_content").map(v -> (String) v).orElse(""),
+                "draft_response", state.value("draft_response").map(v -> (String) v).orElse(""),
+                "urgency", classification.getUrgency(),
+                "intent", classification.getIntent(),
+                "action", "请审核并批准/编辑此响应"
         );
 
         log.info("Waiting for human review: {}", reviewData);
 
-        // 注意：实际的中断逻辑需要在 Graph 编译时配置 interruptBefore
-        // 这里返回状态以供审核
+        // 返回审核数据和下一个节点
+        // 注意：在 interruptBefore 模式下，此节点在人工输入后才会执行
         return Map.of(
-            "review_data", reviewData,
-            "status", "waiting_for_review"
+                "review_data", reviewData,
+                "status", "waiting_for_review",
+                "next_node", "send_reply"
         );
     }
 }
 
 // 发送回复节点
-public class SendReplyNode implements NodeAction {
+public static class SendReplyNode implements NodeAction {
 
     @Override
     public Map<String, Object> apply(OverAllState state) throws Exception {
-        EmailAgentState emailState = (EmailAgentState) state;
-        String draftResponse = emailState.draftResponse().orElse("");
+        String draftResponse = state.value("draft_response")
+                .map(v -> (String) v)
+                .orElse("");
 
         // 与邮件服务集成
-        log.info("Sending reply: {}...", draftResponse.substring(0, Math.min(100, draftResponse.length())));
+        log.info("Sending reply: {}...", 
+                draftResponse.length() > 100 
+                        ? draftResponse.substring(0, 100) 
+                        : draftResponse);
 
         return Map.of("status", "sent");
     }
-}
-```
+}`}
+</Code>
 
 ## 步骤 5：组装Graph
 
@@ -669,77 +760,99 @@ public class SendReplyNode implements NodeAction {
 
 要启用人工介入（human-in-the-loop）功能，我们需要使用 checkpointer 编译以在运行之间保存状态：
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="创建邮件处理 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/QuickStartExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
-import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
+import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 import com.alibaba.cloud.ai.graph.CompileConfig;
-import com.alibaba.cloud.ai.graph.RetryPolicy;
-import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
-import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edgeasync;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.client.ChatClient;
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+import java.util.Map;
 
-// 配置 ChatClient
-ChatClient.Builder chatClientBuilder = ChatClient.builder(chatModel);
+/**
+ * 创建邮件处理 Graph
+ */
+public static CompiledGraph createEmailAgentGraph(ChatModel chatModel) throws GraphStateException {
+    // 配置 ChatClient
+    ChatClient.Builder chatClientBuilder = ChatClient.builder(chatModel);
 
-// 创建节点
-var readEmail = nodeasync(new ReadEmailNode());
-var classifyIntent = nodeasync(new ClassifyIntentNode(chatClientBuilder));
-var searchDocumentation = nodeasync(new SearchDocumentationNode());
-var bugTracking = nodeasync(new BugTrackingNode());
-var draftResponse = nodeasync(new DraftResponseNode(chatClientBuilder));
-var humanReview = nodeasync(new HumanReviewNode());
-var sendReply = nodeasync(new SendReplyNode());
+    // 创建节点
+    var readEmail = node_async(new ReadEmailNode());
+    var classifyIntent = node_async(new ClassifyIntentNode(chatClientBuilder));
+    var searchDocumentation = node_async(new SearchDocumentationNode());
+    var bugTracking = node_async(new BugTrackingNode());
+    var draftResponse = node_async(new DraftResponseNode(chatClientBuilder));
+    var humanReview = node_async(new HumanReviewNode());
+    var sendReply = node_async(new SendReplyNode());
 
-// 创建图
-StateGraph workflow = new StateGraph(keyStrategyFactory)
-    .addNode("read_email", readEmail)
-    .addNode("classify_intent", classifyIntent)
-    .addNode("search_documentation", searchDocumentation)
-    .addNode("bug_tracking", bugTracking)
-    .addNode("draft_response", draftResponse)
-    .addNode("human_review", humanReview)
-    .addNode("send_reply", sendReply);
+    // 创建图
+    StateGraph workflow = new StateGraph(createKeyStrategyFactory())
+            .addNode("read_email", readEmail)
+            .addNode("classify_intent", classifyIntent)
+            .addNode("search_documentation", searchDocumentation)
+            .addNode("bug_tracking", bugTracking)
+            .addNode("draft_response", draftResponse)
+            .addNode("human_review", humanReview)
+            .addNode("send_reply", sendReply);
 
-// 添加基本边
-workflow.addEdge(StateGraph.START, "read_email");
-workflow.addEdge("read_email", "classify_intent");
-workflow.addEdge("send_reply", StateGraph.END);
+    // 添加基本边
+    workflow.addEdge(START, "read_email");
+    workflow.addEdge("read_email", "classify_intent");
+    workflow.addEdge("send_reply", END);
 
-// 添加条件边（基于节点返回的 next_node）
-workflow.addConditionalEdges("classify_intent",
-    edgeasync(state -> {
-        return (String) state.value("next_node").orElse("draft_response");
-    }),
-    Map.of(
-        "search_documentation", "search_documentation",
-        "bug_tracking", "bug_tracking",
-        "human_review", "human_review",
-        "draft_response", "draft_response"
-    ));
+    // 添加条件边（基于节点返回的 next_node）
+    workflow.addConditionalEdges("classify_intent",
+            edge_async(state -> {
+                return (String) state.value("next_node").orElse("draft_response");
+            }),
+            Map.of(
+                    "search_documentation", "search_documentation",
+                    "bug_tracking", "bug_tracking",
+                    "human_review", "human_review",
+                    "draft_response", "draft_response"
+            ));
 
-workflow.addConditionalEdges("draft_response",
-    edgeasync(state -> {
-        return (String) state.value("next_node").orElse("send_reply");
-    }),
-    Map.of(
-        "human_review", "human_review",
-        "send_reply", "send_reply"
-    ));
+    workflow.addConditionalEdges("draft_response",
+            edge_async(state -> {
+                return (String) state.value("next_node").orElse("send_reply");
+            }),
+            Map.of(
+                    "human_review", "human_review",
+                    "send_reply", "send_reply"
+            ));
 
-// 配置持久化和重试策略
-var memory = new MemorySaver();
-var compileConfig = CompileConfig.builder()
-    .checkpointSaver(memory)
-    .interruptBefore("human_review")  // 在人工审核前中断
-    .retryPolicy("search_documentation",
-        RetryPolicy.builder()
-            .maxAttempts(3)
-            .initialInterval(1000L)
-            .build())
-    .build();
+    workflow.addConditionalEdges("human_review",
+            edge_async(state -> {
+                return (String) state.value("next_node").orElse("send_reply");
+            }),
+            Map.of(
+                    "send_reply", "send_reply"
+            ));
 
-CompiledGraph app = workflow.compile(compileConfig);
-```
+    workflow.addEdge("search_documentation", "draft_response");
+    workflow.addEdge("bug_tracking", "draft_response");
+
+    // 配置持久化
+    var memory = new MemorySaver();
+    var compileConfig = CompileConfig.builder()
+            .saverConfig(SaverConfig.builder()
+                    .register(memory)
+                    .build())
+            .interruptBefore("human_review")  // 在人工审核前中断
+            .build();
+
+    return workflow.compile(compileConfig);
+}`}
+</Code>
 
 图结构是最小的，因为路由通过节点内部的返回值发生。每个节点通过返回 `next_node` 键来声明它可以去哪里，使流程显式和可追溯。
 
@@ -747,40 +860,80 @@ CompiledGraph app = workflow.compile(compileConfig);
 
 让我们用一个需要人工审核的紧急账单问题来运行我们的代理：
 
-```java
+<Code
+  language="java"
+  title="测试邮件代理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/QuickStartExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import reactor.core.publisher.Flux;
+import java.util.ArrayList;
+import java.util.Map;
 
-// 测试紧急账单问题
-Map<String, Object> initialState = Map.of(
-    "email_content", "我的订阅被收费两次了！这很紧急！",
-    "sender_email", "customer@example.com",
-    "email_id", "email_123",
-    "messages", new ArrayList<String>()
-);
+/**
+ * 测试紧急账单问题
+ */
+public static void testBillingIssue(CompiledGraph app) throws Exception {
+    log.info("=== 测试紧急账单问题 ===");
 
-// 使用 thread_id 运行以实现持久化
-var config = RunnableConfig.builder()
-    .threadId("customer_123")
-    .build();
+    // 测试紧急账单问题
+    Map<String, Object> initialState = Map.of(
+            "email_content", "我的订阅被收费两次了！这很紧急！",
+            "sender_email", "customer@example.com",
+            "email_id", "email_123",
+            "messages", new ArrayList<String>()
+    );
 
-var result = app.invoke(initialState, config);
-// 图将在 human_review 处暂停
+    // 使用 thread_id 运行以实现持久化
+    var config = RunnableConfig.builder()
+            .threadId("customer_123")
+            .build();
 
-String draftResponse = (String) result.data().get("draft_response");
-log.info("Draft ready for review: {}...", draftResponse.substring(0, Math.min(100, draftResponse.length())));
+    // 使用 stream 执行，直到中断点（human_review）
+    // 图将在 human_review 处暂停（因为配置了 interruptBefore）
+    Flux<NodeOutput> stream = app.stream(initialState, config);
+    stream
+            .doOnNext(output -> log.info("节点输出: {}", output))
+            .doOnError(error -> log.error("执行错误: {}", error.getMessage()))
+            .doOnComplete(() -> log.info("流完成"))
+            .blockLast();
 
-// 准备好后，提供人工输入以恢复
-Map<String, Object> humanResponse = Map.of(
-    "approved", true,
-    "edited_response", "我们对重复收费深表歉意。我已经立即启动了退款..."
-);
+    // 获取当前状态，检查是否有草稿回复
+    var currentState = app.getState(config);
+    Map<String, Object> stateData = currentState.state().data();
+    String draftResponse = (String) stateData.get("draft_response");
+    if (draftResponse != null) {
+        log.info("Draft ready for review: {}...", 
+                draftResponse.length() > 100 
+                        ? draftResponse.substring(0, 100) 
+                        : draftResponse);
+    }
 
-// 恢复执行
-var finalResult = app.invoke(humanResponse, config);
-log.info("Email sent successfully!");
-```
+    // 准备好后，提供人工输入以恢复
+    // 使用 updateState 更新状态（interruptBefore 模式下，传入 null 作为节点 ID）
+    var updatedConfig = app.updateState(config, Map.of(
+            "approved", true,
+            "edited_response", "我们对重复收费深表歉意。我已经立即启动了退款..."
+    ), null);
+
+    // 继续执行（input 为 null，使用之前的状态）
+    app.stream(null, updatedConfig)
+            .doOnNext(output -> log.info("节点输出: {}", output))
+            .doOnError(error -> log.error("执行错误: {}", error.getMessage()))
+            .doOnComplete(() -> log.info("流完成"))
+            .blockLast();
+
+    // 获取最终状态
+    var finalState = app.getState(updatedConfig);
+    String status = (String) finalState.state().data().get("status");
+    log.info("Email sent successfully! Status: {}", status);
+}`}
+</Code>
 
 图在遇到 `interruptBefore` 时暂停，将所有内容保存到 checkpointer，然后等待。它可以在几天后恢复，准确地从它停止的地方继续。`thread_id` 确保这个对话的所有状态都保存在一起。
+
+**注意**：在 `interruptBefore` 模式下，使用 `app.stream()` 方法执行图，它会流式返回每个节点的输出。当执行到配置的中断点（`human_review`）时，图会自动暂停。使用 `app.getState()` 可以获取当前状态，使用 `app.updateState()` 可以更新状态并提供人工输入，然后再次调用 `app.stream()` 继续执行。
 
 ## 总结和下一步
 
@@ -828,11 +981,11 @@ Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工�
 
 我们为邮件代理选择这种分解的原因：
 
-* **隔离外部服务**：文档搜索和Bug跟踪是独立的节点，因为它们调用外部API。如果搜索服务慢或失败，我们希望将其与LLM调用隔离。我们可以向这些特定节点添加重试策略而不影响其他节点。
+* **隔离外部服务**：文档搜索和Bug跟踪是独立的节点，因为它们调用外部API。如果搜索服务慢或失败，我们希望将其与LLM调用隔离。独立的节点让您可以独立处理错误和配置重试策略。
 
 * **中间可见性**：将"分类意图"作为自己的节点让我们可以在采取行动之前检查LLM决定了什么。这对调试和监控很有价值 - 您可以准确看到代理何时以及为什么路由到人工审核。
 
-* **不同的故障模式**：LLM调用、数据库查找和邮件发送具有不同的重试策略。独立的节点让您可以独立配置这些。
+* **不同的故障模式**：LLM调用、数据库查找和邮件发送具有不同的错误处理需求。独立的节点让您可以独立处理这些不同的故障模式。
 
 * **可重用性和测试**：较小的节点更容易单独测试并在其他工作流中重用。
 
@@ -852,7 +1005,7 @@ Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工�
 
 #### 1. 人工介入模式
 了解如何在执行前添加工具批准、批量批准和其他模式。参考：
-- [等待用户输入](./examples/wait-user-input)
+- [等待用户输入](./examples/human-in-the-loop)
 
 #### 2. 子图
 为复杂的多步骤操作创建子图。参考：
@@ -868,8 +1021,8 @@ Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工�
 集成更多工具进行网络搜索、数据库查询和API调用。参考：
 - [Spring AI Function Calling](https://docs.spring.io/spring-ai/reference/api/functions.html)
 
-#### 5. 重试逻辑
-为失败的操作实现指数退避的重试逻辑。参考配置示例中的 `RetryPolicy`。
+#### 5. 错误处理和重试逻辑
+为失败的操作实现错误处理和重试逻辑。在实际应用中，您可以根据需要在节点中实现重试机制，或使用框架提供的重试策略配置。
 
 #### 6. 持久化和时光旅行
 深入了解状态持久化和历史回溯。参考：
