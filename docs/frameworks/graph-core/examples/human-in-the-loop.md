@@ -740,4 +740,4 @@ public class HumanFeedbackDispatcher implements EdgeAction {
 
 - [Checkpoint 机制](./checkpoint-redis) - 状态持久化
 - [快速入门](../quick-start) - Graph 基础使用
-- [流式处理](./streaming) - 流式输出
+- [流式处理](./llm-streaming-springai) - 流式输出

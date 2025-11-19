@@ -480,6 +480,6 @@ public class PersistenceExample {
 
 ## 相关文档
 
-- [等待用户输入](./wait-user-input) - 中断和恢复示例
+- [等待用户输入](./human-in-the-loop) - 中断和恢复示例
 - [时光旅行](./time-travel) - 状态历史导航
 - [快速入门](../quick-start) - Graph 基础使用

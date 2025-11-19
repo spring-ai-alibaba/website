@@ -1022,7 +1022,7 @@ Spring AI Alibaba Graph 的持久执行在节点边界创建检查点。当工�
 
 #### 1. 人工介入模式
 了解如何在执行前添加工具批准、批量批准和其他模式。参考：
-- [等待用户输入](./examples/wait-user-input)
+- [等待用户输入](./examples/human-in-the-loop)
 
 #### 2. 子图
 为复杂的多步骤操作创建子图。参考：
