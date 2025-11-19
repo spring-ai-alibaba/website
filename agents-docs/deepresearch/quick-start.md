@@ -1,3 +1,9 @@
+---
+title: DeepResearch 快速开始
+description: DeepResearch 是基于 Spring AI Alibaba 构建的深度研究智能体，实现任务规划、子智能体协作、文件系统访问等高级功能，用于解决复杂的多步骤研究任务
+keywords: [DeepResearch, 深度研究, Research Agent, 任务规划, 多智能体协作, Spring AI Alibaba, AI研究助手]
+---
+
 # 项目简介
 
 A DeepResearch agent built with Spring AI Alibaba that conducts thorough research and writes polished reports. Using an LLM to call tools in a loop is the simplest form of an agent, but this can yield agents that are "shallow". DeepResearch implements **task planning**, **sub agents**, **file system access**, and a **detailed prompt** to solve complex, multi-step research tasks.
