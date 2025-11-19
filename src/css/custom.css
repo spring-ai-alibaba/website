@@ -1491,16 +1491,6 @@ article {
   }
 }
 
-/* Lazy loading images - improve performance */
-img[loading="lazy"] {
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-img[loading="lazy"].loaded {
-  opacity: 1;
-}
-
 /* Reduce layout shift */
 .main-wrapper {
   min-height: 100vh;

@@ -259,16 +259,6 @@ const config: Config = {
         breadcrumbs: true,
       },
     ],
-    // Sitemap plugin configuration
-    [
-      '@docusaurus/plugin-sitemap',
-      {
-        changefreq: 'weekly',
-        priority: 0.5,
-        ignorePatterns: ['/tags/**'],
-        filename: 'sitemap.xml',
-      },
-    ],
     // [
     //   '@docusaurus/plugin-content-docs',
     //   {
@@ -319,6 +309,12 @@ const config: Config = {
         },
         theme: {
           customCss: ['./src/css/custom.css', './src/css/blog.css', './src/css/image-zoom.css'],
+        },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
         },
       } satisfies PresetClassicOptions,
     ],
