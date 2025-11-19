@@ -349,7 +349,7 @@ SaverConfig saverConfig = SaverConfig.builder()
 
 ### PostgreSqlSaver
 
-PostgreSQL 数据库检查点器，详见 [PostgreSQL 检查点持久化](../examples/checkpoint-postgres)。
+PostgreSQL 数据库检查点器，详见 [PostgreSQL 检查点持久化](../examples/checkpoint-redis)。
 
 ### RedisSaver
 

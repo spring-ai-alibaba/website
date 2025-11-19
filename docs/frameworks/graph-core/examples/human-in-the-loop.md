@@ -738,6 +738,6 @@ public class HumanFeedbackDispatcher implements EdgeAction {
 
 ## 相关文档
 
-- [Checkpoint 机制](./checkpoint-postgres) - 状态持久化
+- [Checkpoint 机制](./checkpoint-redis) - 状态持久化
 - [快速入门](../quick-start) - Graph 基础使用
 - [流式处理](./streaming) - 流式输出

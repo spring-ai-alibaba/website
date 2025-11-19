@@ -314,6 +314,6 @@ graph.invoke(Map.of(), replayConfig);
 
 - [持久化](./persistence) - 状态持久化
 - [等待用户输入](./wait-user-input) - 中断和恢复
-- [Checkpoint 机制](../core/checkpoint-postgres) - 检查点详解
+- [Checkpoint 机制](../core/checkpoint-redis) - 检查点详解
 - [快速入门](../quick-start) - Graph 基础使用
 
