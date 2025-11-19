@@ -99,7 +99,12 @@ checklinks: ## Check for broken links in the docs
 	@$(LOG_TARGET)
 	linkinator build -r --concurrency 25 --skip $(LINKINATOR_IGNORE)
 
-.PHONY: -lint
+.PHONY: lint
+lint: ## Run all lint checks
+lint: markdown yamllint npm-lint pangu-lint yamllint codespell
+	@echo "All lint checks passed!"
+
+.PHONY: npm-lint
 npm-lint: ## Lint Check the npm files.
 npm-lint:
 	@$(LOG_TARGET)
