@@ -1,3 +1,9 @@
+---
+title: DataAgent 快速开始
+description: DataAgent 是基于 Spring AI Alibaba 的自然语言转 SQL 智能体，支持用自然语言直接查询数据库，无需编写复杂 SQL 语句，提供智能的数据查询和分析能力
+keywords: [DataAgent, NL2SQL, 自然语言转SQL, Text to SQL, 数据库查询, Spring AI Alibaba, AI数据分析, 智能查询]
+---
+
 # 项目简介
 
 这是一个基于Spring AI Alibaba的自然语言转SQL项目，能让你用自然语言直接查询数据库，不需要写复杂的SQL。

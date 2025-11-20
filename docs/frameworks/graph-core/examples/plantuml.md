@@ -10,8 +10,11 @@ Spring AI Alibaba Graph 支持将工作流导出为 PlantUML 格式，方便可�
 
 ## PlantUML 工具函数
 
-```java
-import net.sourceforge.plantuml.SourceStringReader;
+<Code
+  language="java"
+  title="PlantUML 工具函数" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
+>
+{`import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FileFormat;
 import com.alibaba.cloud.ai.graph.GraphRepresentation;
@@ -31,13 +34,16 @@ static java.awt.Image plantUML2PNG(String code) throws IOException {
 static void displayDiagram(GraphRepresentation representation) throws IOException {
     var image = plantUML2PNG(representation.getContent());
     display(image);
-}
-```
+}`}
+</Code>
 
 ## 简单示例
 
-```java
-var code = """
+<Code
+  language="java"
+  title="简单示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
+>
+{`var code = """
     @startuml
     title Spring AI Alibaba Graph
     START --> NodeA
@@ -46,41 +52,63 @@ var code = """
     @enduml
     """;
 
-display(plantUML2PNG(code));
-```
+display(plantUML2PNG(code));`}
+</Code>
 
 ## 从 Graph 生成 PlantUML
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="从 Graph 生成 PlantUML" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.GraphRepresentation;
-import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+/**
+ * 从 Graph 生成 PlantUML
+ */
+public static void generatePlantUmlFromGraph() throws GraphStateException {
+    KeyStrategyFactory keyStrategyFactory = () -> {
+        HashMap<String, KeyStrategy> strategies = new HashMap<>();
+        strategies.put("result", new ReplaceStrategy());
+        return strategies;
+    };
 
 // 构建一个简单的 Graph
 StateGraph graph = new StateGraph(keyStrategyFactory)
-    .addNode("step1", nodeasync(state -> Map.of("result", "Step 1")))
-    .addNode("step2", nodeasync(state -> Map.of("result", "Step 2")))
-    .addNode("step3", nodeasync(state -> Map.of("result", "Step 3")))
-    .addEdge(StateGraph.START, "step1")
+            .addNode("step1", node_async(state -> Map.of("result", "Step 1")))
+            .addNode("step2", node_async(state -> Map.of("result", "Step 2")))
+            .addNode("step3", node_async(state -> Map.of("result", "Step 3")))
+            .addEdge(START, "step1")
     .addEdge("step1", "step2")
     .addEdge("step2", "step3")
-    .addEdge("step3", StateGraph.END);
+            .addEdge("step3", END);
 
 CompiledGraph compiledGraph = graph.compile();
 
 // 生成 PlantUML 表示
 GraphRepresentation representation = compiledGraph.getGraph(
     GraphRepresentation.Type.PLANTUML,
-    "My Workflow",
-    false
+            "My Workflow"
 );
 
-// 显示图表
-displayDiagram(representation);
-
-// 或者直接获取 PlantUML 代码
-System.out.println(representation.getContent());
-```
+    // 显示 PlantUML 代码
+    System.out.println("PlantUML representation:");
+    System.out.println(representation.content());
+}`}
+</Code>
 
 ## PlantUML 输出示例
 

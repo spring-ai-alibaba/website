@@ -1,5 +1,8 @@
 ---
 sidebar_position: 1
+title: 概览
+description: Spring AI Alibaba 是构建 Agent 智能体应用最简单的方式，基于 Spring AI 与阿里云通义模型深度集成，提供 ReactAgent、Graph 工作流、多智能体编排等核心能力
+keywords: [Spring AI Alibaba, Agent Framework, ReactAgent, Graph Core, 智能体, AI应用开发, 阿里云通义, Java AI框架, 多智能体系统]
 ---
 
 # 概览

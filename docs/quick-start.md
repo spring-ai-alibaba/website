@@ -57,8 +57,9 @@ spring:
 ```
 
 **获取 API Key**：
-- DashScope（阿里云百炼）：访问 [https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api](https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api)
-- 其他模型提供商请参考对应的文档
+
+* DashScope（阿里云百炼）：访问 [https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api](https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api)
+* 其他模型提供商请参考对应的文档
 
 ## 构建一个基础 Agent
 
@@ -214,16 +215,16 @@ ChatModel chatModel = DashScopeChatModel.builder()
 ```xml
 <!-- DashScope-->
 <dependency>
-	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-	<version>1.1.0.0-M5</version>
+ <groupId>com.alibaba.cloud.ai</groupId>
+ <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+ <version>1.1.0.0-M5</version>
 </dependency>
 
 <!-- OpenAI-->
 <dependency>
-	<groupId>org.springframework.ai</groupId>
-	<artifactId>spring-ai-starter-model-openai</artifactId>
-	<version>1.1.0-M3</version>
+ <groupId>org.springframework.ai</groupId>
+ <artifactId>spring-ai-starter-model-openai</artifactId>
+ <version>1.1.0-M3</version>
 </dependency>
 ```
 
@@ -398,8 +399,8 @@ import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 
 // 创建 hook
 Hook humanInTheLoopHook = HumanInTheLoopHook.builder()
-	.approvalOn("getWeatherTool", ToolConfig.builder().description("Please confirm tool execution.")
-	.build();
+ .approvalOn("getWeatherTool", ToolConfig.builder().description("Please confirm tool execution.")
+ .build();
 
 ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
@@ -413,8 +414,7 @@ ReactAgent agent = ReactAgent.builder()
 
 现在你已经创建了一个基础的 ReactAgent，你可以：
 
-- 探索更多的工具集成
-- 学习如何使用不同的 Checkpoint 实现对话持久化
-- 了解如何使用 Hooks 扩展 agent 功能
-- 学习如何创建多 agent 系统
-
+* 探索更多的工具集成
+* 学习如何使用不同的 Checkpoint 实现对话持久化
+* 了解如何使用 Hooks 扩展 agent 功能
+* 学习如何创建多 agent 系统

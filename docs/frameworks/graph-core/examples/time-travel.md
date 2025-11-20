@@ -13,27 +13,43 @@ Spring AI Alibaba Graph 支持时光旅行功能，允许您查看和恢复 Grap
 要启用时光旅行，需要配置 Checkpointer：
 
 ```java
-import com.alibaba.cloud.ai.graph.StateGraph;
-import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
 import com.alibaba.cloud.ai.graph.CompileConfig;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.StateSnapshot;
-import java.util.List;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
 
+/**
+ * 配置 Checkpoint
+ */
+public static CompiledGraph configureCheckpoint(StateGraph stateGraph) throws GraphStateException {
 // 创建 Checkpointer
 var checkpointer = new MemorySaver();
 
 // 配置持久化
 var compileConfig = CompileConfig.builder()
-    .checkpointSaver(checkpointer)
+            .saverConfig(SaverConfig.builder()
+                    .register(checkpointer)
+                    .build())
     .build();
 
-CompiledGraph graph = stateGraph.compile(compileConfig);
+    return stateGraph.compile(compileConfig);
+}
 ```
 
 ## 执行 Graph 并生成历史
 
 ```java
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+
+import java.util.Map;
+
+/**
+ * 执行 Graph 并生成历史
+ */
+public static void executeGraphAndGenerateHistory(CompiledGraph graph) {
 // 配置线程 ID
 var config = RunnableConfig.builder()
     .threadId("conversation-1")
@@ -41,24 +57,40 @@ var config = RunnableConfig.builder()
 
 // 执行 Graph
 Map<String, Object> input = Map.of("query", "Hello");
-OverAllState result = graph.invoke(input, config);
+    graph.invoke(input, config);
 
 // 再次执行
-result = graph.invoke(Map.of("query", "Follow-up question"), config);
+graph.invoke(Map.of("query", "Follow-up question"), config);
+}
 ```
 
 ## 查看状态历史
 
 ```java
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.state.StateSnapshot;
+
+import java.util.List;
+
+/**
+ * 查看状态历史
+ */
+public static void viewStateHistory(CompiledGraph graph) {
+    var config = RunnableConfig.builder()
+            .threadId("conversation-1")
+            .build();
+
 // 获取所有历史状态
-List<StateSnapshot> history = graph.getStateHistory(config);
+    List<StateSnapshot> history = (List<StateSnapshot>) graph.getStateHistory(config);
 
 System.out.println("State history:");
 for (int i = 0; i < history.size(); i++) {
     StateSnapshot snapshot = history.get(i);
     System.out.printf("Step %d: %s\n", i, snapshot.state());
-    System.out.printf("  Checkpoint ID: %s\n", snapshot.config().checkpointId());
+        System.out.printf("  Checkpoint ID: %s\n", snapshot.config().checkPointId().orElse("N/A"));
     System.out.printf("  Node: %s\n", snapshot.node());
+    }
 }
 ```
 
@@ -79,20 +111,39 @@ Step 2: {query=Hello}
 ## 回溯到历史状态
 
 ```java
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.state.StateSnapshot;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 回溯到历史状态
+ */
+public static void travelBackToHistory(CompiledGraph graph) {
+    var config = RunnableConfig.builder()
+            .threadId("conversation-1")
+            .build();
+
+    // 获取所有历史状态
+    List<StateSnapshot> history = (List<StateSnapshot>) graph.getStateHistory(config);
+
 // 获取特定的历史状态
 StateSnapshot historicalSnapshot = history.get(1);
 
 // 使用历史状态的 checkpoint ID 创建新配置
 var historicalConfig = RunnableConfig.builder()
     .threadId("conversation-1")
-    .checkpointId(historicalSnapshot.config().checkpointId())
+            .checkPointId(historicalSnapshot.config().checkPointId().orElse(null))
     .build();
 
 // 从历史状态继续执行
-OverAllState restored = graph.invoke(
+graph.invoke(
     Map.of("query", "New question from historical state"),
     historicalConfig
 );
+}
 ```
 
 ## 分支创建
@@ -100,17 +151,39 @@ OverAllState restored = graph.invoke(
 基于历史状态创建新的执行分支：
 
 ```java
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.state.StateSnapshot;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 分支创建
+ */
+public static void createBranch(CompiledGraph graph) {
+    var config = RunnableConfig.builder()
+            .threadId("conversation-1")
+            .build();
+
+    // 获取所有历史状态
+    List<StateSnapshot> history = (List<StateSnapshot>) graph.getStateHistory(config);
+
+    // 获取特定的历史状态
+    StateSnapshot historicalSnapshot = history.get(1);
+
 // 从历史状态创建新分支
 var branchConfig = RunnableConfig.builder()
     .threadId("conversation-1-branch")  // 新的线程 ID
-    .checkpointId(historicalSnapshot.config().checkpointId())
+            .checkPointId(historicalSnapshot.config().checkPointId().orElse(null))
     .build();
 
 // 在新分支上执行
-OverAllState branchResult = graph.invoke(
+    graph.invoke(
     Map.of("query", "Alternative path"),
     branchConfig
 );
+}
 ```
 
 ## 应用场景
@@ -144,12 +217,31 @@ public interface StateSnapshot {
 ## 完整示例
 
 ```java
-import com.alibaba.cloud.ai.graph.StateGraph;
-import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
 import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
-import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.nodeasync;
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
+import com.alibaba.cloud.ai.graph.state.StateSnapshot;
+import com.alibaba.cloud.ai.graph.state.strategy.AppendStrategy;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.alibaba.cloud.ai.graph.StateGraph.END;
+import static com.alibaba.cloud.ai.graph.StateGraph.START;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+/**
+ * 完整示例
+ */
+public static void completeExample() throws GraphStateException {
 // 构建 Graph
 KeyStrategyFactory keyStrategyFactory = () -> {
     HashMap<String, KeyStrategy> strategies = new HashMap<>();
@@ -159,21 +251,23 @@ KeyStrategyFactory keyStrategyFactory = () -> {
 };
 
 StateGraph builder = new StateGraph(keyStrategyFactory)
-    .addNode("step1", nodeasync(state ->
+            .addNode("step1", node_async(state ->
         Map.of("messages", "Step 1", "step", 1)))
-    .addNode("step2", nodeasync(state ->
+            .addNode("step2", node_async(state ->
         Map.of("messages", "Step 2", "step", 2)))
-    .addNode("step3", nodeasync(state ->
+            .addNode("step3", node_async(state ->
         Map.of("messages", "Step 3", "step", 3)))
-    .addEdge(StateGraph.START, "step1")
+            .addEdge(START, "step1")
     .addEdge("step1", "step2")
     .addEdge("step2", "step3")
-    .addEdge("step3", StateGraph.END);
+            .addEdge("step3", END);
 
 // 配置持久化
 var checkpointer = new MemorySaver();
 var compileConfig = CompileConfig.builder()
-    .checkpointSaver(checkpointer)
+            .saverConfig(SaverConfig.builder()
+                    .register(checkpointer)
+                    .build())
     .build();
 
 CompiledGraph graph = builder.compile(compileConfig);
@@ -186,7 +280,7 @@ var config = RunnableConfig.builder()
 graph.invoke(Map.of(), config);
 
 // 查看历史
-List<StateSnapshot> history = graph.getStateHistory(config);
+    List<StateSnapshot> history = (List<StateSnapshot>) graph.getStateHistory(config);
 history.forEach(snapshot -> {
     System.out.println("State: " + snapshot.state());
     System.out.println("Node: " + snapshot.node());
@@ -201,11 +295,12 @@ StateSnapshot step1Snapshot = history.stream()
 
 var replayConfig = RunnableConfig.builder()
     .threadId("demo")
-    .checkpointId(step1Snapshot.config().checkpointId())
+            .checkPointId(step1Snapshot.config().checkPointId().orElse(null))
     .build();
 
 // 从 step1 重新执行
 graph.invoke(Map.of(), replayConfig);
+}
 ```
 
 ## 注意事项
@@ -218,7 +313,7 @@ graph.invoke(Map.of(), replayConfig);
 ## 相关文档
 
 - [持久化](./persistence) - 状态持久化
-- [等待用户输入](./wait-user-input) - 中断和恢复
-- [Checkpoint 机制](../core/checkpoint-postgres) - 检查点详解
+- [等待用户输入](./human-in-the-loop) - 中断和恢复
+- [Checkpoint 机制](../examples/checkpoint-redis) - 检查点详解
 - [快速入门](../quick-start) - Graph 基础使用
 

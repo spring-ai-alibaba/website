@@ -1,3 +1,9 @@
+---
+title: JManus 快速开始
+description: JManus 是 Manus 的 Java 实现版本，在阿里巴巴集团内部广泛应用，专注于处理需要确定性的探索性任务，如海量数据查找、日志分析和告警等场景
+keywords: [JManus, Manus, Java Agent, 探索性任务, 数据查找, 日志分析, Spring AI Alibaba, OpenManus, 确定性Agent]
+---
+
 # 项目简介
 
 ## ✨ About JManus

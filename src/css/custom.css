@@ -1490,3 +1490,75 @@ article {
     color: var(--ifm-color-primary) !important;
   }
 }
+
+/* Reduce layout shift */
+.main-wrapper {
+  min-height: 100vh;
+}
+
+/* Image optimization */
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/* Improve Core Web Vitals - reduce CLS */
+.hero {
+  min-height: 400px;
+}
+
+/* Preconnect to external domains for faster loading */
+/* Add these to HTML head via Docusaurus config */
+
+/* Accessibility improvements for SEO */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip to main content for accessibility */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1em;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  text-decoration: none;
+}
+
+.skip-to-main:focus {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+}
+
+/* Print styles for better SEO */
+@media print {
+  .navbar,
+  .footer,
+  .theme-doc-sidebar-container,
+  .theme-doc-toc-desktop {
+    display: none !important;
+  }
+
+  .main-wrapper {
+    padding: 0 !important;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+}
+
+/* Optimize table of contents for mobile - improve UX/SEO */
+@media (max-width: 996px) {
+  .table-of-contents {
+    border: none;
+    padding: 0;
+  }
+}

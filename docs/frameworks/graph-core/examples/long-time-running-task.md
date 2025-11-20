@@ -28,15 +28,15 @@ Spring AI Alibaba Graph 的内置持久化层为工作流提供了持久化执�
 
 ## 确定性和一致性重放
 
-当您恢复工作流运行时，代码**不会**从执行停止的**同一行代码**恢复；相反，它将识别一个适当的起点，从那里继续执行。这意味着工作流将从起点重放所有步骤，直到达到停止的点。
+当您恢复工作流运行时，代码**不会**从执行停止的**同一行代码**恢复；相反，它将从上次停止的 Node 节点第一行代码开始，从那里继续执行。这意味着工作流将从上次终止的 Node 节点开始继续执行或重放所有步骤，直到达到流程的终止点。
 
-因此，在为持久化执行编写工作流时，您必须将任何非确定性操作（例如，随机数生成）和任何具有副作用的操作（例如，文件写入、API 调用）包装在节点中。
+因此，在为持久化执行编写工作流时，您必须将任何非确定性操作（例如，随机数生成）和任何具有副作用的操作（例如，文件写入、API 调用）包装在独立的节点中。
 
 为了确保您的工作流是确定性的并且可以一致地重放，请遵循以下准则：
 
 * **避免重复工作**：如果节点包含多个具有副作用的操作（例如，日志记录、文件写入或网络调用），请将每个操作包装在单独的节点中。这确保在恢复工作流时，操作不会重复，而是从持久化层检索它们的结果。
 * **封装非确定性操作**：将可能产生非确定性结果的任何代码（例如，随机数生成）包装在节点中。这确保在恢复时，工作流遵循记录的精确步骤序列和相同的结果。
-* **使用幂等操作**：尽可能确保副作用（例如，API 调用、文件写入）是幂等的。这意味着如果在工作流失败后重试操作，它将具有与第一次执行相同的效果。这对于导致数据写入的操作特别重要。如果节点启动但未能成功完成，工作流的恢复将重新运行该节点，依靠记录的结果来保持一致性。使用幂等性键或验证现有结果以避免意外重复，确保平稳和可预测的工作流执行。
+* **使用幂等操作**：尽可能确保副作用（例如，API 调用、文件写入）是幂等的。这意味着如果在工作流失败后重试操作，它将具有与第一次执行相同的效果。这对于导致数据写入的操作特别重要。如果某个 Node 节点已经启动但未能成功完成，工作流的恢复将重新运行该节点，依靠记录的结果来保持一致性。使用幂等性键或验证现有结果以避免意外重复，确保平稳和可预测的工作流执行。
 
 ## 持久化模式
 
@@ -46,34 +46,46 @@ Spring AI Alibaba Graph 支持不同的持久化策略，允许您根据应用�
 
 在编译图时，您可以配置持久化策略：
 
-```java
-import com.alibaba.cloud.ai.graph.CompileConfig;
+<Code
+  language="java"
+  title="编译时配置持久化策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.checkpoint.constant.SaverConstant;
 
 SaverConfig saverConfig = SaverConfig.builder()
-    .register(SaverConstant.MEMORY, new MemorySaver())
-    .build();
+        .register(new MemorySaver())
+        .build();
 
 CompiledGraph graph = stateGraph.compile(
-    CompileConfig.builder()
-        .saverConfig(saverConfig)
-        .build()
-);
-```
+        CompileConfig.builder()
+                .saverConfig(saverConfig)
+                .build()
+);`}
+</Code>
 
 ### 执行时配置
 
 在执行图时指定配置：
 
-```java
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("unique-thread-id")
-    .build();
+<Code
+  language="java"
+  title="执行时配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
 
-graph.invoke(inputData, config);
-```
+import java.util.Map;
+import java.util.UUID;
+
+RunnableConfig config = RunnableConfig.builder()
+        .threadId("long-running-task-" + UUID.randomUUID())
+        .build();
+
+graph.invoke(inputData, config);`}
+</Code>
 
 ## 在节点中使用任务模式
 
@@ -81,8 +93,11 @@ graph.invoke(inputData, config);
 
 ### 原始版本
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="原始版本" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -149,13 +164,16 @@ RunnableConfig config = RunnableConfig.builder()
     .threadId(UUID.randomUUID().toString())
     .build();
 
-graph.invoke(Map.of("url", "https://www.example.com"), config);
-```
+graph.invoke(Map.of("url", "https://www.example.com"), config);`}
+</Code>
 
 ### 改进版本（将副作用操作分离到独立节点）
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="改进版本" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.StateGraph;
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
 
 // 定义状态策略
@@ -222,8 +240,8 @@ RunnableConfig config = RunnableConfig.builder()
     .threadId(UUID.randomUUID().toString())
     .build();
 
-graph.invoke(Map.of("urls", List.of("https://www.example.com")), config);
-```
+graph.invoke(Map.of("urls", List.of("https://www.example.com")), config);`}
+</Code>
 
 ## 恢复工作流
 
@@ -234,8 +252,11 @@ graph.invoke(Map.of("urls", List.of("https://www.example.com")), config);
 
 ### 从错误中恢复示例
 
-```java
-import com.alibaba.cloud.ai.graph.RunnableConfig;
+<Code
+  language="java"
+  title="从错误中恢复示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
 
 String threadId = "error-recovery-thread";
@@ -252,8 +273,8 @@ try {
     // 使用相同的 threadId 重新执行，将从检查点恢复
     // 传入 null 作为输入，表示从上次状态继续
     graph.invoke(null, config);
-}
-```
+}`}
+</Code>
 
 ## 工作流恢复的起点
 
@@ -270,8 +291,11 @@ try {
 
 ## 示例：长时间运行的数据处理任务
 
-```java
-import com.alibaba.cloud.ai.graph.StateGraph;
+<Code
+  language="java"
+  title="长时间运行的数据处理任务示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
 
@@ -345,8 +369,8 @@ List<String> largeDataSet = IntStream.range(0, 10000)
 graph.invoke(Map.of(
     "items", largeDataSet,
     "processedCount", 0
-), config);
-```
+), config);`}
+</Code>
 
 通过这种方式，即使处理过程被中断，您也可以使用相同的 `threadId` 恢复执行，工作流将从上次保存的检查点继续处理。
 
