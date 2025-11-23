@@ -21,7 +21,7 @@ install:
 install-tools:
 	@$(LOG_TARGET)
 	@echo "Installing tools..."
-	npm install -g markdownlint-cli2 linkinator
+	npm install -g markdownlint-cli linkinator
 	pip install --user yamllint codespell
 
 ##@ Docs
