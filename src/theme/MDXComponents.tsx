@@ -1,4 +1,3 @@
-import React from 'react'
 import MDXComponents from '@theme-original/MDXComponents'
 import CodeBlockWithLink from '@site/src/components/CodeBlockWithLink'
 

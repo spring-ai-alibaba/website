@@ -18,8 +18,6 @@ java版的MCP源码：https://github.com/modelcontextprotocol/java-sdk
 
 ## 理论部分
 
-![Image](/img/blog/mcp-desc/overall.PNG)
-
 ### MCP调用链路（核心）
 
 以client-webflux、server-webflux为例
