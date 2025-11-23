@@ -18,7 +18,7 @@ nacos.core.auth.server.identity.value=yingzi
 nacos.core.auth.plugin.nacos.token.secret.key=VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg=
 ```
 
-![nacos-start.png](/img/blog/extensions/mc/nacos-start.png)
+![nacos-start.png](/img/blog/extensions/mcp/nacos-start.png)
 
 项目启动：cd 到 nacos/bin 目录下，这里以单机模式启动
 
@@ -43,4 +43,4 @@ sh startup.sh -m standalone
 
 有关 mcp 相关的配置信息可在配置管理/配置列表中查看
 
-![nacos-mcp-confg.png](static//img/blog/extensions/mcp/nacos-mcp-config.png)
+![nacos-mcp-confog.png](/img/blog/extensions/mcp/nacos-mcp-confog.png)

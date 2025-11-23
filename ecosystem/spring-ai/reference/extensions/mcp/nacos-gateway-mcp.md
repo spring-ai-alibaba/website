@@ -81,8 +81,8 @@ _        _streamable-http:
 
 Gateway 被触发调用 restful 服务
 
-![nacos-gateway-4](/img/blog/extensions/mcp/nacos-gateway-14png)
+![nacos-gateway-4](/img/blog/extensions/mcp/nacos-gateway-4.png)
 
 restful 接收请求
 
-![nacos-gateway-6](/img/blog/extensions/mcp/nacos-gateway-6.png)
+![nacos-gateway-5](/img/blog/extensions/mcp/nacos-gateway-5.png)

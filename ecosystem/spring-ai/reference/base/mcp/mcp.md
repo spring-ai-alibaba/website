@@ -104,21 +104,45 @@ Spring AI 提供 MCP 的 Spring Boot 启动器，极大简化了开发：
 
 <table>
 <tr>
-<td>protocol<br/></td><td>Server Type<br/></td><td>Dependency<br/></td><td>Property<br/></td></tr>
+<th>protocol</th>
+<th>Server Type</th>
+<th>Dependency</th>
+<th>Property</th>
+</tr>
 <tr>
-<td>STDIO<br/></td><td>[Standard Input/Output (STDIO)](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-stdio-sse-server-boot-starter-docs.html)<br/></td><td>spring-ai-starter-mcp-server<br/></td><td>spring.ai.mcp.server.stido=true<br/></td></tr>
+<td>STDIO</td>
+<td><a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-stdio-sse-server-boot-starter-docs.html">Standard Input/Output (STDIO)</a></td>
+<td>spring-ai-starter-mcp-server</td>
+<td>spring.ai.mcp.server.stido=true</td>
+</tr>
 <tr>
-<td rowspan="3">WebMVC<br/></td><td>SSE WebMCV<br/></td><td rowspan="3">spring-ai-starter-mcp-server-webmvc<br/></td><td>spring.ai.mcp.server.protocol=SSE or empty<br/></td></tr>
+<td rowspan="3">WebMVC</td>
+<td>SSE WebMCV</td>
+<td rowspan="3">spring-ai-starter-mcp-server-webmvc</td>
+<td>spring.ai.mcp.server.protocol=SSE or empty</td>
+</tr>
 <tr>
-<td>Streamable-HTTP WebMVC<br/></td><td>spring.ai.mcp.server.protocol=STREAMABLE<br/></td></tr>
+<td>Streamable-HTTP WebMVC</td>
+<td>spring.ai.mcp.server.protocol=STREAMABLE</td>
+</tr>
 <tr>
-<td>Stateless WebMVC<br/></td><td>spring.ai.mcp.server.protocol=STATELESS<br/></td></tr>
+<td>Stateless WebMVC</td>
+<td>spring.ai.mcp.server.protocol=STATELESS</td>
+</tr>
 <tr>
-<td rowspan="3">WebFlux<br/></td><td>SSE WebFlux<br/></td><td rowspan="3">spring-ai-starter-mcp-server-webflux<br/></td><td>spring.ai.mcp.server.protocol=SSE or empty<br/></td></tr>
+<td rowspan="3">WebFlux</td>
+<td>SSE WebFlux</td>
+<td rowspan="3">spring-ai-starter-mcp-server-webflux</td>
+<td>spring.ai.mcp.server.protocol=SSE or empty</td>
+</tr>
 <tr>
-<td>Streamable-HTTP WebFlux<br/></td><td>spring.ai.mcp.server.protocol=STREAMABLE<br/></td></tr>
+<td>Streamable-HTTP WebFlux</td>
+<td>spring.ai.mcp.server.protocol=STREAMABLE</td>
+</tr>
 <tr>
-<td>Stateless WebFlux<br/></td><td>spring.ai.mcp.server.protocol=STATELESS<br/></td></tr>
+<td>Stateless WebFlux</td>
+<td>spring.ai.mcp.server.protocol=STATELESS</td>
+</tr>
 </table>
 
 
@@ -224,15 +248,30 @@ Spring AI 提供注解来声明 MCP 功能，让开发者使用简单的 Java �
 
 <table>
 <tr>
-<td>场景<br/></td><td>推荐协议<br/></td><td>推荐理由<br/></td></tr>
+<th>场景</th>
+<th>推荐协议</th>
+<th>推荐理由</th>
+</tr>
 <tr>
-<td>本地开发与调试场景<br/><br/></td><td>STDIO<br/></td><td>无需网络配置，实现简单，适合快速验证工具逻辑和本地调试。例如，开发一个天气查询工具时，可以通过STDIO协议快速启动服务进程并测试工具功能<br/></td></tr>
+<td>本地开发与调试场景<br/><br/></td>
+<td>STDIO</td>
+<td>无需网络配置，实现简单，适合快速验证工具逻辑和本地调试。例如，开发一个天气查询工具时，可以通过STDIO协议快速启动服务进程并测试工具功能</td>
+</tr>
 <tr>
-<td>传统Servlet应用的实时通知<br/></td><td>WebMVC模式的SSE<br/></td><td>与现有Spring MVC项目无缝集成，适合简单的实时通知场景，如聊天室消息推送。但需注意高并发场景下的性能问题<br/></td></tr>
+<td>传统Servlet应用的实时通知</td>
+<td>WebMVC模式的SSE</td>
+<td>与现有Spring MVC项目无缝集成，适合简单的实时通知场景，如聊天室消息推送。但需注意高并发场景下的性能问题</td>
+</tr>
 <tr>
-<td>高性能流式交互场景<br/></td><td>WebFlux模式的Streamable HTTP<br/></td><td>在高并发场景下性能优势明显，同时支持会话状态管理和断线重连。例如，实现一个AI对话系统，用户发送查询后，系统以流形式返回处理结果<br/></td></tr>
+<td>高性能流式交互场景</td>
+<td>WebFlux模式的Streamable HTTP</td>
+<td>在高并发场景下性能优势明显，同时支持会话状态管理和断线重连。例如，实现一个AI对话系统，用户发送查询后，系统以流形式返回处理结果</td>
+</tr>
 <tr>
-<td>大规模分布式系统<br/></td><td>WebFlux模式的Stateless Streamable HTTP<br/></td><td>无状态设计使请求可在集群中自由路由，支持真正的线性扩展。例如，微服务架构中的工具调用服务，每个请求都是独立的<br/></td></tr>
+<td>大规模分布式系统</td>
+<td>WebFlux模式的Stateless Streamable HTTP</td>
+<td>无状态设计使请求可在集群中自由路由，支持真正的线性扩展。例如，微服务架构中的工具调用服务，每个请求都是独立的</td>
+</tr>
 </table>
 
 

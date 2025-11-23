@@ -33,10 +33,10 @@ spring:
     mcp:
       server:
         name: streamable-mcp-server
-        protocol: _STREAMABLE # SSE、STREAMABLE、STATELESS_
-_        _version: 1.0.0
-        type: _ASYNC  # Recommended for reactive applications_
-_        _instructions: "This reactive server provides time information tools and resources"
+        protocol: STREAMABLE # SSE、STREAMABLE、STATELESS
+        version: 1.0.0
+        type: ASYNC  # Recommended for reactive applications
+        instructions: "This reactive server provides time information tools and resources"
         request-timeout: 20s
         streamable-http:
           mcp-endpoint: /mcp
@@ -50,10 +50,10 @@ _        _instructions: "This reactive server provides time information tools an
 @Component
 public class McpServerFilter implements WebFilter {
 
-    private static final String _TOKEN_HEADER _= "token-1";
-    private static final String _TOKEN_VALUE _= "yingzi-1";
+    private static final String TOKENHEADER = "token-1";
+    private static final String TOKENVALUE = "yingzi-1";
 
-    private static final Logger _logger _= LoggerFactory._getLogger_(McpServerFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(McpServerFilter.class);
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -61,22 +61,22 @@ public class McpServerFilter implements WebFilter {
         HttpHeaders headers = exchange.getRequest().getHeaders();
         // 打印所有请求头信息
         for (String headerName : headers.keySet()) {
-            _logger_.info("Header {}: {}", headerName, headers.getFirst(headerName));
+            logger.info("Header {}: {}", headerName, headers.getFirst(headerName));
         }
 
-        String token = headers.getFirst(_TOKEN_HEADER_);
+        String token = headers.getFirst(TOKENHEADER);
         // 检查token是否存在且值正确
-        if (_TOKEN_VALUE_.equals(token)) {
-            _logger_.info("preHandle: 验证通过");
-            _logger_.info("preHandle: 请求的URL: {}", exchange.getRequest().getURI());
-            _logger_.info("preHandle: 请求的TOKEN: {}", token);
+        if (TOKENVALUE.equals(token)) {
+            logger.info("preHandle: 验证通过");
+            logger.info("preHandle: 请求的URL: {}", exchange.getRequest().getURI());
+            logger.info("preHandle: 请求的TOKEN: {}", token);
             // token验证通过，继续处理请求
             return chain.filter(exchange);
         } else {
             // token验证失败，返回401未授权错误
-            _logger_.warn("Token验证失败: 请求的URL: {}, 提供的TOKEN: {}", exchange.getRequest().getURI(), token);
-            _logger_.warn("要求的token为：{}", _TOKEN_VALUE_);
-            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus._UNAUTHORIZED_);
+            logger.warn("Token验证失败: 请求的URL: {}, 提供的TOKEN: {}", exchange.getRequest().getURI(), token);
+            logger.warn("要求的token为：{}", TOKENVALUE);
+            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
     }
@@ -115,10 +115,10 @@ spring:
   application:
     name: mcp-auth-client
   main:
-    web-application-type: _none_
-_  _ai:
+    web-application-type: none
+  ai:
     dashscope:
-      api-key: ${AI_DASHSCOPE_API_KEY}
+      api-key: ${AIDASHSCOPEAPIKEY}
 
     mcp:
       client:
@@ -126,8 +126,8 @@ _  _ai:
         name: my-mcp-client
         version: 1.0.0
         request-timeout: 600s
-        type: _ASYNC  # or ASYNC for reactive applications_
-_        _streamable-http:
+        type: ASYNC  # or ASYNC for reactive applications
+        streamable-http:
           connections:
             server1:
               url: http://localhost:20000
@@ -169,7 +169,7 @@ public class HttpClientConfig {
 
 ## 验证
 
-当 mcp client 侧携带对应请求头 kv 对{token-1:yingzi-1}时，通过，否则将不予连接
+当 mcp client 侧携带对应请求头 kv 对`{token-1:yingzi-1}`时，通过，否则将不予连接
 ![mcp-auth-1](/img/blog/base/mcp/mcp-auth-1.png)
 
 ![mcp-auth-2](/img/blog/base/mcp/mcp-auth-2.png)
