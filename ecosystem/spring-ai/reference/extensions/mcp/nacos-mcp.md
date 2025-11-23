@@ -1,6 +1,6 @@
 # Nacos 的 mcp 配置
 
-### 安装
+## 安装
 
 nacos 下载页面：[Nacos Server 下载页面](https://nacos.io/download/nacos-server/?spm=5238cd80.2ef5001f.0.0.3f613b7cz5Lc7o)
 
@@ -8,7 +8,7 @@ nacos 下载页面：[Nacos Server 下载页面](https://nacos.io/download/nacos
 
 选择下载最新的 3.1.0+ 版本，质量选择二进制包下载
 
-### 基础配置
+## 基础配置
 
 下载完后，在 nacos/conf/application.properties 文件中调整三个参数配置，用来实现对应的鉴权功能
 
@@ -32,7 +32,7 @@ sh startup.sh -m standalone
 
 ![nacos-login.png](/img/blog/extensions/mcp/nacos-login.png)
 
-### 界面说明
+## 界面说明
 
 1. 可以为 MCP 单独建立一个命名空间
 2. MCP 管理下的 MCP 列表，记录了注册上来的 MCP 服务信息

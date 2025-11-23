@@ -1,6 +1,6 @@
 # MCP 的分布式
 
-### 背景
+## 背景
 
 Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以非常方便的开发自己的 MCP 服务，把自己企业内部的业务系统通过标准 MCP 形式发布为 AI Agent 能够接入的工具；另一方面，开发者也可以使用 Spring AI 开发自己的 AI Agent，去接入提供各种能力的 MCP 服务。
 
@@ -17,7 +17,7 @@ Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以�
 
 分布式调用注册至 nacos 的 mcp 服务，示例代码：[https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-nacos-example/client/mcp-nacos-distributed-extensions-example](https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-nacos-example/client/mcp-nacos-distributed-extensions-example)
 
-### pom 依赖
+## pom 依赖
 
 ```xml
 <dependencies>
@@ -43,7 +43,7 @@ Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以�
 </dependencies>
 ```
 
-### application.yml 文件
+## application.yml 文件
 
 ```yaml
 spring:
@@ -83,7 +83,7 @@ spring:
 1. 支持发现 sse、streamable 类型 MCP 服务
 2. 支持发现不同命名空间下的 MCP 服务
 
-### 启动
+## 启动
 
 ```java
 @SpringBootApplication
@@ -130,7 +130,7 @@ public class DistributedApplication {
 - ASYNC：导入 Bean 名称为 distributedAsyncToolCallback
 - SYNC：导入 Bean 名称为 distributedSyncToolCallback
 
-### 验证
+## 验证
 
 为 webflux-mcp-server 服务注册两个实例（演示是以本地启动，分别暴露 21000、21001 端口号）
 ![nacos-distributed-1](/img/blog/extensions/mcp/nacos-distributed-1.png)

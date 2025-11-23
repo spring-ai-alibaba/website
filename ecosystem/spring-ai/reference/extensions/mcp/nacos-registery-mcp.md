@@ -1,6 +1,6 @@
 # MCP 的注册
 
-### 背景
+## 背景
 
 Nacos 的友链：[Nacos 3.0 正式发布：MCP Registry、安全零信任、链接更多生态](https://nacos.io/blog/nacos-gvr7dxawbbpbgg16sv97bgirkixe/?spm=5238cd80.2ef5001f.0.0.3f613b7cBlKF0b&source=blog#%E5%AD%98%E9%87%8F-mcp-server%E6%B3%A8%E5%86%8C%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1%E5%8A%A8%E6%80%81%E7%AE%A1%E7%90%86)
 
@@ -16,7 +16,7 @@ Nacos 的友链：[Nacos 3.0 正式发布：MCP Registry、安全零信任、链
 
 注册一个 stream-http 的示例代码：[https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-nacos-example/server/mcp-nacos-register-extensions-example](https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-nacos-example/server/mcp-nacos-register-extensions-example)
 
-### pom 依赖
+## pom 依赖
 
 ```xml
 <dependencies>
@@ -36,7 +36,7 @@ Nacos 的友链：[Nacos 3.0 正式发布：MCP Registry、安全零信任、链
 </dependencies>
 ```
 
-### application.yml 文件
+## application.yml 文件
 
 ```yaml
 server:
@@ -74,7 +74,7 @@ spring:
             service-name: webflux-mcp-server ## 指定服务名称
 ```
 
-### 启动及工具类
+## 启动及工具类
 
 ```java
 @SpringBootApplication
@@ -406,7 +406,7 @@ public class OpenMeteoService {
 }
 ```
 
-### 验证
+## 验证
 ![nacos-registry-1](/img/blog/extensions/mcp/nacos-registry-1.png)
 
 点击详情后，可查看当前 MCP 服务提供的工具信息

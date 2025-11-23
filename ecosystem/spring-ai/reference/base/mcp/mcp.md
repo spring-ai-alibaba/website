@@ -1,9 +1,6 @@
 ---
 sidebar_position: 11
 ---
-
-# MCP 基础开发
-
 # Model Context Protocol（MCP）概览
 
 ## 介绍
@@ -145,7 +142,6 @@ Spring AI 提供 MCP 的 Spring Boot 启动器，极大简化了开发：
 </tr>
 </table>
 
-
 - STDIO：
 - WebMVC：
 - WebFlux：
@@ -214,8 +210,6 @@ Spring AI 提供注解来声明 MCP 功能，让开发者使用简单的 Java �
 - 实现复杂度低：客户端只需通过浏览器原生支持的 EventSource 对象即可实现连接
 - 传统环境集成方便：适合与现有 Spring MVC 项目无缝衔接
 
-#### 
-
 劣势：
 
 - 高并发资源消耗：每个连接需占用约 80KB 内存，万级并发时可能导致服务器资源耗尽
@@ -273,6 +267,4 @@ Spring AI 提供注解来声明 MCP 功能，让开发者使用简单的 Java �
 <td>无状态设计使请求可在集群中自由路由，支持真正的线性扩展。例如，微服务架构中的工具调用服务，每个请求都是独立的</td>
 </tr>
 </table>
-
-
 

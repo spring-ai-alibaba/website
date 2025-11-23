@@ -1,12 +1,12 @@
 # MCP 的网关
 
-### 背景
+## 背景
 
 Spring AI Alibaba MCP Gateway 基于 Nacos 提供的 MCP server registry 实现，为普通应用建立一个中间代理层 Java MCP 应用。一方面将 Nacos 中注册的服务信息转换成 MCP 协议的服务器信息，以便 MCP 客户端可以无缝调用这些服务；另一方面可以实现协议转化，将 MCP 协议转换为对后端 HTTP、Dubbo 等服务的调用。基于 Spring AI Alibaba MCP Gateway，您无需对原有业务代码进行改造，新增或者删除 MCP 服务（在 Nacos 中）无需重启代理应用。
 
 示例代码可见：[https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-nacos-example/server/mcp-nacos-gateway-example](https://github.com/spring-ai-alibaba/examples/tree/main/spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-nacos-example/server/mcp-nacos-gateway-example)
 
-### pom 依赖
+## pom 依赖
 
 ```xml
 <dependencies>
@@ -26,7 +26,7 @@ Spring AI Alibaba MCP Gateway 基于 Nacos 提供的 MCP server registry 实现�
 </dependencies>
 ```
 
-### application.yml 文件
+## application.yml 文件
 
 ```yaml
 server:
@@ -60,7 +60,7 @@ _        _streamable-http:
           password: nacos
 ```
 
-### 存量 restful
+## 存量 restful
 
 事先准备好一个存量 restful 服务（DEFAULT/nacos-restful），该服务已被注册至 Nacos 中。
 
@@ -69,7 +69,7 @@ _        _streamable-http:
 - 根据 restful 接口响应，选择响应模版
 ![nacos-gateway-1](/img/blog/extensions/mcp/nacos-gateway-1.png)
 
-### 验证
+## 验证
 
 启动 gateway 服务，我们发现 restful 服务的工具已经被添加了
 
