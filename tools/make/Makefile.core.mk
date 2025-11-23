@@ -73,13 +73,13 @@ serve:
 markdown: ## Lint Check the markdown files.
 markdown:
 	@$(LOG_TARGET)
-	markdownlint-cli2 "blog/*" "docs/*" "docs-versioned/*" --config .markdownlint.json
+	markdownlint -c tools/linter/markdownlint/markdownlint.yaml "blog/*" "docs/*" "docs-versioned/*"
 
 .PHONY: markdown-fix
 markdown-fix: ## Lint Check the markdown files and fix them.
 markdown-fix:
 	@$(LOG_TARGET)
-	markdownlint-cli2 "blog/*" "docs/*" "docs-versioned/*" --config .markdownlint.json --fix
+	markdownlint -c tools/linter/markdownlint/markdownlint.yaml --fix "blog/*" "docs/*" "docs-versioned/*"
 
 .PHONY: yamllint
 yamllint: ## Lint Check the yaml files.
