@@ -21,7 +21,7 @@ install:
 install-tools:
 	@$(LOG_TARGET)
 	@echo "Installing tools..."
-	npm install -g markdownlint-cli linkinator
+	npm install -g markdownlint-cli2 linkinator
 	pip install --user yamllint codespell
 
 ##@ Docs
@@ -73,13 +73,13 @@ serve:
 markdown: ## Lint Check the markdown files.
 markdown:
 	@$(LOG_TARGET)
-	markdownlint -c tools/linter/markdownlint/markdownlint.yaml "blog/*" "docs/*" "docs-versioned/*"
+	markdownlint-cli2 "blog/*" "docs/*" "docs-versioned/*" --config .markdownlint.json
 
 .PHONY: markdown-fix
 markdown-fix: ## Lint Check the markdown files and fix them.
 markdown-fix:
 	@$(LOG_TARGET)
-	markdownlint -c tools/linter/markdownlint/markdownlint.yaml --fix "blog/*" "docs/*" "docs-versioned/*"
+	markdownlint-cli2 "blog/*" "docs/*" "docs-versioned/*" --config .markdownlint.json --fix
 
 .PHONY: yamllint
 yamllint: ## Lint Check the yaml files.
