@@ -93,6 +93,7 @@ Spring AI Alibaba 的运行时 Options 同 Spring AI。分为 Runtime Options �
 @GetMapping("/custom/chat")
 public String customChat() {
 
+    // Note: model must be set when use options build.
     DashScopeChatOptions customOptions = DashScopeChatOptions.builder()
             .withTopP(0.7)
             .withTopK(50)

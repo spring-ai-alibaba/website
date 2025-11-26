@@ -204,6 +204,8 @@ DashScopeApi dashScopeApi = DashScopeApi.builder()
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(DashScopeChatOptions.builder()
+        // Note: model must be set when use options build.
+        .withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
         .withTemperature(0.5)
         .withMaxToken(1000)
         .build())
