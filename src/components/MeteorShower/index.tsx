@@ -16,6 +16,8 @@ const MeteorShower: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const meteorsRef = useRef<Meteor[]>([])
   const animationRef = useRef<number | undefined>(undefined)
+  const lastFrameTimeRef = useRef<number>(0)
+  const frameSkipCounter = useRef<number>(0)
 
   const meteorColors = useMemo(() => [
     '#ff6b9d', // Pink
@@ -121,9 +123,24 @@ const MeteorShower: React.FC = () => {
     ctx.fill()
   }
 
-  const animate = useCallback(() => {
+  const animate = useCallback((currentTime: number) => {
     const canvas = canvasRef.current
     if (!canvas) return
+
+    // Frame rate control: target ~30fps instead of 60fps
+    const elapsed = currentTime - lastFrameTimeRef.current
+    if (elapsed < 33) { // ~30fps
+      animationRef.current = requestAnimationFrame(animate)
+      return
+    }
+    lastFrameTimeRef.current = currentTime
+
+    // Skip every other frame to reduce rendering load
+    frameSkipCounter.current++
+    if (frameSkipCounter.current % 2 !== 0) {
+      animationRef.current = requestAnimationFrame(animate)
+      return
+    }
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -141,8 +158,8 @@ const MeteorShower: React.FC = () => {
       return isVisible
     })
 
-    // Randomly add new meteors - reduce frequency
-    if (Math.random() < 0.01 && meteorsRef.current.length < 6) {  // Reduced from 0.04 to 0.01, max count from 12 to 6
+    // Randomly add new meteors - further reduced frequency
+    if (Math.random() < 0.005 && meteorsRef.current.length < 3) {  // Reduced from 0.01 to 0.005, max count from 6 to 3
       meteorsRef.current.push(createMeteor())
     }
 
@@ -161,11 +178,12 @@ const MeteorShower: React.FC = () => {
     resizeCanvas()
 
     // Initialize a small number of meteors
-    for (let i = 0; i < 2; i++) {  // Reduced from 5 to 2
+    for (let i = 0; i < 1; i++) {  // Reduced from 2 to 1
       meteorsRef.current.push(createMeteor())
     }
 
-    animate()
+    lastFrameTimeRef.current = performance.now()
+    animate(lastFrameTimeRef.current)
 
     window.addEventListener('resize', resizeCanvas)
 

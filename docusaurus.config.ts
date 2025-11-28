@@ -316,10 +316,12 @@ const config: Config = {
           ignorePatterns: ['/tags/**'],
           filename: 'sitemap.xml',
         },
+        // Performance optimizations
+        gtag: undefined, // Disable if not using Google Analytics
       } satisfies PresetClassicOptions,
     ],
   ],
-
+  
   themeConfig: {
     // Replace with your project's social card
     image: 'img/social-card.jpg',

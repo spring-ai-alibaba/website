@@ -32,6 +32,8 @@ AssistantMessage message = agent.call("Conduct a research of Spring AI Alibaba."
 // Neural Network Animation Component
 function NeuralNetwork() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const lastFrameTimeRef = useRef<number>(0)
+  const animationFrameRef = useRef<number | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -44,7 +46,7 @@ function NeuralNetwork() {
     canvas.height = canvas.offsetHeight
 
     const nodes: Array<{ x: number; y: number; vx: number; vy: number }> = []
-    const nodeCount = 30
+    const nodeCount = 20 // Reduced from 30 to 20
 
     // Initialize nodes
     for (let i = 0; i < nodeCount; i++) {
@@ -56,8 +58,16 @@ function NeuralNetwork() {
       })
     }
 
-    function animate() {
+    function animate(currentTime: number) {
       if (!ctx || !canvas) return
+
+      // Frame rate control: target ~24fps
+      const elapsed = currentTime - lastFrameTimeRef.current
+      if (elapsed < 42) { // ~24fps
+        animationFrameRef.current = requestAnimationFrame(animate)
+        return
+      }
+      lastFrameTimeRef.current = currentTime
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -72,8 +82,8 @@ function NeuralNetwork() {
 
         // Draw node
         ctx.beginPath()
-        ctx.arc(node.x, node.y, 3, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(96, 165, 250, 0.6)'
+        ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2) // Slightly smaller
+        ctx.fillStyle = 'rgba(96, 165, 250, 0.5)' // Reduced opacity
         ctx.fill()
 
         // Draw connections
@@ -84,21 +94,22 @@ function NeuralNetwork() {
           const dy = node.y - otherNode.y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 120) {
+          if (distance < 100) { // Reduced from 120 to 100
             ctx.beginPath()
             ctx.moveTo(node.x, node.y)
             ctx.lineTo(otherNode.x, otherNode.y)
-            ctx.strokeStyle = `rgba(96, 165, 250, ${0.3 * (1 - distance / 120)})`
-            ctx.lineWidth = 1
+            ctx.strokeStyle = `rgba(96, 165, 250, ${0.25 * (1 - distance / 100)})` // Reduced opacity
+            ctx.lineWidth = 0.8 // Thinner lines
             ctx.stroke()
           }
         })
       })
 
-      requestAnimationFrame(animate)
+      animationFrameRef.current = requestAnimationFrame(animate)
     }
 
-    animate()
+    lastFrameTimeRef.current = performance.now()
+    animationFrameRef.current = requestAnimationFrame(animate)
 
     const handleResize = () => {
       canvas.width = canvas.offsetWidth
@@ -106,7 +117,12 @@ function NeuralNetwork() {
     }
 
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
   }, [])
 
   return <canvas ref={canvasRef} className={styles.neuralNetwork} />

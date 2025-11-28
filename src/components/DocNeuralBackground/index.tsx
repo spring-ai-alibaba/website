@@ -12,6 +12,7 @@ const DocNeuralBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const nodesRef = useRef<Node[]>([])
   const animationFrameRef = useRef<number | null>(null)
+  const lastFrameTimeRef = useRef<number>(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -27,8 +28,8 @@ const DocNeuralBackground: React.FC = () => {
 
     resizeCanvas()
 
-    // Initialize nodes
-    const nodeCount = 40
+    // Initialize nodes - reduced count
+    const nodeCount = 25 // Reduced from 40 to 25
     nodesRef.current = []
 
     for (let i = 0; i < nodeCount; i++) {
@@ -40,8 +41,16 @@ const DocNeuralBackground: React.FC = () => {
       })
     }
 
-    const animate = () => {
+    const animate = (currentTime: number) => {
       if (!ctx || !canvas) return
+
+      // Frame rate control: target ~24fps for background animation
+      const elapsed = currentTime - lastFrameTimeRef.current
+      if (elapsed < 42) { // ~24fps
+        animationFrameRef.current = requestAnimationFrame(animate)
+        return
+      }
+      lastFrameTimeRef.current = currentTime
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -61,19 +70,13 @@ const DocNeuralBackground: React.FC = () => {
         node.x = Math.max(0, Math.min(canvas.width, node.x))
         node.y = Math.max(0, Math.min(canvas.height, node.y))
 
-        // Draw node
+        // Draw node (simplified)
         ctx.beginPath()
-        ctx.arc(node.x, node.y, 3, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(102, 126, 234, 0.7)'
+        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2) // Reduced size from 3 to 2
+        ctx.fillStyle = 'rgba(102, 126, 234, 0.6)' // Reduced opacity
         ctx.fill()
 
-        // Add glow effect
-        ctx.beginPath()
-        ctx.arc(node.x, node.y, 5, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(102, 126, 234, 0.3)'
-        ctx.fill()
-
-        // Draw connections
+        // Draw connections (reduced distance)
         nodes.forEach((otherNode, j) => {
           if (i >= j) return
 
@@ -81,13 +84,13 @@ const DocNeuralBackground: React.FC = () => {
           const dy = node.y - otherNode.y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 150) {
+          if (distance < 120) { // Reduced from 150 to 120
             ctx.beginPath()
             ctx.moveTo(node.x, node.y)
             ctx.lineTo(otherNode.x, otherNode.y)
-            const opacity = 0.4 * (1 - distance / 150)
+            const opacity = 0.3 * (1 - distance / 120) // Reduced opacity
             ctx.strokeStyle = `rgba(102, 126, 234, ${opacity})`
-            ctx.lineWidth = 1
+            ctx.lineWidth = 0.8 // Reduced from 1 to 0.8
             ctx.stroke()
           }
         })
@@ -96,7 +99,8 @@ const DocNeuralBackground: React.FC = () => {
       animationFrameRef.current = requestAnimationFrame(animate)
     }
 
-    animate()
+    lastFrameTimeRef.current = performance.now()
+    animate(lastFrameTimeRef.current)
 
     window.addEventListener('resize', resizeCanvas)
 
