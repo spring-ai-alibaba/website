@@ -94,7 +94,7 @@ export default projectConfig
 // Helper function: generate GitHub related links
 export const getGitHubUrls = (config: ProjectConfig) => {
   const { username, repoName } = config.github
-  const baseUrl = `https://github.com/${username}/${repoName}`
+  const baseUrl = `https://github.com/${repoName}`
 
   return {
     repo: baseUrl,
