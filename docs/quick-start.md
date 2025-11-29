@@ -401,8 +401,9 @@ import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 
 // 创建 hook
 Hook humanInTheLoopHook = HumanInTheLoopHook.builder()
- .approvalOn("getWeatherTool", ToolConfig.builder().description("Please confirm tool execution.")
- .build();
+        .approvalOn("getWeatherTool",
+                ToolConfig.builder().description("Please confirm tool execution.").build())
+        .build();
 
 ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
