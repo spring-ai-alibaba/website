@@ -58,8 +58,8 @@ const projectConfig: ProjectConfig = {
 
   // GitHub repository information
   github: {
-    username: 'alibaba',
-    repoName: 'spring-ai-alibaba',
+    username: 'spring-ai-alibaba',
+    repoName: 'website',
   },
 
   // Website deployment configuration
@@ -92,9 +92,29 @@ const projectConfig: ProjectConfig = {
 export default projectConfig
 
 // Helper function: generate GitHub related links
-export const getGitHubUrls = (config: ProjectConfig) => {
+export const getGitHubUrls = (config: ProjectConfig, currentPagePath?: string) => {
   const { username, repoName } = config.github
-  const baseUrl = `https://github.com/${repoName}`
+  const baseUrl = `https://github.com/${username}/${repoName}`
+  
+  // 定义页面路径 -> 源码文件路径的映射规则（可扩展更多页面）
+  const pageToSourceMap: Record<string, string> = {
+    // 关键：docs/quick-start 映射到 agents-docs/jmanus/quick-start.md
+    '/docs/quick-start': 'agents-docs/jmanus/quick-start.md',
+    // 可添加更多映射规则，比如：
+    // '/docs/guide': 'agents-docs/jmanus/guide.md',
+  }
+
+  // 处理编辑文档的链接
+  let editDocs = `${baseUrl}/blob/main/`
+  if (currentPagePath && pageToSourceMap[currentPagePath]) {
+    // 如果当前页面有映射规则，直接指向指定的源码文件
+    editDocs = `${baseUrl}/blob/main/${pageToSourceMap[currentPagePath]}`
+  } else {
+    // 其他页面沿用原有规则（拼接页面路径）
+    editDocs = currentPagePath 
+      ? `${baseUrl}/blob/main/${currentPagePath}.md` 
+      : `${baseUrl}/blob/main/`
+  }
 
   return {
     repo: baseUrl,
@@ -102,8 +122,8 @@ export const getGitHubUrls = (config: ProjectConfig) => {
     issues: `${baseUrl}/issues`,
     license: `${baseUrl}/blob/main/LICENSE`,
     contributing: `${baseUrl}/blob/main/CONTRIBUTING.md`,
-    editDocs: `${baseUrl}/website/blob/main/`,
-    editBlog: `${baseUrl}/website/blob/main/blog/`,
+    editDocs, // 动态生成的编辑链接
+    editBlog: `${baseUrl}/blob/main/blog/`,
   }
 }
 
