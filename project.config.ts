@@ -102,8 +102,8 @@ export const getGitHubUrls = (config: ProjectConfig) => {
     issues: `${baseUrl}/issues`,
     license: `${baseUrl}/blob/main/LICENSE`,
     contributing: `${baseUrl}/blob/main/CONTRIBUTING.md`,
-    editDocs: `${baseUrl}/tree/main/docs/`,
-    editBlog: `${baseUrl}/tree/main/blog/`,
+    editDocs: `${baseUrl}/website/blob/main/`,
+    editBlog: `${baseUrl}/website/blob/main/blog/`,
   }
 }
 
