@@ -1,10 +1,10 @@
 {
-  "name": "docs-website-template",
+  "name": "spring-ai-alibaba-website",
   "version": "1.0.0",
   "private": true,
-  "description": "基于 Docusaurus 的文档网站模板",
-  "author": "Your Name <your.email@example.com>",
-  "license": "MIT",
+  "description": "Spring AI Alibaba Website",
+  "author": "Spring AI Alibaba Contributors",
+  "license": "Apache-2.0",
   "scripts": {
     "docusaurus": "docusaurus",
     "dev": "docusaurus start",

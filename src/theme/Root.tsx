@@ -32,19 +32,32 @@ export default function Root({ children }: RootProps) {
 
     window.addEventListener('popstate', handleLocationChange)
 
-    // Also check on navigation using MutationObserver
-    const observer = new MutationObserver(() => {
-      checkPath()
-    })
+    // Throttle function to limit frequency
+    let timeoutId: NodeJS.Timeout | null = null
+    const throttledCheckPath = () => {
+      if (timeoutId) return
+      timeoutId = setTimeout(() => {
+        checkPath()
+        timeoutId = null
+      }, 500)
+    }
 
-    observer.observe(document.body, {
+    // Use more specific MutationObserver configuration
+    const observer = new MutationObserver(throttledCheckPath)
+
+    // Only observe the main content area, not entire body
+    const mainContent = document.querySelector('main') || document.body
+    observer.observe(mainContent, {
       childList: true,
-      subtree: true,
+      subtree: false, // Changed from true to false to reduce overhead
     })
 
     return () => {
       window.removeEventListener('popstate', handleLocationChange)
       observer.disconnect()
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
     }
   }, [])
 
@@ -71,6 +84,8 @@ export default function Root({ children }: RootProps) {
 
   // 加载图片放大功能的 JavaScript
   useEffect(() => {
+    const processedImages = new WeakSet<HTMLImageElement>()
+    
     // 图片放大功能
     function initImageZoom() {
       // 查找博客文章容器
@@ -82,13 +97,18 @@ export default function Root({ children }: RootProps) {
 
       images.forEach((img) => {
         // 跳过已经处理过的图片
-        if (img.closest('.image-zoom-wrapper')) return
+        if (processedImages.has(img as HTMLImageElement) || img.closest('.image-zoom-wrapper')) return
+        
+        processedImages.add(img as HTMLImageElement)
 
         const src = img.getAttribute('src')
         const alt = img.getAttribute('alt') || ''
         const className = img.getAttribute('class') || ''
 
         if (src) {
+          // 使用DocumentFragment减少重排
+          const fragment = document.createDocumentFragment()
+          
           // 创建包装器
           const wrapper = document.createElement('div')
           wrapper.className = 'image-zoom-wrapper'
@@ -98,20 +118,18 @@ export default function Root({ children }: RootProps) {
           newImg.src = src
           newImg.alt = alt
           newImg.className = className
+          newImg.setAttribute('data-zoom-src', src)
+          newImg.setAttribute('data-zoom-alt', alt)
 
-          // 复制所有其他属性
-          for (let i = 0; i < img.attributes.length; i++) {
-            const attr = img.attributes[i]
-            if (attr.name !== 'src' && attr.name !== 'alt' && attr.name !== 'class') {
+          // 复制所有其他属性 (优化版)
+          Array.from(img.attributes).forEach(attr => {
+            if (!['src', 'alt', 'class'].includes(attr.name)) {
               newImg.setAttribute(attr.name, attr.value)
             }
-          }
+          })
 
           // 添加点击事件来模拟放大功能
           newImg.style.cursor = 'pointer'
-          newImg.addEventListener('click', () => {
-            openImageZoom(src, alt)
-          })
 
           wrapper.appendChild(newImg)
 
@@ -127,15 +145,11 @@ export default function Root({ children }: RootProps) {
             </svg>
           `
 
-          zoomButton.addEventListener('click', (e) => {
-            e.stopPropagation()
-            openImageZoom(src, alt)
-          })
-
           wrapper.appendChild(zoomButton)
+          fragment.appendChild(wrapper)
 
           // 插入到原始图片位置
-          img.parentNode?.insertBefore(wrapper, img)
+          img.parentNode?.insertBefore(fragment, img)
           img.remove()
         }
       })
@@ -202,6 +216,22 @@ export default function Root({ children }: RootProps) {
       document.body.classList.add('modal-open')
     }
 
+    // 使用事件委托处理图片点击
+    const handleImageClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const img = target.closest('.image-zoom-wrapper img, .image-zoom-button')
+      if (img) {
+        const imgElement = target.closest('.image-zoom-wrapper')?.querySelector('img')
+        if (imgElement) {
+          const src = imgElement.getAttribute('data-zoom-src') || imgElement.src
+          const alt = imgElement.getAttribute('data-zoom-alt') || imgElement.alt
+          openImageZoom(src, alt)
+        }
+      }
+    }
+
+    document.addEventListener('click', handleImageClick)
+
     // 页面加载完成后初始化
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initImageZoom)
@@ -211,28 +241,34 @@ export default function Root({ children }: RootProps) {
 
     // 监听路由变化（适用于 SPA）
     let currentPath = window.location.pathname
+    let debounceTimer: NodeJS.Timeout | null = null
 
     const observeUrlChange = () => {
       const newPath = window.location.pathname
       if (newPath !== currentPath) {
         currentPath = newPath
-        // 延迟执行以确保新内容已加载
-        setTimeout(initImageZoom, 100)
+        // 使用防抖延迟执行
+        if (debounceTimer) clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(initImageZoom, 300)
       }
     }
 
-    // 使用 MutationObserver 监听路由变化
+    // 使用更优化的 MutationObserver 配置
     const observer = new MutationObserver(() => {
-      observeUrlChange()
+      if (debounceTimer) clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(observeUrlChange, 200)
     })
 
-    observer.observe(document.body, {
+    const mainContent = document.querySelector('main') || document.body
+    observer.observe(mainContent, {
       childList: true,
-      subtree: true,
+      subtree: false, // 减少监听深度
     })
 
     return () => {
       observer.disconnect()
+      document.removeEventListener('click', handleImageClick)
+      if (debounceTimer) clearTimeout(debounceTimer)
     }
   }, [])
 

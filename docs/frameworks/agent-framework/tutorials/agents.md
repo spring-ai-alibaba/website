@@ -91,6 +91,7 @@ ReactAgent agent = ReactAgent.builder()
 ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(DashScopeChatOptions.builder()
+		.withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
         .withTemperature(0.7)    // 控制随机性
         .withMaxToken(2000)      // 最大输出长度
         .withTopP(0.9)           // 核采样参数

@@ -316,18 +316,20 @@ const config: Config = {
           ignorePatterns: ['/tags/**'],
           filename: 'sitemap.xml',
         },
+        // Performance optimizations
+        gtag: undefined, // Disable if not using Google Analytics
       } satisfies PresetClassicOptions,
     ],
   ],
-
+  
   themeConfig: {
     // Replace with your project's social card
     image: 'img/social-card.jpg',
     // Enhanced metadata for SEO
     metadata: [
-      {name: 'keywords', content: 'Spring AI Alibaba, Agent Framework, ReactAgent, Graph, Multi-Agent, Java AI, 智能体, AI开发框架'},
-      {name: 'twitter:card', content: 'summary_large_image'},
-      {property: 'og:type', content: 'website'},
+      { name: 'keywords', content: 'Spring AI Alibaba, Agent Framework, ReactAgent, Graph, Multi-Agent, Java AI, 智能体, AI开发框架' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { property: 'og:type', content: 'website' },
     ],
     // Disable search functionality
     algolia: undefined,

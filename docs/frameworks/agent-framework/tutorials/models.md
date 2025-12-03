@@ -337,7 +337,7 @@ System.out.println(answer);`}
 
 DashScopeChatOptions options = DashScopeChatOptions.builder()
     .withModel("qwen-plus")           // 模型名称
-    .withTemperature(0.7)              // 温度参数
+    .withTemperature(0.7)              // Temperature 参数
     .withMaxToken(2000)                // 最大令牌数
     .withTopP(0.9)                     // Top-P 采样
     .build();

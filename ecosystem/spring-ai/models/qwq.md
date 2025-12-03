@@ -77,6 +77,8 @@ sidebar_position: 6
 				.defaultOptions(
 						DashScopeChatOptions.builder()
 								.withTopP(0.7)
+								// Note: model must be set when use options build.
+								.withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
 								.build()
 				)
 				.build();
