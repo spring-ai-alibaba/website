@@ -56,7 +56,9 @@ Multi-agent设计的核心是**上下文工程**——决定每个Agent看到什
 
 ![agent tool](/img/agent/multi-agent/agent-tool.png)
 
-> 作为工具使用的Agent通常**不期望**与用户继续对话。它们的角色是执行任务并将结果返回给控制器Agent。如果你需要子Agent能够与用户对话，请改用**交接**模式。
+> 作为工具使用的Agent通常**不期望**与用户继续对话。它们的角色是执行任务并将结果返回给控制器Agent。如果你需要子Agent能够与用户对话，请改用**交接（HandOff）**模式。
+
+关于工具调用模式的使用请查看 [HandOffs 模式文档](./multi-agent.md)。
 
 ### 实现
 
@@ -67,7 +69,7 @@ Multi-agent设计的核心是**上下文工程**——决定每个Agent看到什
   title="AgentTool 基础示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
 import org.springframework.ai.chat.model.ChatModel;
 
 // 创建子Agent
@@ -114,19 +116,31 @@ Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的
 
 #### 使用 inputSchema
 
+使用标准的 JSON Schema 格式定义输入结构，确保子Agent能够接收结构化的输入信息：
+
 <Code
   language="java"
   title="使用 inputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
 
-// 定义子Agent的输入Schema
+// 定义子Agent的输入Schema（标准 JSON Schema 格式）
 String writerInputSchema = """
     {
-        "topic": "文章主题",
-        "wordCount": "字数要求（整数）",
-        "style": "文章风格（如：散文、诗歌等）"
+        "type": "object",
+        "properties": {
+            "topic": {
+                "type": "string"
+            },
+            "wordCount": {
+                "type": "integer"
+            },
+            "style": {
+                "type": "string"
+            }
+        },
+        "required": ["topic", "wordCount", "style"]
     }
     """;
 
@@ -157,7 +171,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于春�
   title="使用 inputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
 
 // 定义输入类型
 public record ArticleRequest(
@@ -195,29 +209,41 @@ Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于秋�
 
 #### 使用 outputSchema
 
+使用 `BeanOutputConverter` 生成输出 Schema，提供类型安全和自动 schema 生成：
+
 <Code
   language="java"
   title="使用 outputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
+import org.springframework.ai.converter.BeanOutputConverter;
 
-// 定义输出Schema
-String writerOutputSchema = """
-    请按照以下JSON格式返回：
-    {
-        "title": "文章标题",
-        "content": "文章正文内容",
-        "characterCount": "文章字符数（整数）"
-    }
-    """;
+// 定义输出类型
+public static class ArticleOutput {
+    private String title;
+    private String content;
+    private int characterCount;
+
+    // Getters and Setters
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+    public int getCharacterCount() { return characterCount; }
+    public void setCharacterCount(int characterCount) { this.characterCount = characterCount; }
+}
+
+// 使用 BeanOutputConverter 生成 outputSchema
+BeanOutputConverter<ArticleOutput> outputConverter = new BeanOutputConverter<>(ArticleOutput.class);
+String format = outputConverter.getFormat();
 
 ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_with_output_schema")
     .model(chatModel)
     .description("写文章并返回结构化输出")
     .instruction("你是一个专业作家。请创作文章并严格按照指定的JSON格式返回结果。")
-    .outputSchema(writerOutputSchema) // [!code highlight]
+    .outputSchema(format) // [!code highlight]
     .build();
 
 ReactAgent coordinatorAgent = ReactAgent.builder()
@@ -239,7 +265,8 @@ Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于冬天�
   title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
+import org.springframework.ai.converter.BeanOutputConverter;
 
 // 定义输出类型
 public class ArticleOutput {
@@ -277,7 +304,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于夏天�
   title="完整类型化示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.tool.AgentTool;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
 
 // 定义输入和输出类型
 public record ArticleRequest(String topic, int wordCount, String style) {}
@@ -327,4 +354,64 @@ ReactAgent orchestratorAgent = ReactAgent.builder()
 Optional<OverAllState> result = orchestratorAgent.invoke("请写一篇关于友谊的散文，约200字，需要评审");`}
 </Code>
 
+### 多个子Agent作为工具
 
+在实际应用中，主Agent通常需要访问多个不同的子Agent工具，根据任务需求选择合适的工具进行调用。这种模式允许你构建更灵活、更强大的多Agent系统。
+
+<Code
+  language="java"
+  title="多个子Agent作为工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
+
+// 创建写作Agent
+ReactAgent writerAgent = ReactAgent.builder()
+    .name("writer_agent")
+    .model(chatModel)
+    .description("专门负责创作文章和内容生成")
+    .instruction("你是一个专业作家，擅长各类文章创作。")
+    .build();
+
+// 创建翻译Agent
+ReactAgent translatorAgent = ReactAgent.builder()
+    .name("translator_agent")
+    .model(chatModel)
+    .description("专门负责文本翻译工作")
+    .instruction("你是一个专业翻译，能够准确翻译多种语言。")
+    .build();
+
+// 创建总结Agent
+ReactAgent summarizerAgent = ReactAgent.builder()
+    .name("summarizer_agent")
+    .model(chatModel)
+    .description("专门负责内容总结和提炼")
+    .instruction("你是一个内容总结专家，擅长提炼关键信息。")
+    .build();
+
+// 创建主Agent，集成多个工具
+ReactAgent multiToolAgent = ReactAgent.builder()
+    .name("multi_tool_coordinator")
+    .model(chatModel)
+    .instruction("你可以访问多个专业工具：写作、翻译和总结。" +
+            "根据用户需求选择合适的工具来完成任务。")
+    .tools(
+        AgentTool.getFunctionToolCallback(writerAgent),      // [!code highlight]
+        AgentTool.getFunctionToolCallback(translatorAgent),  // [!code highlight]
+        AgentTool.getFunctionToolCallback(summarizerAgent)   // [!code highlight]
+    )
+    .build();
+
+// 使用 - 主Agent会根据需求自动选择合适的工具
+Optional<OverAllState> result = multiToolAgent.invoke(
+    "请写一篇关于AI的文章，然后翻译成英文，最后给出摘要");`}
+</Code>
+
+在这种模式中：
+
+1. **专业化分工**：每个子Agent专注于特定领域（写作、翻译、总结等）
+2. **灵活组合**：主Agent可以根据任务需求调用一个或多个工具
+3. **智能路由**：主Agent根据工具的描述和用户需求，自动选择合适的工具
+4. **顺序执行**：主Agent可以按顺序调用多个工具，实现复杂的工作流
+
+> **提示**：为每个子Agent提供清晰、准确的 `description` 非常重要，这直接影响主Agent如何选择合适的工具。描述应该简洁地说明Agent的职责和能力。

@@ -268,7 +268,7 @@ DashScope 是阿里云提供的大模型服务平台，提供通义千问等多�
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.0.0-M5</version>
+    <version>1.1.0.0-RC2</version>
 </dependency>
 ```
 

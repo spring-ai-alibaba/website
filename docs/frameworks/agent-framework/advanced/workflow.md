@@ -113,7 +113,9 @@ import com.alibaba.cloud.ai.graph.action.NodeActionWithConfig;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class QueryExpanderNode implements NodeActionWithConfig {
@@ -150,7 +152,7 @@ public class QueryExpanderNode implements NodeActionWithConfig {
 
         // 返回更新的状态
         Map<String, Object> output = new HashMap<>();
-        output.put("queryVariants", List.of(variants));
+        output.put("queryVariants", Arrays.asList(variants));
         return output;
     }
 }`}
@@ -244,13 +246,16 @@ public class ParallelResultAggregatorNode implements NodeAction {
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
 import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
 
 @Configuration
 public class WorkflowConfiguration {
@@ -272,20 +277,19 @@ public class WorkflowConfiguration {
 
         // 添加自定义 Node
         graph.addNode("processor", node_async(new TextProcessorNode()));
-        graph.addNode("expander", node_async(new QueryExpanderNode(chatClientBuilder)));
-        graph.addNode("condition", node_async(new ConditionEvaluatorNode()));
+        graph.addNode("condition", node_async(new ConditionNode()));
 
         // 定义边（流程连接）
         graph.addEdge(StateGraph.START, "processor");
-        graph.addEdge("processor", "expander");
+        graph.addEdge("processor", "condition");
 
         // 条件边：根据 condition node 的结果路由
         graph.addConditionalEdges(
-            "expander",
-            state -> state.value("_condition_result", "default").toString(),
+            "condition",
+            edge_async(state -> state.value("_condition_result", "short").toString()),
             Map.of(
-                "data_processing", "processor",
-                "default", StateGraph.END
+                "long", "processor",  // 长文本重新处理
+                "short", StateGraph.END  // 短文本结束
             )
         );
 
@@ -356,49 +360,73 @@ public class WorkflowConfiguration {
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
 import org.springframework.ai.chat.model.ChatModel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AgentWorkflowExample {
 
-    public StateGraph buildWorkflowWithAgent(ChatModel chatModel) {
+    public void buildWorkflowWithAgent(ChatModel chatModel) throws Exception {
         // 创建专门的数据分析 Agent
         ReactAgent analysisAgent = ReactAgent.builder()
             .name("data_analyzer")
             .model(chatModel)
-            .instruction("你是一个数据分析专家，负责分析数据并提供洞察")
-            .tools(dataAnalysisTool, statisticsTool)
+            .instruction("你是一个数据分析专家，负责分析数据并提供洞察，请分析以下输入数据：\n {input}")
+            .outputKey("analysis_result")
             .build();
 
         // 创建报告生成 Agent
         ReactAgent reportAgent = ReactAgent.builder()
             .name("report_generator")
             .model(chatModel)
-            .instruction("你是一个报告生成专家，负责将分析结果转化为专业报告")
-            .tools(formatTool, chartTool)
+            .instruction("你是一个报告生成专家，负责将分析结果 "{analysis_result}" 转化为专业报告")
+            .outputKey("final_report")
             .build();
 
+        // 定义状态管理策略
+        KeyStrategyFactory keyStrategyFactory = () -> {
+            HashMap<String, KeyStrategy> strategies = new HashMap<>();
+            strategies.put("input", new ReplaceStrategy());
+            return strategies;
+        };
+
         // 构建包含 Agent 的工作流
-        StateGraph workflow = new StateGraph("multi_agent_workflow", keyStrategyFactory);
+        StateGraph workflow = new StateGraph(keyStrategyFactory);
 
         // 将 Agent 作为 SubGraph Node 添加
-        workflow.addNode("analysis", analysisAgent.asNode(
+        workflow.addNode(analysisAgent.name(), analysisAgent.asNode(
             true,                     // includeContents: 是否传递父图的消息历史
-            false,                    // returnReasoningContents: 是否返回推理过程
-            "analysis_result"         // outputKeyToParent: 输出键名
+            false                     // returnReasoningContents: 是否返回推理过程
         ));
 
-        workflow.addNode("reporting", reportAgent.asNode(
+        workflow.addNode(reportAgent.name(), reportAgent.asNode(
             true,
-            false,
-            "final_report"
+            false
         ));
 
         // 定义流程
-        workflow.addEdge(StateGraph.START, "analysis");
-        workflow.addEdge("analysis", "reporting");
-        workflow.addEdge("reporting", StateGraph.END);
+        workflow.addEdge(StateGraph.START, analysisAgent.name());
+        workflow.addEdge(analysisAgent.name(), reportAgent.name());
+        workflow.addEdge(reportAgent.name(), StateGraph.END);
 
-        return workflow;
+        // 编译并执行工作流
+        CompiledGraph compiledGraph = workflow.compile(CompileConfig.builder().build());
+        NodeOutput lastOutput = compiledGraph.stream(Map.of("input", "2025年全年销量100亿，毛利率 23%，净利率 13%。2024年全年销量80亿，毛利率 20%，净利率 8%。"))
+            .doOnNext(output -> {
+                if (output instanceof StreamingOutput<?> streamingOutput) {
+                    System.out.println("Output from node " + streamingOutput.node() + ": " + streamingOutput.message().getText());
+                }
+            })
+            .blockLast();
+
+        System.out.println("\n\n最终结果，包含所有节点状态：\n" + lastOutput.state().data());
     }
 }`}
 </Code>
@@ -411,7 +439,8 @@ public class AgentWorkflowExample {
 |------|------|------|
 | `includeContents` | boolean | 是否将父图的 messages 传递给子 Agent（默认 true） |
 | `returnReasoningContents` | boolean | 是否返回完整的推理过程，false 则只返回最终结果（默认 false） |
-| `outputKeyToParent` | String | 子 Agent 结果在父图状态中的键名 |
+
+**注意**：`outputKey` 是在创建 `ReactAgent` 时通过 `ReactAgent.builder().outputKey()` 设置的，用于指定 Agent 输出结果在状态中的键名。
 
 ### 多 Agent 协作工作流示例
 
@@ -424,70 +453,100 @@ public class AgentWorkflowExample {
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MultiAgentWorkflow {
 
-    public StateGraph buildResearchWorkflow(
+    public void buildResearchWorkflow(
             ChatModel chatModel,
             ToolCallback searchTool,
             ToolCallback analysisTool,
-            ToolCallback summaryTool) {
+            ToolCallback summaryTool) throws Exception {
 
         // 1. 创建信息收集 Agent
         ReactAgent researchAgent = ReactAgent.builder()
             .name("researcher")
             .model(chatModel)
-            .instruction("你是一个研究专家，负责收集和整理相关信息")
+            .instruction("你是一个研究专家，负责收集和整理相关信息，请研究主题： {input}")
             .tools(searchTool)
+            .outputKey("research_data")
+            .enableLogging(true)
             .build();
 
         // 2. 创建数据分析 Agent
         ReactAgent analysisAgent = ReactAgent.builder()
             .name("analyst")
             .model(chatModel)
-            .instruction("你是一个分析专家，负责深入分析研究数据")
+            .instruction("你是一个分析专家，负责深入分析关于主题 "{input}" 的研究数据。数据如下： \n\n {research_data}")
             .tools(analysisTool)
+            .outputKey("analysis_result")
+            .enableLogging(true)
             .build();
 
         // 3. 创建总结 Agent
         ReactAgent summaryAgent = ReactAgent.builder()
             .name("summarizer")
             .model(chatModel)
-            .instruction("你是一个总结专家，负责将分析结果提炼为简洁的结论")
+            .instruction("你是一个总结专家，负责将分析结果提炼为简洁的结论，结果：\n\n {analysis_result}")
             .tools(summaryTool)
+            .outputKey("final_summary")
+            .enableLogging(true)
             .build();
 
+        // 定义状态管理策略
+        KeyStrategyFactory keyStrategyFactory = () -> {
+            HashMap<String, KeyStrategy> strategies = new HashMap<>();
+            strategies.put("input", new ReplaceStrategy());
+            return strategies;
+        };
+
         // 4. 构建工作流
-        StateGraph workflow = new StateGraph("research_workflow", keyStrategyFactory);
+        StateGraph workflow = new StateGraph(keyStrategyFactory);
 
         // 添加 Agent 节点
-        workflow.addNode("research", researchAgent.asNode(
+        workflow.addNode(researchAgent.name(), researchAgent.asNode(
             true,    // 包含历史消息
-            false,   // 不返回推理过程
-            "research_data"
+            false    // 不返回推理过程
         ));
 
-        workflow.addNode("analysis", analysisAgent.asNode(
+        workflow.addNode(analysisAgent.name(), analysisAgent.asNode(
             true,
-            false,
-            "analysis_result"
+            false
         ));
 
-        workflow.addNode("summary", summaryAgent.asNode(
+        workflow.addNode(summaryAgent.name(), summaryAgent.asNode(
             true,
-            true,    // 返回完整推理过程
-            "final_summary"
+            true     // 返回完整推理过程
         ));
 
         // 定义顺序执行流程
-        workflow.addEdge(StateGraph.START, "research");
-        workflow.addEdge("research", "analysis");
-        workflow.addEdge("analysis", "summary");
-        workflow.addEdge("summary", StateGraph.END);
+        workflow.addEdge(StateGraph.START, researchAgent.name());
+        workflow.addEdge(researchAgent.name(), analysisAgent.name());
+        workflow.addEdge(analysisAgent.name(), summaryAgent.name());
+        workflow.addEdge(summaryAgent.name(), StateGraph.END);
 
-        return workflow;
+        // 编译并执行工作流
+        CompiledGraph compiledGraph = workflow.compile(CompileConfig.builder().build());
+        NodeOutput finalOutput = compiledGraph.stream(Map.of("input", "帮我做一份关于AI Agent的研究报告"))
+            .doOnNext(output -> {
+                if (output instanceof StreamingOutput<?> streamingOutput) {
+                    System.out.println("Output from node " + streamingOutput.node() + ": " + streamingOutput.message().getText());
+                }
+            })
+            .blockLast();
+
+        System.out.println("多Agent研究工作流构建完成");
+        System.out.println("最终输出: " + finalOutput.state().value("final_summary").orElse("无"));
     }
 }`}
 </Code>
@@ -500,85 +559,208 @@ public class MultiAgentWorkflow {
   language="java"
   title="Agent Node 与普通 Node 混合使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
-{`public class HybridWorkflow {
+{`import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.messages.Message;
 
-    public StateGraph buildHybridWorkflow(ChatModel chatModel) {
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
+
+public class HybridWorkflow {
+
+    public void buildHybridWorkflow(ChatModel chatModel) throws Exception {
         // 创建 Agent
         ReactAgent qaAgent = ReactAgent.builder()
             .name("qa_agent")
             .model(chatModel)
-            .instruction("你是一个问答专家")
-            .tools(knowledgeBaseTool)
+            .instruction("你是一个问答专家，负责回答用户的问题：\n {cleaned_input}")
+            .outputKey("qa_result")
+            .enableLogging(true)
             .build();
 
         // 创建自定义 Node
-        NodeAction preprocessor = state -> {
-            String input = state.value("input", "").toString();
-            String cleaned = input.trim().toLowerCase();
-            return Map.of("cleaned_input", cleaned);
-        };
+        class PreprocessorNode implements NodeAction {
+            @Override
+            public Map<String, Object> apply(OverAllState state) throws Exception {
+                String input = state.value("input", "").toString();
+                String cleaned = input.trim().toLowerCase();
+                return Map.of("cleaned_input", cleaned);
+            }
+        }
 
-        NodeAction validator = state -> {
-            String result = state.value("final_summary", "").toString();
-            boolean isValid = result.length() > 50; // 简单验证
-            return Map.of("is_valid", isValid);
+        class ValidatorNode implements NodeAction {
+            @Override
+            public Map<String, Object> apply(OverAllState state) throws Exception {
+                Message message = (Message) state.value("qa_result").get();
+                boolean isValid = message.getText().length() > 50; // 简单验证
+                return Map.of("is_valid", isValid);
+            }
+        }
+
+        // 定义状态管理策略
+        KeyStrategyFactory keyStrategyFactory = () -> {
+            HashMap<String, KeyStrategy> strategies = new HashMap<>();
+            strategies.put("input", new ReplaceStrategy());
+            strategies.put("cleaned_input", new ReplaceStrategy());
+            strategies.put("qa_result", new ReplaceStrategy());
+            strategies.put("is_valid", new ReplaceStrategy());
+            return strategies;
         };
 
         // 构建混合工作流
-        StateGraph workflow = new StateGraph("hybrid_workflow", keyStrategyFactory);
+        StateGraph workflow = new StateGraph(keyStrategyFactory);
 
         // 添加普通 Node
-        workflow.addNode("preprocess", node_async(preprocessor));
-        workflow.addNode("validate", node_async(validator));
+        workflow.addNode("preprocess", node_async(new PreprocessorNode()));
+        workflow.addNode("validate", node_async(new ValidatorNode()));
 
         // 添加 Agent Node
-        workflow.addNode("qa", qaAgent.asNode(
+        workflow.addNode(qaAgent.name(), qaAgent.asNode(
             true,
-            false,
-            "qa_result"
+            false
         ));
 
         // 定义流程：预处理 -> Agent处理 -> 验证
         workflow.addEdge(StateGraph.START, "preprocess");
-        workflow.addEdge("preprocess", "qa");
-        workflow.addEdge("qa", "validate");
+        workflow.addEdge("preprocess", qaAgent.name());
+        workflow.addEdge(qaAgent.name(), "validate");
 
         // 条件边：验证通过则结束，否则重新处理
         workflow.addConditionalEdges(
             "validate",
-            state -> state.value("is_valid", false) ? "end" : "qa",
-            Map.of("end", StateGraph.END, "qa", "qa")
+            edge_async(state -> (Boolean) state.value("is_valid", false) ? "end" : qaAgent.name()),
+            Map.of("end", StateGraph.END, qaAgent.name(), qaAgent.name())
         );
 
-        return workflow;
+        // 编译并执行工作流
+        CompiledGraph compiledGraph = workflow.compile(CompileConfig.builder().build());
+        NodeOutput lastOutput = compiledGraph.stream(Map.of("input", "请解释量子计算的基本原理"))
+            .doOnNext(output -> {
+                if (output instanceof StreamingOutput<?> streamingOutput) {
+                    if (streamingOutput.message() != null) {
+                        // streaming output from streaming llm node
+                        System.out.println("Streaming output from node " + streamingOutput.node() + ": " + streamingOutput.message().getText());
+                    } else {
+                        // output from normal node, investigate the state to get the node data
+                        System.out.println("Output from node " + streamingOutput.node() + ": " + streamingOutput.state().data());
+                    }
+                }
+            })
+            .blockLast();
+
+        System.out.println("\n\n\n最终结果，包含所有节点状态：\n" + lastOutput.state().data());
     }
 }`}
 </Code>
 
 ### 执行工作流
 
+Spring AI Alibaba Graph 支持两种执行方式：
+
+1. **流式执行**：使用 `compiledGraph.stream()` 方法，实时获取每个节点的输出，适合需要实时反馈的场景
+2. **同步执行**：使用 `compiledGraph.invoke()` 方法，等待整个工作流执行完成后返回最终结果
+
+#### 流式执行示例
+
 <Code
   language="java"
-  title="执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="流式执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
+
+import java.util.Map;
+
+// 编译工作流
+CompiledGraph compiledGraph = workflow.compile(CompileConfig.builder().build());
+
+// 流式执行，实时获取每个节点的输出
+NodeOutput lastOutput = compiledGraph.stream(Map.of("input", "请分析2024年AI行业发展趋势"))
+    .doOnNext(output -> {
+        if (output instanceof StreamingOutput<?> streamingOutput) {
+            if (streamingOutput.message() != null) {
+                // streaming output from streaming llm node
+                System.out.println("Streaming output from node " + streamingOutput.node() + ": " + streamingOutput.message().getText());
+            } else {
+                // output from normal node, investigate the state to get the node data
+                System.out.println("Output from node " + streamingOutput.node() + ": " + streamingOutput.state().data());
+            }
+        }
+    })
+    .blockLast();
+
+// 获取最终状态
+System.out.println("最终结果: " + lastOutput.state().data());`}
+</Code>
+
+#### 同步执行示例
+
+<Code
+  language="java"
+  title="同步执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
 public class WorkflowExecutor {
 
-    public void executeWorkflow(StateGraph workflow) throws Exception {
+    public void executeWorkflow() throws Exception {
+        // 创建简单的工作流
+        KeyStrategyFactory keyStrategyFactory = () -> {
+            HashMap<String, KeyStrategy> strategies = new HashMap<>();
+            strategies.put("input", new ReplaceStrategy());
+            strategies.put("output", new ReplaceStrategy());
+            return strategies;
+        };
+
+        StateGraph workflow = new StateGraph(keyStrategyFactory);
+
+        class SimpleNode implements NodeAction {
+            @Override
+            public Map<String, Object> apply(OverAllState state) throws Exception {
+                String input = state.value("input", "").toString();
+                return Map.of("output", "Processed: " + input);
+            }
+        }
+
+        workflow.addNode("process", node_async(new SimpleNode()));
+        workflow.addEdge(StateGraph.START, "process");
+        workflow.addEdge("process", StateGraph.END);
+
         // 编译工作流
         CompileConfig compileConfig = CompileConfig.builder().build();
         CompiledGraph compiledGraph = workflow.compile(compileConfig);
 
         // 准备输入
         Map<String, Object> input = Map.of(
-            "input", "请分析2024年AI行业发展趋势",
-            "expanderNumber", 3
+            "input", "请分析2024年AI行业发展趋势"
         );
 
         // 配置运行参数
@@ -586,27 +768,30 @@ public class WorkflowExecutor {
             .threadId("workflow-001")
             .build();
 
-        // 执行工作流
+        // 执行工作流（同步调用）
         Optional<OverAllState> result = compiledGraph.invoke(input, runnableConfig);
 
         // 处理结果
         result.ifPresent(state -> {
-            System.out.println("研究数据: " + state.value("research_data").orElse("无"));
-            System.out.println("分析结果: " + state.value("analysis_result").orElse("无"));
-            System.out.println("最终总结: " + state.value("final_summary").orElse("无"));
+            System.out.println("输入: " + state.value("input").orElse("无"));
+            System.out.println("输出: " + state.value("output").orElse("无"));
         });
+
+        System.out.println("工作流执行完成");
     }
 }`}
 </Code>
 
 ### Agent Node 最佳实践
 
-1. **明确角色定位**：为每个 Agent 设置清晰的职责和指令
+1. **明确角色定位**：为每个 Agent 设置清晰的职责和指令，使用 `.instruction()` 方法定义 Agent 的角色
 2. **合理配置工具**：只为 Agent 提供其角色所需的工具，避免工具过多导致选择困难
-3. **控制上下文传递**：根据需要配置 `includeContents` 参数，避免不必要的上下文传递
-4. **优化输出格式**：使用 `returnReasoningContents` 控制返回内容的详细程度
-5. **错误处理**：在 Agent 外层添加错误处理 Node，确保流程的健壮性
-6. **监控和日志**：记录 Agent 的执行过程，便于调试和优化
+3. **设置输出键名**：使用 `.outputKey()` 方法为 Agent 设置输出键名，便于在工作流中访问结果
+4. **控制上下文传递**：根据需要配置 `includeContents` 参数，避免不必要的上下文传递
+5. **优化输出格式**：使用 `returnReasoningContents` 控制返回内容的详细程度
+6. **启用日志记录**：使用 `.enableLogging(true)` 启用日志，便于调试和监控
+7. **错误处理**：在 Agent 外层添加错误处理 Node，确保流程的健壮性
+8. **流式处理**：使用 `compiledGraph.stream()` 进行流式处理，实时获取节点输出；使用 `compiledGraph.invoke()` 进行同步调用
 
 ### 性能优化建议
 
@@ -624,10 +809,31 @@ public class WorkflowExecutor {
 {`// 并行执行示例
 workflow.addNode("parallel_start", node_async(new TransparentNode()));
 
-// 添加多个并行 Agent
-workflow.addNode("agent1", agent1.asNode(true, false, "result1"));
-workflow.addNode("agent2", agent2.asNode(true, false, "result2"));
-workflow.addNode("agent3", agent3.asNode(true, false, "result3"));
+// 添加多个并行 Agent（注意：outputKey 在 builder 中设置）
+ReactAgent agent1 = ReactAgent.builder()
+    .name("agent1")
+    .model(chatModel)
+    .instruction("Agent 1 的指令")
+    .outputKey("result1")
+    .build();
+
+ReactAgent agent2 = ReactAgent.builder()
+    .name("agent2")
+    .model(chatModel)
+    .instruction("Agent 2 的指令")
+    .outputKey("result2")
+    .build();
+
+ReactAgent agent3 = ReactAgent.builder()
+    .name("agent3")
+    .model(chatModel)
+    .instruction("Agent 3 的指令")
+    .outputKey("result3")
+    .build();
+
+workflow.addNode("agent1", agent1.asNode(true, false));
+workflow.addNode("agent2", agent2.asNode(true, false));
+workflow.addNode("agent3", agent3.asNode(true, false));
 
 // 聚合结果
 workflow.addNode("aggregator", node_async(new ParallelResultAggregatorNode("merged_result")));

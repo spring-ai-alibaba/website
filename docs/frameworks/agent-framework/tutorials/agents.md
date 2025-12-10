@@ -402,26 +402,40 @@ System.out.println(response.getText());`}
 
 #### 使用 outputSchema
 
-直接提供 JSON Schema 字符串进行更灵活的控制：
+使用 `BeanOutputConverter` 生成输出 Schema，提供类型安全和自动 schema 生成：
 
 <Code
   language="java"
   title="使用 outputSchema 自定义输出格式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
-{`String customSchema = """
-    请严格按照以下JSON格式返回结果：
-    {
-        "summary": "内容摘要",
-        "keywords": ["关键词1", "关键词2", "关键词3"],
-        "sentiment": "情感倾向（正面/负面/中性）",
-        "confidence": 0.95
-    }
-    """;
+{`import org.springframework.ai.converter.BeanOutputConverter;
+
+// 定义输出类型
+public static class TextAnalysisResult {
+    private String summary;
+    private List<String> keywords;
+    private String sentiment;
+    private Double confidence;
+
+    // Getters and Setters
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+    public List<String> getKeywords() { return keywords; }
+    public void setKeywords(List<String> keywords) { this.keywords = keywords; }
+    public String getSentiment() { return sentiment; }
+    public void setSentiment(String sentiment) { this.sentiment = sentiment; }
+    public Double getConfidence() { return confidence; }
+    public void setConfidence(Double confidence) { this.confidence = confidence; }
+}
+
+// 使用 BeanOutputConverter 生成 outputSchema
+BeanOutputConverter<TextAnalysisResult> outputConverter = new BeanOutputConverter<>(TextAnalysisResult.class);
+String format = outputConverter.getFormat();
 
 ReactAgent agent = ReactAgent.builder()
     .name("analysis_agent")
     .model(chatModel)
-    .outputSchema(customSchema)
+    .outputSchema(format)
     .saver(new MemorySaver())
     .build();
 
@@ -429,8 +443,8 @@ AssistantMessage response = agent.call("分析这段文本：春天来了，万�
 </Code>
 
 **选择建议**：
-- `outputType`：类型安全，适合结构固定的场景
-- `outputSchema`：灵活性高，适合动态或复杂的输出格式
+- `outputType`：类型安全，适合结构固定的场景（**推荐**）
+- `outputSchema`：使用 `BeanOutputConverter` 生成时提供类型安全，手动提供字符串时灵活性高，适合动态或复杂的输出格式
 
 ### Memory（记忆）
 
@@ -549,7 +563,7 @@ public class GuardrailInterceptor extends ModelInterceptor {
     public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 前置：检查输入
         if (containsSensitiveContent(request.getMessages())) {
-            return ModelResponse.blocked("检测到不适当的内容");
+        	return ModelResponse.of(AssistantMessage.builder().content("检测到不适当的内容").build());
         }
 
         // 执行调用
