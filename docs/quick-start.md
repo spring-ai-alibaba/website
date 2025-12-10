@@ -166,7 +166,17 @@ public class UserLocationTool implements BiFunction<String, ToolContext, String>
         @ToolParam(description = "User query") String query,
         ToolContext toolContext) {
         // 从上下文中获取用户信息
-        String userId = (String) toolContext.getContext().get("user_id");
+        String userId = "";
+        if (toolContext != null && toolContext.getContext() != null) {
+			RunnableConfig runnableConfig = (RunnableConfig) toolContext.getContext().get(AGENT_CONFIG_CONTEXT_KEY);
+			Optional<Object> userIdObjOptional = runnableConfig.metadata("user_id");
+			if (userIdObjOptional.isPresent()) {
+				userId = (String) userIdObjOptional.get();
+			}
+		}
+		if (userId == null) {
+			userId = "1";
+		}
         return "1".equals(userId) ? "Florida" : "San Francisco";
     }
 }

@@ -140,7 +140,7 @@ import org.springframework.ai.chat.messages.Message;
 // 创建一个模型拦截器，根据对话长度调整系统提示
 class StateAwarePromptInterceptor extends ModelInterceptor {
     @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         List<Message> messages = request.getMessages();
         int messageCount = messages.size();
 
@@ -162,17 +162,18 @@ class StateAwarePromptInterceptor extends ModelInterceptor {
             );
         }
 
-        // 创建新的请求并继续
-        ModelRequest updatedRequest = ModelRequest.builder(request)
+        // 创建增强的请求
+        ModelRequest enhancedRequest = ModelRequest.builder(request)
             .systemMessage(enhancedSystemMessage)
             .build();
 
-        return next.call(updatedRequest);
+        // 调用处理器
+        return handler.call(enhancedRequest);
     }
 
     @Override
     public String getName() {
-        return "";
+        return "StateAwarePromptInterceptor";
     }
 }
 
@@ -199,7 +200,7 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
     }
 
     @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 从运行时上下文获取用户ID
         String userId = getUserIdFromContext(request);
 
@@ -219,11 +220,13 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
             );
         }
 
-        ModelRequest updatedRequest = ModelRequest.builder(request)
+        // 创建增强的请求
+        ModelRequest enhancedRequest = ModelRequest.builder(request)
             .systemMessage(enhancedSystemMessage)
             .build();
 
-        return next.call(updatedRequest);
+        // 调用处理器
+        return handler.call(enhancedRequest);
     }
 
     private String getUserIdFromContext(ModelRequest request) {
@@ -278,7 +281,7 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
     }
 
     @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         List<Message> messages = request.getMessages();
 
         // 只保留最近的N条消息
@@ -298,11 +301,11 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
             messages = filtered;
         }
 
-        ModelRequest updatedRequest = ModelRequest.builder(request)
+        ModelRequest enhancedRequest = ModelRequest.builder(request)
             .messages(messages)
             .build();
 
-        return next.call(updatedRequest);
+        return handler.call(enhancedRequest);
     }
 
     @Override
@@ -335,7 +338,7 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
     }
 
     @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 从上下文获取用户角色
         String userRole = getUserRole(request);
 
@@ -349,7 +352,7 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
         // 这里展示概念性代码
         System.out.println("为角色 " + userRole + " 选择了 " + allowedTools.size() + " 个工具");
 
-        return next.call(request);
+        return handler.call(request);
     }
 
     private String getUserRole(ModelRequest request) {
@@ -395,7 +398,7 @@ ReactAgent agent = ReactAgent.builder()
     }
 
     @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 分析任务复杂度
         boolean isComplexTask = analyzeComplexity(request.getMessages());
 
@@ -405,7 +408,7 @@ ReactAgent agent = ReactAgent.builder()
         // 注意：在实际实现中，你可能需要在Agent级别切换模型
         // 这里展示的是概念性示例
 
-        return next.call(request);
+        return handler.call(request);
     }
 
     private boolean analyzeComplexity(List<Message> messages) {
@@ -439,7 +442,7 @@ ReactAgent agent = ReactAgent.builder()
 // 也可以在Interceptor中动态调整
 class DynamicFormatInterceptor extends ModelInterceptor {
     @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler next) {
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
         // 根据请求内容决定输出格式
         String outputSchema = determineOutputSchema(request);
 
@@ -449,11 +452,11 @@ class DynamicFormatInterceptor extends ModelInterceptor {
             outputSchema
         );
 
-        ModelRequest updatedRequest = ModelRequest.builder(request)
+        ModelRequest enhancedRequest = ModelRequest.builder(request)
             .messages(updatedMessages)
             .build();
 
-        return next.call(updatedRequest);
+        return handler.call(enhancedRequest);
     }
 
     private String determineOutputSchema(ModelRequest request) {
@@ -609,7 +612,23 @@ ReactAgent agent = ReactAgent.builder()
   language="java"
   title="SummarizationHook 消息摘要Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
-{`class SummarizationHook extends ModelHook {
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+class SummarizationHook extends MessagesModelHook {
     private final ChatModel summarizationModel;
     private final int triggerLength;
 
@@ -624,53 +643,44 @@ ReactAgent agent = ReactAgent.builder()
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        List<Message> messages = (List<Message>) state.value("messages").orElse(List.of());
-
-        if (messages.size() > triggerLength) {
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.size() > triggerLength) {
             // 生成对话摘要
-            String summary = generateSummary(messages);
+            String summary = generateSummary(previousMessages);
 
-            // 查找是否已存在 SystemMessage
+            // 查找是否已存在 SystemMessage（保留它，不修改）
             SystemMessage existingSystemMessage = null;
-            int systemMessageIndex = -1;
-            for (int i = 0; i < messages.size(); i++) {
-                Message msg = messages.get(i);
+            for (Message msg : previousMessages) {
                 if (msg instanceof SystemMessage) {
                     existingSystemMessage = (SystemMessage) msg;
-                    systemMessageIndex = i;
                     break;
                 }
             }
 
-            // 创建摘要 SystemMessage
-            String summaryText = "之前对话摘要：" + summary;
-            SystemMessage summarySystemMessage;
-            if (existingSystemMessage != null) {
-                // 如果存在 SystemMessage，追加摘要信息
-                summarySystemMessage = new SystemMessage(
-                    existingSystemMessage.getText() + "\n\n" + summaryText
-                );
-            } else {
-                // 如果不存在，创建新的
-                summarySystemMessage = new SystemMessage(summaryText);
-            }
+            // 创建包含摘要的上下文消息（使用 UserMessage 而不是 SystemMessage）
+            // 这样可以将摘要作为对话上下文的一部分，而不修改系统提示
+            UserMessage summaryContextMessage = new UserMessage(
+                "【上下文摘要】之前的对话摘要：" + summary
+            );
 
             // 保留最近的几条消息
-            int recentCount = Math.min(5, messages.size());
-            List<Message> recentMessages = messages.subList(
-                messages.size() - recentCount,
-                messages.size()
+            int recentCount = Math.min(5, previousMessages.size());
+            List<Message> recentMessages = previousMessages.subList(
+                previousMessages.size() - recentCount,
+                previousMessages.size()
             );
 
             // 构建新的消息列表
             List<Message> newMessages = new ArrayList<>();
-            newMessages.add(summarySystemMessage);
+            
+            // 保留原有的 SystemMessage（如果存在）
+            if (existingSystemMessage != null) {
+                newMessages.add(existingSystemMessage);
+            }
+            
+            // 添加摘要上下文消息
+            newMessages.add(summaryContextMessage);
+            
             // 添加最近的消息，排除旧的 SystemMessage（如果存在）
             for (Message msg : recentMessages) {
                 if (msg != existingSystemMessage) {
@@ -678,10 +688,12 @@ ReactAgent agent = ReactAgent.builder()
                 }
             }
 
-            return CompletableFuture.completedFuture(Map.of("messages", newMessages));
+            // 使用 REPLACE 策略替换消息列表
+            return new AgentCommand(newMessages, UpdatePolicy.REPLACE);
         }
 
-        return CompletableFuture.completedFuture(Map.of());
+        // 如果消息数量未超过阈值，返回原始消息（不进行修改）
+        return new AgentCommand(previousMessages);
     }
 
     private String generateSummary(List<Message> messages) {
