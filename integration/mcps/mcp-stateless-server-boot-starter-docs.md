@@ -5,7 +5,7 @@ Stateless Streamable-HTTP MCP 服务器专为简化部署而设计，在请求�
 
 > **提示：** 设置 `spring.ai.mcp.server.protocol=STATELESS` 属性
 
-> **提示：** 使用 [Streamable-HTTP clients](mcp/mcp-client-boot-starter-docs#_streamable_http_transport_properties) 连接到无状态服务器。
+> **提示：** 使用 [Streamable-HTTP clients](mcp-client-boot-starter-docs#_streamable_http_transport_properties) 连接到无状态服务器。
 
 **注意：** 无状态服务器不支持向 MCP 客户端发送消息请求（例如，elicitation、sampling、ping）。
 
@@ -100,7 +100,7 @@ MCP Server Boot Starter 允许服务器向客户端暴露工具、资源和 prom
 允许服务器暴露可由语言模型调用的工具。MCP Server Boot Starter 提供：
 
 * 变更通知支持
-* [Spring AI Tools](tools.adoc) 根据服务器类型自动转换为同步/异步规范
+* [Spring AI Tools](../tools) 根据服务器类型自动转换为同步/异步规范
 * 通过 Spring beans 自动工具规范：
 
 ```java

@@ -4,13 +4,13 @@ Chat Model API 为开发人员提供了将 AI 驱动的聊天完成功能集成�
 
 API 通常通过向 AI model 发送 prompt 或部分对话来工作，然后 AI model 根据其训练数据和对自然语言模式的理解生成完成或对话的延续。然后将完成的响应返回给应用程序，应用程序可以将其呈现给用户或用于进一步处理。
 
-`Spring AI Chat Model API` 设计为与各种 [AI Models](concepts.adoc#_models) 交互的简单且可移植的接口，允许开发人员以最少的代码更改在不同 model 之间切换。
+`Spring AI Chat Model API` 设计为与各种 AI Models 交互的简单且可移植的接口，允许开发人员以最少的代码更改在不同 model 之间切换。
 这种设计符合 Spring 的模块化和可互换性理念。
 
 此外，借助 `Prompt`（用于输入封装）和 `ChatResponse`（用于输出处理）等配套类的帮助，Chat Model API 统一了与 AI Models 的通信。
 它管理请求准备和响应解析的复杂性，提供直接和简化的 API 交互。
 
-您可以在 [可用实现](chatmodel.adoc#_available_implementations) 部分找到有关可用实现的更多信息，以及在 [Chat Models 比较](chat/comparison.adoc) 部分找到详细比较。
+您可以在 [可用实现](chatmodel#_available_implementations) 部分找到有关可用实现的更多信息，以及在 [Chat Models 比较](chat/comparison.adoc) 部分找到详细比较。
 
 ## API 概述
 
@@ -112,7 +112,7 @@ public interface MediaContent extends Content {
 虽然术语 `MessageType` 可能暗示特定的消息格式，但在此上下文中，它有效地指定了消息在对话中扮演的角色。
 
 对于不使用特定角色的 AI model，`UserMessage` 实现充当标准类别，通常表示用户生成的查询或指令。
-要了解实际应用以及 `Prompt` 和 `Message` 之间的关系，特别是在这些角色或消息类别的上下文中，请参阅 [Prompts](prompt.adoc) 部分中的详细说明。
+要了解实际应用以及 `Prompt` 和 `Message` 之间的关系，特别是在这些角色或消息类别的上下文中，请参阅 [Prompts](prompt) 部分中的详细说明。
 
 #### Chat Options
 
@@ -207,16 +207,16 @@ public class Generation implements ModelResult<AssistantMessage> {
 
 ![Spring AI Chat Completions Clients](/img/integration/spring-ai-chat-completions-clients.jpg)
 
-* [OpenAI Chat Completion](chat/openai-chat.adoc)（支持流式传输、多模态和 function-calling）
-* [Microsoft Azure Open AI Chat Completion](chat/azure-openai-chat.adoc)（支持流式传输和 function-calling）
-* [Ollama Chat Completion](chat/ollama-chat.adoc)（支持流式传输、多模态和 function-calling）
-* [Hugging Face Chat Completion](chat/huggingface.adoc)（不支持流式传输）
-* [Google Vertex AI Gemini Chat Completion](chat/vertexai-gemini-chat.adoc)（支持流式传输、多模态和 function-calling）
-* [Amazon Bedrock](bedrock.adoc)
-* [Mistral AI Chat Completion](chat/mistralai-chat.adoc)（支持流式传输和 function-calling）
-* [Anthropic Chat Completion](chat/anthropic-chat.adoc)（支持流式传输和 function-calling）
+* [OpenAI Chat Completion](chatmodels/openai-chat)（支持流式传输、多模态和 function-calling）
+* [Microsoft Azure Open AI Chat Completion](chatmodels/more/azure-openai-chat)（支持流式传输和 function-calling）
+* [Ollama Chat Completion](chatmodels/ollama-chat)（支持流式传输、多模态和 function-calling）
+* [Hugging Face Chat Completion](chatmodels/more/huggingface)（不支持流式传输）
+* [Google Vertex AI Gemini Chat Completion](chatmodels/gemini-chat)（支持流式传输、多模态和 function-calling）
+* [Amazon Bedrock](chatmodels/more/bedrock)
+* [Mistral AI Chat Completion](chatmodels/more/mistralai-chat)（支持流式传输和 function-calling）
+* [Anthropic Chat Completion](chatmodels/more/anthropic-chat)（支持流式传输和 function-calling）
 
-> **TIP:** 在 [Chat Models 比较](chat/comparison.adoc) 部分查找可用 Chat Models 的详细比较。
+> **TIP:** 在 [Chat Models 比较](chatmodels/comparison) 部分查找可用 Chat Models 的详细比较。
 
 ## Chat Model API
 

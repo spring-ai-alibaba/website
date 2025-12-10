@@ -6,7 +6,7 @@
 > **NOTE:**
 > 请参阅本文档底部的 [实现说明](#implementation-notes)，了解 `ChatClient` 中命令式和响应式编程模型结合使用的相关信息。
 
-流式 API 提供了用于构建传递给 AI model 作为输入的 [Prompt](prompt.adoc#_prompt) 的各个组成部分的方法。
+流式 API 提供了用于构建传递给 AI model 作为输入的 [Prompt](prompt#_prompt) 的各个组成部分的方法。
 `Prompt` 包含用于指导 AI model 输出和行为的指令文本。从 API 的角度来看，prompts 由消息集合组成。
 
 AI model 处理两种主要类型的消息：用户消息（来自用户的直接输入）和系统消息（由系统生成以指导对话）。
@@ -18,7 +18,7 @@ AI model 处理两种主要类型的消息：用户消息（来自用户的直�
 ## 创建 ChatClient
 
 `ChatClient` 使用 `ChatClient.Builder` 对象创建。
-您可以为任何 [ChatModel](chatmodel.adoc) Spring Boot 自动配置获取自动配置的 `ChatClient.Builder` 实例，或以编程方式创建一个。
+您可以为任何 [ChatModel](chatmodel) Spring Boot 自动配置获取自动配置的 `ChatClient.Builder` 实例，或以编程方式创建一个。
 
 ### 使用自动配置的 ChatClient.Builder
 
@@ -226,8 +226,8 @@ public class MultiModelService {
 
 ### 返回 ChatResponse
 
-来自 AI model 的响应是由类型 [ChatResponse](chatmodel.adoc#ChatResponse) 定义的丰富结构。
-它包括有关如何生成响应的元数据，还可以包含多个响应，称为 [Generation](chatmodel.adoc#Generation)s，每个都有自己的元数据。
+来自 AI model 的响应是由类型 [ChatResponse](chatmodel#ChatResponse) 定义的丰富结构。
+它包括有关如何生成响应的元数据，还可以包含多个响应，称为 [Generation](chatmodel#Generation)s，每个都有自己的元数据。
 元数据包括用于创建响应的 token 数量（每个 token 大约相当于 3/4 个单词）。
 此信息很重要，因为托管 AI model 根据每个请求使用的 token 数量收费。
 
@@ -300,7 +300,7 @@ Flux<String> output = chatClient.prompt()
 您还可以使用 `Flux<ChatResponse> chatResponse()` 方法流式传输 `ChatResponse`。
 
 将来，我们将提供一个便捷方法，让您使用响应式 `stream()` 方法返回 Java 实体。
-同时，您应该使用 [Structured Output Converter](structured-output-converter.adoc#StructuredOutputConverter) 显式转换聚合响应，如下所示。
+同时，您应该使用 [Structured Output Converter](structured-output-converter#StructuredOutputConverter) 显式转换聚合响应，如下所示。
 这也演示了流式 API 中参数的使用，将在文档的后续部分中更详细地讨论。
 
 ```java
@@ -339,7 +339,7 @@ String answer = ChatClient.create(chatModel).prompt()
 Spring AI 还提供了一个 `NoOpTemplateRenderer`，用于不需要模板处理的情况。
 
 > **NOTE:** 直接在 `ChatClient` 上配置的 `TemplateRenderer`（通过 `.templateRenderer()`）仅适用于在 `ChatClient` 构建器链中直接定义的 prompt 内容（例如，通过 `.user()`、`.system()`）。
-> 它*不会*影响 [Advisors](retrieval-augmented-generation.adoc#_questionansweradvisor)（如 `QuestionAnswerAdvisor`）内部使用的模板，它们有自己的模板自定义机制（请参阅 [自定义 Advisor 模板](retrieval-augmented-generation.adoc#_custom_template)）。
+> 它*不会*影响 [Advisors](rag/retrieval-augmented-generation#_questionansweradvisor)（如 `QuestionAnswerAdvisor`）内部使用的模板，它们有自己的模板自定义机制（请参阅 [自定义 Advisor 模板](rag/retrieval-augmented-generation#_custom_template)）。
 
 如果您想使用不同的模板引擎，可以直接向 ChatClient 提供 `TemplateRenderer` 接口的自定义实现。您也可以继续使用默认的 `StTemplateRenderer`，但使用自定义配置。
 
@@ -618,7 +618,7 @@ java.util.function.Function<I, O> function)`
 
 ## Advisors
 
-[Advisors API](advisors.adoc) 提供了一种灵活而强大的方式来拦截、修改和增强 Spring 应用程序中的 AI 驱动交互。
+[Advisors API](advisors) 提供了一种灵活而强大的方式来拦截、修改和增强 Spring 应用程序中的 AI 驱动交互。
 
 在使用用户文本调用 AI model 时，一个常见模式是将 prompt 附加或增强上下文数据。
 

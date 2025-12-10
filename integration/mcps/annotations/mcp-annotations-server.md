@@ -619,10 +619,4 @@ spring:
           enabled: true
 ```
 
-## Additional Resources
-
-* [MCP Annotations Overview](mcp/mcp-annotations-overview.adoc)
-* [Client Annotations](mcp/mcp-annotations-client.adoc)
-* [Special Parameters](mcp/mcp-annotations-special-params.adoc)
-* [MCP Server Boot Starter](mcp/mcp-server-boot-starter-docs.adoc)
 

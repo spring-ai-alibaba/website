@@ -24,7 +24,7 @@ MCP Security 模块提供三个主要组件：
 
 ## MCP Server Security
 
-MCP Server Security 模块为 [Spring AI's MCP servers](mcp/mcp-server-boot-starter-docs.adoc) 提供 OAuth 2.0 资源服务器功能。
+MCP Server Security 模块为 [Spring AI's MCP servers](mcps/mcp-server-boot-starter-docs) 提供 OAuth 2.0 资源服务器功能。
 它还提供基于 API 密钥的身份验证的基本支持。
 
 > **重要提示：** 此模块仅与基于 Spring WebMVC 的服务器兼容。
@@ -252,13 +252,13 @@ class McpServerConfiguration {
 
 > **重要提示：**
 
-* 不支持已弃用的 SSE 传输。使用 [Streamable HTTP](mcp/mcp-streamable-http-server-boot-starter-docs.adoc) 或 [stateless transport](mcp/mcp-stateless-server-boot-starter-docs.adoc)。
+* 不支持已弃用的 SSE 传输。使用 [Streamable HTTP](mcps/mcp-streamable-http-server-boot-starter-docs) 或 [stateless transport](mcp/mcp-stateless-server-boot-starter-docs.adoc)。
 * 不支持基于 WebFlux 的服务器。
 * 不支持 Opaque tokens。使用 JWT。
 
 ## MCP Client Security
 
-MCP Client Security 模块为 [Spring AI's MCP clients](mcp/mcp-client-boot-starter-docs.adoc) 提供 OAuth 2.0 支持，支持基于 HttpClient 的客户端（来自 `spring-ai-starter-mcp-client`）和基于 WebClient 的客户端（来自 `spring-ai-starter-mcp-client-webflux`）。
+MCP Client Security 模块为 [Spring AI's MCP clients](mcp-client-boot-starter-docs) 提供 OAuth 2.0 支持，支持基于 HttpClient 的客户端（来自 `spring-ai-starter-mcp-client`）和基于 WebClient 的客户端（来自 `spring-ai-starter-mcp-client-webflux`）。
 
 > **重要提示：** 此模块仅支持 `McpSyncClient`。
 
