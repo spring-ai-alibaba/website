@@ -209,7 +209,7 @@ public class AzureOpenAiConfig {
 | spring.ai.azure.openai.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
 | spring.ai.azure.openai.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
-> **提示：** 所有前缀为 `spring.ai.azure.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.azure.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ### Token Limit Parameters: Model-Specific Usage
 
@@ -217,8 +217,8 @@ Azure OpenAI 对 token 限制参数有模型特定的要求：
 
 | Model Family | Required Parameter | Notes |
 |--------------|-------------------|-------|
-| **Reasoning Models**<br>(o1, o3, o4-mini series) | `maxCompletionTokens` | 这些模型仅接受 `maxCompletionTokens`。使用 `maxTokens` 将导致 API 错误。 |
-| **Non-Reasoning Models**<br>(gpt-4o, gpt-3.5-turbo, etc.) | `maxTokens` | 传统模型使用 `maxTokens` 进行输出限制。使用 `maxCompletionTokens` 可能导致 API 错误。 |
+| **Reasoning Models**<br/>(o1, o3, o4-mini series) | `maxCompletionTokens` | 这些模型仅接受 `maxCompletionTokens`。使用 `maxTokens` 将导致 API 错误。 |
+| **Non-Reasoning Models**<br/>(gpt-4o, gpt-3.5-turbo, etc.) | `maxTokens` | 传统模型使用 `maxTokens` 进行输出限制。使用 `maxCompletionTokens` 可能导致 API 错误。 |
 
 > **重要：** 参数 `maxTokens` 和 `maxCompletionTokens` 是**互斥的**。同时设置这两个参数将导致 Azure OpenAI 的 API 错误。Spring AI Azure OpenAI 客户端在您设置另一个参数时会自动清除先前设置的参数，并显示警告消息。
 
@@ -266,7 +266,7 @@ ChatResponse response = chatModel.call(
 
 您可以将自定义 Java functions 注册到 AzureOpenAiChatModel，并让模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](api/tools)。
+了解更多关于 [Tool Calling](tools)。
 
 ## Multimodal
 
@@ -292,7 +292,7 @@ String response = ChatClient.create(chatModel).prompt()
 
 它将 `multimodal.test.png` 图像作为输入：
 
-![multimodal.test.png](multimodal.test.png)
+![multimodal.test.png](/img/integration/multimodal.test.png)
 
 以及文本消息 "Explain what do you see on this picture?"，并生成如下响应：
 

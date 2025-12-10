@@ -15,7 +15,7 @@ Bedrock Converse API 具有以下高级功能：
 
 > **注意：**
 > 遵循 Bedrock 建议，Spring AI 正在过渡到使用 Amazon Bedrock 的 Converse API 来实现 Spring AI 中的所有 chat conversation 实现。
-> 虽然现有的 [InvokeModel API](api/bedrock-chat) 支持对话应用程序，但我们强烈建议为所有 Chat conversation 模型采用 Converse API。
+> 虽然现有的 [InvokeModel API](bedrock-chat) 支持对话应用程序，但我们强烈建议为所有 Chat conversation 模型采用 Converse API。
 >
 > Converse API 不支持 embedding 操作，因此这些操作将保留在当前 API 中，现有 `InvokeModel API` 中的 embedding model 功能将得到维护
 
@@ -723,7 +723,7 @@ String response = ChatClient.create(this.chatModel)
         .content();
 ```
 
-在 [Tools](api/tools) 文档中查找更多信息。
+在 [Tools](tools) 文档中查找更多信息。
 
 ## Multimodal
 
@@ -757,7 +757,7 @@ logger.info(response);
 
 它将 `test.png` 图像作为输入：
 
-![multimodal.test.png](multimodal.test.png)
+![multimodal.test.png](/img/integration/multimodal.test.png)
 
 以及文本消息 "Explain what do you see on this picture?"，并生成如下响应：
 
@@ -790,7 +790,7 @@ logger.info(response);
 
 它将 `test.video.mp4` 图像作为输入：
 
-![test.video.jpeg](test.video.jpeg)
+![test.video.jpeg](/img/integration/test.video.jpeg)
 
 以及文本消息 "Explain what do you see in this video?"，并生成如下响应：
 
@@ -825,7 +825,7 @@ logger.info(response);
 
 它将 `spring-ai-reference-overview.pdf` 文档作为输入：
 
-![test.pdf.png](test.pdf.png)
+![test.pdf.png](/img/integration/test.pdf.png)
 
 以及文本消息 "You are a very professional document summarization specialist. Please summarize the given document."，并生成如下响应：
 

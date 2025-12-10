@@ -2,10 +2,10 @@
 
 [NVIDIA LLM API](https://docs.api.nvidia.com/nim/reference/llm-apis) 是一个代理 AI Inference Engine，提供来自[各种提供商](https://docs.api.nvidia.com/nim/reference/llm-apis#models)的广泛模型。
 
-Spring AI 通过重用现有的 [OpenAI](api/chat/openai-chat) 客户端与 NVIDIA LLM API 集成。
+Spring AI 通过重用现有的 [OpenAI](chat/openai-chat) 客户端与 NVIDIA LLM API 集成。
 为此，您需要将 base-url 设置为 `+https://integrate.api.nvidia.com+`，选择提供的 [LLM models](https://docs.api.nvidia.com/nim/reference/llm-apis#model) 之一，并获取其 `api-key`。
 
-![spring-ai-nvidia-llm-api-1.jpg](spring-ai-nvidia-llm-api-1.jpg)
+![spring-ai-nvidia-llm-api-1.jpg](/img/integration/spring-ai-nvidia-llm-api-1.jpg)
 
 > **注意：** NVIDIA LLM API 要求显式设置 `max-tokens` 参数，否则将抛出服务器错误。
 
@@ -17,7 +17,7 @@ Spring AI 通过重用现有的 [OpenAI](api/chat/openai-chat) 客户端与 NVID
 * 选择要使用的 LLM Model。例如，下面截图中的 `meta/llama-3.1-70b-instruct`。
 * 从所选模型的页面，您可以获取访问该模型的 `api-key`。
 
-![spring-ai-nvidia-registration.jpg](spring-ai-nvidia-registration.jpg)
+![spring-ai-nvidia-registration.jpg](/img/integration/spring-ai-nvidia-registration.jpg)
 
 ## Auto-configuration
 
@@ -100,14 +100,14 @@ dependencies {
 | spring.ai.openai.chat.options.stop | 最多 4 个序列，API 将停止生成更多 tokens。 | - |
 | spring.ai.openai.chat.options.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 top_p 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 temperature，但不要同时修改两者。 | - |
 | spring.ai.openai.chat.options.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
-| spring.ai.openai.chat.options.toolChoice | 控制模型调用哪个（如果有）function。none 意味着模型不会调用 function，而是生成消息。auto 意味着模型可以在生成消息或调用 function 之间进行选择。通过 {"type: "function", "function": {"name": "my_function"}} 指定特定 function 会强制模型调用该 function。当没有 functions 时，none 是默认值。如果存在 functions，auto 是默认值。 | - |
+| spring.ai.openai.chat.options.toolChoice | 控制模型调用哪个（如果有）function。none 意味着模型不会调用 function，而是生成消息。auto 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type: "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，none 是默认值。如果存在 functions，auto 是默认值。 | - |
 | spring.ai.openai.chat.options.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用。 | - |
 | spring.ai.openai.chat.options.stream-usage | （仅用于 streaming）设置为添加包含整个请求的 token 使用统计信息的额外块。此块的 `choices` 字段是一个空数组，所有其他块也将包含一个 usage 字段，但值为 null。 | false |
 | spring.ai.openai.chat.options.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
 | spring.ai.openai.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
 | spring.ai.openai.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
-> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
@@ -135,7 +135,7 @@ ChatResponse response = chatModel.call(
 
 NVIDIA LLM API 在选择支持它的模型时支持 Tool/Function calling。
 
-![spring-ai-nvidia-function-calling.jpg](spring-ai-nvidia-function-calling.jpg)
+![spring-ai-nvidia-function-calling.jpg](/img/integration/spring-ai-nvidia-function-calling.jpg)
 
 您可以将自定义 Java functions 注册到您的 ChatModel，并让提供的模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。

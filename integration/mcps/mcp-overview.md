@@ -20,7 +20,7 @@ Spring AI 通过专用的 Boot Starters 和 MCP Java Annotations 全面支持 MC
 Java MCP 实现遵循三层架构，将关注点分离以提高可维护性和灵活性：
 
 .MCP Stack Architecture
-![MCP Stack Architecture](mcp/mcp-stack.svg)
+![MCP Stack Architecture](/img/integration/mcp/mcp-stack.svg)
 
 ### Client/Server Layer (Top)
 
@@ -48,11 +48,11 @@ Java MCP 实现遵循三层架构，将关注点分离以提高可维护性和�
 
 | [MCP Client](https://modelcontextprotocol.io/sdk/java/mcp-client) |
 | --- |
-| MCP Client 是 Model Context Protocol (MCP) 架构中的关键组件，负责建立和管理与 MCP 服务器的连接。它实现协议的客户端，处理：<br><br>* 协议版本协商以确保与服务器的兼容性<br>* 能力协商以确定可用功能<br>* 消息传输和 JSON-RPC 通信<br>* 工具发现和执行<br>* 资源访问和管理<br>* Prompt 系统交互<br>* 可选功能：<br>** Roots 管理<br>** Sampling 支持<br>* 同步和异步操作<br>* 传输选项：<br>** 基于 Stdio 的传输，用于基于进程的通信<br>** 基于 Java HttpClient 的 SSE 客户端传输<br>** WebFlux SSE 客户端传输，用于响应式 HTTP 流式传输<br><br>![Java MCP Client Architecture](mcp/java-mcp-client-architecture.jpg) |
+| MCP Client 是 Model Context Protocol (MCP) 架构中的关键组件，负责建立和管理与 MCP 服务器的连接。它实现协议的客户端，处理：<br/><br/>* 协议版本协商以确保与服务器的兼容性<br/>* 能力协商以确定可用功能<br/>* 消息传输和 JSON-RPC 通信<br/>* 工具发现和执行<br/>* 资源访问和管理<br/>* Prompt 系统交互<br/>* 可选功能：<br/>** Roots 管理<br/>** Sampling 支持<br/>* 同步和异步操作<br/>* 传输选项：<br/>** 基于 Stdio 的传输，用于基于进程的通信<br/>** 基于 Java HttpClient 的 SSE 客户端传输<br/>** WebFlux SSE 客户端传输，用于响应式 HTTP 流式传输<br/><br/>![Java MCP Client Architecture](/img/integration/mcp/java-mcp-client-architecture.jpg) |
 
 | [MCP Server](https://modelcontextprotocol.io/sdk/java/mcp-server) |
 | --- |
-| MCP Server 是 Model Context Protocol (MCP) 架构中的基础组件，向客户端提供工具、资源和能力。它实现协议的服务器端，负责：<br><br>* 服务器端协议操作实现<br>** 工具暴露和发现<br>** 基于 URI 的资源管理<br>** Prompt 模板提供和处理<br>** 与客户端的能力协商<br>** 结构化日志记录和通知<br>* 并发客户端连接管理<br>* 同步和异步 API 支持<br>* 传输实现：<br>** Stdio、Streamable-HTTP、Stateless Streamable-HTTP、SSE<br><br>![Java MCP Server Architecture](mcp/java-mcp-server-architecture.jpg) |
+| MCP Server 是 Model Context Protocol (MCP) 架构中的基础组件，向客户端提供工具、资源和能力。它实现协议的服务器端，负责：<br/><br/>* 服务器端协议操作实现<br/>** 工具暴露和发现<br/>** 基于 URI 的资源管理<br/>** Prompt 模板提供和处理<br/>** 与客户端的能力协商<br/>** 结构化日志记录和通知<br/>* 并发客户端连接管理<br/>* 同步和异步 API 支持<br/>* 传输实现：<br/>** Stdio、Streamable-HTTP、Stateless Streamable-HTTP、SSE<br/><br/>![Java MCP Server Architecture](/img/integration/mcp/java-mcp-server-architecture.jpg) |
 
 有关使用低级 MCP Client/Server API 的详细实现指导，请参考 [MCP Java SDK 文档](https://modelcontextprotocol.io/sdk/java/mcp-overview)。
 要使用 Spring Boot 进行简化设置，请使用下面描述的 MCP Boot Starters。
@@ -72,27 +72,27 @@ Spring AI 通过以下 Spring Boot starters 提供 MCP 集成：
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [Standard Input/Output (STDIO)](api/mcp/mcp-stdio-sse-server-boot-starter-docs.adoc) | `spring-ai-starter-mcp-server` | `spring.ai.mcp.server.stdio=true` |
+| [Standard Input/Output (STDIO)](mcp/mcp-stdio-sse-server-boot-starter-docs.adoc) | `spring-ai-starter-mcp-server` | `spring.ai.mcp.server.stdio=true` |
 
 #### WebMVC
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [SSE WebMVC](api/mcp/mcp-stdio-sse-server-boot-starter-docs.adoc#_sse_webmvc_serve) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=SSE` or empty |
-| [Streamable-HTTP WebMVC](api/mcp/mcp-streamable-http-server-boot-starter-docs.adoc#_streamable_http_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STREAMABLE` |
-| [Stateless Streamable-HTTP WebMVC](api/mcp/mcp-stateless-server-boot-starter-docs.adoc#_stateless_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STATELESS` |
+| [SSE WebMVC](mcp/mcp-stdio-sse-server-boot-starter-docs.adoc#_sse_webmvc_serve) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=SSE` or empty |
+| [Streamable-HTTP WebMVC](mcp/mcp-streamable-http-server-boot-starter-docs.adoc#_streamable_http_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STREAMABLE` |
+| [Stateless Streamable-HTTP WebMVC](mcp/mcp-stateless-server-boot-starter-docs.adoc#_stateless_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STATELESS` |
 
 #### WebMVC (Reactive)
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [SSE WebFlux](api/mcp/mcp-stdio-sse-server-boot-starter-docs.adoc#_sse_webflux_serve) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=SSE` or empty |
-| [Streamable-HTTP WebFlux](api/mcp/mcp-streamable-http-server-boot-starter-docs.adoc#_streamable_http_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
-| [Stateless Streamable-HTTP WebFlux](api/mcp/mcp-stateless-server-boot-starter-docs.adoc#_stateless_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
+| [SSE WebFlux](mcp/mcp-stdio-sse-server-boot-starter-docs.adoc#_sse_webflux_serve) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=SSE` or empty |
+| [Streamable-HTTP WebFlux](mcp/mcp-streamable-http-server-boot-starter-docs.adoc#_streamable_http_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
+| [Stateless Streamable-HTTP WebFlux](mcp/mcp-stateless-server-boot-starter-docs.adoc#_stateless_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
 
-## [Spring AI MCP Annotations](api/mcp/mcp-annotations-overview.adoc)
+## [Spring AI MCP Annotations](mcp/mcp-annotations-overview.adoc)
 
-除了程序化的 MCP 客户端和服务器配置外，Spring AI 还通过 [MCP Annotations](api/mcp/mcp-annotations-overview.adoc) 模块为 MCP 服务器和客户端提供基于注解的方法处理。
+除了程序化的 MCP 客户端和服务器配置外，Spring AI 还通过 [MCP Annotations](mcp/mcp-annotations-overview.adoc) 模块为 MCP 服务器和客户端提供基于注解的方法处理。
 这种方法使用简洁的声明式编程模型和 Java 注解简化了 MCP 操作的创建和注册。
 
 MCP Annotations 模块使开发者能够：
@@ -105,15 +105,15 @@ MCP Annotations 模块使开发者能够：
 
 主要功能包括：
 
-* [Server Annotations](api/mcp/mcp-annotations-server.adoc): `@McpTool`、`@McpResource`、`@McpPrompt`、`@McpComplete`
-* [Client Annotations](api/mcp/mcp-annotations-client.adoc): `@McpLogging`、`@McpSampling`、`@McpElicitation`、`@McpProgress`
-* [Special Parameters](api/mcp/mcp-annotations-special-params.adoc): `McpSyncServerExchange`、`McpAsyncServerExchange`、`McpTransportContext`、`McpMeta`
+* [Server Annotations](mcp/mcp-annotations-server.adoc): `@McpTool`、`@McpResource`、`@McpPrompt`、`@McpComplete`
+* [Client Annotations](mcp/mcp-annotations-client.adoc): `@McpLogging`、`@McpSampling`、`@McpElicitation`、`@McpProgress`
+* [Special Parameters](mcp/mcp-annotations-special-params.adoc): `McpSyncServerExchange`、`McpAsyncServerExchange`、`McpTransportContext`、`McpMeta`
 * *Automatic Discovery*: 具有可配置包包含/排除的注解扫描
 * *Spring Boot Integration*: 与 MCP Boot Starters 无缝集成
 
 ## 其他资源
 
-* [MCP Annotations 文档](api/mcp/mcp-annotations-overview.adoc)
+* [MCP Annotations 文档](mcp/mcp-annotations-overview.adoc)
 * [MCP Client Boot Starters 文档](mcp-client-boot-starter-docs.html)
 * [MCP Server Boot Starters 文档](mcp-server-boot-starter-docs.html)
 * [MCP Utilities 文档](mcp-helpers.html)

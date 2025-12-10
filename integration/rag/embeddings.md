@@ -38,8 +38,6 @@ image:embeddings-api.jpg[title=Embeddings API,align=center,width=900]
 This section provides a guide to the `EmbeddingModel` interface and associated classes.
 
 ```java
-
-```
 public interface EmbeddingModel extends Model<EmbeddingRequest, EmbeddingResponse> {
 
 	@Override
@@ -96,6 +94,7 @@ public interface EmbeddingModel extends Model<EmbeddingRequest, EmbeddingRespons
 	}
 
 }
+```
 
 The embed methods offer various options for converting text into embeddings, accommodating single strings, structured `Document` objects, or batches of text.
 
@@ -114,27 +113,27 @@ The `EmbeddingRequest` is a `ModelRequest` that takes a list of text objects and
 The following listing shows a truncated version of the EmbeddingRequest class, excluding constructors and other utility methods:
 
 ```java
-
-```
 public class EmbeddingRequest implements ModelRequest<List<String>> {
 	private final List<String> inputs;
 	private final EmbeddingOptions options;
 	// other methods omitted
 }
 
+```
+
 #### EmbeddingResponse
 
 The structure of the `EmbeddingResponse` class is as follows:
 
 ```java
-
-```
 public class EmbeddingResponse implements ModelResponse<Embedding> {
 
 	private List<Embedding> embeddings;
 	private EmbeddingResponseMetadata metadata = new EmbeddingResponseMetadata();
 	// other methods omitted
 }
+
+```
 
 The `EmbeddingResponse` class holds the AI Model's output, with each `Embedding` instance containing the result vector data from a single text input.
 
@@ -145,26 +144,14 @@ The `EmbeddingResponse` class also carries a `EmbeddingResponseMetadata` metadat
 The `Embedding` represents a single embedding vector.
 
 ```java
-
-```
 public class Embedding implements ModelResult<float[]> {
 	private float[] embedding;
 	private Integer index;
 	private EmbeddingResultMetadata metadata;
 	// other methods omitted
 }
+```
 
 ## Available Implementations [[available-implementations]]
 
 Internally the various `EmbeddingModel` implementations use different low-level libraries and APIs to perform the embedding tasks. The following are some of the available implementations of the `EmbeddingModel` implementations:
-
-* [Spring AI OpenAI Embeddings](api/embeddings/openai-embeddings)
-* [Spring AI Azure OpenAI Embeddings](api/embeddings/azure-openai-embeddings)
-* [Spring AI Ollama Embeddings](api/embeddings/ollama-embeddings)
-* [Spring AI Transformers (ONNX) Embeddings](api/embeddings/onnx)
-* [Spring AI PostgresML Embeddings](api/embeddings/postgresml-embeddings)
-* [Spring AI Bedrock Cohere Embeddings](api/embeddings/bedrock-cohere-embedding)
-* [Spring AI Bedrock Titan Embeddings](api/embeddings/bedrock-titan-embedding)
-* [Spring AI VertexAI Embeddings](api/embeddings/vertexai-embeddings-text)
-* [Spring AI Mistral AI Embeddings](api/embeddings/mistralai-embeddings)
-* [Spring AI Oracle Cloud Infrastructure GenAI Embeddings](api/embeddings/oci-genai-embeddings)

@@ -6,7 +6,7 @@
 
 ## 类图
 
-![Spring AI Generic Model API](spring-ai-generic-model-api.jpg)
+![Spring AI Generic Model API](/img/integration/spring-ai-generic-model-api.jpg)
 
 ## Model
 

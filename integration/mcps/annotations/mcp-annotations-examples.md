@@ -826,9 +826,9 @@ public class WeatherTools {
 
 ## Additional Resources
 
-* [MCP Annotations Overview](api/mcp/mcp-annotations-overview.adoc)
-* [Server Annotations Reference](api/mcp/mcp-annotations-server.adoc)
-* [Client Annotations Reference](api/mcp/mcp-annotations-client.adoc)
-* [Special Parameters Reference](api/mcp/mcp-annotations-special-params.adoc)
+* [MCP Annotations Overview](mcp/mcp-annotations-overview.adoc)
+* [Server Annotations Reference](mcp/mcp-annotations-server.adoc)
+* [Client Annotations Reference](mcp/mcp-annotations-client.adoc)
+* [Special Parameters Reference](mcp/mcp-annotations-special-params.adoc)
 * [Spring AI MCP Examples on GitHub](https://github.com/spring-projects/spring-ai-examples/tree/main/model-context-protocol)
 

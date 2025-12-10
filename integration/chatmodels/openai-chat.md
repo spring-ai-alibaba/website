@@ -159,7 +159,7 @@ Spring AI 自动向 OpenAI 发送带有 `User-Agent: spring-ai` header 的所有
 | spring.ai.openai.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
 | spring.ai.openai.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 | spring.ai.openai.chat.options.service-tier | 指定用于服务请求的 [processing type](https://platform.openai.com/docs/api-reference/responses/create#responses_create-service_tier)。 | - |
-| spring.ai.openai.chat.options.extra-body | 要包含在请求中的其他参数。接受任何键值对，这些键值对被展平到 JSON 请求的顶层。用于与支持标准 OpenAI API 之外参数的 OpenAI 兼容服务器（vLLM、Ollama 等）一起使用。官方 OpenAI API 会忽略未知参数。有关详细信息，请参阅 <<openai-compatible-servers>>。 | - |
+| spring.ai.openai.chat.options.extra-body | 要包含在请求中的其他参数。接受任何键值对，这些键值对被展平到 JSON 请求的顶层。用于与支持标准 OpenAI API 之外参数的 OpenAI 兼容服务器（vLLM、Ollama 等）一起使用。官方 OpenAI API 会忽略未知参数。有关详细信息，请参阅 【openai-compatible-servers】。 | - |
 
 > **注意：**
 > 使用 GPT-5 模型（如 `gpt-5`、`gpt-5-mini` 和 `gpt-5-nano`）时，不支持 `temperature` 参数。
@@ -171,7 +171,7 @@ Spring AI 自动向 OpenAI 发送带有 `User-Agent: spring-ai` header 的所有
 > 如果设置了 `spring.ai.openai.chat.base-url` 和 `spring.ai.openai.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 OpenAI 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ### Token Limit Parameters: Model-Specific Usage
 
@@ -251,7 +251,7 @@ ChatResponse response = chatModel.call(
 
 您可以将自定义 Java functions 注册到 `OpenAiChatModel`，并让 OpenAI 模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](api/tools)。
+了解更多关于 [Tool Calling](tools)。
 
 ## Multimodal
 
@@ -296,7 +296,7 @@ ChatResponse response = chatModel.call(new Prompt(this.userMessage,
 
 该示例显示模型将 `multimodal.test.png` 图像作为输入：
 
-![multimodal.test.png](multimodal.test.png)
+![multimodal.test.png](/img/integration/multimodal.test.png)
 
 以及文本消息 "Explain what do you see on this picture?"，并生成如下响应：
 
@@ -366,7 +366,7 @@ byte[] waveAudio = response.getResult().getOutput().getMedia().get(0).getDataAsB
 ## Structured Outputs
 
 OpenAI 提供自定义 [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs) APIs，确保您的模型生成严格符合您提供的 `JSON Schema` 的响应。
-除了现有的 Spring AI 模型无关的 [Structured Output Converter](api/structured-output-converter) 之外，这些 APIs 还提供增强的控制和精度。
+除了现有的 Spring AI 模型无关的 [Structured Output Converter](structured-output-converter) 之外，这些 APIs 还提供增强的控制和精度。
 
 > **注意：** 目前，OpenAI 支持 [subset of the JSON Schema language](https://platform.openai.com/docs/guides/structured-outputs/supported-schemas) 格式。
 
@@ -415,7 +415,7 @@ ChatResponse response = this.openAiChatModel.call(this.prompt);
 
 #### Integrating with BeanOutputConverter Utilities
 
-您可以利用现有的 [BeanOutputConverter](api/structured-output-converter#_bean_output_converter) 工具自动从您的域对象生成 JSON Schema，然后将结构化响应转换为域特定的实例：
+您可以利用现有的 [BeanOutputConverter](structured-output-converter#_bean_output_converter) 工具自动从您的域对象生成 JSON Schema，然后将结构化响应转换为域特定的实例：
 
 ```java
 record MathReasoning(
@@ -507,7 +507,7 @@ public class ChatController {
 
 ## Manual Configuration
 
-[OpenAiChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 <<low-level-api>> 连接到 OpenAI 服务。
+[OpenAiChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 【low-level-api】 连接到 OpenAI 服务。
 
 将 `spring-ai-openai` 依赖项添加到项目的 Maven `pom.xml` 文件中：
 
@@ -558,7 +558,7 @@ Flux<ChatResponse> response = this.chatModel.stream(
 
 以下类图说明了 `OpenAiApi` chat 接口和构建块：
 
-![openai-chat-api.jpg](openai-chat-api.jpg)
+![openai-chat-api.jpg](/img/integration/openai-chat-api.jpg)
 
 以下是如何以编程方式使用 API 的简单示例：
 

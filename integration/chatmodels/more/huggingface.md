@@ -140,7 +140,7 @@ public class ChatController {
 
 ## Manual Configuration
 
-[HuggingfaceChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-huggingface/src/main/java/org/springframework/ai/huggingface/HuggingfaceChatModel.java) 实现了 `ChatModel` 接口，并使用 <<low-level-api>> 连接到 Hugging Face inference endpoints。
+[HuggingfaceChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-huggingface/src/main/java/org/springframework/ai/huggingface/HuggingfaceChatModel.java) 实现了 `ChatModel` 接口，并使用 【low-level-api】 连接到 Hugging Face inference endpoints。
 
 将 `spring-ai-huggingface` 依赖项添加到项目的 Maven `pom.xml` 文件中：
 

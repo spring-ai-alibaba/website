@@ -74,7 +74,7 @@ public interface MediaContent extends Content {
 `Message` 接口的各种实现对应于 AI model 可以处理的不同类别的消息。
 Models 根据对话角色区分消息类别。
 
-![Spring AI Message API](spring-ai-message-api.jpg)
+![Spring AI Message API](/img/integration/spring-ai-message-api.jpg)
 
 这些角色由 `MessageType` 有效映射，如下所述。
 
@@ -139,7 +139,7 @@ Spring AI 使用 `TemplateRenderer` 接口来处理将变量替换到模板字�
 如果您需要自定义逻辑，可以提供自己的 `TemplateRenderer` 实现。
 对于不需要模板渲染的场景（例如，模板字符串已经完整），您可以使用提供的 `NoOpTemplateRenderer`。
 
-使用带有 '<' 和 '>' 分隔符的自定义 StringTemplate 渲染器的示例
+使用带有 `<` 和 `>` 分隔符的自定义 StringTemplate 渲染器的示例
 
 ```java
 PromptTemplate promptTemplate = PromptTemplate.builder()

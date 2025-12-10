@@ -621,8 +621,8 @@ spring:
 
 ## Additional Resources
 
-* [MCP Annotations Overview](api/mcp/mcp-annotations-overview.adoc)
-* [Client Annotations](api/mcp/mcp-annotations-client.adoc)
-* [Special Parameters](api/mcp/mcp-annotations-special-params.adoc)
-* [MCP Server Boot Starter](api/mcp/mcp-server-boot-starter-docs.adoc)
+* [MCP Annotations Overview](mcp/mcp-annotations-overview.adoc)
+* [Client Annotations](mcp/mcp-annotations-client.adoc)
+* [Special Parameters](mcp/mcp-annotations-special-params.adoc)
+* [MCP Server Boot Starter](mcp/mcp-server-boot-starter-docs.adoc)
 

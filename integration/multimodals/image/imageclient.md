@@ -154,6 +154,7 @@ public class ImageGeneration implements ModelResult<Image> {
 * [QianFan Image Generation](qianfan-image.md)
 * [StabilityAI Image Generation](stabilityai-image.md)
 * [ZhiPuAI Image Generation](zhipuai-image.md)
+* [DashScope Image Generation](dashscope-image.md)
 
 ## API Docs
 

@@ -124,7 +124,7 @@ dependencies {
 > 如果设置了 `spring.ai.deepseek.chat.base-url` 和 `spring.ai.deepseek.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 DeepSeek 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.deepseek.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.deepseek.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
@@ -244,7 +244,7 @@ public void deepSeekReasonerExample() {
 
 在对话的每一轮中，模型输出 CoT (reasoning_content) 和最终答案 (content)。在下一轮对话中，之前轮次的 CoT 不会连接到上下文中，如下图所示：
 
-![deepseek_r1_multiround_example.png](deepseek_r1_multiround_example.png)
+![deepseek_r1_multiround_example.png](/img/integration/deepseek_r1_multiround_example.png)
 
 请注意，如果 reasoning_content 字段包含在输入消息序列中，API 将返回 400 错误。因此，您应该在发出 API 请求之前从 API 响应中删除 reasoning_content 字段，如 API 示例中所示。
 
@@ -276,7 +276,7 @@ public String deepSeekReasonerMultiRoundExample() {
 
 ## Manual Configuration
 
-[DeepSeekChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-deepseek/src/main/java/org/springframework/ai/deepseek/DeepSeekChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 <<low-level-api>> 连接到 DeepSeek 服务。
+[DeepSeekChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-deepseek/src/main/java/org/springframework/ai/deepseek/DeepSeekChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 `low-level-api` 连接到 DeepSeek 服务。
 
 将 `spring-ai-deepseek` 依赖项添加到项目的 Maven `pom.xml` 文件中：
 

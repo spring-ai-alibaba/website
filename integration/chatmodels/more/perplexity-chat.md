@@ -2,9 +2,9 @@
 
 [Perplexity AI](https://perplexity.ai/) 提供独特的 AI 服务，将其语言模型与实时搜索功能集成。它提供多种模型并支持 conversational AI 的 streaming 响应。
 
-Spring AI 通过重用现有的 [OpenAI](api/chat/openai-chat) 客户端与 Perplexity AI 集成。要开始使用，您需要获取 [Perplexity API Key](https://docs.perplexity.ai/guides/getting-started)，配置 base URL，并选择支持的 [models](https://docs.perplexity.ai/guides/model-cards) 之一。
+Spring AI 通过重用现有的 [OpenAI](chat/openai-chat) 客户端与 Perplexity AI 集成。要开始使用，您需要获取 [Perplexity API Key](https://docs.perplexity.ai/guides/getting-started)，配置 base URL，并选择支持的 [models](https://docs.perplexity.ai/guides/model-cards) 之一。
 
-![spring-ai-perplexity-integration.jpg](spring-ai-perplexity-integration.jpg)
+![spring-ai-perplexity-integration.jpg](/img/integration/spring-ai-perplexity-integration.jpg)
 
 > **注意：** Perplexity API 与 OpenAI API 不完全兼容。
 > Perplexity 将实时网络搜索结果与其语言模型响应相结合。
@@ -153,7 +153,7 @@ dependencies {
 | spring.ai.openai.chat.options.topP | nucleus sampling 阈值，值在 0 和 1 之间（包含）。对于每个后续 token，模型考虑具有 top_p 概率质量的 tokens 结果。我们建议修改 top_k 或 top_p，但不要同时修改两者。必需范围：`0 < x < 1` | 0.9 |
 | spring.ai.openai.chat.options.stream-usage | （仅用于 streaming）设置为添加包含整个请求的 token 使用统计信息的额外块。此块的 `choices` 字段是一个空数组，所有其他块也将包含一个 usage 字段，但值为 null。 | false |
 
-> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 

@@ -56,7 +56,7 @@ dependencies {
 | spring.ai.oci.genai.fingerprint | 私钥指纹，在使用 `simple` auth 进行身份验证时使用。 | - |
 | spring.ai.oci.genai.privateKey | 私钥内容，在使用 `simple` auth 进行身份验证时使用。 | - |
 | spring.ai.oci.genai.passPhrase | 可选的私钥密码短语，在使用 `simple` auth 和受密码保护的私钥进行身份验证时使用。 | - |
-| spring.ai.oci.genai.file | OCI 配置文件的路径。在使用 `file` auth 进行身份验证时使用。 | <user's home directory>/.oci/config |
+| spring.ai.oci.genai.file | OCI 配置文件的路径。在使用 `file` auth 进行身份验证时使用。 | /user-home-directory/.oci/config |
 | spring.ai.oci.genai.profile | OCI profile 名称。在使用 `file` auth 进行身份验证时使用。 | DEFAULT |
 | spring.ai.oci.genai.endpoint | 可选的 OCI GenAI endpoint。 | - |
 
@@ -86,7 +86,7 @@ dependencies {
 | spring.ai.oci.genai.cohere.chat.options.stop | 将结束 completions 生成的文本序列列表。 | - |
 | spring.ai.oci.genai.cohere.chat.options.documents | 在 chat context 中使用的文档列表。 | - |
 
-> **提示：** 所有前缀为 `spring.ai.oci.genai.cohere.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.oci.genai.cohere.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 

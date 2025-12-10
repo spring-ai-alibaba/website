@@ -20,7 +20,7 @@
 
 Spring AI Message API 提供了支持多模态 LLM 所需的所有抽象。
 
-![Spring AI Message API](spring-ai-message-api.jpg)
+![Spring AI Message API](/img/integration/spring-ai-message-api.jpg)
 
 UserMessage 的 `content` 字段主要用于文本输入，而可选的 `media` 字段允许添加一个或多个不同模态的附加内容，如图像、音频和视频。
 `MimeType` 指定模态类型。
@@ -30,7 +30,7 @@ UserMessage 的 `content` 字段主要用于文本输入，而可选的 `media` 
 
 例如，我们可以将以下图片（`multimodal.test.png`）作为输入，并要求 LLM 解释它看到的内容。
 
-![Multimodal Test Image](multimodal.test.png)
+![Multimodal Test Image](/img/integration/multimodal.test.png)
 
 对于大多数多模态 LLM，Spring AI 代码看起来像这样：
 
@@ -45,7 +45,7 @@ var userMessage = UserMessage.builder()
 ChatResponse response = chatModel.call(new Prompt(this.userMessage));
 ```
 
-或使用流式 [ChatClient](api/chatclient.adoc) API：
+或使用流式 [ChatClient](chatclient.adoc) API：
 
 ```java
 String response = ChatClient.create(chatModel).prompt()
@@ -61,10 +61,10 @@ String response = ChatClient.create(chatModel).prompt()
 
 Spring AI 为以下 chat model 提供多模态支持：
 
-* [Anthropic Claude 3](api/chat/anthropic-chat.adoc#_multimodal)
-* [AWS Bedrock Converse](api/chat/bedrock-converse.adoc#_multimodal)
-* [Azure Open AI（例如 GPT-4o model）](api/chat/azure-openai-chat.adoc#_multimodal)
-* [Mistral AI（例如 Mistral Pixtral model）](api/chat/mistralai-chat.adoc#_multimodal)
-* [Ollama（例如 LLaVA、BakLLaVA、Llama3.2 model）](api/chat/ollama-chat.adoc#_multimodal)
-* [OpenAI（例如 GPT-4 和 GPT-4o model）](api/chat/openai-chat.adoc#_multimodal)
-* [Vertex AI Gemini（例如 gemini-1.5-pro-001、gemini-1.5-flash-001 model）](api/chat/vertexai-gemini-chat.adoc#_multimodal)
+* [Anthropic Claude 3](chat/anthropic-chat.adoc#_multimodal)
+* [AWS Bedrock Converse](chat/bedrock-converse.adoc#_multimodal)
+* [Azure Open AI（例如 GPT-4o model）](chat/azure-openai-chat.adoc#_multimodal)
+* [Mistral AI（例如 Mistral Pixtral model）](chat/mistralai-chat.adoc#_multimodal)
+* [Ollama（例如 LLaVA、BakLLaVA、Llama3.2 model）](chat/ollama-chat.adoc#_multimodal)
+* [OpenAI（例如 GPT-4 和 GPT-4o model）](chat/openai-chat.adoc#_multimodal)
+* [Vertex AI Gemini（例如 gemini-1.5-pro-001、gemini-1.5-flash-001 model）](chat/vertexai-gemini-chat.adoc#_multimodal)

@@ -3,7 +3,7 @@
 Spring AI 支持来自 Mistral AI 的各种 AI 语言模型。您可以与 Mistral AI 语言模型交互，并基于 Mistral 模型创建多语言对话助手。
 
 > **提示：** Mistral AI 还提供 OpenAI API 兼容的 endpoint。
-> 请查看 [OpenAI API compatibility](_openai_api_compatibility) 部分，了解如何使用 [Spring AI OpenAI](api/chat/openai-chat) 集成与 Mistral endpoint 通信。
+> 请查看 [OpenAI API compatibility](_openai_api_compatibility) 部分，了解如何使用 [Spring AI OpenAI](chat/openai-chat) 集成与 Mistral endpoint 通信。
 
 ## Prerequisites
 
@@ -136,7 +136,7 @@ dependencies {
 > 如果设置了 `spring.ai.mistralai.chat.base-url` 和 `spring.ai.mistralai.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 Mistral AI 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.mistralai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.mistralai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
@@ -164,7 +164,7 @@ ChatResponse response = chatModel.call(
 
 您可以将自定义 Java functions 注册到 `MistralAiChatModel`，并让 Mistral AI 模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](api/tools)。
+了解更多关于 [Tool Calling](tools)。
 
 ## Multimodal
 
@@ -207,7 +207,7 @@ ChatResponse response = chatModel.call(new Prompt(this.userMessage,
 
 该示例显示模型将 `multimodal.test.png` 图像作为输入：
 
-![multimodal.test.png](multimodal.test.png)
+![multimodal.test.png](/img/integration/multimodal.test.png)
 
 以及文本消息 "Explain what do you see on this picture?"，并生成如下响应：
 
@@ -222,7 +222,7 @@ view of the fruit inside.
 
 ## OpenAI API Compatibility
 
-Mistral 与 OpenAI API 兼容，您可以使用 [Spring AI OpenAI](api/chat/openai-chat) 客户端与 Mistrial 通信。
+Mistral 与 OpenAI API 兼容，您可以使用 [Spring AI OpenAI](chat/openai-chat) 客户端与 Mistrial 通信。
 为此，您需要将 OpenAI base URL 配置为 Mistral AI 平台：`spring.ai.openai.chat.base-url=https://api.mistral.ai`，并选择 Mistral 模型：`spring.ai.openai.chat.options.model=mistral-small-latest` 并设置 Mistral AI API key：`spring.ai.openai.chat.api-key=<YOUR MISTRAL API KEY`。
 
 查看 [MistralWithOpenAiChatModelIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/chat/proxy/MistralWithOpenAiChatModelIT.java) 测试以了解通过 Spring AI OpenAI 使用 Mistral 的示例。
@@ -270,7 +270,7 @@ public class ChatController {
 
 ## Manual Configuration
 
-[MistralAiChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-mistral-ai/src/main/java/org/springframework/ai/mistralai/MistralAiChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 <<low-level-api>> 连接到 Mistral AI 服务。
+[MistralAiChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-mistral-ai/src/main/java/org/springframework/ai/mistralai/MistralAiChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 【low-level-api】 连接到 Mistral AI 服务。
 
 将 `spring-ai-mistral-ai` 依赖项添加到项目的 Maven `pom.xml` 文件中：
 

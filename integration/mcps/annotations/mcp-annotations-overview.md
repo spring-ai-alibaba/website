@@ -130,15 +130,15 @@ public class LoggingHandler {
 
 ## Documentation
 
-* [Client Annotations](api/mcp/mcp-annotations-client.adoc) - 客户端注解的详细指南
-* [Server Annotations](api/mcp/mcp-annotations-server.adoc) - 服务器端注解的详细指南
-* [Special Parameters](api/mcp/mcp-annotations-special-params.adoc) - 特殊参数类型指南
-* [Examples](api/mcp/mcp-annotations-examples.adoc) - 综合示例和用例
+* [Client Annotations](mcp/mcp-annotations-client.adoc) - 客户端注解的详细指南
+* [Server Annotations](mcp/mcp-annotations-server.adoc) - 服务器端注解的详细指南
+* [Special Parameters](mcp/mcp-annotations-special-params.adoc) - 特殊参数类型指南
+* [Examples](mcp/mcp-annotations-examples.adoc) - 综合示例和用例
 
 ## Additional Resources
 
-* [MCP Overview](api/mcp/mcp-overview.adoc)
-* [MCP Client Boot Starter](api/mcp/mcp-client-boot-starter-docs.adoc)
-* [MCP Server Boot Starter](api/mcp/mcp-server-boot-starter-docs.adoc)
+* [MCP Overview](mcp/mcp-overview.adoc)
+* [MCP Client Boot Starter](mcp/mcp-client-boot-starter-docs.adoc)
+* [MCP Server Boot Starter](mcp/mcp-server-boot-starter-docs.adoc)
 * [Model Context Protocol 规范](https://modelcontextprotocol.github.io/specification/)
 

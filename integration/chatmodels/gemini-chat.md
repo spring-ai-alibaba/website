@@ -89,7 +89,7 @@ dependencies {
 | spring.ai.vertex.ai.gemini.chat.options.internal-tool-execution-enabled | 如果为 true，应执行 tool execution，否则将模型的响应返回给用户。默认为 null，但如果为 null，将考虑 `ToolCallingChatOptions.DEFAULT_TOOL_EXECUTION_ENABLED`（为 true） | - |
 | spring.ai.vertex.ai.gemini.chat.options.safety-settings | 用于控制安全过滤器的安全设置列表，如 [Vertex AI Safety Filters](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/configure-safety-filters) 所定义。每个安全设置可以有一个 method、threshold 和 category。 | - |
 
-> **提示：** 所有前缀为 `spring.ai.vertex.ai.gemini.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.vertex.ai.gemini.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime options [[chat-options]]
 
@@ -151,7 +151,7 @@ String response = ChatClient.create(this.chatModel)
         .content();
 ```
 
-在 [Tools](api/tools) 文档中查找更多信息。
+在 [Tools](tools) 文档中查找更多信息。
 
 ## Multimodal
 
@@ -283,5 +283,5 @@ ChatResponse response = this.chatModel.call(
 
 以下类图说明了 Vertex AI Gemini 原生 Java API：
 
-![vertex-ai-gemini-native-api.jpg](vertex-ai-gemini-native-api.jpg)
+![vertex-ai-gemini-native-api.jpg](/img/integration/vertex-ai-gemini-native-api.jpg)
 

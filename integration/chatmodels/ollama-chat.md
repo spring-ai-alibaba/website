@@ -9,15 +9,15 @@ sidebar_position: 3
 Spring AI 通过 `OllamaChatModel` API 支持 Ollama chat completion 功能。
 
 > **提示：** Ollama 还提供 OpenAI API 兼容的 endpoint。
-> [OpenAI API compatibility](_openai_api_compatibility) 部分解释了如何使用 [Spring AI OpenAI](api/chat/openai-chat) 连接到 Ollama 服务器。
+> [OpenAI API compatibility](_openai_api_compatibility) 部分解释了如何使用 [Spring AI OpenAI](chat/openai-chat) 连接到 Ollama 服务器。
 
 ## Prerequisites
 
 您首先需要访问 Ollama 实例。有几种选择，包括以下：
 
 * 在本地机器上[下载并安装 Ollama](https://ollama.com/download)。
-* 通过 [Testcontainers](api/testcontainers) 配置和运行 Ollama。
-* 通过 [Kubernetes Service Bindings](api/cloud-bindings) 绑定到 Ollama 实例。
+* 通过 [Testcontainers](testcontainers) 配置和运行 Ollama。
+* 通过 [Kubernetes Service Bindings](cloud-bindings) 绑定到 Ollama 实例。
 
 您可以从 [Ollama model library](https://ollama.com/library) 拉取要在应用程序中使用的模型：
 
@@ -131,7 +131,7 @@ Spring AI 为 Ollama chat 集成提供 Spring Boot auto-configuration。
 | spring.ai.ollama.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
 | spring.ai.ollama.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
-> **提示：** 所有前缀为 `spring.ai.ollama.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.ollama.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
@@ -220,7 +220,7 @@ spring:
 
 您可以将自定义 Java functions 注册到 `OllamaChatModel`，并让 Ollama 模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](api/tools)。
+了解更多关于 [Tool Calling](tools)。
 
 > **提示：** 您需要 Ollama 0.2.8 或更高版本来使用 function calling 功能，需要 Ollama 0.4.6 或更高版本来在 streaming 模式中使用它们。
 
@@ -380,7 +380,7 @@ ChatResponse response = chatModel.call(new Prompt(this.userMessage,
 
 该示例显示模型将 `multimodal.test.png` 图像作为输入：
 
-![multimodal.test.png](multimodal.test.png)
+![multimodal.test.png](/img/integration/multimodal.test.png)
 
 以及文本消息 "Explain what do you see on this picture?"，并生成如下响应：
 
@@ -395,7 +395,7 @@ where fruits are being displayed, possibly for convenience or aesthetic purposes
 ## Structured Outputs
 
 Ollama 提供自定义 [Structured Outputs](https://ollama.com/blog/structured-outputs) APIs，确保您的模型生成严格符合您提供的 `JSON Schema` 的响应。
-除了现有的 Spring AI 模型无关的 [Structured Output Converter](api/structured-output-converter) 之外，这些 APIs 还提供增强的控制和精度。
+除了现有的 Spring AI 模型无关的 [Structured Output Converter](structured-output-converter) 之外，这些 APIs 还提供增强的控制和精度。
 
 ### Configuration
 
@@ -440,7 +440,7 @@ ChatResponse response = this.ollamaChatModel.call(this.prompt);
 
 #### Integrating with BeanOutputConverter Utilities
 
-您可以利用现有的 [BeanOutputConverter](api/structured-output-converter#_bean_output_converter) 工具自动从您的域对象生成 JSON Schema，然后将结构化响应转换为域特定的实例：
+您可以利用现有的 [BeanOutputConverter](structured-output-converter#_bean_output_converter) 工具自动从您的域对象生成 JSON Schema，然后将结构化响应转换为域特定的实例：
 
 ```java
 record MathReasoning(
@@ -476,20 +476,20 @@ MathReasoning mathReasoning = this.outputConverter.convert(this.content);
 
 ## OpenAI API Compatibility
 
-Ollama 是 OpenAI API 兼容的，您可以使用 [Spring AI OpenAI](api/chat/openai-chat) 客户端与 Ollama 通信并使用工具。
+Ollama 是 OpenAI API 兼容的，您可以使用 [Spring AI OpenAI](chat/openai-chat) 客户端与 Ollama 通信并使用工具。
 为此，您需要将 OpenAI base URL 配置为您的 Ollama 实例：`spring.ai.openai.chat.base-url=http://localhost:11434` 并选择提供的 Ollama 模型之一：`spring.ai.openai.chat.options.model=mistral`。
 
-> **提示：** 使用 OpenAI 客户端与 Ollama 时，您可以使用 [extraBody option](api/chat/openai-chat#openai-compatible-servers) 传递 Ollama 特定的参数（如 `top_k`、`repeat_penalty`、`num_predict`）。
+> **提示：** 使用 OpenAI 客户端与 Ollama 时，您可以使用 [extraBody option](chat/openai-chat#openai-compatible-servers) 传递 Ollama 特定的参数（如 `top_k`、`repeat_penalty`、`num_predict`）。
 > 这允许您在 using OpenAI 客户端时利用 Ollama 的完整功能。
 
-![spring-ai-ollama-over-openai.jpg](spring-ai-ollama-over-openai.jpg)
+![spring-ai-ollama-over-openai.jpg](/img/integration/spring-ai-ollama-over-openai.jpg)
 
 ### Reasoning Content via OpenAI Compatibility
 
 Ollama 的 OpenAI 兼容 endpoint 支持支持 thinking 的模型（如 `qwen3:*-thinking`、`deepseek-r1`、`deepseek-v3.1`）的 `reasoning_content` 字段。
 使用 Spring AI OpenAI 客户端与 Ollama 时，模型的推理过程会自动捕获并通过响应 metadata 提供。
 
-> **注意：** 这是使用 Ollama 原生 thinking mode API（在上面 <<Thinking Mode (Reasoning)>> 中记录）的替代方案。
+> **注意：** 这是使用 Ollama 原生 thinking mode API（在上面 【Thinking Mode (Reasoning)】 中记录）的替代方案。
 > 两种方法都适用于 Ollama 的 thinking 模型，但 OpenAI 兼容 endpoint 使用 `reasoning_content` 字段名称而不是 `thinking`。
 
 以下是通过 OpenAI 客户端从 Ollama 访问推理内容的示例：
@@ -593,7 +593,7 @@ public class ChatController {
 ## Manual Configuration
 
 如果您不想使用 Spring Boot auto-configuration，可以在应用程序中手动配置 `OllamaChatModel`。
-[OllamaChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-ollama/src/main/java/org/springframework/ai/ollama/OllamaChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 <<low-level-api>> 连接到 Ollama 服务。
+[OllamaChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-ollama/src/main/java/org/springframework/ai/ollama/OllamaChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 【low-level-api】 连接到 Ollama 服务。
 
 要使用它，请将 `spring-ai-ollama` 依赖项添加到项目的 Maven `pom.xml` 或 Gradle `build.gradle` 构建文件中：
 
@@ -639,7 +639,7 @@ Flux<ChatResponse> response = this.chatModel.stream(
 
 以下类图说明了 `OllamaApi` chat 接口和构建块：
 
-![ollama-chat-completion-api.jpg](ollama-chat-completion-api.jpg)
+![ollama-chat-completion-api.jpg](/img/integration/ollama-chat-completion-api.jpg)
 
 > **注意：** `OllamaApi` 是一个 low-level API，不建议直接使用。请改用 `OllamaChatModel`。
 

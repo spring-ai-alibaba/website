@@ -10,7 +10,7 @@ API 通常通过向 AI model 发送 prompt 或部分对话来工作，然后 AI 
 此外，借助 `Prompt`（用于输入封装）和 `ChatResponse`（用于输出处理）等配套类的帮助，Chat Model API 统一了与 AI Models 的通信。
 它管理请求准备和响应解析的复杂性，提供直接和简化的 API 交互。
 
-您可以在 [可用实现](api/chatmodel.adoc#_available_implementations) 部分找到有关可用实现的更多信息，以及在 [Chat Models 比较](api/chat/comparison.adoc) 部分找到详细比较。
+您可以在 [可用实现](chatmodel.adoc#_available_implementations) 部分找到有关可用实现的更多信息，以及在 [Chat Models 比较](chat/comparison.adoc) 部分找到详细比较。
 
 ## API 概述
 
@@ -103,7 +103,7 @@ public interface MediaContent extends Content {
 
 `Message` 接口有各种实现，对应于 AI model 可以处理的消息类别：
 
-![Spring AI Message API](spring-ai-message-api.jpg)
+![Spring AI Message API](/img/integration/spring-ai-message-api.jpg)
 
 聊天完成端点根据对话角色区分消息类别，由 `MessageType` 有效映射。
 
@@ -112,7 +112,7 @@ public interface MediaContent extends Content {
 虽然术语 `MessageType` 可能暗示特定的消息格式，但在此上下文中，它有效地指定了消息在对话中扮演的角色。
 
 对于不使用特定角色的 AI model，`UserMessage` 实现充当标准类别，通常表示用户生成的查询或指令。
-要了解实际应用以及 `Prompt` 和 `Message` 之间的关系，特别是在这些角色或消息类别的上下文中，请参阅 [Prompts](api/prompt.adoc) 部分中的详细说明。
+要了解实际应用以及 `Prompt` 和 `Message` 之间的关系，特别是在这些角色或消息类别的上下文中，请参阅 [Prompts](prompt.adoc) 部分中的详细说明。
 
 #### Chat Options
 
@@ -145,7 +145,7 @@ Spring AI 提供了一个复杂的系统来配置和使用 Chat Models。
 
 以下流程图说明了 Spring AI 如何处理 Chat Models 的配置和执行，结合启动和运行时选项：
 
-![Chat Options Flow](chat-options-flow.jpg)
+![Chat Options Flow](/img/integration/chat-options-flow.jpg)
 
 1. 启动配置 - ChatModel/StreamingChatModel 使用"启动"Chat Options 初始化。
 这些选项在 ChatModel 初始化期间设置，旨在提供默认配置。
@@ -205,18 +205,18 @@ public class Generation implements ModelResult<AssistantMessage> {
 
 此图说明了统一的接口 `ChatModel` 和 `StreamingChatModel` 用于与来自不同提供商的各种 AI chat model 交互，允许轻松集成和在不同 AI 服务之间切换，同时为客户端应用程序维护一致的 API。
 
-![Spring AI Chat Completions Clients](spring-ai-chat-completions-clients.jpg)
+![Spring AI Chat Completions Clients](/img/integration/spring-ai-chat-completions-clients.jpg)
 
-* [OpenAI Chat Completion](api/chat/openai-chat.adoc)（支持流式传输、多模态和 function-calling）
-* [Microsoft Azure Open AI Chat Completion](api/chat/azure-openai-chat.adoc)（支持流式传输和 function-calling）
-* [Ollama Chat Completion](api/chat/ollama-chat.adoc)（支持流式传输、多模态和 function-calling）
-* [Hugging Face Chat Completion](api/chat/huggingface.adoc)（不支持流式传输）
-* [Google Vertex AI Gemini Chat Completion](api/chat/vertexai-gemini-chat.adoc)（支持流式传输、多模态和 function-calling）
-* [Amazon Bedrock](api/bedrock.adoc)
-* [Mistral AI Chat Completion](api/chat/mistralai-chat.adoc)（支持流式传输和 function-calling）
-* [Anthropic Chat Completion](api/chat/anthropic-chat.adoc)（支持流式传输和 function-calling）
+* [OpenAI Chat Completion](chat/openai-chat.adoc)（支持流式传输、多模态和 function-calling）
+* [Microsoft Azure Open AI Chat Completion](chat/azure-openai-chat.adoc)（支持流式传输和 function-calling）
+* [Ollama Chat Completion](chat/ollama-chat.adoc)（支持流式传输、多模态和 function-calling）
+* [Hugging Face Chat Completion](chat/huggingface.adoc)（不支持流式传输）
+* [Google Vertex AI Gemini Chat Completion](chat/vertexai-gemini-chat.adoc)（支持流式传输、多模态和 function-calling）
+* [Amazon Bedrock](bedrock.adoc)
+* [Mistral AI Chat Completion](chat/mistralai-chat.adoc)（支持流式传输和 function-calling）
+* [Anthropic Chat Completion](chat/anthropic-chat.adoc)（支持流式传输和 function-calling）
 
-> **TIP:** 在 [Chat Models 比较](api/chat/comparison.adoc) 部分查找可用 Chat Models 的详细比较。
+> **TIP:** 在 [Chat Models 比较](chat/comparison.adoc) 部分查找可用 Chat Models 的详细比较。
 
 ## Chat Model API
 
@@ -224,4 +224,4 @@ Spring AI Chat Model API 构建在 Spring AI `Generic Model API` 之上，提供
 这允许轻松集成和在不同 AI 服务之间切换，同时为客户端应用程序维护一致的 API。
 以下类图说明了 Spring AI Chat Model API 的主要类和接口。
 
-![Spring AI Chat API](spring-ai-chat-api.jpg)
+![Spring AI Chat API](/img/integration/spring-ai-chat-api.jpg)

@@ -10,7 +10,7 @@ RAG 用例是通过从数据体中检索相关信息来增强生成模型能力�
 
 ETL pipeline 创建、转换和存储 `Document` 实例。
 
-![Spring AI Message API](spring-ai-document1-api.jpg)
+![Spring AI Message API](/img/integration/spring-ai-document1-api.jpg)
 
 `Document` 类包含文本、元数据，以及可选的额外媒体类型，如图像、音频和视频。
 
@@ -24,7 +24,7 @@ ETL pipeline 有三个主要组件：
 
 要构建一个简单的 ETL pipeline，可以将每种类型的实例链接在一起。
 
-![ETL Pipeline](etl-pipeline.jpg)
+![ETL Pipeline](/img/integration/etl-pipeline.jpg)
 
 假设我们有这三种 ETL 类型的以下实例：
 
@@ -92,7 +92,7 @@ public interface DocumentWriter extends Consumer<List<Document>> {
 
 以下类图说明了 ETL 接口和实现。
 
-![ETL Class Diagram](etl-class-diagram.jpg)
+![ETL Class Diagram](/img/integration/etl-class-diagram.jpg)
 
 ## DocumentReaders
 
@@ -936,4 +936,4 @@ writer.accept(documents);
 ### VectorStore
 
 提供与各种向量存储的集成。
-有关完整列表，请参阅 [Vector DB 文档](api/vectordbs.adoc)。
+有关完整列表，请参阅 [Vector DB 文档](vectordbs.adoc)。

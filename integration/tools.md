@@ -11,9 +11,9 @@ Tools 主要用于：
 
 Spring AI 提供了便捷的 API 来定义 tools、解析来自 model 的 tool call 请求并执行 tool calls。以下部分概述了 Spring AI 中的 tool calling 功能。
 
-> **NOTE:** 请检查 [Chat Model 比较](api/chat/comparison.adoc) 以查看哪些 AI model 支持 tool calling 调用。
+> **NOTE:** 请检查 [Chat Model 比较](chat/comparison.adoc) 以查看哪些 AI model 支持 tool calling 调用。
 
-> **TIP:** 遵循指南从已弃用的 [FunctionCallback 迁移到 ToolCallback API](api/tools-migration.adoc)。
+> **TIP:** 遵循指南从已弃用的 [FunctionCallback 迁移到 ToolCallback API](tools-migration.adoc)。
 
 ## 快速开始
 
@@ -118,7 +118,7 @@ System.out.println(response);
 
 Spring AI 通过一组灵活的抽象支持 tool calling，允许您以一致的方式定义、解析和执行 tools。本节概述了 Spring AI 中 tool calling 的主要概念和组件。
 
-![Tool Calling 主要操作序列](tools/tool-calling-01.jpg)
+![Tool Calling 主要操作序列](/img/integration/tools/tool-calling-01.jpg)
 
 1. 当我们想要使 tool 可用于 model 时，我们在聊天请求中包含其定义。每个 tool 定义包括名称、描述和输入参数的 schema。
 2. 当 model 决定调用 tool 时，它发送带有 tool 名称和根据定义 schema 建模的输入参数的响应。
@@ -886,7 +886,7 @@ class CustomerTools {
 
 Spring AI 支持通过 `ToolContext` API 向 tools 传递附加的上下文信息。此功能允许您提供额外的、用户提供的数据，这些数据可以在 tool 执行期间与 AI model 传递的 tool 参数一起使用。
 
-![向 tools 提供附加上下文信息](tools/tool-context.jpg)
+![向 tools 提供附加上下文信息](/img/integration/tools/tool-context.jpg)
 
 ```java
 class CustomerTools {
@@ -944,7 +944,7 @@ chatModel.call(prompt);
 
 > **NOTE:** 如果同时请求多个 tool calls，所有 tools 的 `returnDirect` 属性必须设置为 `true` 才能将结果直接返回给调用者。否则，结果将发送回 model。
 
-![将 tool call 结果直接返回给调用者](tools/return-direct.jpg)
+![将 tool call 结果直接返回给调用者](/img/integration/tools/return-direct.jpg)
 
 1. 当我们想要使 tool 可用于 model 时，我们在聊天请求中包含其定义。如果我们希望 tool 执行的结果直接返回给调用者，我们将 `returnDirect` 属性设置为 `true`。
 2. 当 model 决定调用 tool 时，它发送带有 tool 名称和根据定义 schema 建模的输入参数的响应。
@@ -1024,7 +1024,7 @@ ToolCallingManager toolCallingManager() {
 
 使用默认行为时，Spring AI 将自动拦截来自 model 的任何 tool call 请求，调用 tool 并将结果返回给 model。所有这些都由每个使用 `ToolCallingManager` 的 `ChatModel` 实现透明地为您完成。
 
-![框架控制的 tool 执行生命周期](tools/framework-manager.jpg)
+![框架控制的 tool 执行生命周期](/img/integration/tools/framework-manager.jpg)
 
 1. 当我们想要使 tool 可用于 model 时，我们在聊天请求（`Prompt`）中包含其定义，并调用将请求发送到 AI model 的 `ChatModel` API。
 2. 当 model 决定调用 tool 时，它发送带有 tool 名称和根据定义 schema 建模的输入参数的响应（`ChatResponse`）。

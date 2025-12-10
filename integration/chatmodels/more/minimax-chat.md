@@ -131,7 +131,7 @@ dependencies {
 > 如果设置了 `spring.ai.minimax.chat.base-url` 和 `spring.ai.minimax.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 MiniMax 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.minimax.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 <<chat-options>> 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.minimax.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
@@ -198,7 +198,7 @@ public class ChatController {
 
 ## Manual Configuration
 
-[MiniMaxChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-minimax/src/main/java/org/springframework/ai/minimax/MiniMaxChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 <<low-level-api>> 连接到 MiniMax 服务。
+[MiniMaxChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-minimax/src/main/java/org/springframework/ai/minimax/MiniMaxChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 【low-level-api】 连接到 MiniMax 服务。
 
 将 `spring-ai-minimax` 依赖项添加到项目的 Maven `pom.xml` 文件中：
 

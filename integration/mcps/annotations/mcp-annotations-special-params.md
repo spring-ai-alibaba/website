@@ -490,8 +490,8 @@ public String capabilityAware(
 
 ## Additional Resources
 
-* [MCP Annotations Overview](api/mcp/mcp-annotations-overview.adoc)
-* [Server Annotations](api/mcp/mcp-annotations-server.adoc)
-* [Client Annotations](api/mcp/mcp-annotations-client.adoc)
-* [Examples](api/mcp/mcp-annotations-examples.adoc)
+* [MCP Annotations Overview](mcp/mcp-annotations-overview.adoc)
+* [Server Annotations](mcp/mcp-annotations-server.adoc)
+* [Client Annotations](mcp/mcp-annotations-client.adoc)
+* [Examples](mcp/mcp-annotations-examples.adoc)
 

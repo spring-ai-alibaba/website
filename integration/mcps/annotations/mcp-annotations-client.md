@@ -427,8 +427,8 @@ private List<McpSyncClient> mcpClients;
 
 ## Additional Resources
 
-* [MCP Annotations Overview](api/mcp/mcp-annotations-overview.adoc)
-* [Server Annotations](api/mcp/mcp-annotations-server.adoc)
-* [Special Parameters](api/mcp/mcp-annotations-special-params.adoc)
-* [MCP Client Boot Starter](api/mcp/mcp-client-boot-starter-docs.adoc)
+* [MCP Annotations Overview](mcp/mcp-annotations-overview.adoc)
+* [Server Annotations](mcp/mcp-annotations-server.adoc)
+* [Special Parameters](mcp/mcp-annotations-special-params.adoc)
+* [MCP Client Boot Starter](mcp/mcp-client-boot-starter-docs.adoc)
 
