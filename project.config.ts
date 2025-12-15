@@ -46,7 +46,7 @@ export interface ProjectConfig {
 const projectConfig: ProjectConfig = {
   // Basic project information
   title: 'Spring AI Alibaba',
-  tagline: 'Agentic AI Framework for Java Developers',
+  tagline: 'Agentic AI Framework for Java Developers. Built on the core concept of DAG Graph, it can easily achieve single agent, multi-agent, and complex workflow orchestration.',
   description: 'Spring AI Alibaba 开源项目基于 Spring AI 构建，是阿里云通义系列模型及服务在 Java AI 应用开发领域的最佳实践，提供高层次的 AI API 抽象与云原生基础设施集成方案，帮助开发者快速构建 AI 应用。',
 
   // Author information

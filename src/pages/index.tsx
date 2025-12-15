@@ -6,7 +6,6 @@ import Layout from '@theme/Layout'
 import EcosystemShowcase from '@site/src/components/EcosystemShowcase'
 import MeteorShower from '@site/src/components/MeteorShower'
 import FloatingClouds from '../components/FloatingClouds'
-import TypewriterCode from '@site/src/components/TypewriterCode'
 import Translate from '@docusaurus/Translate'
 
 import styles from './index.module.css'
@@ -14,20 +13,6 @@ import projectConfig, { getGitHubUrls } from '../../project.config'
 
 // Generate GitHub links from project configuration
 const githubUrls = getGitHubUrls(projectConfig)
-
-// Sample code string
-const sampleCode = `
-ReactAgent agent = ReactAgent.builder()
-    .name("deep_research_agent")
-    .model(chatModel)
-    .systemPrompt("You are a helpful research assistant.")
-    .tools(fileSystemTool, jinaSearhMcpTool)
-    .interceptors(toolCallLimit, contextSummary, todoList)
-    .hooks(humanInTheLoopHook)
-    .build();
-
-AssistantMessage message = agent.call("Conduct a research of Spring AI Alibaba.");
-`
 
 // Neural Network Animation Component
 function NeuralNetwork() {
@@ -154,7 +139,9 @@ function HomepageHeader() {
               {siteConfig.title}
             </h1>
             <p className={clsx('hero__subtitle', styles.heroSubtitle)}>
-              {siteConfig.tagline}
+              Agentic AI Framework for Java Developers.
+              <br />
+              Built on the core concept of DAG Graph, Spring AI Alibaba can easily achieve single agent, multi-agent, and complex workflow orchestration.
             </p>
 
             <div className={styles.heroLabels}>
@@ -196,15 +183,6 @@ function HomepageHeader() {
                 <Translate id="homepage.viewOnGithub" description="View on GitHub button text">GitHub</Translate>
               </Link>
             </div>
-          </div>
-          <div className={styles.heroRight}>
-            <TypewriterCode
-              code={sampleCode}
-              fileName="DeepResearchAgent.java"
-              language="java"
-              typingSpeed={50}
-              startDelay={800}
-            />
           </div>
         </div>
       </div>
