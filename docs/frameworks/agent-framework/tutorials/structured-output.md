@@ -27,15 +27,17 @@ Spring AI Alibaba 的 `ReactAgent.Builder` 通过 `outputSchema` 和 `outputType
 
 Spring AI Alibaba 支持两种方式控制结构化输出：
 
-* **`outputSchema(String schema)`**: 提供自定义的 JSON schema 字符串
-* **`outputType(Class<?> type)`**: 提供 Java 类 - 使用 `BeanOutputConverter` 自动转换为 JSON schema
+* **`outputSchema(String schema)`**: 提供 JSON schema 字符串。推荐使用 `BeanOutputConverter` 从 Java 类自动生成 schema，也可以手动提供自定义的 schema 字符串
+* **`outputType(Class<?> type)`**: 提供 Java 类 - 使用 `BeanOutputConverter` 自动转换为 JSON schema（推荐方式，类型安全）
 * **不指定**: 返回非结构化的自然语言响应
+
+**推荐做法**：使用 `BeanOutputConverter` 生成 schema，既保证了类型安全，又实现了自动 schema 生成，代码更易维护。
 
 结构化响应在 Agent 的 `AssistantMessage` 中作为 JSON 文本返回，可以解析为您需要的格式。
 
 ## 输出 Schema 策略
 
-您可以使用 JSON schema 字符串显式定义输出格式。这使您可以完全控制结构，并可以为每个字段包含详细的描述。
+您可以使用 `BeanOutputConverter` 从 Java 类自动生成 JSON schema，或者直接提供 JSON schema 字符串。推荐使用 `BeanOutputConverter` 以获得类型安全和自动 schema 生成。
 
 ### 方法签名
 
@@ -47,11 +49,13 @@ Spring AI Alibaba 支持两种方式控制结构化输出：
 </Code>
 
 **参数:**
-- `outputSchema` (String, 必需): 定义结构化输出格式的 JSON schema 字符串。Schema 应包含字段名称、类型、描述和要求，以指导模型。
+- `outputSchema` (String, 必需): 定义结构化输出格式的 JSON schema 字符串。可以通过 `BeanOutputConverter.getFormat()` 方法从 Java 类自动生成，也可以手动提供自定义的 schema 字符串。
 
 ### 示例
 
 **基本 JSON Schema:**
+
+使用 `BeanOutputConverter` 从 Java 类自动生成 JSON Schema：
 
 <Code
   language="java"
@@ -59,20 +63,31 @@ Spring AI Alibaba 支持两种方式控制结构化输出：
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.converter.BeanOutputConverter;
 
-String contactInfoSchema = """
-    请按照以下JSON格式输出：
-    {
-        "name": "人名",
-        "email": "电子邮箱地址",
-        "phone": "电话号码"
-    }
-    """;
+// 定义输出类型
+public static class ContactInfo {
+    private String name;
+    private String email;
+    private String phone;
+
+    // Getters and Setters
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+}
+
+// 使用 BeanOutputConverter 生成 outputSchema
+BeanOutputConverter<ContactInfo> outputConverter = new BeanOutputConverter<>(ContactInfo.class);
+String format = outputConverter.getFormat();
 
 ReactAgent agent = ReactAgent.builder()
     .name("contact_extractor")
     .model(chatModel)
-    .outputSchema(contactInfoSchema)
+    .outputSchema(format)
     .build();
 
 AssistantMessage result = agent.call(
@@ -85,27 +100,46 @@ System.out.println(result.getText());
 
 **复杂嵌套 Schema:**
 
+使用 `BeanOutputConverter` 处理复杂嵌套结构：
+
 <Code
   language="java"
   title="复杂嵌套 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
-{`String productReviewSchema = """
-    请严格按照以下JSON格式返回产品评价分析：
-    {
-        "rating": 1-5之间的整数评分,
-        "sentiment": "情感倾向（正面/负面/中性）",
-        "keyPoints": ["关键点1", "关键点2", "关键点3"],
-        "details": {
-            "pros": ["优点1", "优点2"],
-            "cons": ["缺点1", "缺点2"]
-        }
+{`import org.springframework.ai.converter.BeanOutputConverter;
+
+// 定义输出类型（包含嵌套类）
+public static class ProductReview {
+    private int rating;
+    private String sentiment;
+    private String[] keyPoints;
+    private ReviewDetails details;
+
+    // Getters and Setters
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
+    public String getSentiment() { return sentiment; }
+    public void setSentiment(String sentiment) { this.sentiment = sentiment; }
+    public String[] getKeyPoints() { return keyPoints; }
+    public void setKeyPoints(String[] keyPoints) { this.keyPoints = keyPoints; }
+    public ReviewDetails getDetails() { return details; }
+    public void setDetails(ReviewDetails details) { this.details = details; }
+
+    public static class ReviewDetails {
+        private String[] pros;
+        private String[] cons;
+        // Getters and Setters
     }
-    """;
+}
+
+// 使用 BeanOutputConverter 生成 outputSchema
+BeanOutputConverter<ProductReview> outputConverter = new BeanOutputConverter<>(ProductReview.class);
+String format = outputConverter.getFormat();
 
 ReactAgent agent = ReactAgent.builder()
     .name("review_analyzer")
     .model(chatModel)
-    .outputSchema(productReviewSchema)
+    .outputSchema(format)
     .build();
 
 AssistantMessage result = agent.call(
@@ -118,28 +152,47 @@ System.out.println(result.getText());
 
 **结构化分析 Schema:**
 
+使用 `BeanOutputConverter` 处理包含实体识别的复杂结构：
+
 <Code
   language="java"
   title="结构化分析 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
-{`String analysisSchema = """
-    请按照以下JSON格式返回文本分析结果：
-    {
-        "summary": "内容摘要（50字以内）",
-        "keywords": ["关键词1", "关键词2", "关键词3"],
-        "sentiment": "情感倾向（正面/负面/中性）",
-        "entities": {
-            "persons": ["人名1", "人名2"],
-            "locations": ["地点1", "地点2"],
-            "organizations": ["组织1", "组织2"]
-        }
+{`import org.springframework.ai.converter.BeanOutputConverter;
+
+// 定义输出类型（包含嵌套实体类）
+public static class TextAnalysis {
+    private String summary;
+    private String[] keywords;
+    private String sentiment;
+    private Entities entities;
+
+    // Getters and Setters
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+    public String[] getKeywords() { return keywords; }
+    public void setKeywords(String[] keywords) { this.keywords = keywords; }
+    public String getSentiment() { return sentiment; }
+    public void setSentiment(String sentiment) { this.sentiment = sentiment; }
+    public Entities getEntities() { return entities; }
+    public void setEntities(Entities entities) { this.entities = entities; }
+
+    public static class Entities {
+        private String[] persons;
+        private String[] locations;
+        private String[] organizations;
+        // Getters and Setters
     }
-    """;
+}
+
+// 使用 BeanOutputConverter 生成 outputSchema
+BeanOutputConverter<TextAnalysis> outputConverter = new BeanOutputConverter<>(TextAnalysis.class);
+String format = outputConverter.getFormat();
 
 ReactAgent agent = ReactAgent.builder()
     .name("text_analyzer")
     .model(chatModel)
-    .outputSchema(analysisSchema)
+    .outputSchema(format)
     .build();
 
 AssistantMessage result = agent.call(
@@ -149,7 +202,7 @@ AssistantMessage result = agent.call(
 System.out.println(result.getText());`}
 </Code>
 
-`outputSchema` 方法提供了最大的灵活性，您可以定义任何 JSON 结构，并提供详细的中文或英文指令来指导模型的输出格式。
+使用 `BeanOutputConverter` 生成 schema 提供了类型安全和自动生成的优势。如果您需要完全自定义的 schema 格式，也可以直接提供 JSON schema 字符串。`outputSchema` 方法支持两种方式，为您提供最大的灵活性。
 
 ## 输出类型策略
 
@@ -166,6 +219,53 @@ System.out.println(result.getText());`}
 
 **参数:**
 - `outputType` (`Class<?>`, 必需): 定义输出结构的 Java 类。该类应该是带有标准 getter 和 setter 的 POJO。
+
+### 示例
+
+使用 `outputType` 是最简洁的方式，框架会自动使用 `BeanOutputConverter` 将 Java 类转换为 JSON schema：
+
+<Code
+  language="java"
+  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import org.springframework.ai.chat.messages.AssistantMessage;
+
+// 定义输出类型
+public static class ContactInfo {
+    private String name;
+    private String email;
+    private String phone;
+
+    // Getters and Setters
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+}
+
+// 直接使用 outputType，框架会自动处理 schema 转换
+ReactAgent agent = ReactAgent.builder()
+    .name("contact_extractor")
+    .model(chatModel)
+    .outputType(ContactInfo.class)  // [!code highlight]
+    .saver(new MemorySaver())
+    .build();
+
+AssistantMessage result = agent.call(
+    "从以下信息提取联系方式：张三，zhangsan@example.com，(555) 123-4567"
+);
+
+System.out.println(result.getText());
+// 输出: {"name": "张三", "email": "zhangsan@example.com", "phone": "(555) 123-4567"}`}
+</Code>
+
+**`outputType` vs `outputSchema`**：
+- `outputType`: 更简洁，直接传入 Java 类，框架自动处理（**推荐**）
+- `outputSchema`: 需要手动使用 `BeanOutputConverter` 生成 schema，或提供自定义字符串，提供更多控制
 
 ## 工作原理
 

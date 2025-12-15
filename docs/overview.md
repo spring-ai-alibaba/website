@@ -11,7 +11,7 @@ keywords: [Spring AI Alibaba, Agent Framework, ReactAgent, Graph Core, 智能体
 
 Spring AI Alibaba 是构建 Agent 智能体应用最简单的方式，只需不到 10 行代码就可以构建您的智能体应用。
 
-![Architecture](/img/agent/overview/architecture.png)
+![Architecture](/img/agent/overview/architecture-new.png)
 
 Spring AI Alibaba 项目从架构上包含如下三层：
 
@@ -32,13 +32,13 @@ Spring AI Alibaba 项目从架构上包含如下三层：
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.0.0-M5</version>
+    <version>1.1.0.0-RC2</version>
 </dependency>
 
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.0.0-M5</version>
+    <version>1.1.0.0-RC2</version>
 </dependency>
 ```
 

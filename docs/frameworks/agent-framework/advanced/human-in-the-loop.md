@@ -394,6 +394,220 @@ public class HumanInTheLoopExample {
 }`}
 </Code>
 
+## Workflow 中嵌套 Agent 的人工中断
+
+在复杂的应用场景中，你可能需要在 `StateGraph` 工作流中嵌套 `ReactAgent`，并为嵌套的 Agent 配置人工介入能力。这允许你在工作流执行过程中对 Agent 的工具调用进行人工监督。
+
+### 工作原理
+
+当 `ReactAgent` 作为工作流中的一个节点时，如果 Agent 配置了 `HumanInTheLoopHook`，工作流会在 Agent 节点触发工具调用中断时暂停。工作流级别的中断处理与单独的 Agent 中断处理类似，但需要在 `CompiledGraph` 层面进行恢复。
+
+### 配置要点
+
+1. **检查点配置**: 必须在 `CompileConfig` 中注册检查点保存器，以便在工作流级别保存和恢复状态
+2. **Agent 配置**: 嵌套的 Agent 也需要配置检查点保存器（使用相同的实例）
+3. **中断处理**: 使用 `CompiledGraph.invokeAndGetOutput()` 检查中断，并使用 `addHumanFeedback()` 恢复执行
+
+<Code
+  language="java"
+  title="Workflow 中嵌套 Agent 的人工中断示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/HumanInTheLoopExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.CompileConfig;
+import com.alibaba.cloud.ai.graph.CompiledGraph;
+import com.alibaba.cloud.ai.graph.KeyStrategy;
+import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.StateGraph;
+import com.alibaba.cloud.ai.graph.action.InterruptionMetadata;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
+import com.alibaba.cloud.ai.graph.agent.hook.hip.ToolConfig;
+import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.state.strategy.ReplaceStrategy;
+
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.alibaba.cloud.ai.graph.action.AsyncEdgeAction.edge_async;
+import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
+
+// 1. 创建工具回调
+ToolCallback searchTool = FunctionToolCallback
+    .builder("search", (args) -> "搜索结果：AI Agent是能够感知环境、自主决策并采取行动的智能系统。")
+    .description("搜索工具，用于查找相关信息")
+    .inputType(String.class)
+    .build();
+
+// 2. 配置检查点保存器（工作流和Agent共享）
+MemorySaver saver = new MemorySaver();
+
+// 3. 创建带有人工介入Hook的ReactAgent
+ReactAgent qaAgent = ReactAgent.builder()
+    .name("qa_agent")
+    .model(chatModel)
+    .instruction("你是一个问答专家，负责回答用户的问题。如果需要搜索信息，请使用search工具。\n用户问题：{cleaned_input}")
+    .outputKey("qa_result")
+    .saver(saver) // [!code highlight]
+    .hooks(HumanInTheLoopHook.builder() // [!code highlight]
+        .approvalOn("search", ToolConfig.builder()
+            .description("搜索操作需要人工审批，请确认是否执行搜索")
+            .build())
+        .build())
+    .tools(searchTool)
+    .build();
+
+// 4. 创建自定义Node（预处理）
+class PreprocessorNode implements NodeAction {
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        String input = state.value("input", "").toString();
+        String cleaned = input.trim();
+        return Map.of("cleaned_input", cleaned);
+    }
+}
+
+// 5. 创建自定义Node（验证）
+class ValidatorNode implements NodeAction {
+    @Override
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        Optional<Object> qaResultOpt = state.value("qa_result");
+        if (qaResultOpt.isPresent() && qaResultOpt.get() instanceof Message message) {
+            boolean isValid = message.getText().length() > 30;
+            return Map.of("is_valid", isValid);
+        }
+        return Map.of("is_valid", false);
+    }
+}
+
+// 6. 定义状态管理策略
+KeyStrategyFactory keyStrategyFactory = () -> {
+    HashMap<String, KeyStrategy> strategies = new HashMap<>();
+    strategies.put("input", new ReplaceStrategy());
+    strategies.put("cleaned_input", new ReplaceStrategy());
+    strategies.put("qa_result", new ReplaceStrategy());
+    strategies.put("is_valid", new ReplaceStrategy());
+    return strategies;
+};
+
+// 7. 构建工作流
+StateGraph workflow = new StateGraph(keyStrategyFactory);
+
+// 添加普通Node
+workflow.addNode("preprocess", node_async(new PreprocessorNode()));
+workflow.addNode("validate", node_async(new ValidatorNode()));
+
+// 添加Agent Node（嵌套的ReactAgent）
+workflow.addNode(qaAgent.name(), qaAgent.asNode( // [!code highlight]
+    true,   // includeContents: 传递父图的消息历史
+    false   // includeReasoning: 不返回推理过程
+));
+
+// 定义流程：预处理 -> Agent处理 -> 验证
+workflow.addEdge(StateGraph.START, "preprocess");
+workflow.addEdge("preprocess", qaAgent.name());
+workflow.addEdge(qaAgent.name(), "validate");
+
+// 条件边：验证通过则结束，否则重新处理
+workflow.addConditionalEdges(
+    "validate",
+    edge_async(state -> {
+        Boolean isValid = (Boolean) state.value("is_valid", false);
+        return isValid ? "end" : qaAgent.name();
+    }),
+    Map.of(
+        "end", StateGraph.END,
+        qaAgent.name(), qaAgent.name()
+    )
+);
+
+// 8. 编译工作流（必须在CompileConfig中注册检查点保存器）
+CompiledGraph compiledGraph = workflow.compile( // [!code highlight]
+    CompileConfig.builder()
+        .saverConfig(SaverConfig.builder().register(saver).build()) // [!code highlight]
+        .build()
+);
+
+// 9. 执行工作流并处理中断
+String threadId = "workflow-hilt-001";
+Map<String, Object> input = Map.of("input", "请解释量子计算的基本原理");
+
+// 第一次调用 - 可能触发中断
+Optional<NodeOutput> nodeOutputOptional = compiledGraph.invokeAndGetOutput( // [!code highlight]
+    input,
+    RunnableConfig.builder().threadId(threadId).build()
+);
+
+// 检查是否发生中断
+if (nodeOutputOptional.isPresent() 
+    && nodeOutputOptional.get() instanceof InterruptionMetadata interruptionMetadata) { // [!code highlight]
+    
+    System.out.println("工作流被中断，等待人工审核。");
+    System.out.println("中断节点: " + interruptionMetadata.node());
+    
+    List<InterruptionMetadata.ToolFeedback> feedbacks = interruptionMetadata.toolFeedbacks();
+    
+    // 显示所有需要审批的工具调用
+    for (InterruptionMetadata.ToolFeedback feedback : feedbacks) {
+        System.out.println("工具名称: " + feedback.getName());
+        System.out.println("工具参数: " + feedback.getArguments());
+        System.out.println("工具描述: " + feedback.getDescription());
+    }
+    
+    // 构建人工反馈（批准所有工具调用）
+    InterruptionMetadata.Builder feedbackBuilder = InterruptionMetadata.builder()
+        .nodeId(interruptionMetadata.node())
+        .state(interruptionMetadata.state());
+    
+    feedbacks.forEach(toolFeedback -> {
+        feedbackBuilder.addToolFeedback(
+            InterruptionMetadata.ToolFeedback.builder(toolFeedback)
+                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.APPROVED)
+                .build()
+        );
+    });
+    
+    InterruptionMetadata approvalMetadata = feedbackBuilder.build();
+    
+    // 使用批准决策恢复执行
+    RunnableConfig resumableConfig = RunnableConfig.builder()
+        .threadId(threadId) // 相同的线程ID
+        .addHumanFeedback(approvalMetadata) // [!code highlight]
+        .build();
+    
+    // 恢复工作流执行（传入空Map，因为状态已保存在检查点中）
+    nodeOutputOptional = compiledGraph.invokeAndGetOutput(Map.of(), resumableConfig); // [!code highlight]
+}`}
+</Code>
+
+### 关键区别
+
+与单独使用 Agent 相比，在 Workflow 中使用人工中断有以下关键区别：
+
+| 特性 | 单独 Agent | Workflow 中的 Agent |
+| --- | --- | --- |
+| **检查点配置** | Agent 级别配置 | 需要在 `CompileConfig` 中注册 |
+| **中断检查** | `agent.invokeAndGetOutput()` | `compiledGraph.invokeAndGetOutput()` |
+| **恢复执行** | 直接调用 Agent | 调用 `CompiledGraph` |
+| **状态管理** | Agent 内部状态 | 工作流全局状态 |
+| **中断位置** | Agent 节点 | 工作流中的 Agent 节点 |
+
+### 注意事项
+
+1. **共享检查点保存器**: 工作流和嵌套的 Agent 应该使用相同的检查点保存器实例，以确保状态一致性
+2. **线程 ID 一致性**: 恢复执行时必须使用相同的 `threadId`
+3. **空输入恢复**: 恢复执行时通常传入空的 `Map`，因为状态已保存在检查点中
+4. **节点标识**: `InterruptionMetadata.node()` 返回的是工作流中 Agent 节点的名称，而不是 Agent 内部的节点名称
+
 ## 实用工具方法
 
 为了简化人工介入的处理，你可以创建实用方法：
