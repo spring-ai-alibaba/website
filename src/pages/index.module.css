@@ -554,11 +554,13 @@
 
 .heroBanner {
   background: var(--gradient-hero);
-  padding: 4rem 0 6rem;
-  text-align: left;
+  padding: 5rem 0 7rem;
+  text-align: center;
   position: relative;
   overflow: hidden;
-  min-height: 600px;
+  min-height: 650px;
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -649,22 +651,21 @@
 
 .heroContent {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 3rem;
-  gap: 8rem;
 }
 
 .heroLeft {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   padding: 0;
-  flex-shrink: 0;
-  min-width: 500px;
-  margin-right: -3rem;
+  width: 100%;
+  max-width: 900px;
 }
 
 [data-theme='dark'] .heroLeft {
@@ -712,11 +713,11 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 900;
-  font-size: 3.2rem;
+  font-size: 3.8rem;
   line-height: 1.1;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   margin-top: 0;
-  text-align: left;
+  text-align: center;
   text-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
   animation: rainbow-flow 4s ease-in-out infinite;
   letter-spacing: -0.02em;
@@ -780,20 +781,30 @@
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 500;
   margin-bottom: 0;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   padding: 0;
-  display: inline-block;
+  display: block;
   text-shadow: none;
   transition: all 0.3s ease-in-out;
-  max-width: 100%;
-  line-height: 1.5;
-  letter-spacing: 0.5px;
+  max-width: 900px;
+  line-height: 2.2;
+  letter-spacing: 0.15px;
   position: relative;
   animation: text-glow 3s ease-in-out infinite alternate;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  word-spacing: 0.05em;
+}
+
+.heroBanner :global(.hero__subtitle) br {
+  display: block;
+  height: 0.6rem;
+  content: "";
 }
 
 /* Text glow animation - no border effects */
@@ -852,8 +863,10 @@
 .heroLabels {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -1110,8 +1123,9 @@
 .heroButtons {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1.5rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   flex-wrap: wrap;
 }
 
@@ -1119,9 +1133,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
-  padding: 1rem 2rem;
+  padding: 1.1rem 2.2rem;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(37, 99, 235, 0.25);
   transition: all 0.3s ease;
@@ -1169,6 +1183,14 @@
   align-items: center;
   flex-shrink: 0;
   margin-left: -3rem;
+}
+
+.heroImage {
+  max-width: 100%;
+  max-height: 60vh;
+  height: auto;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Floating decoration elements */
@@ -1786,31 +1808,14 @@
 /* Responsive design */
 @media screen and (max-width: 996px) {
   .heroContent {
-    grid-template-columns: 1fr;
-    gap: 2rem;
     padding: 0 1rem;
-    flex-direction: column;
   }
 
   .heroLeft {
     align-items: center;
     text-align: center;
-    margin-right: 0;
-    min-width: auto;
-    order: 1;
-    width: 100%;
-    padding: 0 1rem;
-  }
-
-  .heroRight {
-    margin-left: 0;
-    order: 2;
-    width: 100%;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 0 1rem;
-    display: block;
-    text-align: left;
+    max-width: 100%;
+    padding: 0;
   }
 
   .titleRow {
@@ -1823,12 +1828,12 @@
   }
 
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 
   .heroBanner :global(.hero__subtitle) {
     font-size: 1rem;
-    line-height: 1.4;
+    line-height: 1.9;
     max-width: 100%;
     word-wrap: break-word;
     white-space: normal;
@@ -1845,30 +1850,17 @@
 
 @media screen and (max-width: 768px) {
   .heroBanner {
-    padding: 2rem 0 3rem;
+    padding: 3rem 0 4rem;
     min-height: auto;
   }
 
   .heroContent {
-    padding: 0 0.5rem;
-    flex-direction: column;
+    padding: 0 1rem;
   }
 
   .heroLeft {
-    order: 1;
     width: 100%;
-    padding: 0 1rem;
-  }
-
-  .heroRight {
-    order: 2;
-    width: 100%;
-    margin-top: 1.5rem;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 0 1rem;
-    display: block;
-    text-align: left;
+    padding: 0;
   }
 
   .titleRow {
@@ -1882,12 +1874,12 @@
   }
 
   .heroTitle {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .heroBanner :global(.hero__subtitle) {
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 1.1rem;
+    line-height: 1.9;
     max-width: 100%;
     word-wrap: break-word;
     white-space: normal;

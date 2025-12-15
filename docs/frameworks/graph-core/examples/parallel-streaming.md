@@ -1,18 +1,18 @@
 ---
 title: 并行流式输出
 description: 使用 Spring AI Alibaba Graph 实现并行节点的流式输出，每个并行节点可以独立产生流式输出并保持各自的节点 ID
-keywords: [Spring AI Alibaba, Graph, 并行流式, Parallel Streaming, GraphFlux, 节点流式]
+keywords: [Spring AI Alibaba, Graph, 并行流式, Parallel Streaming, 节点流式, Flux]
 ---
 
 # 并行流式输出
 
-并行流式输出允许在并行分支中使用 `GraphFlux` 实现流式输出。每个并行节点可以独立产生流式输出，并保持各自的节点 ID，便于区分不同节点的输出。
+并行流式输出允许在并行分支中使用 `Flux` 实现流式输出。每个并行节点可以独立产生流式输出，并保持各自的节点 ID，便于区分不同节点的输出。
 
 ## 核心概念
 
 在并行流式输出中：
 
-- **GraphFlux**：用于将 Reactor Flux 转换为图流式输出的工具类
+- **Flux 流式输出**：节点可以直接返回 `Flux<T>` 类型的流式数据，系统会自动处理流式输出
 - **节点 ID 保持**：每个并行节点的流式输出会保持各自的节点 ID
 - **独立流式处理**：每个并行节点可以独立产生和处理流式数据
 
@@ -33,7 +33,6 @@ import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.action.AsyncNodeAction;
 import com.alibaba.cloud.ai.graph.exception.GraphStateException;
 import com.alibaba.cloud.ai.graph.state.strategy.AppendStrategy;
-import com.alibaba.cloud.ai.graph.streaming.GraphFlux;
 import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
 
 import java.time.Duration;
@@ -41,17 +40,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 import reactor.core.publisher.Flux;
 
 import static com.alibaba.cloud.ai.graph.StateGraph.END;
 import static com.alibaba.cloud.ai.graph.StateGraph.START;
 
+/**
+ * 并行流式输出示例
+ * 演示如何在并行分支中使用 Flux 实现流式输出
+ * 每个并行节点可以独立产生流式输出，并保持各自的节点 ID
+ */
 public class ParallelStreamingExample {
 
     /**
-     * 并行节点流式输出 - 每个节点保持独立的节点 ID
+     * 示例 1: 并行节点流式输出 - 每个节点保持独立的节点 ID
+     *
+     * 演示如何创建多个并行节点，每个节点返回 Flux 流式输出
+     * 流式输出会保持各自的节点 ID，便于区分不同节点的输出
      */
     public static void parallelStreamingWithNodeIdPreservation() throws GraphStateException {
         // 定义状态策略
@@ -62,54 +68,32 @@ public class ParallelStreamingExample {
             return keyStrategyMap;
         };
 
-        // 并行节点 1 - 返回 GraphFlux 流式输出
+        // 并行节点 1 - 返回 Flux 流式输出
         AsyncNodeAction node1 = state -> {
+            System.out.println("Node1 executing on thread: " + Thread.currentThread().getName());
+
             // 创建流式数据
             Flux<String> stream1 = Flux.just("节点1-块1", "节点1-块2", "节点1-块3")
-                    .delayElements(Duration.ofMillis(50));
+                    .delayElements(Duration.ofMillis(50))
+                    .doOnNext(chunk ->
+                            System.out.println("Node1 streaming emitting on thread: " + Thread.currentThread().getName())
+                    );
 
-            // 定义最终结果映射函数
-            Function<String, String> mapResult1 = lastChunk ->
-                    "节点1完成，最后块: " + lastChunk;
-
-            // 定义块结果提取函数
-            Function<String, String> chunkResult1 = chunk -> chunk;
-
-            // 创建 GraphFlux，指定节点 ID 为 "parallel_node_1"
-            GraphFlux<String> graphFlux1 = GraphFlux.of(
-                    "parallel_node_1",  // 节点 ID
-                    "stream1",          // 输出键
-                    stream1,            // 流式数据
-                    mapResult1,         // 最终结果映射
-                    chunkResult1        // 块结果提取
-            );
-
-            return CompletableFuture.completedFuture(Map.of("stream1", graphFlux1));
+            return CompletableFuture.completedFuture(Map.of("stream1", stream1));
         };
 
-        // 并行节点 2 - 返回 GraphFlux 流式输出
+        // 并行节点 2 - 返回 Flux 流式输出
         AsyncNodeAction node2 = state -> {
+            System.out.println("Node2 executing on thread: " + Thread.currentThread().getName());
+
             // 创建流式数据（延迟时间不同，模拟不同的处理速度）
             Flux<String> stream2 = Flux.just("节点2-块1", "节点2-块2", "节点2-块3")
-                    .delayElements(Duration.ofMillis(75));
+                    .delayElements(Duration.ofMillis(75))
+                    .doOnNext(chunk ->
+                            System.out.println("Node2 streaming emitting on thread: " + Thread.currentThread().getName())
+                    );
 
-            // 定义最终结果映射函数
-            Function<String, String> mapResult2 = lastChunk ->
-                    "节点2完成，最后块: " + lastChunk;
-
-            // 定义块结果提取函数
-            Function<String, String> chunkResult2 = chunk -> chunk;
-
-            // 创建 GraphFlux，指定节点 ID 为 "parallel_node_2"
-            GraphFlux<String> graphFlux2 = GraphFlux.of(
-                    "parallel_node_2",  // 节点 ID
-                    "stream2",          // 输出键
-                    stream2,            // 流式数据
-                    mapResult2,         // 最终结果映射
-                    chunkResult2        // 块结果提取
-            );
-
-            return CompletableFuture.completedFuture(Map.of("stream2", graphFlux2));
+            return CompletableFuture.completedFuture(Map.of("stream2", stream2));
         };
 
         // 合并节点 - 接收并行节点的结果
@@ -193,7 +177,9 @@ public class ParallelStreamingExample {
   title="单个节点的流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelStreamingExample.java"
 >
 {`/**
- * 单个节点的流式输出
+ * 示例 2: 单个节点的流式输出
+ *
+ * 演示单个节点使用 Flux 产生流式输出
  */
 public static void singleNodeStreaming() throws GraphStateException {
     // 定义状态策略
@@ -210,23 +196,8 @@ public static void singleNodeStreaming() throws GraphStateException {
         Flux<String> dataStream = Flux.just("块1", "块2", "块3", "块4", "块5")
                 .delayElements(Duration.ofMillis(100));
 
-        // 定义最终结果映射函数
-        Function<String, Map<String, Object>> mapResult = lastChunk ->
-                Map.of("final_result", "所有块处理完成，最后块: " + lastChunk);
 
-        // 定义块结果提取函数
-        Function<String, String> chunkResult = chunk -> chunk;
-
-        // 创建 GraphFlux
-        GraphFlux<String> graphFlux = GraphFlux.of(
-                "streaming_node",  // 节点 ID
-                "stream_output",   // 输出键
-                dataStream,         // 流式数据
-                mapResult,          // 最终结果映射
-                chunkResult         // 块结果提取
-        );
-
-        return CompletableFuture.completedFuture(Map.of("stream_output", graphFlux));
+        return CompletableFuture.completedFuture(Map.of("stream_output", dataStream));
     };
 
     // 构建图
@@ -273,37 +244,13 @@ public static void singleNodeStreaming() throws GraphStateException {
 }`}
 </Code>
 
-## GraphFlux API
-
-`GraphFlux` 提供了以下静态方法来创建流式输出：
-
-<Code
-  language="java"
-  title="GraphFlux API" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelStreamingExample.java"
->
-{`GraphFlux<T> GraphFlux.of(
-    String nodeId,              // 节点 ID
-    String outputKey,           // 输出键
-    Flux<T> dataStream,        // 流式数据
-    Function<T, Map<String, Object>> mapResult,  // 最终结果映射
-    Function<T, Object> chunkResult              // 块结果提取
-);`}
-</Code>
-
-### 参数说明
-
-- **nodeId**：节点标识符，用于在流式输出中标识来源节点
-- **outputKey**：输出键，用于在状态中存储流式结果
-- **dataStream**：Reactor Flux 流式数据源
-- **mapResult**：将最后一个块映射为最终状态更新的函数
-- **chunkResult**：从每个块中提取结果的函数
-
 ## 关键特性
 
-1. **节点 ID 保持**：每个并行节点的流式输出会保持各自的节点 ID，便于区分
-2. **独立流式处理**：每个并行节点可以独立产生和处理流式数据
-3. **结果统计**：可以统计每个节点产生的流式输出数量
-4. **实时输出**：流式输出可以实时打印，提供良好的用户体验
+1. **直接使用 Flux**：节点可以直接返回 `Flux<T>` 类型的流式数据，系统会自动识别并处理
+2. **节点 ID 保持**：每个并行节点的流式输出会保持各自的节点 ID，便于区分不同节点的输出
+3. **独立流式处理**：每个并行节点可以独立产生和处理流式数据，互不干扰
+4. **结果统计**：可以统计每个节点产生的流式输出数量，便于监控和调试
+5. **实时输出**：流式输出可以实时打印，提供良好的用户体验
 
 ## 使用场景
 
@@ -314,10 +261,12 @@ public static void singleNodeStreaming() throws GraphStateException {
 
 ## 最佳实践
 
-1. **节点 ID 命名**：为每个并行节点使用清晰、有意义的节点 ID
-2. **延迟控制**：合理设置流式数据的延迟，避免过快或过慢
-3. **错误处理**：在流式处理中添加适当的错误处理逻辑
-4. **结果统计**：使用统计机制跟踪流式输出的进度和数量
+1. **直接返回 Flux**：在节点中直接返回 `Flux<T>` 类型的数据，系统会自动识别并处理为流式输出
+2. **节点 ID 命名**：为每个并行节点使用清晰、有意义的节点 ID，便于区分不同节点的输出
+3. **延迟控制**：使用 `delayElements()` 合理设置流式数据的延迟，避免过快或过慢
+4. **错误处理**：在流式处理中添加适当的错误处理逻辑，使用 `doOnError()` 处理异常
+5. **结果统计**：使用统计机制跟踪流式输出的进度和数量，便于监控和调试
+6. **线程信息**：可以在节点中添加线程信息输出，便于理解并行执行的机制
 
 通过并行流式输出，您可以构建高效、实时的并行处理系统，提供良好的用户体验。
 

@@ -305,10 +305,153 @@ ReactAgent agent = ReactAgent.builder()
 
 你可以通过以下方式创建自定义功能：
 
-1. **ModelHook** - 在模型调用前后执行
-2. **AgentHook** - 在 Agent 开始和结束时执行
-3. **ModelInterceptor** - 拦截和修改模型请求/响应
-4. **ToolInterceptor** - 拦截和修改工具调用
+1. **MessagesModelHook** - 在模型调用前后执行，专注于消息操作（推荐）
+2. **ModelHook** - 在模型调用前后执行，可访问完整状态
+3. **AgentHook** - 在 Agent 开始和结束时执行
+4. **ModelInterceptor** - 拦截和修改模型请求/响应
+5. **ToolInterceptor** - 拦截和修改工具调用
+
+### MessagesModelHook
+
+`MessagesModelHook` 是一个专门用于操作消息列表的 Hook，**使用更简单，更推荐**。它直接接收和返回消息列表，无需处理复杂的 `OverAllState`。
+
+**适用场景**：
+- 消息修剪、过滤或转换
+- 添加系统提示或上下文消息
+- 消息压缩和摘要
+- 简单的消息操作需求
+
+<Code
+  language="java"
+  title="MessageTrimmingHook 消息修剪示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class MessageTrimmingHook extends MessagesModelHook {
+    private static final int MAX_MESSAGES = 10;
+
+    @Override
+    public String getName() {
+        return "message_trimming";
+    }
+
+    @Override
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        // 如果消息数量超过限制，只保留最后 MAX_MESSAGES 条消息
+        if (previousMessages.size() > MAX_MESSAGES) {
+            List<Message> trimmedMessages = previousMessages.subList(
+                previousMessages.size() - MAX_MESSAGES,
+                previousMessages.size()
+            );
+            // 使用 REPLACE 策略替换所有消息
+            return new AgentCommand(trimmedMessages, UpdatePolicy.REPLACE);
+        }
+        // 如果消息数量未超过限制，返回原始消息（不进行修改）
+        return new AgentCommand(previousMessages);
+    }
+}`}
+</Code>
+
+**AgentCommand 和 UpdatePolicy**：
+
+`MessagesModelHook` 通过 `AgentCommand` 返回操作结果：
+
+- **REPLACE 策略**：替换所有现有消息
+- **APPEND 策略**：将新消息追加到现有消息列表
+
+<Code
+  language="java"
+  title="使用不同策略的 MessagesModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import java.util.ArrayList;
+import java.util.List;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class ContextEnhancementHook extends MessagesModelHook {
+    
+    @Override
+    public String getName() {
+        return "context_enhancement";
+    }
+
+    @Override
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        // 示例 1: 使用 REPLACE 策略替换所有消息
+        List<Message> newMessages = new ArrayList<>();
+        newMessages.add(new SystemMessage("你是一个专业的助手"));
+        newMessages.addAll(previousMessages);
+        return new AgentCommand(newMessages, UpdatePolicy.REPLACE);
+        
+        // 示例 2: 使用 APPEND 策略追加消息
+        // List<Message> additionalMessages = List.of(
+        //     new UserMessage("请记住：保持友好和专业")
+        // );
+        // return new AgentCommand(additionalMessages, UpdatePolicy.APPEND);
+    }
+}`}
+</Code>
+
+**支持跳转控制**：
+
+`MessagesModelHook` 也支持通过 `JumpTo` 实现提前退出：
+
+<Code
+  language="java"
+  title="MessagesModelHook 跳转控制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import java.util.List;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class EarlyExitHook extends MessagesModelHook {
+    
+    @Override
+    public String getName() {
+        return "early_exit";
+    }
+
+    @Override
+    public List<JumpTo> canJumpTo() {
+        return List.of(JumpTo.end);
+    }
+
+    @Override
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        // 检查某些条件，如果满足则提前退出
+        if (shouldExit(previousMessages)) {
+            return new AgentCommand(JumpTo.end, previousMessages);
+        }
+        return new AgentCommand(previousMessages);
+    }
+    
+    private boolean shouldExit(List<Message> messages) {
+        // 实现你的退出逻辑
+        return false;
+    }
+}`}
+</Code>
 
 ### ModelHook
 
@@ -351,6 +494,139 @@ public class CustomModelHook extends ModelHook {
     }
 }`}
 </Code>
+
+### MessagesModelHook vs ModelHook：如何选择？
+
+`MessagesModelHook` 和 `ModelHook` 都可以在模型调用前后执行自定义逻辑，但它们有不同的设计目标和适用场景。
+
+#### 核心区别
+
+| 特性 | MessagesModelHook | ModelHook |
+|------|------------------|-----------|
+| **易用性** | ⭐⭐⭐⭐⭐ 更简单，直接操作消息列表 | ⭐⭐⭐ 需要理解 `OverAllState` |
+| **灵活性** | ⭐⭐⭐ 专注于消息操作 | ⭐⭐⭐⭐⭐ 可访问和修改完整状态 |
+| **推荐场景** | 消息修剪、过滤、添加系统提示 | 需要访问全局状态、自定义状态管理 |
+| **API 复杂度** | 简单：`AgentCommand` 返回消息列表 | 复杂：返回 `Map<String, Object>` 更新状态 |
+
+#### 使用建议
+
+**选择 MessagesModelHook，如果你需要：**
+- ✅ 简单的消息操作（修剪、过滤、转换）
+- ✅ 添加或修改系统提示
+- ✅ 消息压缩和摘要
+- ✅ 快速实现消息相关的 Hook
+
+**选择 ModelHook，如果你需要：**
+- ✅ 访问和修改 `OverAllState` 中的其他数据
+- ✅ 在状态中存储自定义信息（如计数器、缓存等）
+- ✅ 基于全局状态做复杂决策
+- ✅ 需要查看 Agent 执行过程中的完整上下文
+
+#### 对比示例
+
+**场景：消息修剪**
+
+使用 `MessagesModelHook`（推荐）：
+
+<Code
+  language="java"
+  title="使用 MessagesModelHook 实现消息修剪" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import java.util.List;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class SimpleMessageTrimmingHook extends MessagesModelHook {
+    private static final int MAX_MESSAGES = 10;
+
+    @Override
+    public String getName() {
+        return "simple_message_trimming";
+    }
+
+    @Override
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.size() > MAX_MESSAGES) {
+            List<Message> trimmed = previousMessages.subList(
+                previousMessages.size() - MAX_MESSAGES,
+                previousMessages.size()
+            );
+            return new AgentCommand(trimmed, UpdatePolicy.REPLACE);
+        }
+        return new AgentCommand(previousMessages);
+    }
+}`}
+</Code>
+
+使用 `ModelHook`（更复杂但更灵活）：
+
+<Code
+  language="java"
+  title="使用 ModelHook 实现消息修剪（可访问状态）" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.state.ReplaceAllWith;
+import org.springframework.ai.chat.messages.Message;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class AdvancedMessageTrimmingHook extends ModelHook {
+    private static final int MAX_MESSAGES = 10;
+    private static final String TRIM_COUNT_KEY = "trim_count";
+
+    @Override
+    public String getName() {
+        return "advanced_message_trimming";
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
+        // 可以访问完整状态
+        Optional<Object> messagesOpt = state.value("messages");
+        if (messagesOpt.isEmpty()) {
+            return CompletableFuture.completedFuture(Map.of());
+        }
+
+        List<Message> messages = (List<Message>) messagesOpt.get();
+        
+        // 可以访问和更新自定义状态
+        int trimCount = (Integer) state.value(TRIM_COUNT_KEY).orElse(0);
+        
+        if (messages.size() > MAX_MESSAGES) {
+            List<Message> trimmed = messages.subList(
+                messages.size() - MAX_MESSAGES,
+                messages.size()
+            );
+            
+            // 可以同时更新消息和自定义状态
+            return CompletableFuture.completedFuture(Map.of(
+                "messages", ReplaceAllWith.of(trimmed),
+                TRIM_COUNT_KEY, trimCount + 1  // 记录修剪次数
+            ));
+        }
+        
+        return CompletableFuture.completedFuture(Map.of());
+    }
+}`}
+</Code>
+
+**总结**：
+
+- **优先使用 `MessagesModelHook`**：对于大多数消息操作场景，它提供了更简洁的 API，代码更易读易维护。
+- **使用 `ModelHook`**：当你需要访问全局状态、存储自定义数据或进行复杂的状态管理时。
 
 ### AgentHook
 
@@ -774,9 +1050,7 @@ public class ModelCallLimiterHook extends ModelHook {
             String content = msg.getText().toLowerCase();
             for (String blocked : BLOCKED_WORDS) {
                 if (content.contains(blocked)) {
-                    return ModelResponse.blocked(
-                        "检测到不适当的内容，请修改您的输入"
-                    );
+					return ModelResponse.of(AssistantMessage.builder().content("检测到不适当的内容，请修改您的输入").build());
                 }
             }
         }

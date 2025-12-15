@@ -259,6 +259,19 @@ const config: Config = {
         breadcrumbs: true,
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'integration',
+        path: 'integration',
+        routeBasePath: 'integration',
+        sidebarPath: './sidebars/sidebars-integration.ts',
+        editUrl: githubUrls.editDocs,
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        breadcrumbs: true,
+      },
+    ],
     // [
     //   '@docusaurus/plugin-content-docs',
     //   {
@@ -357,10 +370,17 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
+          sidebarId: 'integrationSidebar',
+          docsPluginId: 'integration',
+          position: 'left',
+          label: ' Spring AI',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'ecosystemSidebar',
           docsPluginId: 'ecosystem',
           position: 'left',
-          label: '生态',
+          label: 'Admin',
         },
         {
           to: '/blog',
