@@ -152,23 +152,24 @@ public class CustomMemoryHook extends ModelHook {
 
 决定何时截断消息的一种方法是计算消息历史中的 token 数量，并在接近该限制时进行截断。
 
-要在 Agent 中修剪消息历史，请使用 `ModelHook`：
+要在 Agent 中修剪消息历史，请使用 `MessagesModelHook`：
 
 <Code
   language="java"
   title="MessageTrimmingHook 修剪消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.OverAllState;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
 import org.springframework.ai.chat.messages.Message;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
-public class MessageTrimmingHook extends ModelHook {
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class MessageTrimmingHook extends MessagesModelHook {
 
     private static final int MAX_MESSAGES = 3;
 
@@ -178,45 +179,25 @@ public class MessageTrimmingHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> messagesOpt = state.value("messages");
-        if (!messagesOpt.isPresent()) {
-            return CompletableFuture.completedFuture(Map.of());
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.size() <= MAX_MESSAGES) {
+            return new AgentCommand(previousMessages); // 无需更改
         }
 
-        List<Message> messages = (List<Message>) messagesOpt.get();
-
-        if (messages.size() <= MAX_MESSAGES) {
-            return CompletableFuture.completedFuture(Map.of()); // 无需更改
-        }
-
-        // 保留第一条消息和最后几条消息，并将中间消息标记为删除
-        Message firstMsg = messages.get(0);
-        int keepCount = messages.size() % 2 == 0 ? 3 : 4;
-        List<Message> recentMessages = messages.subList(
-            messages.size() - keepCount,
-            messages.size()
+        // 保留第一条消息和最后几条消息
+        Message firstMsg = previousMessages.get(0);
+        int keepCount = previousMessages.size() % 2 == 0 ? 3 : 4;
+        List<Message> recentMessages = previousMessages.subList(
+            previousMessages.size() - keepCount,
+            previousMessages.size()
         );
 
-        List<Object> newMessages = new ArrayList<>();
-        // 标记中间消息为删除（使用 RemoveByHash）
-        if (messages.size() - keepCount > 1) {
-            for (Message msg : messages.subList(1, messages.size() - keepCount)) {
-                newMessages.add(com.alibaba.cloud.ai.graph.state.RemoveByHash.of(msg));
-            }
-        }
+        List<Message> trimmedMessages = new ArrayList<>();
+        trimmedMessages.add(firstMsg);
+        trimmedMessages.addAll(recentMessages);
 
-        return CompletableFuture.completedFuture(Map.of("messages", newMessages));
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        return CompletableFuture.completedFuture(Map.of());
+        // 使用 REPLACE 策略替换消息列表，只保留需要的消息
+        return new AgentCommand(trimmedMessages, UpdatePolicy.REPLACE);
     }
 }
 
@@ -254,18 +235,17 @@ System.out.println(finalResponse.getText());
   language="java"
   title="MessageDeletionHook 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.OverAllState;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.state.RemoveByHash;
 import org.springframework.ai.chat.messages.Message;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
-public class MessageDeletionHook extends ModelHook {
+@HookPositions({HookPosition.AFTER_MODEL})
+public class MessageDeletionHook extends MessagesModelHook {
 
     @Override
     public String getName() {
@@ -273,33 +253,14 @@ public class MessageDeletionHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.AFTER_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        return CompletableFuture.completedFuture(Map.of());
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> messagesOpt = state.value("messages");
-        if (!messagesOpt.isPresent()) {
-            return CompletableFuture.completedFuture(Map.of());
+    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.size() > 2) {
+            // 删除最早的两条消息，只保留剩余的消息
+            List<Message> remainingMessages = previousMessages.subList(2, previousMessages.size());
+            return new AgentCommand(remainingMessages, UpdatePolicy.REPLACE);
         }
 
-        List<Message> messages = (List<Message>) messagesOpt.get();
-
-        if (messages.size() > 2) {
-            // 将最早的两条消息转为 RemoveByHash 对象以便从状态中删除
-            List<Object> removeOldMessages = new ArrayList<>();
-            removeOldMessages.add(RemoveByHash.of(messages.get(0)));
-            removeOldMessages.add(RemoveByHash.of(messages.get(1)));
-            return CompletableFuture.completedFuture(Map.of("messages", removeOldMessages));
-        }
-
-        return CompletableFuture.completedFuture(Map.of());
+        return new AgentCommand(previousMessages);
     }
 }`}
 </Code>
@@ -310,9 +271,18 @@ public class MessageDeletionHook extends ModelHook {
   language="java"
   title="ClearAllMessagesHook 删除所有消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.state.RemoveByHash;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ClearAllMessagesHook extends ModelHook {
+@HookPositions({HookPosition.AFTER_MODEL})
+public class ClearAllMessagesHook extends MessagesModelHook {
 
     @Override
     public String getName() {
@@ -320,26 +290,9 @@ public class ClearAllMessagesHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.AFTER_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> messagesOpt = state.value("messages");
-        if (!messagesOpt.isPresent()) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        List<Message> messages = (List<Message>) messagesOpt.get();
-
-        // 将所有消息转为 RemoveByHash 对象以便从状态中删除
-        List<Object> removeAllMessages = new ArrayList<>();
-        for (Message msg : messages) {
-            removeAllMessages.add(RemoveByHash.of(msg));
-        }
-
-        return CompletableFuture.completedFuture(Map.of("messages", removeAllMessages));
+    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
+        // 删除所有消息，返回空列表
+        return new AgentCommand(new ArrayList<>(), UpdatePolicy.REPLACE);
     }
 }`}
 </Code>
@@ -353,10 +306,17 @@ public class ClearAllMessagesHook extends ModelHook {
   language="java"
   title="DeleteOldMessagesHook 删除旧消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.state.RemoveByHash;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import java.util.List;
 
-public class DeleteOldMessagesHook extends ModelHook {
+@HookPositions({HookPosition.AFTER_MODEL})
+public class DeleteOldMessagesHook extends MessagesModelHook {
 
     @Override
     public String getName() {
@@ -364,27 +324,14 @@ public class DeleteOldMessagesHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.AFTER_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> messagesOpt = state.value("messages");
-        if (!messagesOpt.isPresent()) {
-            return CompletableFuture.completedFuture(Map.of());
+    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.size() > 2) {
+            // 删除最早的两条消息，只保留剩余的消息
+            List<Message> remainingMessages = previousMessages.subList(2, previousMessages.size());
+            return new AgentCommand(remainingMessages, UpdatePolicy.REPLACE);
         }
 
-        List<Message> messages = (List<Message>) messagesOpt.get();
-        if (messages.size() > 2) {
-            // 将最早的两条消息转为 RemoveByHash 对象以便从状态中删除
-            List<Object> removeOldMessages = new ArrayList<>();
-            removeOldMessages.add(RemoveByHash.of(messages.get(0)));
-            removeOldMessages.add(RemoveByHash.of(messages.get(1)));
-            return CompletableFuture.completedFuture(Map.of("messages", removeOldMessages));
-        }
-
-        return CompletableFuture.completedFuture(Map.of());
+        return new AgentCommand(previousMessages);
     }
 }
 
@@ -419,11 +366,12 @@ agent.call("我叫什么名字？", config);
   language="java"
   title="MessageSummarizationHook 总结消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.OverAllState;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.state.RemoveByHash;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.messages.Message;
@@ -432,11 +380,9 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
-public class MessageSummarizationHook extends ModelHook {
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class MessageSummarizationHook extends MessagesModelHook {
 
     private final ChatModel summaryModel;
     private final int maxTokensBeforeSummary;
@@ -458,35 +404,24 @@ public class MessageSummarizationHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> messagesOpt = state.value("messages");
-        if (!messagesOpt.isPresent()) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        List<Message> messages = (List<Message>) messagesOpt.get();
-
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
         // 估算 token 数量（简化版）
-        int estimatedTokens = messages.stream()
+        int estimatedTokens = previousMessages.stream()
             .mapToInt(m -> m.getText().length() / 4)
             .sum();
 
         if (estimatedTokens < maxTokensBeforeSummary) {
-            return CompletableFuture.completedFuture(Map.of());
+            return new AgentCommand(previousMessages);
         }
 
         // 需要总结
-        int messagesToSummarize = messages.size() - messagesToKeep;
+        int messagesToSummarize = previousMessages.size() - messagesToKeep;
         if (messagesToSummarize <= 0) {
-            return CompletableFuture.completedFuture(Map.of());
+            return new AgentCommand(previousMessages);
         }
 
-        List<Message> oldMessages = messages.subList(0, messagesToSummarize);
+        List<Message> oldMessages = previousMessages.subList(0, messagesToSummarize);
+        List<Message> recentMessages = previousMessages.subList(messagesToSummarize, previousMessages.size());
 
         // 生成摘要
         String summary = generateSummary(oldMessages);
@@ -496,15 +431,13 @@ public class MessageSummarizationHook extends ModelHook {
             "## 之前对话摘要:\n" + summary
         );
 
-        // 只需要把摘要消息和需要删除的消息保留在状态中，其余未包含的消息将会自动保留
-        List<Object> newMessages = new ArrayList<>();
+        // 构建新的消息列表：摘要消息 + 保留的最近消息
+        List<Message> newMessages = new ArrayList<>();
         newMessages.add(summaryMessage);
-        // IMPORTANT! Convert summarized messages to RemoveByHash objects so we can remove them from state
-        for (Message msg : oldMessages) {
-            newMessages.add(RemoveByHash.of(msg));
-        }
+        newMessages.addAll(recentMessages);
 
-        return CompletableFuture.completedFuture(Map.of("messages", newMessages));
+        // 使用 REPLACE 策略替换消息列表
+        return new AgentCommand(newMessages, UpdatePolicy.REPLACE);
     }
 
     private String generateSummary(List<Message> messages) {
@@ -523,11 +456,6 @@ public class MessageSummarizationHook extends ModelHook {
         );
 
         return response.getResult().getOutput().getText();
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        return CompletableFuture.completedFuture(Map.of());
     }
 }
 
@@ -695,9 +623,18 @@ Map<String, Object> context = Map.of("user_name", "John Smith");`}
   language="java"
   title="TrimMessagesHook Before Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.Message;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TrimMessagesHook extends ModelHook {
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class TrimMessagesHook extends MessagesModelHook {
 
     @Override
     public String getName() {
@@ -705,47 +642,24 @@ public class TrimMessagesHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        // 访问和修改消息
-        Optional<Object> messagesOpt = state.value("messages");
-        if (messagesOpt.isPresent()) {
-            List<Message> messages = (List<Message>) messagesOpt.get();
-
-            if (messages.size() <= 3) {
-                return CompletableFuture.completedFuture(Map.of()); // 无需更改
-            }
-
-            // 保留第一条和最后几条消息，并将中间消息标记为删除
-            Message firstMsg = messages.get(0);
-            List<Message> recentMessages = messages.subList(
-                messages.size() - 3,
-                messages.size()
-            );
-
-            List<Object> newMessages = new ArrayList<>();
-            newMessages.add(firstMsg);
-            newMessages.addAll(recentMessages);
-            // 标记中间消息为删除（使用 RemoveByHash）
-            if (messages.size() - 3 > 1) {
-                for (Message msg : messages.subList(1, messages.size() - 3)) {
-                    newMessages.add(com.alibaba.cloud.ai.graph.state.RemoveByHash.of(msg));
-                }
-            }
-
-            return CompletableFuture.completedFuture(Map.of("messages", newMessages));
+    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.size() <= 3) {
+            return new AgentCommand(previousMessages); // 无需更改
         }
 
-        return CompletableFuture.completedFuture(Map.of());
-    }
+        // 保留第一条和最后几条消息
+        Message firstMsg = previousMessages.get(0);
+        List<Message> recentMessages = previousMessages.subList(
+            previousMessages.size() - 3,
+            previousMessages.size()
+        );
 
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        return CompletableFuture.completedFuture(Map.of());
+        List<Message> trimmedMessages = new ArrayList<>();
+        trimmedMessages.add(firstMsg);
+        trimmedMessages.addAll(recentMessages);
+
+        // 使用 REPLACE 策略替换消息列表，只保留需要的消息
+        return new AgentCommand(trimmedMessages, UpdatePolicy.REPLACE);
     }
 }
 
@@ -766,9 +680,19 @@ ReactAgent agent = ReactAgent.builder()
   language="java"
   title="ValidateResponseHook After Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
+import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ValidateResponseHook extends ModelHook {
+@HookPositions({HookPosition.AFTER_MODEL})
+public class ValidateResponseHook extends MessagesModelHook {
 
     private static final List<String> STOP_WORDS =
         List.of("password", "secret", "api_key");
@@ -779,43 +703,27 @@ public class ValidateResponseHook extends ModelHook {
     }
 
     @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.AFTER_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        return CompletableFuture.completedFuture(Map.of());
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> messagesOpt = state.value("messages");
-        if (!messagesOpt.isPresent()) {
-            return CompletableFuture.completedFuture(Map.of());
+    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
+        if (previousMessages.isEmpty()) {
+            return new AgentCommand(previousMessages);
         }
 
-        List<Message> messages = (List<Message>) messagesOpt.get();
-        if (messages.isEmpty()) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        Message lastMessage = messages.get(messages.size() - 1);
+        Message lastMessage = previousMessages.get(previousMessages.size() - 1);
         String content = lastMessage.getText();
 
         // 检查是否包含敏感词
         for (String stopWord : STOP_WORDS) {
             if (content.toLowerCase().contains(stopWord)) {
-                // 移除包含敏感词的消息
-                List<Message> filtered = messages.subList(0, messages.size() - 1);
-                filtered.add(new AssistantMessage(
-                    "抱歉，我无法提供该信息。"
-                ));
-                return CompletableFuture.completedFuture(Map.of("messages", filtered));
+                // 移除包含敏感词的消息，替换为安全消息
+                List<Message> filtered = new ArrayList<>(
+                    previousMessages.subList(0, previousMessages.size() - 1)
+                );
+                filtered.add(new AssistantMessage("抱歉，我无法提供该信息。"));
+                return new AgentCommand(filtered, UpdatePolicy.REPLACE);
             }
         }
 
-        return CompletableFuture.completedFuture(Map.of());
+        return new AgentCommand(previousMessages);
     }
 }
 

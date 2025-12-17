@@ -87,7 +87,7 @@ spring.ai.embedding.transformer.tokenizer.uri=https://huggingface.co/intfloat/e5
 | spring.ai.embedding.transformer.tokenizer.uri | 由 ONNX 引擎创建的预训练 HuggingFaceTokenizer 的 URI（例如 tokenizer.json）。 | onnx/all-MiniLM-L6-v2/tokenizer.json |
 | spring.ai.embedding.transformer.tokenizer.options | HuggingFaceTokenizer 选项，如 '`addSpecialTokens`'、'`modelMaxLength`'、'`truncation`'、'`padding`'、'`maxLength`'、'`stride`'、'`padToMultipleOf`'。留空以回退到默认值。 | empty |
 | spring.ai.embedding.transformer.cache.enabled | 启用远程 Resource 缓存。 | true |
-| spring.ai.embedding.transformer.cache.directory | 缓存远程资源（如 ONNX 模型）的目录路径 | ${java.io.tmpdir}/spring-ai-onnx-model |
+| spring.ai.embedding.transformer.cache.directory | 缓存远程资源（如 ONNX 模型）的目录路径 | ``${java.io.tmpdir}/spring-ai-onnx-model`` |
 | spring.ai.embedding.transformer.onnx.modelUri | 现有的、预训练的 ONNX 模型。 | onnx/all-MiniLM-L6-v2/model.onnx |
 | spring.ai.embedding.transformer.onnx.modelOutputName | ONNX 模型的输出节点名称，我们将使用它进行 embedding 计算。 | last_hidden_state |
 | spring.ai.embedding.transformer.onnx.gpuDeviceId | 要执行的 GPU 设备 ID。仅在 >= 0 时适用。否则忽略。（需要额外的 onnxruntime_gpu 依赖） | -1 |
@@ -171,7 +171,7 @@ embeddingModel.setTokenizerResource("classpath:/onnx/all-MiniLM-L6-v2/tokenizer.
 // (optional) defaults to classpath:/onnx/all-MiniLM-L6-v2/model.onnx
 embeddingModel.setModelResource("classpath:/onnx/all-MiniLM-L6-v2/model.onnx");
 
-// (optional) defaults to ${java.io.tmpdir}/spring-ai-onnx-model
+// (optional) defaults to \${java.io.tmpdir}/spring-ai-onnx-model
 // Only the http/https resources are cached by default.
 embeddingModel.setResourceCacheDirectory("/tmp/onnx-zoo");
 
@@ -189,7 +189,7 @@ List<List<Double>> embeddings = this.embeddingModel.embed(List.of("Hello world",
 第一次 `embed()` 调用会下载大型 ONNX 模型并将其缓存在本地文件系统上。
 因此，第一次调用可能比平时花费更长时间。
 使用 `#setResourceCacheDirectory(<path>)` 方法设置存储 ONNX 模型的本地文件夹。
-默认缓存文件夹是 `${java.io.tmpdir}/spring-ai-onnx-model`。
+默认缓存文件夹是 ``\${java.io.tmpdir}/spring-ai-onnx-model``。
 
 更方便（且推荐）的是将 TransformersEmbeddingModel 创建为 `Bean`。
 这样您就不必手动调用 `afterPropertiesSet()`。
