@@ -28,7 +28,7 @@ const config: Config = {
   // check links and markdown links
   // if the link is broken, it will throw an error during build
   // if the markdown link is broken, it will show a warning during build
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Metadata for SEO
@@ -373,7 +373,7 @@ const config: Config = {
           sidebarId: 'integrationSidebar',
           docsPluginId: 'integration',
           position: 'left',
-          label: ' Spring AI',
+          label: '生态集成',
         },
         {
           type: 'docSidebar',

@@ -6,11 +6,7 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 
 const sidebars: SidebarsConfig = {
   integrationSidebar: [
-    'chatmodel',
     'chatclient',
-    'generic-model',
-    'prompt',
-    'tools',
     {
       type: 'category',
       label: 'Chat Models',

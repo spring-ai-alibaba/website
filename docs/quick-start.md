@@ -236,7 +236,7 @@ ChatModel chatModel = DashScopeChatModel.builder()
 <dependency>
  <groupId>org.springframework.ai</groupId>
  <artifactId>spring-ai-starter-model-openai</artifactId>
- <version>1.1.0-M3</version>
+ <version>1.1.0</version>
 </dependency>
 ```
 
@@ -390,13 +390,20 @@ if (result.isPresent()) {
 
 ### 配置最大迭代次数
 
-为防止无限循环，可以配置最大迭代次数：
+为防止无限循环，可以使用 `ModelCallLimitHook` 来限制模型调用次数：
 
 ```java
+import com.alibaba.cloud.ai.graph.agent.hook.modelcalllimit.ModelCallLimitHook;
+
+ModelCallLimitHook hook = ModelCallLimitHook.builder()
+    .runLimit(5)  // 限制最多调用 5 次
+    .exitBehavior(ModelCallLimitHook.ExitBehavior.ERROR)  // 超出限制时抛出异常
+    .build();
+
 ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
     .model(chatModel)
-    .maxIterations(5)  // 默认为 10
+    .hooks(hook)
     .saver(new MemorySaver())
     .build();
 ```
