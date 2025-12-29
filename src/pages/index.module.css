@@ -564,91 +564,6 @@
   border-bottom: 1px solid var(--border-light);
 }
 
-/* Neural Network Canvas */
-.neuralNetwork {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.4;
-}
-
-[data-theme='dark'] .neuralNetwork {
-  opacity: 0.6;
-}
-
-/* Spring Leaves Animation */
-.springLeaves {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-  overflow: hidden;
-}
-
-.springLeaf {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #6db33f 0%, #5a9f31 100%);
-  clip-path: path('M20,0 Q30,10 20,20 Q10,10 20,0 M20,20 Q30,30 20,40 Q10,30 20,20');
-  opacity: 0.15;
-  animation: springLeafFloat 15s ease-in-out infinite;
-}
-
-[data-theme='dark'] .springLeaf {
-  background: linear-gradient(135deg, #7ed957 0%, #6db33f 100%);
-  opacity: 0.2;
-}
-
-.springLeaf:nth-child(1) {
-  top: 10%;
-  left: 15%;
-  animation-delay: 0s;
-  animation-duration: 12s;
-}
-
-.springLeaf:nth-child(2) {
-  top: 60%;
-  left: 75%;
-  animation-delay: -5s;
-  animation-duration: 18s;
-  transform: scale(1.5);
-}
-
-.springLeaf:nth-child(3) {
-  top: 35%;
-  left: 85%;
-  animation-delay: -10s;
-  animation-duration: 15s;
-  transform: scale(0.8);
-}
-
-@keyframes springLeafFloat {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 0.1;
-  }
-  25% {
-    transform: translate(30px, -20px) rotate(90deg);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translate(-20px, -40px) rotate(180deg);
-    opacity: 0.15;
-  }
-  75% {
-    transform: translate(40px, -30px) rotate(270deg);
-    opacity: 0.25;
-  }
-}
-
 .heroContent {
   display: flex;
   justify-content: center;
@@ -1790,9 +1705,6 @@
     display: none;
   }
 
-  .neuralNetwork {
-    opacity: 0.2;
-  }
 }
 
 /* Dark theme specific styles */
