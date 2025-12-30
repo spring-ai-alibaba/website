@@ -26,7 +26,7 @@
 
 /* Meteor body - tapered from thick head to thin tail */
 .pageMeteor::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -47,7 +47,7 @@
 
 /* Meteor head - bright glowing orb */
 .pageMeteor::after {
-  content: '';
+  
   position: absolute;
   top: 50%;
   right: -3px;
@@ -134,7 +134,7 @@
 
 /* Meteor head effect - enhanced gradient flashing */
 .pageMeteor::before {
-  content: '';
+  
   position: absolute;
   left: 0;
   top: 50%;
@@ -815,7 +815,7 @@
 }
 
 .label::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: -100%;
@@ -1068,7 +1068,7 @@
 }
 
 .heroButton::before {
-  content: '';
+  
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1342,7 +1342,7 @@
 }
 
 .featureCard::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -1358,7 +1358,7 @@
 }
 
 .featureCard::after {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -1476,7 +1476,7 @@
 }
 
 .acknowledgmentCard::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;

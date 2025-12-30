@@ -78,7 +78,7 @@
 }
 
 .contributionCard::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -272,7 +272,7 @@
 }
 
 .callToAction::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -337,7 +337,7 @@
 }
 
 .rolesSection::before {
-  content: '';
+  
   position: absolute;
   top: -2rem;
   left: 50%;
@@ -355,7 +355,7 @@
 }
 
 .governanceSection::before {
-  content: '';
+  
   position: absolute;
   top: -2rem;
   left: 50%;
@@ -387,7 +387,7 @@
 }
 
 .mainSectionTitle::after {
-  content: '';
+  
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -441,7 +441,7 @@
 
 /* Separator line */
 .rolesSection::after {
-  content: '';
+  
   position: absolute;
   bottom: -3rem;
   left: 50%;
@@ -500,7 +500,7 @@
 }
 
 .memberCard::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -620,7 +620,7 @@
 }
 
 .joinCard::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -631,7 +631,7 @@
 }
 
 .joinCard::after {
-  content: '';
+  
   position: absolute;
   inset: -2px;
   border-radius: 30px;
@@ -844,7 +844,7 @@
 }
 
 .section::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -898,7 +898,7 @@
 }
 
 .standardsColumn::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -1016,7 +1016,7 @@
 }
 
 .memberItem::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;

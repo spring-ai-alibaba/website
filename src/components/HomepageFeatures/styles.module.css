@@ -56,7 +56,7 @@
 }
 
 .featureCard::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -91,7 +91,7 @@
 }
 
 .featureIcon::before {
-  content: '';
+  
   position: absolute;
   top: -2px;
   left: -2px;
@@ -263,7 +263,7 @@
 
 /* Special effects for light theme */
 [data-theme='light'] .featureCard::after {
-  content: '';
+  
   position: absolute;
   bottom: -50%;
   left: -50%;
@@ -281,7 +281,7 @@
 
 /* Special effects for dark theme */
 [data-theme='dark'] .featureCard::after {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
