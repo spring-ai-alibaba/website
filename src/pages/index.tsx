@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
@@ -118,13 +118,6 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <FloatingClouds />
-      <NeuralNetwork />
-      <div className={styles.springLeaves}>
-        <div className={styles.springLeaf}></div>
-        <div className={styles.springLeaf}></div>
-        <div className={styles.springLeaf}></div>
-      </div>
       <div className={clsx('container', styles.heroContainer)}>
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
@@ -302,7 +295,6 @@ export default function Home() {
     <Layout
       title={`${siteConfig.title}`}
       description={siteConfig.tagline}>
-      <MeteorShower />
       <HomepageHeader />
       <main>
         <ArchitectureSection />

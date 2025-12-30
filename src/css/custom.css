@@ -136,7 +136,7 @@ body {
 
 /* Light theme background decorations */
 [data-theme='light'] body::before {
-  content: '';
+  
   position: fixed;
   top: 0;
   left: 0;
@@ -200,7 +200,7 @@ body {
 
 /* Starry sky background effect - dark theme only */
 [data-theme='dark'] body::before {
-  content: '';
+  
   position: fixed;
   top: 0;
   left: 0;
@@ -326,7 +326,7 @@ body {
 
 /* Starry sky background effect - dark theme only */
 [data-theme='dark'] body::before {
-  content: '';
+  
   position: fixed;
   top: 0;
   left: 0;
@@ -498,7 +498,7 @@ article {
 }
 
 article::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -579,7 +579,7 @@ a:hover {
 }
 
 a:hover::after {
-  content: '';
+  
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -612,7 +612,7 @@ a:hover::after {
 }
 
 .button::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: -100%;
@@ -749,7 +749,7 @@ code:hover {
 }
 
 .card::before {
-  content: '';
+  
   position: absolute;
   top: 0;
   left: 0;
