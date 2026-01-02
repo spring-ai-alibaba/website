@@ -1,10 +1,10 @@
 ---
 title: Models 模型
 description: 学习使用Chat Model API与各种AI模型交互，实现聊天补全功能和自然语言处理
-keywords: [Chat Model, ChatModel API, GPT, 语言模型, Prompt, ChatResponse, AI模型集成]
+keywords: [Chat Model, ChatModel API, GPT, 语言模型, Prompt, ChatResponse, AI模型集成, Generic Model API]
 ---
 
-## ChatModel API
+## 概述
 
 ChatModel API 为开发者提供了将 AI 驱动的聊天补全功能集成到应用程序中的能力。它利用预训练的语言模型（如 GPT），根据用户的自然语言输入生成类似人类的响应。
 
@@ -14,13 +14,152 @@ ChatModel API 为开发者提供了将 AI 驱动的聊天补全功能集成到�
 
 借助 `Prompt`（用于输入封装）和 `ChatResponse`（用于输出处理）等配套类，ChatModel API 统一了与 AI 模型的通信。它管理请求准备和响应解析的复杂性，提供直接且简化的 API 交互。
 
-## API 概述
+Spring AI ChatModel API 构建在 Spring AI `Generic Model API` 之上，提供 Chat 特定的抽象和实现。这允许轻松集成和在不同 AI 服务之间切换，同时为客户端应用程序维护一致的 API。
 
-本节提供 Spring AI ChatModel API 接口和相关类的指南。
+## Generic Model API
+
+为了为所有 AI Models 提供基础，Spring AI 创建了 Generic Model API。这使得通过遵循通用模式轻松地为 Spring AI 贡献新的 AI Model 支持。
+
+以下类图展示了 Generic Model API 的架构：
+
+![Spring AI Generic Model API](/img/integration/spring-ai-generic-model-api.jpg)
+
+### Model
+
+`Model` 接口提供了调用 AI model 的通用 API。它旨在通过抽象发送请求和接收响应的过程来处理与各种类型的 AI model 的交互。该接口使用 Java 泛型来容纳不同类型的请求和响应，增强了不同 AI model 实现的灵活性和适应性。
+
+<Code
+  language="java"
+  title="Model 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface Model<TReq extends ModelRequest<?>, TRes extends ModelResponse<?>> {
+
+    /**
+     * Executes a method call to the AI model.
+     * @param request the request object to be sent to the AI model
+     * @return the response from the AI model
+     */
+    TRes call(TReq request);
+}`}
+</Code>
+
+### StreamingModel
+
+`StreamingModel` 接口提供了调用具有流式响应的 AI model 的通用 API。它抽象了发送请求和接收流式响应的过程。
+
+<Code
+  language="java"
+  title="StreamingModel 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface StreamingModel<TReq extends ModelRequest<?>, TResChunk extends ModelResponse<?>> {
+
+    /**
+     * Executes a method call to the AI model.
+     * @param request the request object to be sent to the AI model
+     * @return the streaming response from the AI model
+     */
+    Flux<TResChunk> stream(TReq request);
+}`}
+</Code>
+
+### ModelRequest
+
+`ModelRequest` 接口表示对 AI model 的请求。它封装了与 AI model 交互所需的信息，包括指令或输入（泛型类型 `T`）和附加的 model 选项。
+
+<Code
+  language="java"
+  title="ModelRequest 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface ModelRequest<T> {
+
+    /**
+     * Retrieves the instructions or input required by the AI model.
+     * @return the instructions or input required by the AI model
+     */
+    T getInstructions(); // required input
+
+    /**
+     * Retrieves the customizable options for AI model interactions.
+     * @return the customizable options for AI model interactions
+     */
+    ModelOptions getOptions();
+}`}
+</Code>
+
+### ModelOptions
+
+`ModelOptions` 接口表示 AI model 交互的可自定义选项。此标记接口允许指定各种设置和参数，这些设置和参数可以影响 AI model 的行为和输出。
+
+<Code
+  language="java"
+  title="ModelOptions 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface ModelOptions {
+
+}`}
+</Code>
+
+### ModelResponse
+
+`ModelResponse` 接口表示从 AI model 接收的响应。此接口提供访问 AI model 生成的主要结果或结果列表以及响应元数据的方法。
+
+<Code
+  language="java"
+  title="ModelResponse 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface ModelResponse<T extends ModelResult<?>> {
+
+    /**
+     * Retrieves the result of the AI model.
+     * @return the result generated by the AI model
+     */
+    T getResult();
+
+    /**
+     * Retrieves the list of generated outputs by the AI model.
+     * @return the list of generated outputs
+     */
+    List<T> getResults();
+
+    /**
+     * Retrieves the response metadata associated with the AI model's response.
+     * @return the response metadata
+     */
+    ResponseMetadata getMetadata();
+}`}
+</Code>
+
+### ModelResult
+
+`ModelResult` 接口提供访问 AI model 的主要输出和与此结果相关的元数据的方法。它旨在提供一种标准化和全面的方式来处理和解释 AI model 生成的输出。
+
+<Code
+  language="java"
+  title="ModelResult 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java"
+>
+{`public interface ModelResult<T> {
+
+    /**
+     * Retrieves the output generated by the AI model.
+     * @return the output generated by the AI model
+     */
+    T getOutput();
+
+    /**
+     * Retrieves the metadata associated with the result of an AI model.
+     * @return the metadata associated with the result
+     */
+    ResultMetadata getMetadata();
+}`}
+</Code>
+
+## Chat Model API
+
+Chat Model API 构建在 Generic Model API 之上，提供 Chat 特定的抽象和实现。本节提供 Spring AI ChatModel API 接口和相关类的指南。
 
 ### ChatModel
 
-以下是 [ChatModel](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/ChatModel.java) 接口定义：
+`ChatModel` 接口扩展了 `Model<Prompt, ChatResponse>` 和 `StreamingChatModel`，提供了与 AI 模型交互的统一接口。
 
 <Code
   language="java"
@@ -39,7 +178,7 @@ ChatModel API 为开发者提供了将 AI 驱动的聊天补全功能集成到�
 
 ### StreamingChatModel
 
-以下是 [StreamingChatModel](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/model/StreamingChatModel.java) 接口定义：
+`StreamingChatModel` 接口扩展了 `StreamingModel<Prompt, ChatResponse>`，提供了流式响应的能力。
 
 <Code
   language="java"
@@ -117,6 +256,10 @@ public interface Message extends Content {
 
 `Message` 接口有多种实现，对应于 AI 模型可以处理的消息类别：
 
+![Spring AI Message API](/img/integration/spring-ai-message-api.jpg)
+
+主要消息类型包括：
+
 - **UserMessage**: 用户消息
 - **SystemMessage**: 系统消息
 - **AssistantMessage**: 助手消息
@@ -184,6 +327,10 @@ Spring AI 提供了一个复杂的系统来配置和使用 ChatModels。它允�
 
 启动和运行时选项的分离允许全局配置和特定于请求的调整。
 
+以下流程图说明了 Spring AI 如何处理 Chat Models 的配置和执行，结合启动和运行时选项：
+
+![Chat Options Flow](/img/integration/chat-options-flow.jpg)这种设计符合 Spring 的模块化和可互换性理念，使开发人员能够轻松地使用不同的 AI model 并根据需要调整参数，所有这些都在 Spring AI 框架提供的统一接口内。
+
 ### ChatResponse
 
 `ChatResponse` 类的结构如下：
@@ -236,19 +383,31 @@ Spring AI 提供了一个复杂的系统来配置和使用 ChatModels。它允�
 
 ## 可用实现
 
-Spring AI 提供了与多个 AI 服务提供商的集成，所有这些都通过统一的 `ChatModel` 和 `StreamingChatModel` 接口进行交互：
+Spring AI 提供了与多个 AI 服务提供商的集成，所有这些都通过统一的 `ChatModel` 和 `StreamingChatModel` 接口进行交互。这种设计允许轻松集成和在不同 AI 服务之间切换，同时为客户端应用程序维护一致的 API。
 
-- **OpenAI Chat Completion** (支持流式、多模态和函数调用)
-- **Microsoft Azure OpenAI Chat Completion** (支持流式和函数调用)
-- **Alibaba DashScope Chat Completion** (支持流式和函数调用)
-- **Ollama Chat Completion** (支持流式、多模态和函数调用)
-- **Hugging Face Chat Completion** (不支持流式)
-- **Google Vertex AI Gemini Chat Completion** (支持流式、多模态和函数调用)
-- **Amazon Bedrock**
-- **Mistral AI Chat Completion** (支持流式和函数调用)
+以下图表说明了统一的接口 `ChatModel` 和 `StreamingChatModel` 用于与来自不同提供商的各种 AI chat model 交互：
+
+![Spring AI Chat Completions Clients](/img/integration/spring-ai-chat-completions-clients.jpg)
+
+### 支持的模型提供商
+
+- **[OpenAI Chat Completion](/integration/chatmodels/openai-chat)** (支持流式、多模态和函数调用)
+- **[Microsoft Azure OpenAI Chat Completion](/integration/chatmodels/more/azure-openai-chat)** (支持流式和函数调用)
+- **[Alibaba DashScope Chat Completion](/integration/chatmodels/dashScope)** (支持流式和函数调用)
+- **[Ollama Chat Completion](/integration/chatmodels/ollama-chat)** (支持流式、多模态和函数调用)
+- **[Hugging Face Chat Completion](/integration/chatmodels/more/huggingface)** (不支持流式)
+- **[Google Vertex AI Gemini Chat Completion](/integration/chatmodels/more/google-vertexai)** (支持流式、多模态和函数调用)
+- **[Amazon Bedrock](/integration/chatmodels/more/bedrock-converse)**
+- **[Mistral AI Chat Completion](/integration/chatmodels/more/mistralai-chat)** (支持流式和函数调用)
 - **Anthropic Chat Completion** (支持流式和函数调用)
 
 关于每个模型的具体用法与特性，请查看 Spring AI Alibaba 模型适配文档。
+
+### API 架构
+
+Spring AI Chat Model API 构建在 Spring AI `Generic Model API` 之上，提供 Chat 特定的抽象和实现。以下类图说明了 Spring AI Chat Model API 的主要类和接口：
+
+![Spring AI Chat API](/img/integration/spring-ai-chat-api.jpg)
 
 ## DashScopeChatModel
 
