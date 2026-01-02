@@ -495,6 +495,60 @@ public class CustomModelHook extends ModelHook {
 }`}
 </Code>
 
+**删除消息**：
+
+使用 `ModelHook` 时，可以通过 `RemoveByHash` 来删除 `messages` 中的消息。**重要提示**：返回的消息列表必须保持原消息列表的顺序，不能打乱顺序。由于 ModelHook 的复杂度，因此我们更推荐直接使用 MessagesModelHook。
+
+<Code
+  language="java"
+  title="使用 RemoveByHash 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
+import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.state.RemoveByHash;
+import org.springframework.ai.chat.messages.Message;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+@HookPositions({HookPosition.BEFORE_MODEL})
+public class MessageDeletionHook extends ModelHook {
+
+    @Override
+    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
+        Optional<Object> messagesOpt = state.value("messages");
+        if (!messagesOpt.isPresent()) {
+            return CompletableFuture.completedFuture(Map.of());
+        }
+
+        List<Message> messages = (List<Message>) messagesOpt.get();
+        
+        // 构建新的消息列表，保持原顺序
+        List<Object> newMessages = new ArrayList<>();
+        for (Message msg : messages) {
+            // 根据条件决定保留或删除
+            if (shouldKeep(msg)) {
+                newMessages.add(msg);  // 保留消息
+            } else {
+                newMessages.add(RemoveByHash.of(msg));  // 标记删除
+            }
+        }
+        
+        return CompletableFuture.completedFuture(Map.of("messages", newMessages));
+    }
+    
+    private boolean shouldKeep(Message msg) {
+        // 实现你的保留逻辑
+        return true;
+    }
+}`}
+</Code>
+
 ### MessagesModelHook vs ModelHook：如何选择？
 
 `MessagesModelHook` 和 `ModelHook` 都可以在模型调用前后执行自定义逻辑，但它们有不同的设计目标和适用场景。
@@ -708,6 +762,84 @@ public class LoggingInterceptor extends ModelInterceptor {
     }
 }`}
 </Code>
+
+**动态工具管理**：
+
+`ModelInterceptor` 支持在模型调用前动态管理工具：
+
+- **`dynamicToolCallbacks`**：动态添加工具回调，可以在运行时根据上下文添加新的工具
+- **`tools`**：动态筛选工具，指定本次调用可用的工具名称列表。如果为空，则使用所有默认工具
+
+<Code
+  language="java"
+  title="DynamicToolInterceptor 动态工具管理示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+>
+{`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ModelCallHandler;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class DynamicToolInterceptor extends ModelInterceptor {
+
+    // 示例：根据上下文动态创建的工具
+    private ToolCallback createContextualTool(String context) {
+        return FunctionToolCallback.builder("contextual_tool", (String input) -> {
+            return "处理上下文: " + context + ", 输入: " + input;
+        })
+        .description("根据上下文动态创建的工具")
+        .build();
+    }
+
+    @Override
+    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
+        // 从上下文中获取信息，决定添加哪些工具
+        Map<String, Object> context = request.getContext();
+        String userRole = (String) context.getOrDefault("user_role", "default");
+
+        // 构建修改后的请求
+        ModelRequest.Builder builder = ModelRequest.builder(request);
+
+        // 示例 1: 动态添加工具回调
+        List<ToolCallback> dynamicTools = new ArrayList<>();
+        if ("premium".equals(userRole)) {
+            // 为高级用户添加额外工具
+            dynamicTools.add(createContextualTool("premium_feature"));
+        }
+        builder.dynamicToolCallbacks(dynamicTools);
+
+        // 示例 2: 动态筛选工具（只允许使用指定的工具）
+        if (shouldRestrictTools(context)) {
+            // 只允许使用 search 和 calculator 工具
+            builder.tools(List.of("search", "calculator"));
+        }
+        // 如果 tools 为空列表，则使用所有默认工具
+
+        ModelRequest modifiedRequest = builder.build();
+        return handler.call(modifiedRequest);
+    }
+
+    private boolean shouldRestrictTools(Map<String, Object> context) {
+        // 根据上下文决定是否限制工具
+        return context.containsKey("restrict_tools");
+    }
+
+    @Override
+    public String getName() {
+        return "DynamicToolInterceptor";
+    }
+}`}
+</Code>
+
+**使用场景**：
+- 根据用户权限动态添加或移除工具
+- 根据对话上下文临时启用特定工具
+- 实现工具的动态加载和卸载
+- 在特定条件下限制可用的工具集
 
 ### ToolInterceptor
 

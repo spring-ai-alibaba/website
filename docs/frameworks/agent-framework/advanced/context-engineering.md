@@ -230,8 +230,8 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
     }
 
     private String getUserIdFromContext(ModelRequest request) {
-        // 从请求上下文提取用户ID
-        return "user_001"; // 简化示例
+        // 相当于是从 RunnableConfig 中读取提取用户ID，所以agent调用时要设置 user-id
+        return request.getContext().get("user-id"); // 简化示例
     }
 
     private String buildPersonalizedPrompt(UserPreferences prefs) {
@@ -268,6 +268,8 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
 - 压缩长对话
 
 #### 消息过滤
+
+> 请注意这里的消息过滤只对当前这一次调用有效，不会影响整体持久存储的短期记忆，也就是下次推理调用过程不会感知到这里的过滤动作。
 
 <Code
   language="java"

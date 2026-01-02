@@ -55,7 +55,7 @@ CompiledGraph graph = stateGraph.compile();`}
 
 ### KeyStrategy
 
-KeyStrategy 是理解如何将节点的更新应用到 `State` 的关键。`State` 中的每个键都有自己独立的 Strategy 策略。如果没有显式指定 Strategy 策略，则默认使用 AppendStrategy，即假定该键的所有更新都应覆盖它。
+KeyStrategy 是理解如何将节点的更新应用到 `State` 的关键。`State` 中的每个键都有自己独立的 Strategy 策略。如果没有显式指定 Strategy 策略，则默认使用 ReplaceStrategy，即假定该键的所有更新都应覆盖它。
 
 让我们看几个例子来更好地理解它们。
 

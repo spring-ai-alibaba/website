@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PineconeFloatingSearch from '../components/PineconeFloatingSearch'
-import DocNeuralBackground from '../components/DocNeuralBackground'
 import BackToTop from '../components/BackToTop'
 
 interface RootProps {
@@ -274,7 +273,6 @@ export default function Root({ children }: RootProps) {
 
   return (
     <>
-      {isDocPage && <DocNeuralBackground />}
       {children}
       <PineconeFloatingSearch />
       <BackToTop />
