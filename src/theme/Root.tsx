@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PineconeFloatingSearch from '../components/PineconeFloatingSearch'
 import BackToTop from '../components/BackToTop'
+import AnnouncementBar from '../components/AnnouncementBar'
 
 interface RootProps {
   children: React.ReactNode;
@@ -8,9 +9,10 @@ interface RootProps {
 
 export default function Root({ children }: RootProps) {
   const [isDocPage, setIsDocPage] = useState(false)
+  const [isHomePage, setIsHomePage] = useState(false)
 
   useEffect(() => {
-    // Check if we're on a documentation page
+    // Check if we're on a documentation page or homepage
     const checkPath = () => {
       const path = window.location.pathname
       const isDoc = path.startsWith('/docs') ||
@@ -18,8 +20,23 @@ export default function Root({ children }: RootProps) {
                     path.startsWith('/blog') ||
                     path.startsWith('/en/blog') ||
                     path.startsWith('/community') ||
-                    path.startsWith('/en/community')
+                    path.startsWith('/en/community') ||
+                    path.startsWith('/agents') ||
+                    path.startsWith('/en/agents') ||
+                    path.startsWith('/integration') ||
+                    path.startsWith('/en/integration') ||
+                    path.startsWith('/ecosystem') ||
+                    path.startsWith('/en/ecosystem')
+      
+      // Check if we're on homepage
+      // Homepage paths: /, /zh-Hans/, /en/
+      const normalizedPath = path.replace(/\/$/, '') || '/'
+      const isHome = normalizedPath === '/' || 
+                     normalizedPath === '/zh-Hans' || 
+                     normalizedPath === '/en'
+      
       setIsDocPage(isDoc)
+      setIsHomePage(isHome)
     }
 
     checkPath()
@@ -273,6 +290,7 @@ export default function Root({ children }: RootProps) {
 
   return (
     <>
+      {isHomePage && <AnnouncementBar />}
       {children}
       <PineconeFloatingSearch />
       <BackToTop />
