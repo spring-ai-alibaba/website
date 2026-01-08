@@ -102,7 +102,7 @@ public class BaiduSearchProvider implements SearchProvider {
                 SearchResultItem item = new SearchResultItem();
                 item.setTitle(r.getTitle());
                 item.setContent(r.getSnippet());
-                item.setUrl(r.getUrl());
+                item.setUri(r.getUrl());
                 item.setSourceType(SearchSourceType.WEB);
                 return item;
             })
@@ -130,7 +130,7 @@ public class ProjectSearchProvider implements SearchProvider {
 
     @Override
     public List<SearchResultItem> search(SearchRequest request) {
-        String projectId = (String) request.getMetadata().get("projectId");
+        String projectId = (String) request.getFilters().get("projectId");
         
         // 搜索代码索引
         List<CodeSnippet> snippets = projectIndexer.search(
@@ -146,10 +146,13 @@ public class ProjectSearchProvider implements SearchProvider {
                 item.setContent(s.getCode());
                 item.setSourceType(SearchSourceType.PROJECT);
                 item.setScore(s.getScore());
-                item.setMetadata(Map.of(
-                    "language", s.getLanguage(),
-                    "lineNumber", s.getLineNumber()
-                ));
+                
+                // 设置元数据
+                SearchMetadata metadata = new SearchMetadata();
+                metadata.setLanguage(s.getLanguage());
+                metadata.getExtensions().put("lineNumber", s.getLineNumber());
+                item.setMetadata(metadata);
+                
                 return item;
             })
             .collect(Collectors.toList());

@@ -95,8 +95,8 @@ public class WebhookChannelDefinition implements ReplyChannelDefinition {
     @Override
     public ParameterSchema getSupportedParameters() {
         return ParameterSchema.builder()
-            .addParameter("url", ParameterType.STRING, "Webhook URL", true)
-            .addParameter("payload", ParameterType.OBJECT, "推送数据", true)
+            .parameter("url", ParameterSchema.ParameterType.STRING, true, "Webhook URL")
+            .parameter("payload", ParameterSchema.ParameterType.OBJECT, true, "推送数据")
             .build();
     }
 
@@ -164,11 +164,12 @@ public ReplyResult execute(ChannelExecutionContext context, Map<String, Object> 
     String userId = context.getUserId();
     String projectId = context.getProjectId();
     
-    // 获取 Agent 状态
-    OverAllState state = context.getState();
+    // 获取工具名称和来源
+    String toolName = context.getToolName();
+    ChannelExecutionContext.ExecutionSource source = context.getSource();
     
-    // 获取元数据
-    Map<String, Object> metadata = context.getMetadata();
+    // 获取扩展信息
+    Map<String, Object> extensions = context.getExtensions();
     
     // 实现发送逻辑...
 }

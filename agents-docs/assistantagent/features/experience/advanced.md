@@ -39,11 +39,18 @@ fastIntent.setMatch(match);
 
 // 设置产物（直接执行的代码）
 ExperienceArtifact artifact = new ExperienceArtifact();
-artifact.setCode("""
+
+// 创建代码产物
+ExperienceArtifact.CodeArtifact codeArtifact = new ExperienceArtifact.CodeArtifact();
+codeArtifact.setLanguage("python");
+codeArtifact.setFunctionName("query_weather");
+codeArtifact.setCode("""
     city = extract_city(user_message)
     result = weather.query(city=city)
     reply.send(text=f"{city}的天气：{result['weather']}")
     """);
+artifact.setCode(codeArtifact);
+
 exp.setArtifact(artifact);
 
 exp.setFastIntentConfig(fastIntent);
@@ -121,11 +128,11 @@ public class VectorExperienceProvider implements ExperienceProvider {
     @Override
     public List<Experience> query(ExperienceQuery query, ExperienceQueryContext context) {
         // 使用向量检索相关经验
-        String input = context.getUserInput();
+        String input = context.getUserQuery();
         
         List<Document> docs = vectorStore.similaritySearch(
             SearchRequest.query(input)
-                .withTopK(query.getMaxItems())
+                .withTopK(query.getLimit())
                 .withFilterExpression("type == '" + query.getType() + "'")
         );
         
@@ -142,20 +149,15 @@ public class VectorExperienceProvider implements ExperienceProvider {
 
 ```java
 // 构建查询上下文
-ExperienceQueryContext context = ExperienceQueryContext.builder()
-    .userInput("如何处理订单超时？")
-    .sessionId("session-123")
-    .userId("user-456")
-    .projectId("project-789")
-    .metadata(Map.of(
-        "language", "java",
-        "framework", "spring-boot"
-    ))
-    .build();
+ExperienceQueryContext context = new ExperienceQueryContext();
+context.setUserQuery("如何处理订单超时？");
+context.setUserId("user-456");
+context.setProjectId("project-789");
+context.setLanguage("java");
 
 // 执行查询
 ExperienceQuery query = new ExperienceQuery(ExperienceType.CODE);
-query.setMaxItems(5);
+query.setLimit(5);
 query.setTags(Set.of("order", "timeout"));
 
 List<Experience> experiences = experienceProvider.query(query, context);
@@ -183,9 +185,8 @@ public class ExperiencePromptBuilder implements PromptBuilder {
     public PromptContribution build(ModelRequest request) {
         String userInput = extractUserInput(request);
         
-        ExperienceQueryContext context = ExperienceQueryContext.builder()
-            .userInput(userInput)
-            .build();
+        ExperienceQueryContext context = new ExperienceQueryContext();
+        context.setUserQuery(userInput);
         
         List<Experience> codeExps = provider.queryByType(ExperienceType.CODE, context);
         List<Experience> reactExps = provider.queryByType(ExperienceType.REACT, context);
@@ -263,8 +264,8 @@ public class CustomMatcher implements FastIntentConditionMatcher {
     @Override
     public boolean matches(String value, FastIntentContext context) {
         // 自定义匹配逻辑
-        String userInput = context.getUserMessage();
-        Map<String, Object> metadata = context.getMetadata();
+        String userInput = context.getInput();
+        Map<String, Object> metadata = context.getConfigMetadata();
         
         // 例如：检查用户是否为 VIP
         Boolean isVip = (Boolean) metadata.get("isVip");

@@ -159,28 +159,28 @@ public class MyEvaluatorConfig {
 ### 步骤 4：在 PromptBuilder 中使用评估结果
 
 ```java
-import com.alibaba.assistant.agent.prompt.builder.PromptBuilder;
-import com.alibaba.assistant.agent.prompt.builder.PromptBuilderContext;
+import com.alibaba.assistant.agent.prompt.PromptBuilder;
+import com.alibaba.assistant.agent.prompt.PromptContribution;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MyPromptBuilder implements PromptBuilder {
 
     @Override
-    public int getOrder() {
-        return 100;
+    public boolean match(ModelRequest request) {
+        // 检查是否有评估结果
+        return request.getState() != null && 
+               request.getState().get("evaluation_result") != null;
     }
 
     @Override
-    public String build(PromptBuilderContext context) {
+    public PromptContribution build(ModelRequest request) {
         // 获取评估结果
-        var evalResult = context.getEvaluationResult();
-        if (evalResult == null) {
-            return "";
-        }
+        var evalResult = request.getState().get("evaluation_result");
 
-        String intentType = evalResult.getCriterionValue("intent_type", String.class);
-        Boolean needsTool = evalResult.getCriterionValue("needs_tool", Boolean.class);
+        String intentType = (String) ((Map<?, ?>) evalResult).get("intent_type");
+        Boolean needsTool = (Boolean) ((Map<?, ?>) evalResult).get("needs_tool");
 
         // 根据评估结果动态生成 Prompt 片段
         StringBuilder prompt = new StringBuilder();
@@ -191,7 +191,14 @@ public class MyPromptBuilder implements PromptBuilder {
             prompt.append("请使用合适的工具来完成任务。\n");
         }
         
-        return prompt.toString();
+        return PromptContribution.builder()
+            .systemTextToAppend(prompt.toString())
+            .build();
+    }
+
+    @Override
+    public int priority() {
+        return 100;
     }
 }
 ```

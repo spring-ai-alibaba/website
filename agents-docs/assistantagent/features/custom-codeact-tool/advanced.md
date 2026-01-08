@@ -11,11 +11,21 @@ ParameterTree.builder()
         .type(ParameterType.OBJECT)
         .description("用户信息")
         .required(true)
-        .shape(ObjectShapeNode.builder()
-            .addProperty("name", PrimitiveShapeNode.string("用户名"))
-            .addProperty("age", PrimitiveShapeNode.integer("年龄"))
-            .addProperty("email", PrimitiveShapeNode.string("邮箱"))
-            .requiredProperties("name")
+        .addProperty(ParameterNode.builder()
+            .name("name")
+            .type(ParameterType.STRING)
+            .description("用户名")
+            .required(true)
+            .build())
+        .addProperty(ParameterNode.builder()
+            .name("age")
+            .type(ParameterType.INTEGER)
+            .description("年龄")
+            .build())
+        .addProperty(ParameterNode.builder()
+            .name("email")
+            .type(ParameterType.STRING)
+            .description("邮箱")
             .build())
         .build())
     .build();
@@ -40,7 +50,11 @@ ParameterTree.builder()
         .type(ParameterType.ARRAY)
         .description("项目列表")
         .required(true)
-        .shape(ArrayShapeNode.of(PrimitiveShapeNode.string("项目名")))
+        .items(ParameterNode.builder()
+            .name("item")
+            .type(ParameterType.STRING)
+            .description("项目名")
+            .build())
         .build())
     .build();
 ```
@@ -58,6 +72,17 @@ result = tool.process_items(items=["item1", "item2", "item3"])
 ```java
 @Override
 public CodeactToolDefinition getCodeactDefinition() {
+    // 构建商品对象的 shape
+    ObjectShapeNode productShape = new ObjectShapeNode();
+    productShape.putField("id", new PrimitiveShapeNode(PrimitiveType.STRING, false, "商品ID"));
+    productShape.putField("name", new PrimitiveShapeNode(PrimitiveType.STRING, false, "商品名称"));
+    productShape.putField("price", new PrimitiveShapeNode(PrimitiveType.NUMBER, false, "价格"));
+
+    // 构建返回值的 shape
+    ObjectShapeNode resultShape = new ObjectShapeNode();
+    resultShape.putField("products", new ArrayShapeNode(productShape, false, "商品列表"));
+    resultShape.putField("total", new PrimitiveShapeNode(PrimitiveType.INTEGER, false, "总数量"));
+
     return DefaultCodeactToolDefinition.builder()
         .name("search_products")
         .description("搜索商品")
@@ -69,17 +94,8 @@ public CodeactToolDefinition getCodeactDefinition() {
                 .required(true)
                 .build())
             .build())
-        .returnSchema(ReturnSchema.builder()
-            .shape(ObjectShapeNode.builder()
-                .addProperty("products", ArrayShapeNode.of(
-                    ObjectShapeNode.builder()
-                        .addProperty("id", PrimitiveShapeNode.string("商品ID"))
-                        .addProperty("name", PrimitiveShapeNode.string("商品名称"))
-                        .addProperty("price", PrimitiveShapeNode.number("价格"))
-                        .build()
-                ))
-                .addProperty("total", PrimitiveShapeNode.integer("总数量"))
-                .build())
+        .declaredReturnSchema(ReturnSchema.builder()
+            .successShape(resultShape)
             .build())
         .build();
 }
@@ -98,23 +114,25 @@ public CodeactToolMetadata getCodeactMetadata() {
         .targetClassName("order")
         .targetClassDescription("订单管理工具")
         .supportedLanguages(List.of(Language.PYTHON))
-        .addFewShot(CodeExample.builder()
-            .input("创建一个订单，商品ID是123，数量是2")
-            .output("""
-                order_result = order.create_order(
-                    product_id="123",
-                    quantity=2
-                )
-                print(f"订单创建成功，订单号: {order_result['order_id']}")
-                """)
-            .build())
-        .addFewShot(CodeExample.builder()
-            .input("查询订单 ORD-001 的状态")
-            .output("""
-                status = order.get_order_status(order_id="ORD-001")
-                print(f"订单状态: {status['status']}")
-                """)
-            .build())
+        .addFewShot(new CodeExample(
+            "创建一个订单，商品ID是123，数量是2",
+            """
+            order_result = order.create_order(
+                product_id="123",
+                quantity=2
+            )
+            print(f"订单创建成功，订单号: {order_result['order_id']}")
+            """,
+            "成功创建订单并返回订单号"
+        ))
+        .addFewShot(new CodeExample(
+            "查询订单 ORD-001 的状态",
+            """
+            status = order.get_order_status(order_id="ORD-001")
+            print(f"订单状态: {status['status']}")
+            """,
+            "返回订单状态信息"
+        ))
         .build();
 }
 ```

@@ -124,7 +124,11 @@ spring:
 ```java
 import com.alibaba.assistant.agent.extension.search.spi.SearchProvider;
 import com.alibaba.assistant.agent.extension.search.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ElasticsearchSearchProvider implements SearchProvider {
@@ -167,11 +171,6 @@ public class ElasticsearchSearchProvider implements SearchProvider {
     public String getName() {
         return "ElasticsearchSearchProvider";
     }
-    
-    @Override
-    public int getOrder() {
-        return 0; // 优先级，数值越小优先级越高
-    }
 }
 ```
 
@@ -187,35 +186,70 @@ Agent 通过工具执行各类操作。框架支持三种工具接入方式：
 
 ```java
 import com.alibaba.assistant.agent.common.tools.CodeactTool;
+import com.alibaba.assistant.agent.common.tools.CodeactToolMetadata;
+import com.alibaba.assistant.agent.common.tools.DefaultCodeactToolMetadata;
+import com.alibaba.assistant.agent.common.tools.definition.CodeactToolDefinition;
+import com.alibaba.assistant.agent.common.tools.definition.DefaultCodeactToolDefinition;
+import com.alibaba.assistant.agent.common.tools.definition.ParameterTree;
+import com.alibaba.assistant.agent.common.tools.definition.ParameterNode;
+import com.alibaba.assistant.agent.common.tools.definition.ParameterType;
+import com.alibaba.assistant.agent.common.enums.Language;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class OrderQueryTool implements CodeactTool {
 
-    @Override
-    public String getName() {
-        return "query_order";
-    }
-
-    @Override
-    public String getDescription() {
-        return "查询订单信息";
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String call(String toolInput) {
-        // toolInput 是 JSON 格式的参数
-        OrderQueryRequest request = JSON.parseObject(toolInput, OrderQueryRequest.class);
-        Order order = orderService.query(request.getOrderId());
-        return JSON.toJSONString(order);
+        try {
+            // toolInput 是 JSON 格式的参数
+            Map<String, Object> params = objectMapper.readValue(toolInput, Map.class);
+            String orderId = (String) params.get("orderId");
+            
+            // 执行业务逻辑
+            Order order = orderService.query(orderId);
+            return objectMapper.writeValueAsString(order);
+        } catch (Exception e) {
+            return "{\"error\": \"" + e.getMessage() + "\"}";
+        }
     }
 
     @Override
-    public CodeactToolMetadata getMetadata() {
-        return DefaultCodeactToolMetadata.builder()
-            .className("order")
-            .methodName("query")
+    public CodeactToolDefinition getCodeactDefinition() {
+        return DefaultCodeactToolDefinition.builder()
+            .name("query_order")
+            .description("查询订单信息")
+            .parameterTree(ParameterTree.builder()
+                .addParameter(ParameterNode.builder()
+                    .name("orderId")
+                    .type(ParameterType.STRING)
+                    .description("订单ID")
+                    .required(true)
+                    .build())
+                .build())
             .build();
+    }
+
+    @Override
+    public CodeactToolMetadata getCodeactMetadata() {
+        return DefaultCodeactToolMetadata.builder()
+            .targetClassName("order")
+            .targetClassDescription("订单查询工具")
+            .supportedLanguages(List.of(Language.PYTHON))
+            .build();
+    }
+
+    @Override
+    public ToolDefinition getToolDefinition() {
+        // CodeactToolDefinition 继承自 ToolDefinition，可直接返回
+        return getCodeactDefinition();
     }
 }
 ```
@@ -309,7 +343,12 @@ spring:
 
 ```java
 import com.alibaba.assistant.agent.extension.reply.spi.ReplyChannelDefinition;
+import com.alibaba.assistant.agent.extension.reply.model.ChannelExecutionContext;
+import com.alibaba.assistant.agent.extension.reply.model.ParameterSchema;
+import com.alibaba.assistant.agent.extension.reply.model.ReplyResult;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class DingTalkChannelDefinition implements ReplyChannelDefinition {
@@ -320,19 +359,25 @@ public class DingTalkChannelDefinition implements ReplyChannelDefinition {
     }
 
     @Override
-    public String getChannelName() {
-        return "钉钉消息";
+    public String getDescription() {
+        return "发送钉钉消息通知";
     }
 
     @Override
-    public Object execute(ChannelExecutionContext context, Map<String, Object> params) {
+    public ParameterSchema getSupportedParameters() {
+        // 返回 null 表示接受任意参数（灵活模式）
+        return null;
+    }
+
+    @Override
+    public ReplyResult execute(ChannelExecutionContext context, Map<String, Object> params) {
         String text = (String) params.get("text");
-        String userId = context.getUserId();
+        String sessionId = context.getSessionId();
         
         // 调用钉钉 API 发送消息
-        dingTalkClient.sendMessage(userId, text);
+        dingTalkClient.sendMessage(sessionId, text);
         
-        return Map.of("success", true);
+        return ReplyResult.success("消息已发送");
     }
 }
 ```
@@ -397,33 +442,61 @@ Prompt Builder 根据评估结果动态组装 Prompt。
 ```java
 import com.alibaba.assistant.agent.prompt.PromptBuilder;
 import com.alibaba.assistant.agent.prompt.PromptContribution;
+import com.alibaba.assistant.agent.extension.experience.spi.ExperienceProvider;
+import com.alibaba.assistant.agent.extension.experience.model.Experience;
+import com.alibaba.assistant.agent.extension.experience.model.ExperienceQuery;
+import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ExperiencePromptBuilder implements PromptBuilder {
 
+    private final ExperienceProvider experienceProvider;
+
+    public ExperiencePromptBuilder(ExperienceProvider experienceProvider) {
+        this.experienceProvider = experienceProvider;
+    }
+
     @Override
     public boolean match(ModelRequest request) {
         // 根据评估结果判断是否注入经验
-        return request.getEvaluationResult("has_experience") == true;
+        Object hasExperience = request.getState().get("has_experience");
+        return Boolean.TRUE.equals(hasExperience);
     }
 
     @Override
     public PromptContribution build(ModelRequest request) {
-        List<Experience> experiences = experienceService.search(request.getQuery());
+        // 构建查询条件
+        ExperienceQuery query = new ExperienceQuery();
+        query.setText(extractUserInput(request));
+        query.setLimit(5);
+        
+        List<Experience> experiences = experienceProvider.query(query, null);
         
         String experienceText = experiences.stream()
             .map(e -> "- " + e.getContent())
             .collect(Collectors.joining("\n"));
             
         return PromptContribution.builder()
-            .systemText("以下是相关经验供参考：\n" + experienceText)
+            .systemTextToAppend("以下是相关经验供参考：\n" + experienceText)
             .build();
     }
 
     @Override
-    public int getOrder() {
-        return 10; // 执行顺序
+    public int priority() {
+        return 10; // 执行顺序，数值越小越先执行
+    }
+    
+    private String extractUserInput(ModelRequest request) {
+        // 从请求中提取用户输入
+        return request.getMessages().stream()
+            .filter(m -> m instanceof org.springframework.ai.chat.messages.UserMessage)
+            .map(m -> m.getText())
+            .reduce((a, b) -> b)
+            .orElse("");
     }
 }
 ```
@@ -454,25 +527,20 @@ spring:
 
 ```java
 import com.alibaba.assistant.agent.extension.experience.spi.ExperienceProvider;
+import com.alibaba.assistant.agent.extension.experience.model.Experience;
+import com.alibaba.assistant.agent.extension.experience.model.ExperienceQuery;
+import com.alibaba.assistant.agent.extension.experience.model.ExperienceQueryContext;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class DatabaseExperienceProvider implements ExperienceProvider {
 
     @Override
-    public List<Experience> search(String query, int topK) {
+    public List<Experience> query(ExperienceQuery query, ExperienceQueryContext context) {
         // 从数据库检索相关经验
-        return experienceRepository.findSimilar(query, topK);
-    }
-
-    @Override
-    public void save(Experience experience) {
-        experienceRepository.save(experience);
-    }
-
-    @Override
-    public String getName() {
-        return "DatabaseExperienceProvider";
+        return experienceRepository.findByQuery(query);
     }
 }
 ```
@@ -510,33 +578,47 @@ spring:
 
 ```java
 import com.alibaba.assistant.agent.extension.learning.spi.LearningExtractor;
+import com.alibaba.assistant.agent.extension.learning.model.LearningContext;
+import com.alibaba.assistant.agent.extension.experience.model.Experience;
+import com.alibaba.assistant.agent.extension.experience.model.ExperienceType;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.ArrayList;
+
 @Component
-public class SuccessPatternExtractor implements LearningExtractor {
+public class SuccessPatternExtractor implements LearningExtractor<Experience> {
 
     @Override
     public boolean shouldLearn(LearningContext context) {
-        // 只从成功的执行中学习
-        return context.isSuccess() && context.getToolCalls().size() > 0;
+        // 根据自定义数据判断是否需要学习
+        Object isSuccess = context.getCustomData().get("success");
+        return Boolean.TRUE.equals(isSuccess) && 
+               !context.getToolCallRecords().isEmpty();
     }
 
     @Override
-    public List<LearningRecord> extract(LearningContext context) {
-        // 提取成功模式
-        LearningRecord record = LearningRecord.builder()
-            .input(context.getInput())
-            .output(context.getOutput())
-            .toolCalls(context.getToolCalls())
-            .type(LearningType.SUCCESS_PATTERN)
-            .build();
-            
-        return List.of(record);
+    public List<Experience> extract(LearningContext context) {
+        List<Experience> experiences = new ArrayList<>();
+        
+        // 从执行上下文中提取经验
+        Experience exp = new Experience();
+        exp.setType(ExperienceType.CODE);
+        exp.setTitle("成功模式提取");
+        exp.setContent("从执行记录中提取的经验内容...");
+        
+        experiences.add(exp);
+        return experiences;
     }
 
     @Override
-    public String getName() {
-        return "SuccessPatternExtractor";
+    public String getSupportedLearningType() {
+        return "experience";
+    }
+
+    @Override
+    public Class<Experience> getRecordType() {
+        return Experience.class;
     }
 }
 ```

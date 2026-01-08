@@ -114,7 +114,8 @@ public class WeatherQueryTool implements CodeactTool {
 
     @Override
     public ToolDefinition getToolDefinition() {
-        return getCodeactDefinition().toToolDefinition();
+        // CodeactToolDefinition 继承自 ToolDefinition，可直接返回
+        return getCodeactDefinition();
     }
 
     private String queryWeather(String city) {
@@ -124,26 +125,79 @@ public class WeatherQueryTool implements CodeactTool {
 }
 ```
 
-### 方式二：使用 Builder 快速创建
+### 方式二：使用 @Bean 方式注册工具
 
 ```java
-import com.alibaba.assistant.agent.common.tools.definition.DefaultCodeactToolDefinition;
+import com.alibaba.assistant.agent.common.tools.CodeactTool;
+import com.alibaba.assistant.agent.common.tools.CodeactToolMetadata;
 import com.alibaba.assistant.agent.common.tools.DefaultCodeactToolMetadata;
+import com.alibaba.assistant.agent.common.tools.definition.CodeactToolDefinition;
+import com.alibaba.assistant.agent.common.tools.definition.DefaultCodeactToolDefinition;
+import com.alibaba.assistant.agent.common.tools.definition.ParameterTree;
+import com.alibaba.assistant.agent.common.tools.definition.ParameterNode;
+import com.alibaba.assistant.agent.common.tools.definition.ParameterType;
+import com.alibaba.assistant.agent.common.enums.Language;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.ai.tool.definition.ToolDefinition;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@Bean
-public CodeactTool calculatorTool() {
-    return SimpleCodeactTool.builder()
-        .name("calculate")
-        .description("执行数学计算")
-        .targetClassName("math")
-        .parameter("expression", ParameterType.STRING, "数学表达式", true)
-        .handler(params -> {
-            String expression = (String) params.get("expression");
-            // 计算逻辑
-            double result = evaluate(expression);
-            return Map.of("result", result);
-        })
-        .build();
+import java.util.List;
+import java.util.Map;
+
+@Configuration
+public class ToolConfig {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Bean
+    public CodeactTool calculatorTool() {
+        return new CodeactTool() {
+            @Override
+            public String call(String toolInput) {
+                try {
+                    Map<String, Object> params = objectMapper.readValue(toolInput, Map.class);
+                    String expression = (String) params.get("expression");
+                    // 计算逻辑（这里简化处理）
+                    double result = 42.0;
+                    return objectMapper.writeValueAsString(Map.of("result", result));
+                } catch (Exception e) {
+                    return "{\"error\": \"" + e.getMessage() + "\"}";
+                }
+            }
+
+            @Override
+            public CodeactToolDefinition getCodeactDefinition() {
+                return DefaultCodeactToolDefinition.builder()
+                    .name("calculate")
+                    .description("执行数学计算")
+                    .parameterTree(ParameterTree.builder()
+                        .addParameter(ParameterNode.builder()
+                            .name("expression")
+                            .type(ParameterType.STRING)
+                            .description("数学表达式")
+                            .required(true)
+                            .build())
+                        .build())
+                    .build();
+            }
+
+            @Override
+            public CodeactToolMetadata getCodeactMetadata() {
+                return DefaultCodeactToolMetadata.builder()
+                    .targetClassName("math")
+                    .targetClassDescription("数学计算工具")
+                    .supportedLanguages(List.of(Language.PYTHON))
+                    .build();
+            }
+
+            @Override
+            public ToolDefinition getToolDefinition() {
+                // CodeactToolDefinition 继承自 ToolDefinition，可直接返回
+                return getCodeactDefinition();
+            }
+        };
+    }
 }
 ```
 

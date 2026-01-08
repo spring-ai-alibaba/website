@@ -91,9 +91,10 @@ public class CodePatternExtractor implements LearningExtractor<Experience> {
     @Override
     public boolean shouldLearn(LearningContext context) {
         // 判断是否需要学习
-        // 例如：只有成功执行的会话才学习
-        return context.isSuccessful() && 
-               context.getGeneratedCode() != null;
+        // 通过 customData 判断执行是否成功
+        Object isSuccess = context.getCustomData().get("success");
+        return Boolean.TRUE.equals(isSuccess) && 
+               !context.getToolCallRecords().isEmpty();
     }
 
     @Override
@@ -101,9 +102,10 @@ public class CodePatternExtractor implements LearningExtractor<Experience> {
         List<Experience> experiences = new ArrayList<>();
         
         // 从执行上下文中提取经验
-        String userInput = context.getUserInput();
-        String generatedCode = context.getGeneratedCode();
-        String output = context.getOutput();
+        // 通过 customData 获取用户输入和生成的代码
+        String userInput = (String) context.getCustomData().get("userInput");
+        String generatedCode = (String) context.getCustomData().get("generatedCode");
+        String output = (String) context.getCustomData().get("output");
         
         // 创建代码经验
         Experience exp = new Experience();
@@ -137,6 +139,7 @@ public class CodePatternExtractor implements LearningExtractor<Experience> {
     }
     
     private String summarize(String input) {
+        if (input == null) return "";
         return input.length() > 50 ? input.substring(0, 50) + "..." : input;
     }
 }
@@ -199,13 +202,11 @@ public class DatabaseLearningRepository implements LearningRepository<Experience
 
 ```java
 // 获取学习上下文中的信息
-String userInput = context.getUserInput();           // 用户输入
-String output = context.getOutput();                 // 最终输出
-String generatedCode = context.getGeneratedCode();   // 生成的代码
-List<ToolCall> toolCalls = context.getToolCalls();   // 工具调用记录
-boolean successful = context.isSuccessful();         // 是否成功
-long duration = context.getDurationMs();             // 执行时长
-String sessionId = context.getSessionId();           // 会话 ID
-Map<String, Object> metadata = context.getMetadata(); // 元数据
+Object overAllState = context.getOverAllState();                      // Agent 执行状态
+List<Object> conversationHistory = context.getConversationHistory();  // 对话历史
+List<ToolCallRecord> toolCalls = context.getToolCallRecords();        // 工具调用记录
+List<ModelCallRecord> modelCalls = context.getModelCallRecords();     // 模型调用记录
+Map<String, Object> customData = context.getCustomData();             // 自定义数据
+LearningTriggerSource triggerSource = context.getTriggerSource();     // 触发来源
 ```
 

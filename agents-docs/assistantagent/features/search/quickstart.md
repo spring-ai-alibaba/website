@@ -83,6 +83,10 @@ public class KnowledgeSearchProvider implements SearchProvider {
 
     private final KnowledgeBaseClient knowledgeClient;
 
+    public KnowledgeSearchProvider(KnowledgeBaseClient knowledgeClient) {
+        this.knowledgeClient = knowledgeClient;
+    }
+
     @Override
     public boolean supports(SearchSourceType type) {
         return type == SearchSourceType.KNOWLEDGE;
@@ -101,14 +105,19 @@ public class KnowledgeSearchProvider implements SearchProvider {
         // 转换结果
         for (Document doc : docs) {
             SearchResultItem item = new SearchResultItem();
+            item.setId(doc.getId());
             item.setTitle(doc.getTitle());
             item.setContent(doc.getContent());
             item.setSourceType(SearchSourceType.KNOWLEDGE);
             item.setScore(doc.getScore());
-            item.setMetadata(Map.of(
-                "docId", doc.getId(),
-                "category", doc.getCategory()
-            ));
+            
+            // 设置元数据
+            SearchMetadata metadata = new SearchMetadata();
+            metadata.setSourceName("knowledge-base");
+            metadata.getExtensions().put("docId", doc.getId());
+            metadata.getExtensions().put("category", doc.getCategory());
+            item.setMetadata(metadata);
+            
             results.add(item);
         }
         
@@ -147,12 +156,10 @@ all_results = search.query(keyword="订单处理", sources=["KNOWLEDGE", "PROJEC
 ```java
 SearchRequest request = new SearchRequest();
 request.setQuery("搜索关键词");
-request.setSourceType(SearchSourceType.KNOWLEDGE);
+request.getSourceTypes().add(SearchSourceType.KNOWLEDGE);  // 添加数据源类型
 request.setTopK(10);
-request.setMetadata(Map.of(
-    "category", "技术文档",
-    "language", "java"
-));
+request.getFilters().put("category", "技术文档");
+request.getFilters().put("language", "java");
 ```
 
 ---
@@ -161,11 +168,19 @@ request.setMetadata(Map.of(
 
 ```java
 SearchResultItem item = new SearchResultItem();
+item.setId("doc-001");
 item.setTitle("文档标题");
 item.setContent("文档内容...");
+item.setSnippet("文档摘要...");
 item.setSourceType(SearchSourceType.KNOWLEDGE);
-item.setScore(0.95);              // 相关度分数
-item.setUrl("https://...");       // 原文链接（可选）
-item.setMetadata(Map.of(...));    // 元数据
+item.setScore(0.95);                     // 相关度分数
+item.setUri("https://...");              // 资源链接（可选）
+
+// 设置元数据
+SearchMetadata metadata = new SearchMetadata();
+metadata.setSourceName("knowledge-base");
+metadata.setLanguage("java");
+metadata.getExtensions().put("category", "技术文档");
+item.setMetadata(metadata);
 ```
 

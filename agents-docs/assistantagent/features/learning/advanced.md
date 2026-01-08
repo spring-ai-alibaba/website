@@ -130,23 +130,26 @@ public class QualityFilteredExtractor implements LearningExtractor<Experience> {
 
     @Override
     public boolean shouldLearn(LearningContext context) {
-        // 1. 必须成功执行
-        if (!context.isSuccessful()) {
+        // 1. 通过 customData 判断执行是否成功
+        Object isSuccess = context.getCustomData().get("success");
+        if (!Boolean.TRUE.equals(isSuccess)) {
             return false;
         }
         
-        // 2. 执行时间不能太短（可能是简单任务）
-        if (context.getDurationMs() < 1000) {
+        // 2. 通过 customData 检查执行时间（可能是简单任务）
+        Long durationMs = (Long) context.getCustomData().get("durationMs");
+        if (durationMs != null && durationMs < 1000) {
             return false;
         }
         
         // 3. 必须有工具调用（有实际操作）
-        if (context.getToolCalls() == null || context.getToolCalls().isEmpty()) {
+        if (context.getToolCallRecords() == null || context.getToolCallRecords().isEmpty()) {
             return false;
         }
         
-        // 4. 输出不能为空
-        if (context.getOutput() == null || context.getOutput().isEmpty()) {
+        // 4. 通过 customData 检查输出不能为空
+        String output = (String) context.getCustomData().get("output");
+        if (output == null || output.isEmpty()) {
             return false;
         }
         
@@ -185,11 +188,10 @@ public class DeduplicatedExtractor implements LearningExtractor<Experience> {
 
     private boolean hasSimilarExperience(Experience exp) {
         ExperienceQuery query = new ExperienceQuery(exp.getType());
-        query.setMaxItems(5);
+        query.setLimit(5);
         
-        ExperienceQueryContext ctx = ExperienceQueryContext.builder()
-            .userInput(exp.getTitle())
-            .build();
+        ExperienceQueryContext ctx = new ExperienceQueryContext();
+        ctx.setUserQuery(exp.getTitle());
         
         List<Experience> existing = experienceProvider.query(query, ctx);
         

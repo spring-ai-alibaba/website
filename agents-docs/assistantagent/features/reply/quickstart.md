@@ -89,7 +89,7 @@ public class TextChannelDefinition implements ReplyChannelDefinition {
     @Override
     public ParameterSchema getSupportedParameters() {
         return ParameterSchema.builder()
-            .addParameter("text", ParameterType.STRING, "消息文本", true)
+            .parameter("text", ParameterSchema.ParameterType.STRING, true, "消息文本")
             .build();
     }
 

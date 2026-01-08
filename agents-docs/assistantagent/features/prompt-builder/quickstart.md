@@ -190,7 +190,13 @@ public class ExperiencePromptBuilder implements PromptBuilder {
     @Override
     public PromptContribution build(ModelRequest request) {
         String userInput = extractUserInput(request);
-        List<Experience> experiences = experienceProvider.search(userInput, 3);
+        
+        // 构建查询条件
+        ExperienceQuery query = new ExperienceQuery();
+        query.setText(userInput);
+        query.setLimit(3);
+        
+        List<Experience> experiences = experienceProvider.query(query, null);
         
         if (experiences.isEmpty()) {
             return PromptContribution.empty();
@@ -210,6 +216,15 @@ public class ExperiencePromptBuilder implements PromptBuilder {
     @Override
     public int priority() {
         return 80;
+    }
+    
+    private String extractUserInput(ModelRequest request) {
+        // 从请求中提取用户输入
+        return request.getMessages().stream()
+            .filter(m -> m instanceof org.springframework.ai.chat.messages.UserMessage)
+            .map(m -> m.getText())
+            .reduce((a, b) -> b)
+            .orElse("");
     }
 }
 ```

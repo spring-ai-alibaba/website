@@ -1445,7 +1445,7 @@ public class JsonController {
                         DashScopeChatOptions.builder()
                                 .withTopP(0.7)
                                 // Note: model must be set when use options build.
-								.withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
+                                .withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
                                 .withResponseFormat(responseFormat)
                                 .build()
                 )

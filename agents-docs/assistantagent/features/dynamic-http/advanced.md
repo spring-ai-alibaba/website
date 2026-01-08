@@ -33,8 +33,7 @@ public List<HttpDynamicToolFactory> httpToolFactories() {
 
 ```java
 HttpDynamicToolFactory.builder()
-    .openApiSpec(OpenApiSpec.builder()
-        .content(openApiContent)
+    .openApiSpec(OpenApiSpec.builder(openApiContent)
         .baseUrl("https://api.example.com")
         .build())
     .defaultHeaders(Map.of(

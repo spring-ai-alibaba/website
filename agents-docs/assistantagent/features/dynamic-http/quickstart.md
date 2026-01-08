@@ -113,8 +113,7 @@ public class HttpToolConfig {
         );
 
         return HttpDynamicToolFactory.builder()
-            .openApiSpec(OpenApiSpec.builder()
-                .content(openApiContent)
+            .openApiSpec(OpenApiSpec.builder(openApiContent)
                 .baseUrl("https://api.petstore.com/v1")  // 可选，覆盖文档中的 server
                 .build())
             // 指定要暴露的 endpoints

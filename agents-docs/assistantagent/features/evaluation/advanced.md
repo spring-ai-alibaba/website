@@ -115,19 +115,25 @@ EvaluationCriterionBuilder.create("custom_eval")
 
 ```java
 import com.alibaba.assistant.agent.evaluation.model.CriterionBatchingConfig;
+import com.alibaba.assistant.agent.evaluation.model.EvaluationCriterion;
 
-EvaluationCriterionBuilder.create("batch_eval")
+// 创建批量配置
+CriterionBatchingConfig batchingConfig = new CriterionBatchingConfig();
+batchingConfig.setEnabled(true);
+batchingConfig.setBatchSize(10);                    // 每批最大数量
+batchingConfig.setMaxConcurrentBatches(3);          // 并行执行数
+batchingConfig.setSourcePath("context.items");      // 数据源路径
+batchingConfig.setBatchBindingKey("itemBatch");     // 绑定键名
+batchingConfig.setAggregationStrategy("ALL_TRUE");  // 聚合策略：ALL_TRUE 或 ANY_TRUE
+
+// 创建评估项并设置批量配置
+EvaluationCriterion criterion = EvaluationCriterionBuilder.create("batch_eval")
     .description("批量内容评估")
     .resultType(ResultType.BOOLEAN)
-    .batchingConfig(
-        CriterionBatchingConfig.builder()
-            .enabled(true)
-            .maxBatchSize(10)           // 每批最大数量
-            .concurrency(3)             // 并行执行数
-            .aggregationStrategy("ALL_PASS")  // 聚合策略
-            .build()
-    )
     .build();
+
+// 通过 EvaluationCriterion 设置批量配置
+criterion.setBatchingConfig(batchingConfig);
 ```
 
 ---
