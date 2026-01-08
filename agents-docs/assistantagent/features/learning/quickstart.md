@@ -76,7 +76,7 @@ spring:
 
 ### 步骤 2：实现自定义 LearningExtractor
 
-```java
+````java
 import com.alibaba.assistant.agent.extension.learning.spi.LearningExtractor;
 import com.alibaba.assistant.agent.extension.learning.model.LearningContext;
 import com.alibaba.assistant.agent.extension.experience.model.Experience;
@@ -140,7 +140,7 @@ public class CodePatternExtractor implements LearningExtractor<Experience> {
         return input.length() > 50 ? input.substring(0, 50) + "..." : input;
     }
 }
-```
+````
 
 ### 步骤 3：实现 LearningRepository（可选）
 
