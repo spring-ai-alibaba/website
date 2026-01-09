@@ -14,7 +14,7 @@ Spring AI Alibaba 是构建 Agent 智能体应用最简单的方式，只需不�
 ![Architecture](/img/agent/overview/architecture-new.png)
 
 > **注意！** Spring Ai Alibaba 深度集成 Spring AI 生态，它是一个专为多智能体系统和工作流编排设计的项目。因此，Spring Ai Alibaba 中的 `ReactAgent` 实际上运行在 Graph Runtime 之上，其设计目标主要是完成工作流和多智能体编排功能。
-
+>
 > 如果您正在寻找更高级的 ReactAgent 范式来构建模型驱动的智能体，请参阅我们近期发布的 **<a href="https://github.com/agentscope-ai/agentscope-java">AgentScope</a>** 项目。Spring Ai Alibaba 的ReactAgent部分将继续得到维护，并持续接收问题修复和关键安全补丁，我们将更专注于Spring Ai 集成与多智能体协同。
 
 Spring AI Alibaba 项目从架构上包含如下三层：
