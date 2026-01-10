@@ -5,7 +5,7 @@ Spring AI 通过 `TranscriptionModel` 接口为 Speech-to-Text 转录提供统�
 ## Supported Providers
 
 - [OpenAI's Whisper API](transcriptions/openai-transcriptions.md)
-- [Azure OpenAI Whisper API](transcriptions/azure-openai-transcriptions.md)
+<!-- - [Azure OpenAI Whisper API](transcriptions/azure-openai-transcriptions.md) -->
 - [DashScope Transcription API](transcriptions/dashscope-transcriptions.md)
 
 ## Common Interface

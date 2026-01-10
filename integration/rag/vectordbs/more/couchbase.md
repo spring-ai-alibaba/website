@@ -39,9 +39,9 @@ dependencies {
 
 > **注意：** Couchbase Vector search 仅在起始版本 7.6 和 Java SDK 版本 3.6.0 中可用
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
-> **提示：** 请参阅 [Artifact Repositories](getting-started#artifact-repositories) 部分，将 Milestone 和/或 Snapshot Repositories 添加到您的构建文件中。
+> **提示：** 请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将 Milestone 和/或 Snapshot Repositories 添加到您的构建文件中。
 
 向量存储实现可以使用默认选项为您初始化配置的 bucket、scope、collection 和搜索索引，但您必须通过在适当的构造函数中指定 `initializeSchema` 布尔值来选择加入。
 

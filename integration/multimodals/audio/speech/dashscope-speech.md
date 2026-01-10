@@ -37,7 +37,7 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI Alibaba BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI Alibaba BOM 添加到您的构建文件中。
 
 ## Speech Properties
 
@@ -139,7 +139,7 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI Alibaba BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI Alibaba BOM 添加到您的构建文件中。
 
 接下来，创建一个 `DashScopeAudioSpeechModel`：
 

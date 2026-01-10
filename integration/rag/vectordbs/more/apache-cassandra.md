@@ -56,7 +56,7 @@ b. 对于托管产品，[Astra DB](https://astra.datastax.com/) 提供健康的�
 > Spring AI auto-configuration、starter modules 的 artifact 名称发生了重大变化。
 > 请参阅 [upgrade notes](https://docs.spring.io/spring-ai/reference/upgrade-notes.html) 了解更多信息。
 
-> **提示：** 对于依赖管理，我们建议使用 Spring AI BOM，如 [Dependency Management](getting-started#dependency-management) 部分所述。
+> **提示：** 对于依赖管理，我们建议使用 Spring AI BOM，如 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分所述。
 
 将这些依赖项添加到您的项目：
 

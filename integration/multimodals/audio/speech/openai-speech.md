@@ -11,7 +11,7 @@ Audio API 提供基于 OpenAI 的 TTS (text-to-speech) 模型的语音端点，�
 ## Prerequisites
 
 1. 创建 OpenAI 账户并获取 API key。您可以在 [OpenAI signup page](https://platform.openai.com/signup) 注册，并在 [API Keys page](https://platform.openai.com/account/api-keys) 生成 API key。
-2. 将 `spring-ai-openai` 依赖项添加到项目的构建文件中。有关更多信息，请参考 [Dependency Management](getting-started.md#dependency-management) 部分。
+2. 将 `spring-ai-openai` 依赖项添加到项目的构建文件中。有关更多信息，请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分。
 
 ## Auto-configuration
 
@@ -38,7 +38,7 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started.md#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 ## Speech Properties
 
@@ -128,7 +128,7 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started.md#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 接下来，创建一个 `OpenAiAudioSpeechModel`：
 
