@@ -14,7 +14,7 @@ Tools 是 [agents](./agents.md) 调用来执行操作的组件。它们通过定
 >
 > 某些聊天模型（例如 OpenAI、Anthropic 和 Gemini）具有在服务器端执行的内置工具，如 Web 搜索和代码解释器。请参阅提供商概述以了解如何使用特定聊天模型访问这些工具。
 
-> **TIP:** 遵循指南从已弃用的 [FunctionCallback 迁移到 ToolCallback API](../../../integration/toolcalls/tools-migration.md)。
+> **TIP:** 迁移与更多 Tool Calling 说明请参考：[Tool Calling 使用指南](/integration/toolcalls/tool-calls)。
 
 _Tool calling_（也称为 _function calling_）是 AI 应用程序中的常见模式，允许 model 与一组 API 或 _tools_ 交互，增强其能力。
 
@@ -926,9 +926,9 @@ ToolCallbackResolver toolCallbackResolver(List<ToolCallback> toolCallbacks) {
 
 ## 可观测性
 
-Tool calling 包括可观测性支持，使用 spring.ai.tool 观察来测量完成时间并传播跟踪信息。请参阅 [Tool Calling 可观测性](../../../integration/observability/index.md#tool-calling)。
+Tool calling 包括可观测性支持，使用 spring.ai.tool 观察来测量完成时间并传播跟踪信息。请参阅 [Tool Calling 可观测性](https://docs.spring.io/spring-ai/reference/observability/index.html#_tool_calling)。
 
-可选地，Spring AI 可以将 tool call 参数和结果导出为 span 属性，默认情况下出于敏感性原因禁用。详细信息：[Tool Call 参数和结果数据](../../../integration/observability/index.md#tool-call-arguments-and-result-data)。
+可选地，Spring AI 可以将 tool call 参数和结果导出为 span 属性，默认情况下出于敏感性原因禁用。详细信息：[Tool Call 参数和结果数据](https://docs.spring.io/spring-ai/reference/observability/index.html#_tool_call_arguments_and_result_data)。
 
 ### 日志记录
 

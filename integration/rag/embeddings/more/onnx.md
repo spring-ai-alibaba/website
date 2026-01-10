@@ -53,8 +53,8 @@ dependencies {
 }
 ```
 
-提示：请参阅 [Dependency Management](getting-started.adoc#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
-请参阅 [Artifact Repositories](getting-started.adoc#artifact-repositories) 部分，将这些仓库添加到您的构建系统。
+提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
+请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将这些仓库添加到您的构建系统。
 
 要配置它，请使用 `spring.ai.embedding.transformer.*` 属性。
 
@@ -150,7 +150,7 @@ spring.ai.embedding.transformer.onnx.modelOutputName=token_embeddings
 </dependency>
 ```
 
-提示：请参阅 [Dependency Management](getting-started.adoc#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
+提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
 然后创建一个新的 `TransformersEmbeddingModel` 实例，并使用 `setTokenizerResource(tokenizerJsonUri)` 和 `setModelResource(modelOnnxUri)` 方法设置导出的 `tokenizer.json` 和 `model.onnx` 文件的 URI。（支持 `classpath:`、`file:` 或 `https:` URI 模式）。
 

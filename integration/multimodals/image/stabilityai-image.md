@@ -61,7 +61,7 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started.md#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 ### Image Generation Properties
 

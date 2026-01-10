@@ -5,7 +5,7 @@ Spring AI 通过 `TextToSpeechModel` 和 `StreamingTextToSpeechModel` 接口为 
 ## Supported Providers
 
 - [OpenAI's Speech API](speech/openai-speech.md)
-- [Eleven Labs Text-To-Speech API](speech/elevenlabs-speech.md)
+<!-- - [Eleven Labs Text-To-Speech API](speech/elevenlabs-speech.md) -->
 - [DashScope Text-To-Speech API](speech/dashscope-speech.md)
 
 ## Common Interface

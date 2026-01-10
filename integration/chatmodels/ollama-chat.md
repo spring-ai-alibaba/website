@@ -49,7 +49,7 @@ Spring AI 为 Ollama chat 集成提供 Spring Boot auto-configuration。
 </dependency>
 ```
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 ### Base Properties
 
@@ -604,7 +604,7 @@ public class ChatController {
 </dependency>
 ```
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 > **提示：** `spring-ai-ollama` 依赖项还提供对 `OllamaEmbeddingModel` 的访问。
 > 有关 `OllamaEmbeddingModel` 的更多信息，请参阅 [Ollama Embedding Model](../embeddings/ollama-embeddings.html) 部分。
