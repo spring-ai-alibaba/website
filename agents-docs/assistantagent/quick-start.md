@@ -111,11 +111,34 @@ public class ChatController {
     @Autowired
     private CodeactAgent codeactAgent;
 
-    @PostMapping("/chat")
-    public String chat(@RequestBody String message) {
-        OverAllState state = OverAllState.builder().build();
-        OverAllState result = codeactAgent.invoke(state, message);
-        return result.getOutput();
+
+    @GetMapping("/test-chat")
+    public String chat(@RequestParam("message") String message) throws GraphRunnerException {
+
+        // 1. 调用 invokeAndGetOutput 获取结果
+        Optional<NodeOutput> nodeOutputOptional = codeactAgent.invokeAndGetOutput(message);
+
+        // 2. 从 NodeOutput 中提取最终结果
+        if (nodeOutputOptional.isPresent()) {
+            NodeOutput nodeOutput = nodeOutputOptional.get();
+
+            // 获取完整状态，包含 messages
+            OverAllState state = nodeOutput.state();
+
+            // 从 state 中获取 messages（核心结果）
+            Optional<List<Message>> messagesOpt = state.value("messages");
+            if (messagesOpt.isPresent()) {
+                List<Message> messages = messagesOpt.get();
+                // 最后一条消息通常是 AssistantMessage，包含最终答案
+                Message lastMessage = messages.get(messages.size() - 1);
+                if (lastMessage instanceof AssistantMessage assistantMessage) {
+                    String finalAnswer = assistantMessage.getText();
+                    System.out.println("最终答案: " + finalAnswer);
+                    return finalAnswer;
+                }
+            }
+        }
+        return "No Response";
     }
 }
 ```
