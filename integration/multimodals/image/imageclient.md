@@ -1,6 +1,6 @@
 # Image Model API
 
-`Spring Image Model API` 旨在为与各种专门用于图像生成的 [AI Models](concepts.md#_models) 交互提供一个简单且可移植的接口，允许开发者在不同的图像相关模型之间切换，只需最少的代码更改。
+`Spring Image Model API` 旨在为与各种专门用于图像生成的 [AI Models](https://docs.spring.io/spring-ai/reference/concepts.html#models) 交互提供一个简单且可移植的接口，允许开发者在不同的图像相关模型之间切换，只需最少的代码更改。
 此设计符合 Spring 的模块化和可互换性理念，确保开发者能够快速调整应用程序以适应不同的图像处理相关 AI 能力。
 
 此外，通过 `ImagePrompt` 用于输入封装和 `ImageResponse` 用于输出处理等配套类的支持，Image Model API 统一了与专门用于图像生成的 AI Models 的通信。

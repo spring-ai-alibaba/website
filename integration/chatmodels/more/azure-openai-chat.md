@@ -117,9 +117,9 @@ Azure OpenAI 和 OpenAI 的不同部署结构导致 Azure OpenAI 客户端库中
 ### Add Repositories and BOM
 
 Spring AI artifacts 发布在 Maven Central 和 Spring Snapshot 仓库中。
-请参阅 [Artifact Repositories](getting-started#artifact-repositories) 部分，将这些仓库添加到您的构建系统中。
+请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将这些仓库添加到您的构建系统中。
 
-为了帮助进行依赖管理，Spring AI 提供了一个 BOM (bill of materials)，以确保在整个项目中使用一致版本的 Spring AI。请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建系统中。
+为了帮助进行依赖管理，Spring AI 提供了一个 BOM (bill of materials)，以确保在整个项目中使用一致版本的 Spring AI。请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建系统中。
 
 ## Auto-configuration
 
@@ -143,7 +143,7 @@ dependencies {
 }
 ```
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 Azure OpenAI Chat Client 使用 Azure SDK 提供的 [OpenAIClientBuilder](https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/openai/azure-ai-openai/src/main/java/com/azure/ai/openai/OpenAIClientBuilder.java) 创建。Spring AI 允许通过提供 [AzureOpenAIClientBuilderCustomizer](https://github.com/spring-projects/spring-ai/blob/main/auto-configurations/models/spring-ai-autoconfigure-model-azure-openai/src/main/java/org/springframework/ai/model/azure/openai/autoconfigure/AzureOpenAIClientBuilderCustomizer.java) beans 来自定义构建器。
 
@@ -382,7 +382,7 @@ dependencies {
 }
 ```
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 > **提示：** `spring-ai-azure-openai` 依赖项还提供对 `AzureOpenAiChatModel` 的访问。有关 `AzureOpenAiChatModel` 的更多信息，请参阅 [Azure OpenAI Chat](../chat/azure-openai-chat.html) 部分。
 

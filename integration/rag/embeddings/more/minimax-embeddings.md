@@ -41,9 +41,9 @@ String apiKey = System.getenv("MINIMAX_API_KEY");
 ### 添加仓库和 BOM
 
 Spring AI 工件发布在 Maven Central 和 Spring Snapshot 仓库中。
-请参阅 [Artifact Repositories](getting-started.adoc#artifact-repositories) 部分，将这些仓库添加到您的构建系统。
+请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将这些仓库添加到您的构建系统。
 
-为了帮助依赖管理，Spring AI 提供了一个 BOM（物料清单），以确保在整个项目中使用一致版本的 Spring AI。请参阅 [Dependency Management](getting-started.adoc#dependency-management) 部分，将 Spring AI BOM 添加到您的构建系统。
+为了帮助依赖管理，Spring AI 提供了一个 BOM（物料清单），以确保在整个项目中使用一致版本的 Spring AI。请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建系统。
 
 ## 自动配置
 
@@ -71,7 +71,7 @@ dependencies {
 }
 ```
 
-提示：请参阅 [Dependency Management](getting-started.adoc#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
+提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
 ### Embedding 属性
 
@@ -196,7 +196,7 @@ dependencies {
 }
 ```
 
-提示：请参阅 [Dependency Management](getting-started.adoc#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
+提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
 注意：`spring-ai-minimax` 依赖项还提供对 `MiniMaxChatModel` 的访问。
 有关 `MiniMaxChatModel` 的更多信息，请参阅 [MiniMax Chat Client](../chat/minimax-chat.html) 部分。

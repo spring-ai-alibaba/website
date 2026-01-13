@@ -93,9 +93,9 @@ NOTE: It is no longer necessary to create a `TokenCredential` bean; it is config
 ### Add Repositories and BOM
 
 Spring AI artifacts are published in Maven Central and Spring Snapshot repositories.
-Refer to the [Artifact Repositories](getting-started.adoc#artifact-repositories) section to add these repositories to your build system.
+Refer to the [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) section to add these repositories to your build system.
 
-To help with dependency management, Spring AI provides a BOM (bill of materials) to ensure that a consistent version of Spring AI is used throughout the entire project. Refer to the [Dependency Management](getting-started.adoc#dependency-management) section to add the Spring AI BOM to your build system.
+To help with dependency management, Spring AI provides a BOM (bill of materials) to ensure that a consistent version of Spring AI is used throughout the entire project. Refer to the [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) section to add the Spring AI BOM to your build system.
 
 
 ## Auto-configuration
@@ -123,7 +123,7 @@ dependencies {
 }
 ```
 
-TIP: Refer to the [Dependency Management](getting-started.adoc#dependency-management) section to add the Spring AI BOM to your build file.
+TIP: Refer to the [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) section to add the Spring AI BOM to your build file.
 
 ### Embedding Properties
 
@@ -216,7 +216,7 @@ For this add the `spring-ai-azure-openai` dependency to your project's Maven `po
 </dependency>
 ```
 
-TIP: Refer to the [Dependency Management](getting-started.adoc#dependency-management) section to add the Spring AI BOM to your build file.
+TIP: Refer to the [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) section to add the Spring AI BOM to your build file.
 
 NOTE: The `spring-ai-azure-openai` dependency also provide the access to the `AzureOpenAiEmbeddingModel`. For more information about the `AzureOpenAiChatModel` refer to the [Azure OpenAI Embeddings](../embeddings/azure-openai-embeddings.html) section.
 

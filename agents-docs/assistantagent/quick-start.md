@@ -76,7 +76,7 @@ mvn spring-boot:run
 
 ![Agent Chat UI](/img/chatui/agent-chat-ui.gif)
 
-> 项目默认集成了 [Spring AI Alibaba Studio](../../docs/frameworks/studio/quick-start.md)，提供开箱即用的可视化对话界面。
+> 项目默认集成了 [Spring AI Alibaba Studio](/docs/frameworks/studio/quick-start)，提供开箱即用的可视化对话界面。
 
 ### 方式二：API 集成
 

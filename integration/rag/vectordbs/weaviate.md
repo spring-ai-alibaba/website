@@ -35,7 +35,7 @@ dependencies {
 }
 ```
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 ## Configuration
 
@@ -108,11 +108,11 @@ dependencies {
 }
 ```
 
-> **提示：** 请参阅 [Dependency Management](getting-started#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 请查看 [configuration parameters](#_weaviatevectorstore_properties) 列表以了解向量存储的默认值和配置选项。
 
-> **提示：** 请参阅 [Artifact Repositories](getting-started#artifact-repositories) 部分，将 Maven Central 和/或 Snapshot Repositories 添加到您的构建文件中。
+> **提示：** 请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将 Maven Central 和/或 Snapshot Repositories 添加到您的构建文件中。
 
 此外，您需要一个配置的 `EmbeddingModel` bean。
 请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。

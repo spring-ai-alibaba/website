@@ -93,9 +93,9 @@ spring.ai.openai-sdk.api-key=${OPENAI_API_KEY}
 ### Add Repositories and BOM
 
 Spring AI artifacts 发布在 Maven Central 和 Spring Snapshot 存储库中。
-请参考 [Artifact Repositories](getting-started.md#artifact-repositories) 部分，将这些存储库添加到您的构建系统。
+请参考 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将这些存储库添加到您的构建系统。
 
-为了帮助依赖管理，Spring AI 提供了一个 BOM（物料清单）以确保在整个项目中使用一致版本的 Spring AI。请参考 [Dependency Management](getting-started.md#dependency-management) 部分，将 Spring AI BOM 添加到您的构建系统。
+为了帮助依赖管理，Spring AI 提供了一个 BOM（物料清单）以确保在整个项目中使用一致版本的 Spring AI。请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建系统。
 
 ## Auto-configuration
 
@@ -119,7 +119,7 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started.md#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 ### Configuration Properties
 
@@ -271,10 +271,10 @@ dependencies {
 }
 ```
 
-> **TIP**: 请参考 [Dependency Management](getting-started.md#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
+> **TIP**: 请参考 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 > **NOTE**: `spring-ai-openai-sdk` 依赖项还提供对 `OpenAiSdkChatModel` 和 `OpenAiSdkEmbeddingModel` 的访问。
-> 有关 `OpenAiSdkChatModel` 的更多信息，请参阅 [OpenAI SDK Chat](openai-sdk-chat.md) 部分。
+> 有关 `OpenAiSdkChatModel` 的更多信息，请参阅 [OpenAI SDK Chat](../../chatmodels/more/openai-sdk-chat.md) 部分。
 
 接下来，创建一个 `OpenAiSdkImageModel` 实例并使用它生成图像：
 
