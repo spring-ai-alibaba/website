@@ -14,7 +14,7 @@ MCP Server Boot Starters 提供：
 * 多种传输层选项
 * 灵活的工具、资源和 prompt 规范
 * 变更通知功能
-* [基于注解的服务器开发](mcp/mcp-annotations-server.adoc)，具有自动 bean 扫描和注册
+* [基于注解的服务器开发](annotations/mcp-annotations-server)，具有自动 bean 扫描和注册
 
 ## MCP Server Boot Starters
 

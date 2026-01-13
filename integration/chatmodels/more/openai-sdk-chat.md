@@ -2,7 +2,7 @@
 
 Spring AI 通过 OpenAI Java SDK 支持 OpenAI 的语言模型，提供与 OpenAI 服务（包括 Microsoft Foundry 和 GitHub Models）的稳健且官方维护的集成。
 
-> **注意：** 此实现使用来自 OpenAI 的官方 [OpenAI Java SDK](https://github.com/openai/openai-java)。对于替代的 Spring AI 实现，请参阅 [OpenAI Chat](chat/openai-chat)。
+> **注意：** 此实现使用来自 OpenAI 的官方 [OpenAI Java SDK](https://github.com/openai/openai-java)。对于替代的 Spring AI 实现，请参阅 [OpenAI Chat](../openai-chat)。
 
 OpenAI SDK 模块根据您提供的 base URL 自动检测服务提供商（OpenAI、Microsoft Foundry 或 GitHub Models）。
 
@@ -262,7 +262,7 @@ ChatResponse response = chatModel.call(
 
 您可以将自定义 Java functions 或 methods 注册到 `OpenAiSdkChatModel`，并让 OpenAI 模型智能地选择输出包含参数以调用一个或多个已注册 functions/tools 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](tools)。
+了解更多关于 [Tool Calling](../../toolcalls/tool-calls)。
 
 使用示例：
 
@@ -413,7 +413,7 @@ ChatResponse response = chatModel.call(prompt);
 
 ### Integrating with BeanOutputConverter
 
-您可以利用现有的 [BeanOutputConverter](structured-output-converter#_bean_output_converter) 工具：
+您可以利用现有的 [BeanOutputConverter](https://docs.spring.io/spring-ai/reference/api/chat/structured-output-converter.html#_bean_output_converter) 工具：
 
 ```java
 record MathReasoning(
@@ -568,7 +568,7 @@ var chatModel = new OpenAiSdkChatModel(chatOptions);
 
 ## Key Differences from Spring AI OpenAI
 
-此实现与 [Spring AI OpenAI](chat/openai-chat) 实现在几个方面有所不同：
+此实现与 [Spring AI OpenAI](../openai-chat) 实现在几个方面有所不同：
 
 | Aspect | Official OpenAI SDK | Existing OpenAI |
 |--------|---------------------|-----------------|
@@ -610,7 +610,7 @@ OpenAI SDK 实现中尚未支持以下功能：
 * Moderation API
 * File API 操作
 
-这些功能在 [Spring AI OpenAI](chat/openai-chat) 实现中可用。
+这些功能在 [Spring AI OpenAI](../openai-chat) 实现中可用。
 
 ## Additional Resources
 

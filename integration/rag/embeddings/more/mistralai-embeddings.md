@@ -224,7 +224,7 @@ dependencies {
 提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
 注意：`spring-ai-mistral-ai` 依赖项还提供对 `MistralAiChatModel` 的访问。
-有关 `MistralAiChatModel` 的更多信息，请参阅 [MistralAI Chat Client](../chat/mistralai-chat.html) 部分。
+有关 `MistralAiChatModel` 的更多信息，请参阅 [MistralAI Chat Client](../../../chatmodels/more/mistralai-chat) 部分。
 
 接下来，创建一个 `MistralAiEmbeddingModel` 实例并使用它来计算两个输入文本之间的相似性：
 

@@ -45,7 +45,7 @@ var userMessage = UserMessage.builder()
 ChatResponse response = chatModel.call(new Prompt(this.userMessage));
 ```
 
-或使用流式 [ChatClient](chatclient.adoc) API：
+或使用流式 [ChatClient](../chatclient) API：
 
 ```java
 String response = ChatClient.create(chatModel).prompt()
@@ -61,10 +61,10 @@ String response = ChatClient.create(chatModel).prompt()
 
 Spring AI 为以下 chat model 提供多模态支持：
 
-* [Anthropic Claude 3](chat/anthropic-chat.adoc#_multimodal)
-* [AWS Bedrock Converse](chat/bedrock-converse.adoc#_multimodal)
-* [Azure Open AI（例如 GPT-4o model）](chat/azure-openai-chat.adoc#_multimodal)
-* [Mistral AI（例如 Mistral Pixtral model）](chat/mistralai-chat.adoc#_multimodal)
-* [Ollama（例如 LLaVA、BakLLaVA、Llama3.2 model）](chat/ollama-chat.adoc#_multimodal)
-* [OpenAI（例如 GPT-4 和 GPT-4o model）](chat/openai-chat.adoc#_multimodal)
-* [Vertex AI Gemini（例如 gemini-1.5-pro-001、gemini-1.5-flash-001 model）](chat/vertexai-gemini-chat.adoc#_multimodal)
+* [Anthropic Claude 3](https://docs.spring.io/spring-ai/reference/api/chat/anthropic-chat.html#_multimodal)
+* [AWS Bedrock Converse](../chatmodels/more/bedrock-converse#_multimodal)
+* [Azure Open AI（例如 GPT-4o model）](../chatmodels/more/azure-openai-chat#_multimodal)
+* [Mistral AI（例如 Mistral Pixtral model）](../chatmodels/more/mistralai-chat#_multimodal)
+* [Ollama（例如 LLaVA、BakLLaVA、Llama3.2 model）](../chatmodels/ollama-chat#_multimodal)
+* [OpenAI（例如 GPT-4 和 GPT-4o model）](../chatmodels/openai-chat#_multimodal)
+* [Vertex AI Gemini（例如 gemini-1.5-pro-001、gemini-1.5-flash-001 model）](../chatmodels/gemini-chat#_multimodal)

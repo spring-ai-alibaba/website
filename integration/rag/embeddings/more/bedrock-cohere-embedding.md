@@ -7,7 +7,7 @@ https://aws.amazon.com/bedrock/cohere-command-embed/[AWS Bedrock Cohere Model Pa
 
 ## 先决条件
 
-请参阅 [Spring AI documentation on Amazon Bedrock](bedrock.adoc) 以设置 API 访问。
+请参阅 [Spring AI documentation on Amazon Bedrock](https://docs.spring.io/spring-ai/reference/api/chat/bedrock-chat.html) 以设置 API 访问。
 
 ### 添加仓库和 BOM
 

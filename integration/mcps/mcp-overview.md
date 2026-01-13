@@ -61,12 +61,12 @@ Java MCP 实现遵循三层架构，将关注点分离以提高可维护性和�
 
 Spring AI 通过以下 Spring Boot starters 提供 MCP 集成：
 
-### [Client Starters](mcp-client-boot-starter-docs.html)
+### [Client Starters](mcp-client-boot-starter-docs)
 
 * `spring-ai-starter-mcp-client` - 核心 starter，提供 `STDIO`、基于 Servlet 的 `Streamable-HTTP`、`Stateless Streamable-HTTP` 和 `SSE` 支持
 * `spring-ai-starter-mcp-client-webflux` - 基于 WebFlux 的 `Streamable-HTTP`、`Stateless Streamable-HTTP` 和 `SSE` 传输实现
 
-### [Server Starters](mcp-server-boot-starter-docs.html)
+### [Server Starters](mcp-server-boot-starter-docs)
 
 #### STDIO
 
@@ -90,7 +90,7 @@ Spring AI 通过以下 Spring Boot starters 提供 MCP 集成：
 | [Streamable-HTTP WebFlux](mcp-streamable-http-server-boot-starter-docs#_streamable_http_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
 | [Stateless Streamable-HTTP WebFlux](mcp-stateless-server-boot-starter-docs#_stateless_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
 
-## [Spring AI MCP Annotations](mcp-annotations-overview)
+## [Spring AI MCP Annotations](annotations/mcp-annotations-overview)
 
 除了程序化的 MCP 客户端和服务器配置外，Spring AI 还通过 [MCP Annotations](annotations/mcp-annotations-overview) 模块为 MCP 服务器和客户端提供基于注解的方法处理。
 这种方法使用简洁的声明式编程模型和 Java 注解简化了 MCP 操作的创建和注册。
@@ -114,8 +114,8 @@ MCP Annotations 模块使开发者能够：
 ## 其他资源
 
 * [MCP Annotations 文档](annotations/mcp-annotations-overview)
-* [MCP Client Boot Starters 文档](mcp-client-boot-starter-docs.html)
-* [MCP Server Boot Starters 文档](mcp-server-boot-starter-docs.html)
+* [MCP Client Boot Starters 文档](mcp-client-boot-starter-docs)
+* [MCP Server Boot Starters 文档](mcp-server-boot-starter-docs)
 * [MCP Utilities 文档](mcp-helpers)
 * [Model Context Protocol 规范](https://modelcontextprotocol.github.io/specification/)
 

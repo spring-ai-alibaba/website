@@ -6,7 +6,7 @@
 > **NOTE:**
 > 请参阅本文档底部的 [实现说明](#implementation-notes)，了解 `ChatClient` 中命令式和响应式编程模型结合使用的相关信息。
 
-流式 API 提供了用于构建传递给 AI model 作为输入的 [Prompt](prompt#_prompt) 的各个组成部分的方法。
+流式 API 提供了用于构建传递给 AI model 作为输入的 [Prompt](https://docs.spring.io/spring-ai/reference/api/chat.html#_prompt) 的各个组成部分的方法。
 `Prompt` 包含用于指导 AI model 输出和行为的指令文本。从 API 的角度来看，prompts 由消息集合组成。
 
 AI model 处理两种主要类型的消息：用户消息（来自用户的直接输入）和系统消息（由系统生成以指导对话）。
@@ -18,7 +18,7 @@ AI model 处理两种主要类型的消息：用户消息（来自用户的直�
 ## 创建 ChatClient
 
 `ChatClient` 使用 `ChatClient.Builder` 对象创建。
-您可以为任何 [ChatModel](chatmodel) Spring Boot 自动配置获取自动配置的 `ChatClient.Builder` 实例，或以编程方式创建一个。
+您可以为任何 [ChatModel](chatmodels/comparison) Spring Boot 自动配置获取自动配置的 `ChatClient.Builder` 实例，或以编程方式创建一个。
 
 ### 使用自动配置的 ChatClient.Builder
 
@@ -226,8 +226,8 @@ public class MultiModelService {
 
 ### 返回 ChatResponse
 
-来自 AI model 的响应是由类型 [ChatResponse](chatmodel#ChatResponse) 定义的丰富结构。
-它包括有关如何生成响应的元数据，还可以包含多个响应，称为 [Generation](chatmodel#Generation)s，每个都有自己的元数据。
+来自 AI model 的响应是由类型 [ChatResponse](https://docs.spring.io/spring-ai/reference/api/chat.html#ChatResponse) 定义的丰富结构。
+它包括有关如何生成响应的元数据，还可以包含多个响应，称为 [Generation](https://docs.spring.io/spring-ai/reference/api/chat.html#Generation)s，每个都有自己的元数据。
 元数据包括用于创建响应的 token 数量（每个 token 大约相当于 3/4 个单词）。
 此信息很重要，因为托管 AI model 根据每个请求使用的 token 数量收费。
 
@@ -300,7 +300,7 @@ Flux<String> output = chatClient.prompt()
 您还可以使用 `Flux<ChatResponse> chatResponse()` 方法流式传输 `ChatResponse`。
 
 将来，我们将提供一个便捷方法，让您使用响应式 `stream()` 方法返回 Java 实体。
-同时，您应该使用 [Structured Output Converter](structured-output-converter#StructuredOutputConverter) 显式转换聚合响应，如下所示。
+同时，您应该使用 [Structured Output Converter](https://docs.spring.io/spring-ai/reference/api/chat.html#StructuredOutputConverter) 显式转换聚合响应，如下所示。
 这也演示了流式 API 中参数的使用，将在文档的后续部分中更详细地讨论。
 
 ```java
@@ -618,7 +618,7 @@ java.util.function.Function<I, O> function)`
 
 ## Advisors
 
-[Advisors API](advisors) 提供了一种灵活而强大的方式来拦截、修改和增强 Spring 应用程序中的 AI 驱动交互。
+[Advisors API](rag/retrieval-augmented-generation) 提供了一种灵活而强大的方式来拦截、修改和增强 Spring 应用程序中的 AI 驱动交互。
 
 在使用用户文本调用 AI model 时，一个常见模式是将 prompt 附加或增强上下文数据。
 
@@ -664,11 +664,11 @@ ChatClient.builder(chatModel)
 在此配置中，`MessageChatMemoryAdvisor` 将首先执行，将对话历史添加到 prompt。
 然后，`QuestionAnswerAdvisor` 将基于用户的问题和添加的对话历史执行搜索，可能提供更相关的结果。
 
-[了解 Question Answer Advisor](retrieval-augmented-generation.adoc#_questionansweradvisor)
+[了解 Question Answer Advisor](rag/retrieval-augmented-generation#_questionansweradvisor)
 
 ### Retrieval Augmented Generation
 
-请参阅 [Retrieval Augmented Generation](retrieval-augmented-generation.adoc) 指南。
+请参阅 [Retrieval Augmented Generation](rag/retrieval-augmented-generation) 指南。
 
 ### 日志记录
 
@@ -676,7 +676,7 @@ ChatClient.builder(chatModel)
 这对于调试和监控您的 AI 交互很有用。
 
 > **TIP:** Spring AI 支持 LLM 和向量存储交互的可观测性。
-> 请参阅 [可观测性](observability/index.adoc) 指南以获取更多信息。
+> 请参阅 [可观测性](https://docs.spring.io/spring-ai/reference/observability/index.html) 指南以获取更多信息。
 
 要启用日志记录，请在创建 ChatClient 时将 `SimpleLoggerAdvisor` 添加到 advisor 链中。
 建议将其添加到链的末尾：
@@ -736,7 +736,7 @@ SimpleLoggerAdvisor customLogger = new SimpleLoggerAdvisor(
 `MessageWindowChatMemory` 由 `ChatMemoryRepository` 抽象支持，该抽象为聊天对话记忆提供存储实现。
 有多个实现可用，包括 `InMemoryChatMemoryRepository`、`JdbcChatMemoryRepository`、`CassandraChatMemoryRepository` 和 `Neo4jChatMemoryRepository`。
 
-有关更多详细信息和使用示例，请参阅 [Chat Memory](chat-memory.adoc) 文档。
+有关更多详细信息和使用示例，请参阅 [Chat Memory](https://docs.spring.io/spring-ai/reference/chat-memory.html) 文档。
 
 ## 实现说明
 

@@ -7,7 +7,7 @@
 * 正在运行的 Milvus 实例。以下选项可用：
 ** [Milvus Standalone](https://milvus.io/docs/install_standalone-docker.md)：Docker、Operator、Helm、DEB/RPM、Docker Compose。
 ** [Milvus Cluster](https://milvus.io/docs/install_cluster-milvusoperator.md)：Operator、Helm。
-* 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `MilvusVectorStore` 存储的嵌入。
+* 如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `MilvusVectorStore` 存储的嵌入。
 
 ## Dependencies
 
@@ -40,7 +40,7 @@ dependencies {
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
 Vector Store 还需要一个 `EmbeddingModel` 实例来计算文档的嵌入。
-您可以选择一个可用的 [EmbeddingModel 实现](embeddings#available-implementations)。
+您可以选择一个可用的 [EmbeddingModel 实现](../embeddings#available-implementations)。
 
 要连接和配置 `MilvusVectorStore`，您需要提供实例的访问详细信息。
 可以通过 Spring Boot 的 `application.yml` 提供简单配置：

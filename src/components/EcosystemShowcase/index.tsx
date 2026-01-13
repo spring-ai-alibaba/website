@@ -61,7 +61,7 @@ const frameworkItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.framework.extensions.description',
     icon: '🔌',
     repoUrl: 'https://github.com/spring-ai-alibaba/spring-ai-extensions',
-    docUrl: '/ecosystem/spring-ai/reference/concepts',
+    docUrl: '/integration/chatmodels/comparison',
     stars: 'spring-ai-extensions',
   },
 ]
@@ -76,6 +76,16 @@ const productItems: EcosystemItem[] = [
     repoUrl: 'https://github.com/spring-ai-alibaba/jmanus',
     docUrl: '/agents/jmanus/quick-start',
     stars: 'jmanus',
+  },
+  {
+    name: 'AssistantAgent',
+    nameId: 'ecosystem.product.copilot.name',
+    description: 'An framework for quickly building enterprise-level AIOps agents, Q&A Agent, Customer Service Agent, Diagnostic Agent, etc.',
+    descriptionId: 'ecosystem.product.copilot.description',
+    icon: '💻',
+    repoUrl: 'https://github.com/spring-ai-alibaba/AssistantAgent',
+    docUrl: '/agents/assistantagent/quick-start',
+    stars: 'copilot',
   },
   {
     name: 'DataAgent',
@@ -96,16 +106,6 @@ const productItems: EcosystemItem[] = [
     repoUrl: 'https://github.com/spring-ai-alibaba/deep-research',
     docUrl: '/agents/deepresearch/quick-start',
     stars: 'deep-research',
-  },
-  {
-    name: 'Copilot',
-    nameId: 'ecosystem.product.copilot.name',
-    description: 'An AI programming assistant agent built with Spring AI Alibaba, helping developers write better code faster.',
-    descriptionId: 'ecosystem.product.copilot.description',
-    icon: '💻',
-    repoUrl: 'https://github.com/spring-ai-alibaba/copilot',
-    docUrl: '/agents/deepresearch/quick-start',
-    stars: 'copilot',
   },
 ]
 

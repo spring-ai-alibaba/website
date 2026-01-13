@@ -3,7 +3,7 @@
 此表格对比了 Spring AI 支持的各种 Chat Models，详细说明了它们的功能：
 
 - [Multimodality](../multimodals/multimodality): 模型可以处理的输入类型（例如，text、image、audio、video）。
-- [Tools/Function Calling](../tools): 模型是否支持 function calling 或 tool use。
+- [Tools/Function Calling](../toolcalls/tool-calls): 模型是否支持 function calling 或 tool use。
 - Streaming: 模型是否提供 streaming 响应。
 - Retry: 是否支持 retry 机制。
 - Observability: 用于监控和调试的功能。
@@ -15,7 +15,7 @@
 |----------|---------------|-----------------|-----------|-------|---------------|---------------|-------|----------------------|
 | [DashScope](dashScope) | text, pdf, image | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ |
 | [Qwen](qwq) | text, pdf, image | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | x |
-| [Anthropic Claude](more/anthropic-chat) | text, pdf, image | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
+| [Anthropic Claude](https://docs.spring.io/spring-ai/reference/api/chat/anthropic-chat.html) | text, pdf, image | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
 | [Azure OpenAI](more/azure-openai-chat) | text, image | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ |
 | [DeepSeek (OpenAI-proxy)](deepseek-chat) | text | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | [Google GenAI](more/google-genai-chat) | text, pdf, image, audio, video | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
@@ -31,7 +31,7 @@
 | [OpenAI SDK (Official)](more/openai-sdk-chat) | In: text, image, audio<br/>Out: text, audio | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ |
 | [OpenAI](openai-chat) | In: text, image, audio<br/>Out: text, audio | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ |
 | [Perplexity (OpenAI-proxy)](more/perplexity-chat) | text | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ |
-| [QianFan](more/qianfan-chat) | text | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
+| [QianFan](https://docs.spring.io/spring-ai/reference/api/chat/qianfan-chat.html) | text | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
 | [ZhiPu AI](more/zhipuai-chat) | text, image, docs | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
-| [Amazon Bedrock Converse](chat/bedrock-converse) | text, image, video, docs (pdf, html, md, docx ...) | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
+| [Amazon Bedrock Converse](more/bedrock-converse) | text, image, video, docs (pdf, html, md, docx ...) | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
 

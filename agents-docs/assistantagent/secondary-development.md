@@ -737,7 +737,7 @@ spring:
 
 ## 参考资源
 
-- [完整配置参考](../assistant-agent-start/src/main/resources/application-reference.yml)
-- [Feature 详细文档](./features/)
+- [完整配置参考](https://github.com/spring-ai-alibaba/AssistantAgent/blob/main/assistant-agent-start/src/main/resources/application-reference.yml)
+- [Feature 详细文档](./features/evaluation/quickstart)
 - [Spring AI Alibaba 文档](https://github.com/alibaba/spring-ai-alibaba)
 

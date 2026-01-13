@@ -2,7 +2,7 @@
 
 STDIO 和 SSE MCP 服务器支持多种传输机制，每个都有专用的 starter。
 
-> **提示：** 使用 [STDIO clients](mcp/mcp-client-boot-starter-docs#_stdio_transport_properties) 或 [SSE clients](mcp/mcp-client-boot-starter-docs#_sse_transport_properties) 连接到 STDIO 和 SSE 服务器。
+> **提示：** 使用 [STDIO clients](mcp-client-boot-starter-docs#_stdio_transport_properties) 或 [SSE clients](mcp-client-boot-starter-docs#_sse_transport_properties) 连接到 STDIO 和 SSE 服务器。
 
 ### STDIO MCP Server
 
@@ -117,7 +117,7 @@ MCP Server Boot Starter 允许服务器向客户端暴露工具、资源和 prom
 允许服务器暴露可由语言模型调用的工具。MCP Server Boot Starter 提供：
 
 * 变更通知支持
-* [Spring AI Tools](tools.adoc) 根据服务器类型自动转换为同步/异步规范
+* [Spring AI Tools](../toolcalls/tool-calls) 根据服务器类型自动转换为同步/异步规范
 * 通过 Spring beans 自动工具规范：
 
 ```java
@@ -150,7 +150,7 @@ public List<McpServerFeatures.SyncToolSpecification> myTools(...) {
 
 #### Tool Context Support
 
-支持 [ToolContext](tools.adoc#_tool_context)，允许将上下文信息传递给工具调用。它在 `exchange` 键下包含一个 `McpSyncServerExchange` 实例，可通过 `McpToolUtils.getMcpExchange(toolContext)` 访问。请参阅此[示例](https://github.com/spring-projects/spring-ai-examples/blob/3fab8483b8deddc241b1e16b8b049616604b7767/model-context-protocol/sampling/mcp-weather-webmvc-server/src/main/java/org/springframework/ai/mcp/sample/server/WeatherService.java#L59-L126)，演示 `exchange.loggingNotification(...)` 和 `exchange.createMessage(...)`。
+支持 [ToolContext](../toolcalls/tool-calls#_tool_context)，允许将上下文信息传递给工具调用。它在 `exchange` 键下包含一个 `McpSyncServerExchange` 实例，可通过 `McpToolUtils.getMcpExchange(toolContext)` 访问。请参阅此[示例](https://github.com/spring-projects/spring-ai-examples/blob/3fab8483b8deddc241b1e16b8b049616604b7767/model-context-protocol/sampling/mcp-weather-webmvc-server/src/main/java/org/springframework/ai/mcp/sample/server/WeatherService.java#L59-L126)，演示 `exchange.loggingNotification(...)` 和 `exchange.createMessage(...)`。
 
 ### [Resources](https://spec.modelcontextprotocol.io/specification/2024-11-05/server/resources/)
 
@@ -246,7 +246,7 @@ public List<McpServerFeatures.SyncCompletionSpecification> myCompletions() {
 }
 ```
 
-在 MCP 客户端上，您可以注册[日志消费者](mcp/mcp-client-boot-starter-docs#_customization_types)来处理这些消息：
+在 MCP 客户端上，您可以注册[日志消费者](mcp-client-boot-starter-docs#_customization_types)来处理这些消息：
 
 ```java
 mcpClientSpec.loggingConsumer((McpSchema.LoggingMessageNotification log) -> {

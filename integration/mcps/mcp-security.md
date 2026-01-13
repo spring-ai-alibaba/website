@@ -24,7 +24,7 @@ MCP Security 模块提供三个主要组件：
 
 ## MCP Server Security
 
-MCP Server Security 模块为 [Spring AI's MCP servers](mcps/mcp-server-boot-starter-docs) 提供 OAuth 2.0 资源服务器功能。
+MCP Server Security 模块为 [Spring AI's MCP servers](mcp-server-boot-starter-docs) 提供 OAuth 2.0 资源服务器功能。
 它还提供基于 API 密钥的身份验证的基本支持。
 
 > **重要提示：** 此模块仅与基于 Spring WebMVC 的服务器兼容。
@@ -252,7 +252,7 @@ class McpServerConfiguration {
 
 > **重要提示：**
 
-* 不支持已弃用的 SSE 传输。使用 [Streamable HTTP](mcps/mcp-streamable-http-server-boot-starter-docs) 或 [stateless transport](mcp/mcp-stateless-server-boot-starter-docs.adoc)。
+* 不支持已弃用的 SSE 传输。使用 [Streamable HTTP](mcp-streamable-http-server-boot-starter-docs) 或 [stateless transport](mcp-stateless-server-boot-starter-docs)。
 * 不支持基于 WebFlux 的服务器。
 * 不支持 Opaque tokens。使用 JWT。
 

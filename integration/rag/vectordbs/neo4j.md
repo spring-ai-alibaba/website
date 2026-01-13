@@ -18,7 +18,7 @@
 ** [Neo4j Desktop](https://neo4j.com/download/)
 ** [Neo4j Aura](https://neo4j.com/cloud/aura-free/)
 ** [Neo4j Server](https://neo4j.com/deployment-center/) 实例
-* 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `Neo4jVectorStore` 存储的嵌入。
+* 如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `Neo4jVectorStore` 存储的嵌入。
 
 ## Auto-configuration
 
@@ -54,7 +54,7 @@ dependencies {
 
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
-此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
+此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](../embeddings#available-implementations) 部分了解更多信息。
 
 现在您可以在应用程序中自动装配 `Neo4jVectorStore` 作为向量存储。
 
@@ -180,7 +180,7 @@ public EmbeddingModel embeddingModel() {
 
 ## Metadata Filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#metadata-filters) 与 Neo4j 存储一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 Neo4j 存储一起使用。
 
 例如，您可以使用文本表达式语言：
 

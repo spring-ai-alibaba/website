@@ -11,7 +11,7 @@
 1. 一个运行中的 OceanBase 数据库实例，支持 VECTOR 数据类型
 2. 数据库连接信息（URL、用户名、密码）
 3. 用于计算文档嵌入的 `EmbeddingModel` 实例。有多个选项可用：
-   - 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `OceanBaseVectorStore` 存储的嵌入。
+   - 如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `OceanBaseVectorStore` 存储的嵌入。
 
 在启动时，如果表不存在，`OceanBaseVectorStore` 将自动创建所需的表结构。
 
@@ -43,9 +43,9 @@ dependencies {
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
 Vector Store 还需要一个 `EmbeddingModel` 实例来计算文档的嵌入。
-您可以选择一个可用的 [EmbeddingModel 实现](embeddings#available-implementations)。
+您可以选择一个可用的 [EmbeddingModel 实现](../embeddings#available-implementations)。
 
-例如，要使用 [OpenAI EmbeddingModel](embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
+例如，要使用 [OpenAI EmbeddingModel](../embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
 
 ```xml
 <dependency>
@@ -119,7 +119,7 @@ List<Document> results = this.vectorStore.similaritySearch(SearchRequest.builder
 
 ## Metadata filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#_metadata_filters) 与 OceanBase 存储一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 OceanBase 存储一起使用。
 
 例如，您可以使用文本表达式语言：
 

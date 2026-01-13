@@ -71,7 +71,7 @@ dependencies {
 请查看 [configuration parameters](#elasticsearchvector-properties) 列表以了解向量存储的默认值和配置选项。
 这些属性也可以通过配置 `ElasticsearchVectorStoreOptions` bean 来设置。
 
-此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
+此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](../embeddings#available-implementations) 部分了解更多信息。
 
 现在您可以在应用程序中自动装配 `ElasticsearchVectorStore` 作为向量存储。
 
@@ -147,7 +147,7 @@ spring:
 
 ## Metadata Filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#metadata-filters) 与 Elasticsearch 一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 Elasticsearch 一起使用。
 
 例如，您可以使用文本表达式语言：
 

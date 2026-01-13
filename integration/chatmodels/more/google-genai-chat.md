@@ -164,7 +164,7 @@ String response = ChatClient.create(this.chatModel)
         .content();
 ```
 
-在 [Tools](tools) 文档中查找更多信息。
+在 [Tools](../../toolcalls/tool-calls) 文档中查找更多信息。
 
 ## Multimodal
 

@@ -202,7 +202,7 @@ dependencies {
 提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
 注意：`spring-ai-zhipuai` 依赖项还提供对 `ZhiPuAiChatModel` 的访问。
-有关 `ZhiPuAiChatModel` 的更多信息，请参阅 [ZhiPuAI Chat Client](../chat/zhipuai-chat.html) 部分。
+有关 `ZhiPuAiChatModel` 的更多信息，请参阅 [ZhiPuAI Chat Client](../../../chatmodels/more/zhipuai-chat) 部分。
 
 接下来，创建一个 `ZhiPuAiEmbeddingModel` 实例并使用它来计算两个输入文本之间的相似性：
 
