@@ -100,7 +100,7 @@ MCP Server Boot Starter 允许服务器向客户端暴露工具、资源和 prom
 允许服务器暴露可由语言模型调用的工具。MCP Server Boot Starter 提供：
 
 * 变更通知支持
-* [Spring AI Tools](../tools) 根据服务器类型自动转换为同步/异步规范
+* [Spring AI Tools](../toolcalls/tool-calls) 根据服务器类型自动转换为同步/异步规范
 * 通过 Spring beans 自动工具规范：
 
 ```java

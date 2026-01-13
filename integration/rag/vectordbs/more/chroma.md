@@ -11,7 +11,7 @@
    - 对于本地 ChromaDB：除了启动容器外，无需额外配置。
 
 2. 用于计算文档嵌入的 `EmbeddingModel` 实例。有多个选项可用：
-- 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `ChromaVectorStore` 存储的嵌入。
+- 如果需要，为 [EmbeddingModel](../../embeddings#available-implementations) 提供一个 API key，用于生成 `ChromaVectorStore` 存储的嵌入。
 
 在启动时，如果尚未配置，`ChromaVectorStore` 会创建所需的 collection。
 
@@ -47,7 +47,7 @@ dependencies {
 
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
-此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
+此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](../../embeddings#available-implementations) 部分了解更多信息。
 
 以下是所需 bean 的示例：
 

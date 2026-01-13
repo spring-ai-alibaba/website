@@ -15,7 +15,7 @@ Bedrock Converse API 具有以下高级功能：
 
 > **注意：**
 > 遵循 Bedrock 建议，Spring AI 正在过渡到使用 Amazon Bedrock 的 Converse API 来实现 Spring AI 中的所有 chat conversation 实现。
-> 虽然现有的 [InvokeModel API](bedrock-chat) 支持对话应用程序，但我们强烈建议为所有 Chat conversation 模型采用 Converse API。
+> 虽然现有的 [InvokeModel API](https://docs.spring.io/spring-ai/reference/api/chat/bedrock-chat.html) 支持对话应用程序，但我们强烈建议为所有 Chat conversation 模型采用 Converse API。
 >
 > Converse API 不支持 embedding 操作，因此这些操作将保留在当前 API 中，现有 `InvokeModel API` 中的 embedding model 功能将得到维护
 
@@ -723,7 +723,7 @@ String response = ChatClient.create(this.chatModel)
         .content();
 ```
 
-在 [Tools](tools) 文档中查找更多信息。
+在 [Tools](../../toolcalls/tool-calls) 文档中查找更多信息。
 
 ## Multimodal
 

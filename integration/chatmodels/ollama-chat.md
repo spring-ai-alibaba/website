@@ -9,15 +9,15 @@ sidebar_position: 3
 Spring AI 通过 `OllamaChatModel` API 支持 Ollama chat completion 功能。
 
 > **提示：** Ollama 还提供 OpenAI API 兼容的 endpoint。
-> [OpenAI API compatibility](_openai_api_compatibility) 部分解释了如何使用 [Spring AI OpenAI](chat/openai-chat) 连接到 Ollama 服务器。
+> [OpenAI API compatibility](https://docs.spring.io/spring-ai/reference/api/chat/openai-compatible-servers.html) 部分解释了如何使用 [Spring AI OpenAI](openai-chat) 连接到 Ollama 服务器。
 
 ## Prerequisites
 
 您首先需要访问 Ollama 实例。有几种选择，包括以下：
 
 * 在本地机器上[下载并安装 Ollama](https://ollama.com/download)。
-* 通过 [Testcontainers](testcontainers) 配置和运行 Ollama。
-* 通过 [Kubernetes Service Bindings](cloud-bindings) 绑定到 Ollama 实例。
+* 通过 [Testcontainers](https://docs.spring.io/spring-ai/reference/api/testcontainers.html) 配置和运行 Ollama。
+* 通过 [Kubernetes Service Bindings](https://docs.spring.io/spring-ai/reference/api/cloud-bindings.html) 绑定到 Ollama 实例。
 
 您可以从 [Ollama model library](https://ollama.com/library) 拉取要在应用程序中使用的模型：
 
@@ -31,7 +31,7 @@ ollama pull <model-name>
 ollama pull hf.co/<username>/<model-repository>
 ```
 
-或者，您可以启用自动下载任何所需模型的选项：[Auto-pulling Models](auto-pulling-models)。
+或者，您可以启用自动下载任何所需模型的选项：[Auto-pulling Models](#auto-pulling-models)。
 
 ## Auto-configuration
 
@@ -59,7 +59,7 @@ Spring AI 为 Ollama chat 集成提供 Spring Boot auto-configuration。
 |----------|-------------|---------|
 | spring.ai.ollama.base-url | Ollama API 服务器运行的 Base URL。 | `http://localhost:11434` |
 
-以下是用于初始化 Ollama 集成和 [auto-pulling models](auto-pulling-models) 的属性。
+以下是用于初始化 Ollama 集成和 [auto-pulling models](#auto-pulling-models) 的属性。
 
 | Property | Description | Default |
 |----------|-------------|---------|
@@ -220,7 +220,7 @@ spring:
 
 您可以将自定义 Java functions 注册到 `OllamaChatModel`，并让 Ollama 模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](tools)。
+了解更多关于 [Tool Calling](../toolcalls/tool-calls)。
 
 > **提示：** 您需要 Ollama 0.2.8 或更高版本来使用 function calling 功能，需要 Ollama 0.4.6 或更高版本来在 streaming 模式中使用它们。
 
@@ -395,7 +395,7 @@ where fruits are being displayed, possibly for convenience or aesthetic purposes
 ## Structured Outputs
 
 Ollama 提供自定义 [Structured Outputs](https://ollama.com/blog/structured-outputs) APIs，确保您的模型生成严格符合您提供的 `JSON Schema` 的响应。
-除了现有的 Spring AI 模型无关的 [Structured Output Converter](structured-output-converter) 之外，这些 APIs 还提供增强的控制和精度。
+除了现有的 Spring AI 模型无关的 [Structured Output Converter](https://docs.spring.io/spring-ai/reference/api/chat/structured-output-converter.html) 之外，这些 APIs 还提供增强的控制和精度。
 
 ### Configuration
 
@@ -440,7 +440,7 @@ ChatResponse response = this.ollamaChatModel.call(this.prompt);
 
 #### Integrating with BeanOutputConverter Utilities
 
-您可以利用现有的 [BeanOutputConverter](structured-output-converter#_bean_output_converter) 工具自动从您的域对象生成 JSON Schema，然后将结构化响应转换为域特定的实例：
+您可以利用现有的 [BeanOutputConverter](https://docs.spring.io/spring-ai/reference/api/chat/structured-output-converter.html#_bean_output_converter) 工具自动从您的域对象生成 JSON Schema，然后将结构化响应转换为域特定的实例：
 
 ```java
 record MathReasoning(
@@ -476,10 +476,10 @@ MathReasoning mathReasoning = this.outputConverter.convert(this.content);
 
 ## OpenAI API Compatibility
 
-Ollama 是 OpenAI API 兼容的，您可以使用 [Spring AI OpenAI](chat/openai-chat) 客户端与 Ollama 通信并使用工具。
+Ollama 是 OpenAI API 兼容的，您可以使用 [Spring AI OpenAI](openai-chat) 客户端与 Ollama 通信并使用工具。
 为此，您需要将 OpenAI base URL 配置为您的 Ollama 实例：`spring.ai.openai.chat.base-url=http://localhost:11434` 并选择提供的 Ollama 模型之一：`spring.ai.openai.chat.options.model=mistral`。
 
-> **提示：** 使用 OpenAI 客户端与 Ollama 时，您可以使用 [extraBody option](chat/openai-chat#openai-compatible-servers) 传递 Ollama 特定的参数（如 `top_k`、`repeat_penalty`、`num_predict`）。
+> **提示：** 使用 OpenAI 客户端与 Ollama 时，您可以使用 [extraBody option](openai-chat#openai-compatible-servers) 传递 Ollama 特定的参数（如 `top_k`、`repeat_penalty`、`num_predict`）。
 > 这允许您在 using OpenAI 客户端时利用 Ollama 的完整功能。
 
 ![spring-ai-ollama-over-openai.jpg](/img/integration/spring-ai-ollama-over-openai.jpg)
@@ -532,7 +532,7 @@ System.out.println("Answer: " + answer);
 ## HuggingFace Models
 
 Ollama 可以开箱即用地访问所有 [GGUF Hugging Face](https://huggingface.co/models?library=gguf&sort=trending) Chat Models。
-您可以通过名称拉取这些模型中的任何一个：`ollama pull hf.co/<username>/<model-repository>` 或配置自动拉取策略：[Auto-pulling Models](auto-pulling-models)：
+您可以通过名称拉取这些模型中的任何一个：`ollama pull hf.co/<username>/<model-repository>` 或配置自动拉取策略：[Auto-pulling Models](#auto-pulling-models)：
 
 ```properties
 spring.ai.ollama.chat.options.model=hf.co/bartowski/gemma-2-2b-it-GGUF
@@ -607,7 +607,7 @@ public class ChatController {
 > **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
 > **提示：** `spring-ai-ollama` 依赖项还提供对 `OllamaEmbeddingModel` 的访问。
-> 有关 `OllamaEmbeddingModel` 的更多信息，请参阅 [Ollama Embedding Model](../embeddings/ollama-embeddings.html) 部分。
+> 有关 `OllamaEmbeddingModel` 的更多信息，请参阅 [Ollama Embedding Model](../rag/embeddings/ollama-embeddings) 部分。
 
 接下来，创建一个 `OllamaChatModel` 实例并使用它发送文本生成请求：
 

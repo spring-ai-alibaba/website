@@ -2,7 +2,7 @@
 
 [Groq](https://groq.com/) 是一个极快的、基于 LPU™ 的 AI Inference Engine，支持各种 [AI Models](https://console.groq.com/docs/models)，支持 `Tool/Function Calling` 并暴露 `OpenAI API` 兼容的 endpoint。
 
-Spring AI 通过重用现有的 [OpenAI](chat/openai-chat) 客户端与 [Groq](https://groq.com/) 集成。
+Spring AI 通过重用现有的 [OpenAI](../openai-chat) 客户端与 [Groq](https://groq.com/) 集成。
 为此，您需要获取 [Groq Api Key](https://console.groq.com/keys)，将 base-url 设置为 https://api.groq.com/openai 并选择提供的 [Groq models](https://console.groq.com/docs/models) 之一。
 
 ![spring-ai-groq-integration.jpg](/img/integration/spring-ai-groq-integration.jpg)

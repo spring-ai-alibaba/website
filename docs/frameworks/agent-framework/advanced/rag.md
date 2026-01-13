@@ -66,7 +66,7 @@ keywords:
 
 #### 向量存储
 
-用于存储和搜索嵌入的专用数据库。Spring AI Alibaba 支持多种向量数据库，包括 [Milvus](/integration/rag/vectordbs/milvus)、[Pinecone](/integration/rag/vectordbs/more/pinecone)、[Redis](/integration/rag/vectordbs/redis)、[Elasticsearch](/integration/rag/vectordbs/elasticsearch) 等。更多实现请查看 [向量数据库文档](/integration/rag/vectordbs)。
+用于存储和搜索嵌入的专用数据库。Spring AI Alibaba 支持多种向量数据库，包括 [Milvus](/integration/rag/vectordbs/milvus)、[Pinecone](/integration/rag/vectordbs/more/pinecone)、[Redis](/integration/rag/vectordbs/redis)、[Elasticsearch](/integration/rag/vectordbs/elasticsearch) 等。更多实现请查看 [向量数据库文档](https://docs.spring.io/spring-ai/reference/api/vectordbs.html)。
 
 #### 检索器
 
@@ -1065,4 +1065,4 @@ Spring AI 实现了模块化 RAG 架构，支持灵活的组件组合：
 - [Document Readers](/integration/rag/document-readers) - 文档加载器实现
 - [Document Parsers](/integration/rag/document-parsers) - 文档解析器实现
 - [Embeddings](/integration/rag/embeddings) - 嵌入模型 API
-- [Vector Databases](/integration/rag/vectordbs) - 向量数据库集成
+- [Vector Databases](https://docs.spring.io/spring-ai/reference/api/vectordbs.html) - 向量数据库集成

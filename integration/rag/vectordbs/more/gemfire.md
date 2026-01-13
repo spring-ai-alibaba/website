@@ -11,8 +11,8 @@
 1. 启用了 GemFire VectorDB 扩展的 GemFire 集群
 - [安装 GemFire VectorDB 扩展](https://docs.vmware.com/en/VMware-GemFire-VectorDB/1.0/gemfire-vectordb/install.html)
 
-2. 用于计算文档嵌入的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
-在您的机器上本地运行的选项是 [ONNX](embeddings/onnx) 和 all-MiniLM-L6-v2 Sentence Transformers。
+2. 用于计算文档嵌入的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](../../embeddings#available-implementations) 部分了解更多信息。
+在您的机器上本地运行的选项是 [ONNX](../../embeddings/more/onnx) 和 all-MiniLM-L6-v2 Sentence Transformers。
 
 ## Auto-configuration
 
@@ -126,7 +126,7 @@ List<Document> results = vectorStore.similaritySearch(
 
 ## Metadata Filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#metadata-filters) 与 GemFire VectorStore 一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 GemFire VectorStore 一起使用。
 
 例如，您可以使用文本表达式语言：
 

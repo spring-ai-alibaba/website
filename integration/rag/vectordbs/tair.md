@@ -11,7 +11,7 @@
 1. 一个 Tair 实例，并已启用向量检索功能
 2. Tair 连接信息（主机、端口、密码等）
 3. 用于计算文档嵌入的 `EmbeddingModel` 实例。有多个选项可用：
-   - 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `TairVectorStore` 存储的嵌入。
+   - 如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `TairVectorStore` 存储的嵌入。
 
 ## Auto-Configuration
 
@@ -42,7 +42,7 @@ dependencies {
 
 请查看 [configuration parameters](#tair-properties) 列表以了解向量存储的默认值和配置选项。
 
-此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
+此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](../embeddings#available-implementations) 部分了解更多信息。
 
 现在您可以在应用程序中自动装配 `TairVectorStore` 作为向量存储：
 

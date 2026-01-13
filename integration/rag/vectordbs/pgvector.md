@@ -8,7 +8,7 @@
 
 首先，您需要访问启用了 `vector`、`hstore` 和 `uuid-ossp` 扩展的 PostgreSQL 实例。
 
-> **提示：** 您可以通过 [Docker Compose](docker-compose) 或 [Testcontainers](testcontainers) 将 PGvector 数据库作为 Spring Boot dev service 运行。或者，【Run Postgres & PGVector DB locally,setup local Postgres/PGVector】 附录显示了如何使用 Docker 容器在本地设置数据库。
+> **提示：** 您可以通过 [Docker Compose](https://docs.spring.io/spring-boot/reference/features/dev-services.html#features.dev-services.docker-compose) 或 [Testcontainers](https://docs.spring.io/spring-boot/reference/features/dev-services.html#features.dev-services.testcontainers) 将 PGvector 数据库作为 Spring Boot dev service 运行。或者，【Run Postgres & PGVector DB locally,setup local Postgres/PGVector】 附录显示了如何使用 Docker 容器在本地设置数据库。
 
 在启动时，如果明确启用了 schema 初始化功能，`PgVectorStore` 将尝试安装所需的数据库扩展，并在不存在时创建所需的带索引的 `vector_store` 表。
 
@@ -32,7 +32,7 @@ CREATE INDEX ON vector_store USING HNSW (embedding vector_cosine_ops);
 
 > **提示：** 如果您使用不同的维度，请将 `1536` 替换为实际的嵌入维度。PGvector 对 HNSW 索引最多支持 2000 个维度。
 
-接下来，如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `PgVectorStore` 存储的嵌入。
+接下来，如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `PgVectorStore` 存储的嵌入。
 
 ## Auto-Configuration
 
@@ -62,9 +62,9 @@ dependencies {
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
 Vector Store 还需要一个 `EmbeddingModel` 实例来计算文档的嵌入。
-您可以选择一个可用的 [EmbeddingModel 实现](embeddings#available-implementations)。
+您可以选择一个可用的 [EmbeddingModel 实现](../embeddings#available-implementations)。
 
-例如，要使用 [OpenAI EmbeddingModel](embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
+例如，要使用 [OpenAI EmbeddingModel](../embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
 
 ```xml
 <dependency>
@@ -146,7 +146,7 @@ List<Document> results = this.vectorStore.similaritySearch(SearchRequest.builder
 
 ## Metadata filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#_metadata_filters) 与 PgVector 存储一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 PgVector 存储一起使用。
 
 例如，您可以使用文本表达式语言：
 

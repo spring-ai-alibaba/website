@@ -13,7 +13,7 @@
 3. 数据库实例 ID、区域 ID、管理账号和密码
 4. 命名空间（Namespace）和命名空间密码
 5. 用于计算文档嵌入的 `EmbeddingModel` 实例。有多个选项可用：
-   - 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `AnalyticDbVectorStore` 存储的嵌入。
+   - 如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `AnalyticDbVectorStore` 存储的嵌入。
 
 在启动时，`AnalyticDbVectorStore` 会自动初始化向量数据库、创建命名空间（如果不存在）和集合（Collection）。
 
@@ -45,9 +45,9 @@ dependencies {
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
 Vector Store 还需要一个 `EmbeddingModel` 实例来计算文档的嵌入。
-您可以选择一个可用的 [EmbeddingModel 实现](embeddings#available-implementations)。
+您可以选择一个可用的 [EmbeddingModel 实现](../embeddings#available-implementations)。
 
-例如，要使用 [OpenAI EmbeddingModel](embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
+例如，要使用 [OpenAI EmbeddingModel](../embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
 
 ```xml
 <dependency>
@@ -137,7 +137,7 @@ List<Document> results = this.vectorStore.similaritySearch(SearchRequest.builder
 
 ## Metadata filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#_metadata_filters) 与 AnalyticDB 存储一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 AnalyticDB 存储一起使用。
 
 例如，您可以使用文本表达式语言：
 

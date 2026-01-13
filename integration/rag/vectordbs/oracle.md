@@ -32,9 +32,9 @@ dependencies {
 > **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
 
 Vector Store 还需要一个 `EmbeddingModel` 实例来计算文档的嵌入。
-您可以选择一个可用的 [EmbeddingModel 实现](embeddings#available-implementations)。
+您可以选择一个可用的 [EmbeddingModel 实现](../embeddings#available-implementations)。
 
-例如，要使用 [OpenAI EmbeddingModel](embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
+例如，要使用 [OpenAI EmbeddingModel](../embeddings/openai-embeddings)，请将以下依赖项添加到您的项目：
 
 ```xml
 <dependency>
@@ -100,7 +100,7 @@ List<Document> results = this.vectorStore.similaritySearch(SearchRequest.builder
 |---------|-------------|---------------|
 | `spring.ai.vectorstore.oracle.index-type` | 最近邻搜索索引类型。选项有 `NONE` - 精确最近邻搜索，`IVF` - 倒排平面文件索引。它的构建时间更快，使用的内存比 HNSW 少，但查询性能较低（在速度-召回权衡方面）。`HNSW` - 创建多层图。它的构建时间比 IVF 慢，使用的内存比 IVF 多，但查询性能更好（在速度-召回权衡方面）。 | NONE |
 | `spring.ai.vectorstore.oracle.distance-type` | 搜索距离类型，包括 `COSINE`（默认）、`DOT`、`EUCLIDEAN`、`EUCLIDEAN_SQUARED` 和 `MANHATTAN`。<br/><br/>注意：如果向量已归一化，您可以使用 `DOT` 或 `COSINE` 以获得最佳性能。 | COSINE |
-| `spring.ai.vectorstore.oracle.forced-normalization` | 允许在插入和相似性搜索之前启用向量归一化（如果为 true）。<br/><br/>警告：将此设置为 true 是允许 [search request similarity threshold](vectordbs#api-overview) 的要求。<br/><br/>注意：如果向量已归一化，您可以使用 `DOT` 或 `COSINE` 以获得最佳性能。 | false |
+| `spring.ai.vectorstore.oracle.forced-normalization` | 允许在插入和相似性搜索之前启用向量归一化（如果为 true）。<br/><br/>警告：将此设置为 true 是允许 [search request similarity threshold](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#api-overview) 的要求。<br/><br/>注意：如果向量已归一化，您可以使用 `DOT` 或 `COSINE` 以获得最佳性能。 | false |
 | `spring.ai.vectorstore.oracle.dimensions` | 嵌入维度。如果未明确指定，OracleVectorStore 将允许最大值：65535。维度在表创建时设置到嵌入列。如果您更改维度，则必须重新创建表。 | 65535 |
 | `spring.ai.vectorstore.oracle.remove-existing-vector-store-table` | 在启动时删除现有表。 | false |
 | `spring.ai.vectorstore.oracle.initialize-schema` | 是否初始化所需的 schema。 | false |

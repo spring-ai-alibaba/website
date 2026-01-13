@@ -936,4 +936,4 @@ writer.accept(documents);
 ### VectorStore
 
 提供与各种向量存储的集成。
-有关完整列表，请参阅 [Vector DB 文档](vectordbs.adoc)。
+有关完整列表，请参阅 [Vector DB 文档](https://docs.spring.io/spring-ai/reference/api/vectordbs.html)。

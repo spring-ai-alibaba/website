@@ -2,7 +2,7 @@
 
 [Docker Model Runner](https://docs.docker.com/desktop/features/model-runner/) 是一个 AI Inference Engine，提供来自[各种提供商](https://hub.docker.com/u/ai)的广泛模型。
 
-Spring AI 通过重用现有的 [OpenAI](chat/openai-chat) 支持的 `ChatClient` 与 Docker Model Runner 集成。
+Spring AI 通过重用现有的 [OpenAI](../openai-chat) 支持的 `ChatClient` 与 Docker Model Runner 集成。
 为此，请将 base URL 设置为 `http://localhost:12434/engines` 并选择提供的 [LLM models](https://hub.docker.com/u/ai) 之一。
 
 查看 [DockerModelRunnerWithOpenAiChatModelIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/chat/proxy/DockerModelRunnerWithOpenAiChatModelIT.java) 测试以了解如何在 Spring AI 中使用 Docker Model Runner 的示例。

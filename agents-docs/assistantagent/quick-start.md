@@ -218,7 +218,7 @@ Assistant Agent 采用模块化设计，支持灵活的二次开发。核心思�
 关于各模块的详细配置方式和高级用法，请参考：
 
 - [二次开发详细指南](./secondary-development.md)
-- [各模块 Feature 文档](./features/)
+- [各模块 Feature 文档](./features/evaluation/quickstart)
 
 ---
 
@@ -235,7 +235,7 @@ Assistant Agent 项目采用渐进式发展策略：
 ## 参考文档
 
 - [Spring AI Alibaba 文档](https://github.com/alibaba/spring-ai-alibaba)
-- [Feature 详细文档](./features/)
+- [Feature 详细文档](./features/evaluation/quickstart)
 - [二次开发详细指南](./secondary-development.md)
 
 ## Contributing
