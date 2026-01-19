@@ -1341,17 +1341,16 @@ ReactAgent agent = ReactAgent.builder()
 }`}
 </Code>
 
-## 总结
+## 与 Interceptor 的区别
 
-Hooks 和 Interceptors 提供了强大的机制来控制和自定义 Agent 的执行流程：
+在 Spring AI Alibaba 中，Hook 和 Interceptor 都可以用于干预 Agent 执行：
 
-- **Hooks**: 在 Agent 执行的关键点插入自定义逻辑（before/after）；
-- **Interceptors**: 拦截和修改模型调用和工具执行；
-- **灵活组合**: 可以组合多个 Hooks 和 Interceptors；
-- **执行顺序**: 理解执行顺序对于构建正确的功能至关重要；
-- **跳转控制**: 支持提前退出和条件跳转。
-
-通过合理使用这些机制，你可以构建具有监控、安全、性能优化等高级功能的生产级 Agent 应用。
+| 特性         | Hook                                                 | Interceptor                   |
+| ------------ | ---------------------------------------------------- | ----------------------------- |
+| **执行位置** | Agent 级别（before/after agent, before/after model） | 模型或工具调用级别            |
+| **中断能力** | 支持中断和恢复（如 HumanInTheLoopHook）              | 不支持中断，仅拦截和修改      |
+| **使用场景** | 人工审批、Agent 间协调                               | 日志记录、重试、降级          |
+| **配置方式** | `.hooks(List.of(...))`                               | `.interceptors(List.of(...))` |
 
 ## 相关资源
 

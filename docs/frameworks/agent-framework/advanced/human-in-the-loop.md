@@ -710,17 +710,6 @@ InterruptionMetadata editMetadata = HITLHelper.editTool(
 5. **使用相同的 threadId**: 恢复执行时必须使用相同的线程 ID
 6. **考虑超时**: 实现超时机制以处理长时间未响应的人工审批
 
-## 与 Interceptor 的区别
-
-在 Spring AI Alibaba 中，Hook 和 Interceptor 都可以用于干预 Agent 执行：
-
-| 特性         | Hook                                                 | Interceptor                   |
-| ------------ | ---------------------------------------------------- | ----------------------------- |
-| **执行位置** | Agent 级别（before/after agent, before/after model） | 模型或工具调用级别            |
-| **中断能力** | 支持中断和恢复（如 HumanInTheLoopHook）              | 不支持中断，仅拦截和修改      |
-| **使用场景** | 人工审批、Agent 间协调                               | 日志记录、重试、降级          |
-| **配置方式** | `.hooks(List.of(...))`                               | `.interceptors(List.of(...))` |
-
 ## 相关文档
 
 - [Hooks](../tutorials/hooks.md) - 了解 Hook 机制
