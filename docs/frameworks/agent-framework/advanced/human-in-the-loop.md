@@ -57,22 +57,22 @@ import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 MemorySaver memorySaver = new MemorySaver();
 
 // 创建人工介入Hook
-HumanInTheLoopHook humanInTheLoopHook = HumanInTheLoopHook.builder() // [!code highlight]
-    .approvalOn("write_file", ToolConfig.builder() // [!code highlight]
-        .description("文件写入操作需要审批") // [!code highlight]
-        .build()) // [!code highlight]
-    .approvalOn("execute_sql", ToolConfig.builder() // [!code highlight]
-        .description("SQL执行操作需要审批") // [!code highlight]
-        .build()) // [!code highlight]
-    .build(); // [!code highlight]
+HumanInTheLoopHook humanInTheLoopHook = HumanInTheLoopHook.builder() 
+    .approvalOn("write_file", ToolConfig.builder() 
+        .description("文件写入操作需要审批") 
+        .build()) 
+    .approvalOn("execute_sql", ToolConfig.builder() 
+        .description("SQL执行操作需要审批") 
+        .build()) 
+    .build(); 
 
 // 创建Agent
 ReactAgent agent = ReactAgent.builder()
     .name("approval_agent")
     .model(chatModel)
     .tools(writeFileTool, executeSqlTool, readDataTool)
-    .hooks(List.of(humanInTheLoopHook)) // [!code highlight]
-    .saver(memorySaver) // [!code highlight]
+    .hooks(List.of(humanInTheLoopHook)) 
+    .saver(memorySaver) 
     .build();`}
 </Code>
 
@@ -98,24 +98,24 @@ import com.alibaba.cloud.ai.graph.action.InterruptionMetadata;
 // 人工介入利用检查点机制。
 // 你必须提供线程ID以将执行与会话线程关联，
 // 以便可以暂停和恢复对话（人工审查所需）。
-String threadId = "user-session-123"; // [!code highlight]
-RunnableConfig config = RunnableConfig.builder() // [!code highlight]
-    .threadId(threadId) // [!code highlight]
-    .build(); // [!code highlight]
+String threadId = "user-session-123"; 
+RunnableConfig config = RunnableConfig.builder() 
+    .threadId(threadId) 
+    .build(); 
 
 // 运行图直到触发中断
-Optional<NodeOutput> result = agent.invokeAndGetOutput( // [!code highlight]
+Optional<NodeOutput> result = agent.invokeAndGetOutput( 
     "删除数据库中的旧记录",
     config
 );
 
 // 检查是否返回了中断
-if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!code highlight]
-    InterruptionMetadata interruptionMetadata = (InterruptionMetadata) result.get(); // [!code highlight]
+if (result.isPresent() && result.get() instanceof InterruptionMetadata) { 
+    InterruptionMetadata interruptionMetadata = (InterruptionMetadata) result.get(); 
 
     // 中断包含需要审查的工具反馈
-    List<InterruptionMetadata.ToolFeedback> toolFeedbacks = // [!code highlight]
-        interruptionMetadata.toolFeedbacks(); // [!code highlight]
+    List<InterruptionMetadata.ToolFeedback> toolFeedbacks = 
+        interruptionMetadata.toolFeedbacks(); 
 
     for (InterruptionMetadata.ToolFeedback feedback : toolFeedbacks) {
         System.out.println("工具: " + feedback.getName());
@@ -150,9 +150,9 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     // 对每个工具调用设置批准决策
     interruptionMetadata.toolFeedbacks().forEach(toolFeedback -> {
         InterruptionMetadata.ToolFeedback approvedFeedback =
-            InterruptionMetadata.ToolFeedback.builder(toolFeedback) // [!code highlight]
-                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.APPROVED) // [!code highlight]
-                .build(); // [!code highlight]
+            InterruptionMetadata.ToolFeedback.builder(toolFeedback) 
+                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.APPROVED) 
+                .build(); 
         feedbackBuilder.addToolFeedback(approvedFeedback);
     });
 
@@ -161,7 +161,7 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     // 使用批准决策恢复执行
     RunnableConfig resumeConfig = RunnableConfig.builder()
         .threadId(threadId) // 相同的线程ID以恢复暂停的对话
-        .addMetadata(RunnableConfig.HUMAN_FEEDBACK_METADATA_KEY, approvalMetadata) // [!code highlight]
+        .addMetadata(RunnableConfig.HUMAN_FEEDBACK_METADATA_KEY, approvalMetadata) 
         .build();
 
     // 第二次调用以恢复执行
@@ -186,12 +186,12 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     interruptionMetadata.toolFeedbacks().forEach(toolFeedback -> {
         // 修改工具参数
         String editedArguments = toolFeedback.getArguments()
-            .replace("DELETE FROM records", "DELETE FROM old_records"); // [!code highlight]
+            .replace("DELETE FROM records", "DELETE FROM old_records"); 
 
         InterruptionMetadata.ToolFeedback editedFeedback =
             InterruptionMetadata.ToolFeedback.builder(toolFeedback)
-                .arguments(editedArguments) // [!code highlight]
-                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.EDITED) // [!code highlight]
+                .arguments(editedArguments) 
+                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.EDITED) 
                 .build();
         feedbackBuilder.addToolFeedback(editedFeedback);
     });
@@ -227,8 +227,8 @@ if (result.isPresent() && result.get() instanceof InterruptionMetadata) { // [!c
     interruptionMetadata.toolFeedbacks().forEach(toolFeedback -> {
         InterruptionMetadata.ToolFeedback rejectedFeedback =
             InterruptionMetadata.ToolFeedback.builder(toolFeedback)
-                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.REJECTED) // [!code highlight]
-                .description("不允许删除操作，请使用归档功能代替。") // [!code highlight]
+                .result(InterruptionMetadata.ToolFeedback.FeedbackResult.REJECTED) 
+                .description("不允许删除操作，请使用归档功能代替。") 
                 .build();
         feedbackBuilder.addToolFeedback(rejectedFeedback);
     });
@@ -457,8 +457,8 @@ ReactAgent qaAgent = ReactAgent.builder()
     .model(chatModel)
     .instruction("你是一个问答专家，负责回答用户的问题。如果需要搜索信息，请使用search工具。\n用户问题：{cleaned_input}")
     .outputKey("qa_result")
-    .saver(saver) // [!code highlight]
-    .hooks(HumanInTheLoopHook.builder() // [!code highlight]
+    .saver(saver) 
+    .hooks(HumanInTheLoopHook.builder() 
         .approvalOn("search", ToolConfig.builder()
             .description("搜索操作需要人工审批，请确认是否执行搜索")
             .build())
@@ -507,7 +507,7 @@ workflow.addNode("preprocess", node_async(new PreprocessorNode()));
 workflow.addNode("validate", node_async(new ValidatorNode()));
 
 // 添加Agent Node（嵌套的ReactAgent）
-workflow.addNode(qaAgent.name(), qaAgent.asNode( // [!code highlight]
+workflow.addNode(qaAgent.name(), qaAgent.asNode( 
     true,   // includeContents: 传递父图的消息历史
     false   // includeReasoning: 不返回推理过程
 ));
@@ -531,9 +531,9 @@ workflow.addConditionalEdges(
 );
 
 // 8. 编译工作流（必须在CompileConfig中注册检查点保存器）
-CompiledGraph compiledGraph = workflow.compile( // [!code highlight]
+CompiledGraph compiledGraph = workflow.compile( 
     CompileConfig.builder()
-        .saverConfig(SaverConfig.builder().register(saver).build()) // [!code highlight]
+        .saverConfig(SaverConfig.builder().register(saver).build()) 
         .build()
 );
 
@@ -542,14 +542,14 @@ String threadId = "workflow-hilt-001";
 Map<String, Object> input = Map.of("input", "请解释量子计算的基本原理");
 
 // 第一次调用 - 可能触发中断
-Optional<NodeOutput> nodeOutputOptional = compiledGraph.invokeAndGetOutput( // [!code highlight]
+Optional<NodeOutput> nodeOutputOptional = compiledGraph.invokeAndGetOutput( 
     input,
     RunnableConfig.builder().threadId(threadId).build()
 );
 
 // 检查是否发生中断
 if (nodeOutputOptional.isPresent() 
-    && nodeOutputOptional.get() instanceof InterruptionMetadata interruptionMetadata) { // [!code highlight]
+    && nodeOutputOptional.get() instanceof InterruptionMetadata interruptionMetadata) { 
     
     System.out.println("工作流被中断，等待人工审核。");
     System.out.println("中断节点: " + interruptionMetadata.node());
@@ -581,11 +581,11 @@ if (nodeOutputOptional.isPresent()
     // 使用批准决策恢复执行
     RunnableConfig resumableConfig = RunnableConfig.builder()
         .threadId(threadId) // 相同的线程ID
-        .addHumanFeedback(approvalMetadata) // [!code highlight]
+        .addHumanFeedback(approvalMetadata) 
         .build();
     
     // 恢复工作流执行（传入空Map，因为状态已保存在检查点中）
-    nodeOutputOptional = compiledGraph.invokeAndGetOutput(Map.of(), resumableConfig); // [!code highlight]
+    nodeOutputOptional = compiledGraph.invokeAndGetOutput(Map.of(), resumableConfig); 
 }`}
 </Code>
 
