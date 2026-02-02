@@ -26,14 +26,14 @@ keywords: [ReactAgent, 快速开始, Quick Start, Spring AI Alibaba, Agent Frame
   <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.0.0-RC2</version>
+    <version>1.1.2.0</version>
   </dependency>
 
   <!-- DashScope ChatModel 支持（如果使用其他模型，请跳转 Spring AI 文档选择对应的 starter） -->
   <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.0.0-RC2</version>
+    <version>1.1.2.0</version>
   </dependency>
 </dependencies>
 ```
@@ -229,14 +229,14 @@ ChatModel chatModel = DashScopeChatModel.builder()
 <dependency>
  <groupId>com.alibaba.cloud.ai</groupId>
  <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
- <version>1.1.0.0-RC2</version>
+ <version>1.1.2.1</version>
 </dependency>
 
 <!-- OpenAI-->
 <dependency>
  <groupId>org.springframework.ai</groupId>
  <artifactId>spring-ai-starter-model-openai</artifactId>
- <version>1.1.0</version>
+ <version>1.1.2</version>
 </dependency>
 ```
 

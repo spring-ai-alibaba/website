@@ -15,6 +15,7 @@ const sidebars: SidebarsConfig = {
   docsSidebar: [
     'overview',
     'quick-start',
+    'versions',
     {
       type: 'category',
       label: 'Agent Framework',
@@ -29,6 +30,7 @@ const sidebars: SidebarsConfig = {
             'frameworks/agent-framework/tutorials/tools',
             'frameworks/agent-framework/tutorials/memory',
             'frameworks/agent-framework/tutorials/hooks',
+            'frameworks/agent-framework/tutorials/skills',
             'frameworks/agent-framework/tutorials/structured-output',
           ],
         },
