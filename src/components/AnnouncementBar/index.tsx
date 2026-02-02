@@ -18,7 +18,7 @@ interface AnnouncementBarProps {
 }
 
 export default function AnnouncementBar({
-  content = '🎉 欢迎阅读下载<a href="https://developer.aliyun.com/ebook/8479" target="_blank">《AI 原生应用架构白皮书》</a>，40位一线工程师编写、15位行业专家力荐！',
+  content = '🎉🎉 <a href="/docs/frameworks/agent-framework/tutorials/skills" target="_blank">1.1.2.0 版本正式发布</a>，适配 Spring AI 1.1.2，支持 Agent Skills，支持 Supervisor、Routing 等多种 Multi-agent 最佳实践！',
   closable = true,
   onClose,
 }: AnnouncementBarProps) {
