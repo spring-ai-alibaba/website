@@ -251,7 +251,7 @@ public static class ContactInfo {
 ReactAgent agent = ReactAgent.builder()
     .name("contact_extractor")
     .model(chatModel)
-    .outputType(ContactInfo.class)  // [!code highlight]
+    .outputType(ContactInfo.class)  
     .saver(new MemorySaver())
     .build();
 

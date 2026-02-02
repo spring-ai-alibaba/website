@@ -218,7 +218,7 @@ For this add the `spring-ai-azure-openai` dependency to your project's Maven `po
 
 TIP: Refer to the [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) section to add the Spring AI BOM to your build file.
 
-NOTE: The `spring-ai-azure-openai` dependency also provide the access to the `AzureOpenAiEmbeddingModel`. For more information about the `AzureOpenAiChatModel` refer to the [Azure OpenAI Embeddings](../embeddings/azure-openai-embeddings.html) section.
+NOTE: The `spring-ai-azure-openai` dependency also provide the access to the `AzureOpenAiEmbeddingModel`. For more information about the `AzureOpenAiChatModel` refer to the [Azure OpenAI Chat](../../../chatmodels/more/azure-openai-chat) section.
 
 Next, create an `AzureOpenAiEmbeddingModel` instance and use it to compute the similarity between two input texts:
 

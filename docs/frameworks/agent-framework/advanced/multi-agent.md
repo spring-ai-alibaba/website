@@ -139,8 +139,8 @@ ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_agent")
     .model(chatModel)
     .description("专业写作Agent")
-    .instruction("你是一个知名的作家，擅长写作和创作。请根据用户的提问进行回答：{input}。") // [!code highlight]
-    .outputKey("article") // [!code highlight]
+    .instruction("你是一个知名的作家，擅长写作和创作。请根据用户的提问进行回答：{input}。") 
+    .outputKey("article") 
     .build();
 
 ReactAgent reviewerAgent = ReactAgent.builder()
@@ -148,16 +148,16 @@ ReactAgent reviewerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("专业评审Agent")
     .instruction("你是一个知名的评论家，擅长对文章进行评论和修改。" +
-                 "对于散文类文章，请确保文章中必须包含对于西湖风景的描述。待评论文章：\n\n {article}" + // [!code highlight]
+                 "对于散文类文章，请确保文章中必须包含对于西湖风景的描述。待评论文章：\n\n {article}" + 
                  "最终只返回修改后的文章，不要包含任何评论信息。")
-    .outputKey("reviewed_article") // [!code highlight]
+    .outputKey("reviewed_article") 
     .build();
 
 // 创建顺序Agent
-SequentialAgent blogAgent = SequentialAgent.builder() // [!code highlight]
+SequentialAgent blogAgent = SequentialAgent.builder() 
     .name("blog_agent")
     .description("根据用户给定的主题写一篇文章，然后将文章交给评论员进行评论")
-    .subAgents(List.of(writerAgent, reviewerAgent)) // [!code highlight]
+    .subAgents(List.of(writerAgent, reviewerAgent)) 
     .build();
 
 // 使用
@@ -167,14 +167,14 @@ if (result.isPresent()) {
     OverAllState state = result.get();
 
     // 访问第一个Agent的输出
-    state.value("article").ifPresent(article -> { // [!code highlight]
+    state.value("article").ifPresent(article -> { 
         if (article instanceof AssistantMessage) {
             System.out.println("原始文章: " + ((AssistantMessage) article).getText());
         }
     });
 
     // 访问第二个Agent的输出
-    state.value("reviewed_article").ifPresent(reviewedArticle -> { // [!code highlight]
+    state.value("reviewed_article").ifPresent(reviewedArticle -> { 
         if (reviewedArticle instanceof AssistantMessage) {
             System.out.println("评审后文章: " + ((AssistantMessage) reviewedArticle).getText());
         }
@@ -198,16 +198,16 @@ if (result.isPresent()) {
 {`ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_agent")
     .model(chatModel)
-    .returnReasoningContents(true) // [!code highlight]
+    .returnReasoningContents(true) 
     .outputKey("article")
     .build();
 
 ReactAgent reviewerAgent = ReactAgent.builder()
     .name("reviewer_agent")
     .model(chatModel)
-    .instruction("请对文章进行评审修正：\n{article}，最终返回评审修正后的文章内容") // [!code highlight]
-    .includeContents(true) // 包含上一个Agent的推理内容 // [!code highlight]
-    .returnReasoningContents(true) // [!code highlight]
+    .instruction("请对文章进行评审修正：\n{article}，最终返回评审修正后的文章内容") 
+    .includeContents(true) // 包含上一个Agent的推理内容 
+    .returnReasoningContents(true) 
     .outputKey("reviewed_article")
     .build();
 
@@ -220,7 +220,7 @@ Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的
 
 if (result.isPresent()) {
     // 消息历史将包含所有工具调用和推理过程
-    List<Message> messages = (List<Message>) result.get().value("messages").orElse(List.of()); // [!code highlight]
+    List<Message> messages = (List<Message>) result.get().value("messages").orElse(List.of()); 
     System.out.println("消息数量: " + messages.size()); // 包含所有中间步骤
 }`}
 </Code>
@@ -251,8 +251,8 @@ ReactAgent proseWriterAgent = ReactAgent.builder()
     .model(chatModel)
     .description("专门写散文的AI助手")
     .instruction("你是一个知名的散文作家，擅长写优美的散文。" +
-                 "用户会给你一个主题：{input}，你只需要创作一篇100字左右的散文。") // [!code highlight]
-    .outputKey("prose_result") // [!code highlight]
+                 "用户会给你一个主题：{input}，你只需要创作一篇100字左右的散文。") 
+    .outputKey("prose_result") 
     .build();
 
 ReactAgent poemWriterAgent = ReactAgent.builder()
@@ -260,8 +260,8 @@ ReactAgent poemWriterAgent = ReactAgent.builder()
     .model(chatModel)
     .description("专门写现代诗的AI助手")
     .instruction("你是一个知名的现代诗人，擅长写现代诗。" +
-                 "用户会给你的主题是：{input}，你只需要创作一首现代诗。") // [!code highlight]
-    .outputKey("poem_result") // [!code highlight]
+                 "用户会给你的主题是：{input}，你只需要创作一首现代诗。") 
+    .outputKey("poem_result") 
     .build();
 
 ReactAgent summaryAgent = ReactAgent.builder()
@@ -269,17 +269,17 @@ ReactAgent summaryAgent = ReactAgent.builder()
     .model(chatModel)
     .description("专门做内容总结的AI助手")
     .instruction("你是一个专业的内容分析师，擅长对主题进行总结和提炼。" +
-                 "用户会给你一个主题：{input}，你只需要对这个主题进行简要总结。") // [!code highlight]
-    .outputKey("summary_result") // [!code highlight]
+                 "用户会给你一个主题：{input}，你只需要对这个主题进行简要总结。") 
+    .outputKey("summary_result") 
     .build();
 
 // 创建并行Agent
-ParallelAgent parallelAgent = ParallelAgent.builder() // [!code highlight]
+ParallelAgent parallelAgent = ParallelAgent.builder() 
     .name("parallel_creative_agent")
     .description("并行执行多个创作任务，包括写散文、写诗和做总结")
-    .mergeOutputKey("merged_results") // [!code highlight]
-    .subAgents(List.of(proseWriterAgent, poemWriterAgent, summaryAgent)) // [!code highlight]
-    .mergeStrategy(new ParallelAgent.DefaultMergeStrategy()) // [!code highlight]
+    .mergeOutputKey("merged_results") 
+    .subAgents(List.of(proseWriterAgent, poemWriterAgent, summaryAgent)) 
+    .mergeStrategy(new ParallelAgent.DefaultMergeStrategy()) 
     .build();
 
 // 使用
@@ -289,15 +289,15 @@ if (result.isPresent()) {
     OverAllState state = result.get();
 
     // 访问各个Agent的输出
-    state.value("prose_result").ifPresent(r -> // [!code highlight]
+    state.value("prose_result").ifPresent(r -> 
             System.out.println("散文: " + r));
-    state.value("poem_result").ifPresent(r -> // [!code highlight]
+    state.value("poem_result").ifPresent(r -> 
             System.out.println("诗歌: " + r));
-    state.value("summary_result").ifPresent(r -> // [!code highlight]
+    state.value("summary_result").ifPresent(r -> 
             System.out.println("总结: " + r));
 
     // 访问合并后的结果
-    state.value("merged_results").ifPresent(r -> // [!code highlight]
+    state.value("merged_results").ifPresent(r -> 
             System.out.println("合并结果: " + r));
 }`}
 </Code>
@@ -313,7 +313,7 @@ if (result.isPresent()) {
 {`public class CustomMergeStrategy implements ParallelAgent.MergeStrategy {
 
     @Override
-    public Map<String, Object> merge(Map<String, Object> mergedState, OverAllState state) { // [!code highlight]
+    public Map<String, Object> merge(Map<String, Object> mergedState, OverAllState state) { 
         // 从每个Agent的状态中提取输出
         state.data().forEach((key, value) -> {
             if (key.endsWith("_result")) {
@@ -335,8 +335,8 @@ if (result.isPresent()) {
 ParallelAgent parallelAgent = ParallelAgent.builder()
     .name("parallel_agent")
     .subAgents(List.of(agent1, agent2, agent3))
-    .mergeStrategy(new CustomMergeStrategy()) // [!code highlight]
-    .mergeOutputKey("final_merged_result") // [!code highlight]
+    .mergeStrategy(new CustomMergeStrategy()) 
+    .mergeOutputKey("final_merged_result") 
     .build();`}
 </Code>
 
@@ -392,8 +392,8 @@ ReactAgent translatorAgent = ReactAgent.builder()
 LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
     .name("content_routing_agent")
     .description("根据用户需求智能路由到合适的专家Agent")
-    .model(chatModel) // [!code highlight]
-    .subAgents(List.of(writerAgent, reviewerAgent, translatorAgent)) // [!code highlight]
+    .model(chatModel) 
+    .subAgents(List.of(writerAgent, reviewerAgent, translatorAgent)) 
     .build();
 
 // 使用 - LLM会自动选择最合适的Agent
@@ -426,8 +426,8 @@ Optional<OverAllState> result3 = routingAgent.invoke("请将以下内容翻译�
 ReactAgent codeAgent = ReactAgent.builder()
     .name("code_agent")
     .model(chatModel)
-    .description("专门处理编程相关问题，包括代码编写、调试、重构和优化。" + // [!code highlight]
-                 "擅长Java、Python、JavaScript等主流编程语言。") // [!code highlight]
+    .description("专门处理编程相关问题，包括代码编写、调试、重构和优化。" + 
+                 "擅长Java、Python、JavaScript等主流编程语言。") 
     .instruction("你是一个资深的软件工程师...")
     .build();
 
@@ -435,8 +435,8 @@ ReactAgent codeAgent = ReactAgent.builder()
 ReactAgent businessAgent = ReactAgent.builder()
     .name("business_agent")
     .model(chatModel)
-    .description("专门处理商业分析、市场研究和战略规划问题。" + // [!code highlight]
-                 "不处理技术实现细节。") // [!code highlight]
+    .description("专门处理商业分析、市场研究和战略规划问题。" + 
+                 "不处理技术实现细节。") 
     .instruction("你是一个资深的商业分析师...")
     .build();
 
@@ -505,7 +505,7 @@ LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
     .name("content_routing_agent")
     .description("根据用户需求智能路由到合适的专家Agent")
     .model(chatModel)
-    .systemPrompt(ROUTING_SYSTEM_PROMPT) // [!code highlight]
+    .systemPrompt(ROUTING_SYSTEM_PROMPT) 
     .subAgents(List.of(writerAgent, reviewerAgent, translatorAgent))
     .build();`}
 </Code>
@@ -532,7 +532,7 @@ LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
     .name("content_routing_agent")
     .description("根据用户需求智能路由到合适的专家Agent")
     .model(chatModel)
-    .instruction(ROUTING_INSTRUCTION) // [!code highlight]
+    .instruction(ROUTING_INSTRUCTION) 
     .subAgents(List.of(writerAgent, reviewerAgent, translatorAgent))
     .build();`}
 </Code>
@@ -577,8 +577,8 @@ LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
     .name("content_routing_agent")
     .description("根据用户需求智能路由到合适的专家Agent")
     .model(chatModel)
-    .systemPrompt(ROUTING_SYSTEM_PROMPT) // [!code highlight]
-    .instruction(ROUTING_INSTRUCTION) // [!code highlight]
+    .systemPrompt(ROUTING_SYSTEM_PROMPT) 
+    .instruction(ROUTING_INSTRUCTION) 
     .subAgents(List.of(writerAgent, reviewerAgent, translatorAgent))
     .build();`}
 </Code>
@@ -643,8 +643,8 @@ ReactAgent translatorAgent = ReactAgent.builder()
 SupervisorAgent supervisorAgent = SupervisorAgent.builder()
     .name("content_supervisor")
     .description("内容管理监督者，负责协调写作、翻译等任务")
-    .model(chatModel) // [!code highlight]
-    .subAgents(List.of(writerAgent, translatorAgent)) // [!code highlight]
+    .model(chatModel) 
+    .subAgents(List.of(writerAgent, translatorAgent)) 
     .build();
 
 // 使用 - 监督者会根据任务自动路由并支持多步骤处理
@@ -705,7 +705,7 @@ SupervisorAgent supervisorAgent = SupervisorAgent.builder()
     .name("content_supervisor")
     .description("内容管理监督者")
     .model(chatModel)
-    .systemPrompt(SUPERVISOR_SYSTEM_PROMPT) // [!code highlight]
+    .systemPrompt(SUPERVISOR_SYSTEM_PROMPT) 
     .subAgents(List.of(writerAgent, translatorAgent))
     .build();`}
 </Code>
@@ -724,7 +724,7 @@ ReactAgent articleWriterAgent = ReactAgent.builder()
     .model(chatModel)
     .description("专业写作Agent，负责创作文章")
     .instruction("你是一个知名的作家，擅长写作和创作。请根据用户的提问进行回答：{input}。")
-    .outputKey("article_content") // [!code highlight]
+    .outputKey("article_content") 
     .build();
 
 // 监督者的子Agent
@@ -748,7 +748,7 @@ ReactAgent reviewerAgent = ReactAgent.builder()
 final String SUPERVISOR_INSTRUCTION = """
 你是一个智能的内容处理监督者，你可以看到前序Agent的聊天历史与任务处理记录。当前，你收到了以下文章内容：
 
-{article_content} // [!code highlight]
+{article_content} 
 
 请根据文章内容的特点，决定是进行翻译还是评审：
 - 如果文章是中文且需要翻译，选择 translator_agent
@@ -779,7 +779,7 @@ SupervisorAgent supervisorAgent = SupervisorAgent.builder()
     .description("内容处理监督者，根据前序Agent的输出决定翻译或评审")
     .model(chatModel)
     .systemPrompt(SUPERVISOR_SYSTEM_PROMPT)
-    .instruction(SUPERVISOR_INSTRUCTION) // [!code highlight]
+    .instruction(SUPERVISOR_INSTRUCTION) 
     .subAgents(List.of(translatorAgent, reviewerAgent))
     .build();
 
@@ -787,7 +787,7 @@ SupervisorAgent supervisorAgent = SupervisorAgent.builder()
 SequentialAgent sequentialAgent = SequentialAgent.builder()
     .name("content_processing_workflow")
     .description("内容处理工作流：先写文章，然后根据文章内容决定翻译或评审")
-    .subAgents(List.of(articleWriterAgent, supervisorAgent)) // [!code highlight]
+    .subAgents(List.of(articleWriterAgent, supervisorAgent)) 
     .build();
 
 // 使用
@@ -983,9 +983,9 @@ Predicate<Map<String, Object>> isUrgent = state -> {
 ConditionalAgent conditionalAgent = ConditionalAgent.builder()
     .name("priority_router")
     .description("根据紧急程度路由请求")
-    .condition(isUrgent) // [!code highlight]
-    .trueAgent(urgentAgent) // [!code highlight]
-    .falseAgent(normalAgent) // [!code highlight]
+    .condition(isUrgent) 
+    .trueAgent(urgentAgent) 
+    .falseAgent(normalAgent) 
     .build();
 
 // 使用
@@ -1071,7 +1071,7 @@ ReactAgent webResearchAgent = ReactAgent.builder()
     .name("web_research")
     .model(chatModel)
     .description("从互联网搜索信息")
-    .instruction("请搜索并收集关于以下主题的信息：{input}") // [!code highlight]
+    .instruction("请搜索并收集关于以下主题的信息：{input}") 
     .outputKey("web_data")
     .build();
 
@@ -1079,7 +1079,7 @@ ReactAgent dbResearchAgent = ReactAgent.builder()
     .name("db_research")
     .model(chatModel)
     .description("从数据库查询信息")
-    .instruction("请从数据库中查询并收集关于以下主题的信息：{input}") // [!code highlight]
+    .instruction("请从数据库中查询并收集关于以下主题的信息：{input}") 
     .outputKey("db_data")
     .build();
 
@@ -1095,7 +1095,7 @@ ReactAgent analysisAgent = ReactAgent.builder()
     .name("analysis_agent")
     .model(chatModel)
     .description("分析研究数据")
-    .instruction("请分析以下收集到的数据并提供见解：{research_data}") // [!code highlight]
+    .instruction("请分析以下收集到的数据并提供见解：{research_data}") 
     .outputKey("analysis_result")
     .build();
 
@@ -1109,7 +1109,7 @@ ReactAgent pdfReportAgent = ReactAgent.builder()
                 
                 研究结果：{research_data}
                 分析结果：{analysis_result}
-                """) // [!code highlight]
+                """) 
     .outputKey("pdf_report")
     .build();
 
@@ -1122,7 +1122,7 @@ ReactAgent htmlReportAgent = ReactAgent.builder()
                 
                 研究结果：{research_data}
                 分析结果：{analysis_result}
-                """) // [!code highlight]
+                """) 
     .outputKey("html_report")
     .build();
 

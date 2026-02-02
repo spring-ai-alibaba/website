@@ -185,7 +185,7 @@ ChatResponse response = chatModel.call(
 
 您可以将自定义 Java functions 注册到 `DashScopeChatModel`，并让 DashScope 模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](tools)。
+了解更多关于 [Tool Calling](../toolcalls/tool-calls)。
 
 ## Multimodal
 

@@ -85,7 +85,7 @@ ReactAgent blogAgent = ReactAgent.builder()
     .name("blog_agent")
     .model(chatModel)
     .instruction("根据用户给定的主题写一篇文章。使用写作工具来完成任务。")
-    .tools(AgentTool.getFunctionToolCallback(writerAgent)) // [!code highlight]
+    .tools(AgentTool.getFunctionToolCallback(writerAgent)) 
     .build();
 
 // 使用
@@ -149,7 +149,7 @@ ReactAgent writerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("根据结构化输入写文章")
     .instruction("你是一个专业作家。请严格按照输入的主题、字数和风格要求创作文章。")
-    .inputSchema(writerInputSchema) // [!code highlight]
+    .inputSchema(writerInputSchema) 
     .build();
 
 ReactAgent coordinatorAgent = ReactAgent.builder()
@@ -185,7 +185,7 @@ ReactAgent writerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("根据类型化输入写文章")
     .instruction("你是一个专业作家。请严格按照输入的 topic（主题）、wordCount（字数）和 style（风格）要求创作文章。")
-    .inputType(ArticleRequest.class) // [!code highlight]
+    .inputType(ArticleRequest.class) 
     .build();
 
 ReactAgent coordinatorAgent = ReactAgent.builder()
@@ -243,7 +243,7 @@ ReactAgent writerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("写文章并返回结构化输出")
     .instruction("你是一个专业作家。请创作文章并严格按照指定的JSON格式返回结果。")
-    .outputSchema(format) // [!code highlight]
+    .outputSchema(format) 
     .build();
 
 ReactAgent coordinatorAgent = ReactAgent.builder()
@@ -282,7 +282,7 @@ ReactAgent writerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("写文章并返回类型化输出")
     .instruction("你是一个专业作家。请创作文章并返回包含 title、content 和 characterCount 的结构化结果。")
-    .outputType(ArticleOutput.class) // [!code highlight]
+    .outputType(ArticleOutput.class) 
     .build();
 
 ReactAgent coordinatorAgent = ReactAgent.builder()
@@ -329,8 +329,8 @@ ReactAgent writerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("完整类型化的写作工具")
     .instruction("根据结构化输入（topic、wordCount、style）创作文章，并返回结构化输出（title、content、characterCount）。")
-    .inputType(ArticleRequest.class) // [!code highlight]
-    .outputType(ArticleOutput.class) // [!code highlight]
+    .inputType(ArticleRequest.class) 
+    .outputType(ArticleOutput.class) 
     .build();
 
 ReactAgent reviewerAgent = ReactAgent.builder()
@@ -338,7 +338,7 @@ ReactAgent reviewerAgent = ReactAgent.builder()
     .model(chatModel)
     .description("完整类型化的评审工具")
     .instruction("对文章进行评审，返回评审意见（comment、approved、suggestions）。")
-    .outputType(ReviewOutput.class) // [!code highlight]
+    .outputType(ReviewOutput.class) 
     .build();
 
 ReactAgent orchestratorAgent = ReactAgent.builder()
@@ -396,9 +396,9 @@ ReactAgent multiToolAgent = ReactAgent.builder()
     .instruction("你可以访问多个专业工具：写作、翻译和总结。" +
             "根据用户需求选择合适的工具来完成任务。")
     .tools(
-        AgentTool.getFunctionToolCallback(writerAgent),      // [!code highlight]
-        AgentTool.getFunctionToolCallback(translatorAgent),  // [!code highlight]
-        AgentTool.getFunctionToolCallback(summarizerAgent)   // [!code highlight]
+        AgentTool.getFunctionToolCallback(writerAgent),      
+        AgentTool.getFunctionToolCallback(translatorAgent),  
+        AgentTool.getFunctionToolCallback(summarizerAgent)   
     )
     .build();
 

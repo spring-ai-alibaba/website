@@ -2,7 +2,7 @@
 
 [Perplexity AI](https://perplexity.ai/) 提供独特的 AI 服务，将其语言模型与实时搜索功能集成。它提供多种模型并支持 conversational AI 的 streaming 响应。
 
-Spring AI 通过重用现有的 [OpenAI](chat/openai-chat) 客户端与 Perplexity AI 集成。要开始使用，您需要获取 [Perplexity API Key](https://docs.perplexity.ai/guides/getting-started)，配置 base URL，并选择支持的 [models](https://docs.perplexity.ai/guides/model-cards) 之一。
+Spring AI 通过重用现有的 [OpenAI](../openai-chat) 客户端与 Perplexity AI 集成。要开始使用，您需要获取 [Perplexity API Key](https://docs.perplexity.ai/guides/getting-started)，配置 base URL，并选择支持的 [models](https://docs.perplexity.ai/guides/model-cards) 之一。
 
 ![spring-ai-perplexity-integration.jpg](/img/integration/spring-ai-perplexity-integration.jpg)
 

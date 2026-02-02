@@ -10,7 +10,7 @@
 * 正在运行的 Weaviate 实例。以下选项可用：
 ** [Weaviate Cloud Service](https://console.weaviate.cloud/)（需要账户创建和 API key）
 ** [Docker container](https://weaviate.io/developers/weaviate/installation/docker)
-* 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `WeaviateVectorStore` 存储的嵌入。
+* 如果需要，为 [EmbeddingModel](../embeddings#available-implementations) 提供一个 API key，用于生成 `WeaviateVectorStore` 存储的嵌入。
 
 ## Dependencies
 
@@ -115,7 +115,7 @@ dependencies {
 > **提示：** 请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将 Maven Central 和/或 Snapshot Repositories 添加到您的构建文件中。
 
 此外，您需要一个配置的 `EmbeddingModel` bean。
-请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
+请参阅 [EmbeddingModel](../embeddings#available-implementations) 部分了解更多信息。
 
 以下是所需 bean 的示例：
 
@@ -156,7 +156,7 @@ public VectorStore vectorStore(WeaviateClient weaviateClient, EmbeddingModel emb
 
 ## Metadata filtering
 
-您可以将通用的、可移植的 [metadata filters](vectordbs#metadata-filters) 与 Weaviate 存储一起使用。
+您可以将通用的、可移植的 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 Weaviate 存储一起使用。
 
 例如，您可以使用文本表达式语言：
 

@@ -6,7 +6,7 @@ keywords: [Hooks, Interceptors, Agent控制, 监控, 重试, 回退, 日志, 护
 
 # Hooks 和 Interceptors
 
-> 让开发者在每个步骤控制和自定义 Agent 执行
+> 让开发者在每个步骤控制和自定义 Agent 执行。
 
 Hooks 和 Interceptors 提供了一种更精细控制 Agent 内部行为的方式。
 
@@ -18,10 +18,10 @@ Hooks 和 Interceptors 在这些步骤的前后暴露了钩子点，允许你：
 
 <img src="/img/agent/hooks/reactagent-hook.png" alt="reactagent" width="450" />
 
-- **监控**: 通过日志、分析和调试跟踪 Agent 行为
-- **修改**: 转换提示、工具选择和输出格式
-- **控制**: 添加重试、回退和提前终止逻辑
-- **强制执行**: 应用速率限制、护栏和 PII 检测
+- **监控**: 通过日志、分析和调试跟踪 Agent 行为；
+- **修改**: 转换提示、工具选择和输出格式；
+- **控制**: 添加重试、回退和提前终止逻辑；
+- **强制执行**: 应用速率限制、护栏和 PII 检测。
 
 通过将它们传递给 `ReactAgent.builder()` 来添加 Hooks 和 Interceptors：
 
@@ -44,13 +44,13 @@ ReactAgent agent = ReactAgent.builder()
 
 ## Hooks 和 Interceptors 能做什么？
 
-* 监控。使用日志、分析和调试跟踪 Agent 行为。
+* 监控：使用日志、分析和调试跟踪 Agent 行为；
 
-* 修改。转换提示、工具选择和输出格式。
+* 修改：转换提示、工具选择和输出格式；
 
-* 控制。添加重试、回退和提前终止逻辑。
+* 控制：添加重试、回退和提前终止逻辑；
 
-* 强制执行。应用速率限制、护栏和 PII 检测。
+* 强制执行：应用速率限制、护栏和 PII 检测。
 
 ## 内置实现
 
@@ -61,9 +61,9 @@ Spring AI Alibaba 为常见用例提供了预构建的 Hooks 和 Interceptors �
 当接近 token 限制时自动压缩对话历史。
 
 **适用场景**：
-* 超出上下文窗口的长期对话
-* 具有大量历史记录的多轮对话
-* 需要保留完整对话上下文的应用程序
+* 超出上下文窗口的长期对话；
+* 具有大量历史记录的多轮对话；
+* 需要保留完整对话上下文的应用程序。
 
 <Code
   language="java"
@@ -87,18 +87,18 @@ ReactAgent agent = ReactAgent.builder()
 </Code>
 
 **配置选项**：
-- `model`: 用于生成摘要的 ChatModel
-- `maxTokensBeforeSummary`: 触发摘要之前的最大 token 数
-- `messagesToKeep`: 摘要后保留的最新消息数
+- `model`: 用于生成摘要的 ChatModel；
+- `maxTokensBeforeSummary`: 触发摘要之前的最大 token 数；
+- `messagesToKeep`: 摘要后保留的最新消息数。
 
 ### Human-in-the-Loop（人机协同）
 
 暂停 Agent 执行以获得人工批准、编辑或拒绝工具调用。
 
 **适用场景**：
-* 需要人工批准的高风险操作（数据库写入、金融交易）
-* 人工监督是强制性的合规工作流程
-* 长期对话，使用人工反馈引导 Agent
+* 需要人工批准的高风险操作（数据库写入、金融交易）；
+* 人工监督是强制性的合规工作流程；
+* 长期对话，使用人工反馈引导 Agent。
 
 <Code
   language="java"
@@ -129,9 +129,9 @@ ReactAgent agent = ReactAgent.builder()
 限制模型调用次数以防止无限循环或过度成本。
 
 **适用场景**：
-* 防止失控的 Agent 进行太多 API 调用
-* 在生产部署中强制执行成本控制
-* 在特定调用预算内测试 Agent 行为
+* 防止失控的 Agent 进行太多 API 调用；
+* 在生产部署中强制执行成本控制；
+* 在特定调用预算内测试 Agent 行为。
 
 <Code
   language="java"
@@ -150,9 +150,9 @@ ReactAgent agent = ReactAgent.builder()
 检测和处理对话中的个人身份信息。
 
 **适用场景**：
-* 具有合规要求的医疗保健和金融应用
-* 需要清理日志的客户服务 Agent
-* 任何处理敏感用户数据的应用程序
+* 具有合规要求的医疗保健和金融应用；
+* 需要清理日志的客户服务 Agent；
+* 任何处理敏感用户数据的应用程序。
 
 <Code
   language="java"
@@ -181,9 +181,9 @@ ReactAgent agent = ReactAgent.builder()
 自动重试失败的工具调用，具有可配置的指数退避。
 
 **适用场景**：
-* 处理外部 API 调用中的瞬态故障
-* 提高依赖网络的工具的可靠性
-* 构建优雅处理临时错误的弹性 Agent
+* 处理外部 API 调用中的瞬态故障；
+* 提高依赖网络的工具的可靠性；
+* 构建优雅处理临时错误的弹性 Agent。
 
 <Code
   language="java"
@@ -209,9 +209,9 @@ ReactAgent agent = ReactAgent.builder()
 在执行工具之前强制执行一个规划步骤，以概述 Agent 将要采取的步骤。
 
 **适用场景**：
-*   需要执行复杂、多步骤任务的 Agent
-*   通过在执行前显示 Agent 的计划来提高透明度
-*   通过检查建议的计划来调试错误
+* 需要执行复杂、多步骤任务的 Agent；
+* 通过在执行前显示 Agent 的计划来提高透明度；
+* 通过检查建议的计划来调试错误。
 
 <Code
   language="java"
@@ -233,9 +233,9 @@ ReactAgent agent = ReactAgent.builder()
 使用一个 LLM 来决定在多个可用工具之间选择哪个工具。
 
 **适用场景**：
-*   当多个工具可以实现相似目标时
-*   需要根据细微的上下文差异进行工具选择
-*   动态选择最适合特定输入的工具
+* 当多个工具可以实现相似目标时；
+* 需要根据细微的上下文差异进行工具选择；
+* 动态选择最适合特定输入的工具。
 
 <Code
   language="java"
@@ -257,9 +257,9 @@ ReactAgent agent = ReactAgent.builder()
 在没有实际执行工具的情况下，使用 LLM 模拟工具的输出。
 
 **适用场景**：
-*   在演示或测试期间模拟 API
-*   在开发过程中为工具提供占位符行为
-*   在不产生实际成本或副作用的情况下测试 Agent 逻辑
+* 在演示或测试期间模拟 API；
+* 在开发过程中为工具提供占位符行为；
+* 在不产生实际成本或副作用的情况下测试 Agent 逻辑。
 
 <Code
   language="java"
@@ -281,9 +281,9 @@ ReactAgent agent = ReactAgent.builder()
 在将上下文发送给 LLM 之前对其进行修改，以注入、删除或修改信息。
 
 **适用场景**：
-*   向 LLM 提供额外的上下文或指令
-*   从对话历史中删除不相关或冗余的信息
-*   动态修改上下文以引导 Agent 的行为
+* 向 LLM 提供额外的上下文或指令；
+* 从对话历史中删除不相关或冗余的信息；
+* 动态修改上下文以引导 Agent 的行为。
 
 <Code
   language="java"
@@ -305,21 +305,21 @@ ReactAgent agent = ReactAgent.builder()
 
 你可以通过以下方式创建自定义功能：
 
-1. **MessagesModelHook** - 在模型调用前后执行，专注于消息操作（推荐）
-2. **ModelHook** - 在模型调用前后执行，可访问完整状态
-3. **AgentHook** - 在 Agent 开始和结束时执行
-4. **ModelInterceptor** - 拦截和修改模型请求/响应
-5. **ToolInterceptor** - 拦截和修改工具调用
+1. **MessagesModelHook** - 在模型调用前后执行，专注于消息操作（推荐）；
+2. **ModelHook** - 在模型调用前后执行，可访问完整状态；
+3. **AgentHook** - 在 Agent 开始和结束时执行；
+4. **ModelInterceptor** - 拦截和修改模型请求/响应；
+5. **ToolInterceptor** - 拦截和修改工具调用。
 
 ### MessagesModelHook
 
 `MessagesModelHook` 是一个专门用于操作消息列表的 Hook，**使用更简单，更推荐**。它直接接收和返回消息列表，无需处理复杂的 `OverAllState`。
 
 **适用场景**：
-- 消息修剪、过滤或转换
-- 添加系统提示或上下文消息
-- 消息压缩和摘要
-- 简单的消息操作需求
+- 消息修剪、过滤或转换；
+- 添加系统提示或上下文消息；
+- 消息压缩和摘要；
+- 简单的消息操作需求。
 
 <Code
   language="java"
@@ -363,8 +363,8 @@ public class MessageTrimmingHook extends MessagesModelHook {
 
 `MessagesModelHook` 通过 `AgentCommand` 返回操作结果：
 
-- **REPLACE 策略**：替换所有现有消息
-- **APPEND 策略**：将新消息追加到现有消息列表
+- **REPLACE 策略**：替换所有现有消息；
+- **APPEND 策略**：将新消息追加到现有消息列表。
 
 <Code
   language="java"
@@ -565,16 +565,16 @@ public class MessageDeletionHook extends ModelHook {
 #### 使用建议
 
 **选择 MessagesModelHook，如果你需要：**
-- ✅ 简单的消息操作（修剪、过滤、转换）
-- ✅ 添加或修改系统提示
-- ✅ 消息压缩和摘要
-- ✅ 快速实现消息相关的 Hook
+- ✅ 简单的消息操作（修剪、过滤、转换）；
+- ✅ 添加或修改系统提示；
+- ✅ 消息压缩和摘要；
+- ✅ 快速实现消息相关的 Hook。
 
 **选择 ModelHook，如果你需要：**
-- ✅ 访问和修改 `OverAllState` 中的其他数据
-- ✅ 在状态中存储自定义信息（如计数器、缓存等）
-- ✅ 基于全局状态做复杂决策
-- ✅ 需要查看 Agent 执行过程中的完整上下文
+- ✅ 访问和修改 `OverAllState` 中的其他数据；
+- ✅ 在状态中存储自定义信息（如计数器、缓存等）；
+- ✅ 基于全局状态做复杂决策；
+- ✅ 需要查看 Agent 执行过程中的完整上下文。
 
 #### 对比示例
 
@@ -836,10 +836,10 @@ public class DynamicToolInterceptor extends ModelInterceptor {
 </Code>
 
 **使用场景**：
-- 根据用户权限动态添加或移除工具
-- 根据对话上下文临时启用特定工具
-- 实现工具的动态加载和卸载
-- 在特定条件下限制可用的工具集
+- 根据用户权限动态添加或移除工具；
+- 根据对话上下文临时启用特定工具；
+- 实现工具的动态加载和卸载；
+- 在特定条件下限制可用的工具集。
 
 ### ToolInterceptor
 
@@ -894,10 +894,10 @@ public class ToolMonitoringInterceptor extends ToolInterceptor {
 `RunnableConfig` 提供了一个 `context()` 方法，允许你在同一个执行流程中的多个 Hook 调用、多轮模型或工具调用之间共享数据。这对于实现计数器、累积统计信息或跨多次调用维护状态非常有用。
 
 **适用场景**：
-* 跟踪模型或工具调用次数
-* 累积性能指标（总耗时、平均响应时间等）
-* 在 before/after Hook 之间传递临时数据
-* 实现基于计数的限流或断路器
+* 跟踪模型或工具调用次数；
+* 累积性能指标（总耗时、平均响应时间等）；
+* 在 before/after Hook 之间传递临时数据；
+* 实现基于计数的限流或断路器。
 
 **示例：使用 RunnableConfig.context() 实现调用计数器**
 
@@ -1055,10 +1055,10 @@ public class ModelCallLimiterHook extends ModelHook {
 
 **关键要点**：
 
-* **context() 是共享的**: 同一个执行流程中的所有 Hook 共享同一个 context
-* **数据持久性**: context 中的数据在整个 Agent 执行期间保持有效
-* **类型安全**: 需要自己管理 context 中数据的类型转换
-* **命名约定**: 建议使用双下划线前缀命名 context key（如 `__model_call_count__`）以避免与用户数据冲突
+* **context() 是共享的**: 同一个执行流程中的所有 Hook 共享同一个 context；
+* **数据持久性**: context 中的数据在整个 Agent 执行期间保持有效；
+* **类型安全**: 需要自己管理 context 中数据的类型转换；
+* **命名约定**: 建议使用双下划线前缀命名 context key（如 `__model_call_count__`）以避免与用户数据冲突。
 
 ## 执行顺序
 
@@ -1341,17 +1341,16 @@ ReactAgent agent = ReactAgent.builder()
 }`}
 </Code>
 
-## 总结
+## 与 Interceptor 的区别
 
-Hooks 和 Interceptors 提供了强大的机制来控制和自定义 Agent 的执行流程：
+在 Spring AI Alibaba 中，Hook 和 Interceptor 都可以用于干预 Agent 执行：
 
-- **Hooks**: 在 Agent 执行的关键点插入自定义逻辑（before/after）
-- **Interceptors**: 拦截和修改模型调用和工具执行
-- **灵活组合**: 可以组合多个 Hooks 和 Interceptors
-- **执行顺序**: 理解执行顺序对于构建正确的功能至关重要
-- **跳转控制**: 支持提前退出和条件跳转
-
-通过合理使用这些机制，你可以构建具有监控、安全、性能优化等高级功能的生产级 Agent 应用。
+| 特性         | Hook                                                 | Interceptor                   |
+| ------------ | ---------------------------------------------------- | ----------------------------- |
+| **执行位置** | Agent 级别（before/after agent, before/after model） | 模型或工具调用级别            |
+| **中断能力** | 支持中断和恢复（如 HumanInTheLoopHook）              | 不支持中断，仅拦截和修改      |
+| **使用场景** | 人工审批、Agent 间协调                               | 日志记录、重试、降级          |
+| **配置方式** | `.hooks(List.of(...))`                               | `.interceptors(List.of(...))` |
 
 ## 相关资源
 

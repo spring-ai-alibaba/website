@@ -124,7 +124,7 @@ const PineconeFloatingSearch: React.FC = () => {
   }
 
   return (
-    <div className={styles.floatingSearchContainer}>
+    <div className={styles.floatingSearchContainer} role="search">
       <button
         ref={buttonRef}
         className={clsx(styles.floatingButton, {

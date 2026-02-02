@@ -266,7 +266,7 @@ ChatResponse response = chatModel.call(
 
 您可以将自定义 Java functions 注册到 AzureOpenAiChatModel，并让模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
 这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](tools)。
+了解更多关于 [Tool Calling](../../toolcalls/tool-calls)。
 
 ## Multimodal
 
@@ -384,7 +384,7 @@ dependencies {
 
 > **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
-> **提示：** `spring-ai-azure-openai` 依赖项还提供对 `AzureOpenAiChatModel` 的访问。有关 `AzureOpenAiChatModel` 的更多信息，请参阅 [Azure OpenAI Chat](../chat/azure-openai-chat.html) 部分。
+> **提示：** `spring-ai-azure-openai` 依赖项还提供对 `AzureOpenAiEmbeddingModel` 的访问。有关 `AzureOpenAiEmbeddingModel` 的更多信息，请参阅 [Azure OpenAI Embeddings](../../rag/embeddings/more/azure-openai-embeddings) 部分。
 
 接下来，创建一个 `AzureOpenAiChatModel` 实例并使用它生成文本响应：
 

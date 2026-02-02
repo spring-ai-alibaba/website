@@ -4,5 +4,5 @@
 
 Spring AI 通过以下客户端提供与 VertexAI API 的集成：
 
-* [api/chat/vertexai-gemini-chat](chat/vertexai-gemini-chat)
+* [VertexAI Gemini Chat](../gemini-chat)
 

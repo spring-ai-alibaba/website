@@ -602,7 +602,7 @@ public class McpConfiguration {
 
 ### Tool Context to MCP Meta Converter
 
-MCP Client Boot Starter 通过 `ToolContextToMcpMetaConverter` 接口支持将 Spring AI 的 [ToolContext](tools.adoc#_tool_context) 转换为 MCP 工具调用元数据的可自定义转换。
+MCP Client Boot Starter 通过 `ToolContextToMcpMetaConverter` 接口支持将 Spring AI 的 [ToolContext](../toolcalls/tool-calls#_tool_context) 转换为 MCP 工具调用元数据的可自定义转换。
 此功能允许您将额外的上下文信息（例如用户 ID、密钥令牌）作为元数据与 LLM 生成的调用参数一起传递。
 
 例如，您可以将 MCP `progressToken` 传递到工具上下文中的 [MCP Progress Flow](https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress#progress-flow) 以跟踪长时间运行操作的进度：
@@ -757,7 +757,7 @@ public Mono<CreateMessageResult> handleAsyncSampling(CreateMessageRequest reques
 }
 ```
 
-有关所有可用注解及其使用模式的详细信息，请参阅 [MCP Client Annotations](mcp/mcp-annotations-client.adoc) 文档。
+有关所有可用注解及其使用模式的详细信息，请参阅 [MCP Client Annotations](annotations/mcp-annotations-client) 文档。
 
 ## Usage Example
 

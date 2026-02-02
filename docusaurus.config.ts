@@ -458,7 +458,7 @@ const config: Config = {
             },
             {
               label: 'Spring AI',
-              to: '/ecosystem/spring-ai/reference/concepts',
+              to: '/integration/chatmodels/comparison',
             },
           ],
         },

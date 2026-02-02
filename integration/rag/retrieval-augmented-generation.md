@@ -4,7 +4,7 @@ Retrieval Augmented Generation (RAG) 是一种有用的技术，用于克服大�
 
 Spring AI 通过提供模块化架构支持 RAG，允许您自己构建自定义 RAG 流程，或使用 `Advisor` API 使用开箱即用的 RAG 流程。
 
-注意：在 [概念](concepts.adoc#concept-rag) 部分了解更多关于 Retrieval Augmented Generation 的信息。
+注意：在 [概念](https://docs.spring.io/spring-ai/reference/concepts.html#concept-rag) 部分了解更多关于 Retrieval Augmented Generation 的信息。
 
 ## Advisors
 
@@ -73,7 +73,7 @@ String content = this.chatClient.prompt()
 
 `QuestionAnswerAdvisor` 使用默认模板来增强用户问题与检索到的文档。您可以通过 `.promptTemplate()` builder 方法提供自己的 `PromptTemplate` 对象来自定义此行为。
 
-注意：这里提供的 `PromptTemplate` 自定义 advisor 如何将检索到的上下文与用户查询合并。这与在 `ChatClient` 本身上配置 `TemplateRenderer`（使用 `.templateRenderer()`）不同，后者影响 advisor 运行*之前*初始用户/系统提示内容的渲染。有关客户端级模板渲染的更多详细信息，请参阅 [ChatClient Prompt Templates](chatclient.adoc#_prompt_templates)。
+注意：这里提供的 `PromptTemplate` 自定义 advisor 如何将检索到的上下文与用户查询合并。这与在 `ChatClient` 本身上配置 `TemplateRenderer`（使用 `.templateRenderer()`）不同，后者影响 advisor 运行*之前*初始用户/系统提示内容的渲染。有关客户端级模板渲染的更多详细信息，请参阅 [ChatClient Prompt Templates](../chatclient#prompt-模板)。
 
 自定义 `PromptTemplate` 可以使用任何 `TemplateRenderer` 实现（默认情况下，它使用基于 https://www.stringtemplate.org/[StringTemplate] 引擎的 `StPromptTemplate`）。重要要求是模板必须包含以下两个占位符：
 
@@ -118,7 +118,7 @@ PromptTemplate customPromptTemplate = PromptTemplate.builder()
 
 ### RetrievalAugmentationAdvisor
 
-Spring AI 包含一个 [RAG 模块库](retrieval-augmented-generation.adoc#modules)，您可以使用它来构建自己的 RAG 流程。
+Spring AI 包含一个 [RAG 模块库](#modules)，您可以使用它来构建自己的 RAG 流程。
 `RetrievalAugmentationAdvisor` 是一个 `Advisor`，为最常见的 RAG 流程提供开箱即用的实现，基于模块化架构。
 
 要使用 `RetrievalAugmentationAdvisor`，您需要将 `spring-ai-rag` 依赖项添加到您的项目：
@@ -188,7 +188,7 @@ String answer = chatClient.prompt()
         .content();
 ```
 
-有关更多信息，请参阅 [VectorStoreDocumentRetriever](retrieval-augmented-generation.adoc#_vectorstoredocumentretriever)。
+有关更多信息，请参阅 [VectorStoreDocumentRetriever](#_vectorstoredocumentretriever)。
 
 ##### Advanced RAG
 

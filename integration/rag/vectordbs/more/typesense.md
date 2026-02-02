@@ -9,7 +9,7 @@
 * 正在运行的 Typesense 实例。以下选项可用：
 ** [Typesense Cloud](https://typesense.org/docs/guide/install-typesense.html)（推荐）
 ** [Docker](https://hub.docker.com/r/typesense/typesense/) 镜像 _typesense/typesense:latest_
-* 如果需要，为 [EmbeddingModel](embeddings#available-implementations) 提供一个 API key，用于生成 `TypesenseVectorStore` 存储的嵌入。
+* 如果需要，为 [EmbeddingModel](../../embeddings#available-implementations) 提供一个 API key，用于生成 `TypesenseVectorStore` 存储的嵌入。
 
 ## Auto-configuration
 
@@ -43,7 +43,7 @@ dependencies {
 
 向量存储实现可以为您初始化所需的 schema，但您必须通过在 `application.properties` 文件中设置 `...initialize-schema=true` 来选择加入。
 
-此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](embeddings#available-implementations) 部分了解更多信息。
+此外，您需要一个配置的 `EmbeddingModel` bean。请参阅 [EmbeddingModel](../../embeddings#available-implementations) 部分了解更多信息。
 
 现在您可以在应用程序中自动装配 `TypesenseVectorStore` 作为向量存储：
 
@@ -151,7 +151,7 @@ public EmbeddingModel embeddingModel() {
 
 ## Metadata Filtering
 
-您可以将通用的可移植 [metadata filters](vectordbs#metadata-filters) 与 Typesense 存储一起使用。
+您可以将通用的可移植 [metadata filters](https://docs.spring.io/spring-ai/reference/api/vectordbs.html#_metadata_filters) 与 Typesense 存储一起使用。
 
 例如，您可以使用文本表达式语言：
 
