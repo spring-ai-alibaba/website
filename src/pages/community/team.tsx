@@ -3,9 +3,6 @@ import Layout from '@theme/Layout'
 import Translate, { translate } from '@docusaurus/Translate'
 import styles from './team.module.css'
 
-
-
-
 // PMC member data
 const pmcMembers = [
   {
@@ -45,6 +42,34 @@ const pmcMembers = [
     profile: 'https://github.com/yuluo-yx',
     termStart: '9th Apr 2025',
   },
+    {
+    avatar: 'https://github.com/disaster1-tesk.png',
+    name: 'Wei Wang',
+    organization: '~',
+    profile: 'https://github.com/disaster1-tesk',
+    termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/Aias00.png',
+    name: 'Hongyu Liu  ',
+    organization: '~',
+    profile: 'https://github.com/Aias00',
+    termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/GTyingzi.png',
+    name: 'Tao Guo',
+    organization: '~',
+    profile: 'https://github.com/GTyingzi',
+    termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/robocanic.png',
+    name: 'Cai Chen',
+    organization: '~',
+    profile: 'https://github.com/robocanic',
+    termStart: '24th Dec 2025',
+  },
 ]
 
 // Committer member data
@@ -54,18 +79,14 @@ const committerMembers = [
     name: 'Yuqiang He',
     profile: 'https://github.com/sincerity-being',
     termStart: '19th Feb 2025',
+    retired: true,
   },
   {
     avatar: 'https://github.com/PolarishT.png',
     name: 'Zhenting Zhang',
     profile: 'https://github.com/PolarishT',
     termStart: '19th Feb 2025',
-  },
-  {
-    avatar: 'https://github.com/robocanic.png',
-    name: 'Cai Chen',
-    profile: 'https://github.com/robocanic',
-    termStart: '19th Feb 2025',
+    retired: true,
   },
   {
     avatar: 'https://github.com/brianxiadong.png',
@@ -75,22 +96,11 @@ const committerMembers = [
     retired: true,
   },
   {
-    avatar: 'https://github.com/disaster1-tesk.png',
-    name: 'Wei Wang',
-    profile: 'https://github.com/disaster1-tesk',
-    termStart: '9th Apr 2025',
-  },
-  {
     avatar: 'https://github.com/CoderSerio.png',
     name: 'Yuyou Shen',
     profile: 'https://github.com/CoderSerio',
     termStart: '9th Apr 2025',
-  },
-  {
-    avatar: 'https://github.com/Aias00.png',
-    name: 'Hongyu Liu',
-    profile: 'https://github.com/Aias00',
-    termStart: '9th Apr 2025',
+    retired: true,
   },
   {
     avatar: 'https://github.com/zhangshenghang.png',
@@ -99,22 +109,47 @@ const committerMembers = [
     termStart: '24th May 2025',
   },
   {
-    avatar: 'https://github.com/GTyingzi.png',
-    name: 'Ying Zi',
-    profile: 'https://github.com/GTyingzi',
-    termStart: '24th May 2025',
-  },
-  {
     avatar: 'https://github.com/HY-love-sleep.png',
     name: 'Hong Yan',
     profile: 'https://github.com/HY-love-sleep',
     termStart: '26th June 2025',
+    retired: true,
   },
-  {
+    {
     avatar: 'https://github.com/VLSMB.png',
     name: 'VLSMB',
     profile: 'https://github.com/VLSMB',
-    termStart: '25th July 2025',
+    termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/zxuexingzhijie.png',
+    name: 'Makoto',
+    profile: 'https://github.com/zxuexingzhijie',
+    termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/Wangzy455.png',
+    name: 'Ziyuan Wang',
+    profile: 'https://github.com/Wangzy455',
+     termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/xiaohai-78.png',
+    name: 'Yuntao Xiao',
+    profile: 'https://github.com/xiaohai-78',
+        termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/SCMRCORE.png',
+    name: 'Guo He',
+    profile: 'https://github.com/SCMRCORE',
+    termStart: '24th Dec 2025',
+  },
+    {
+    avatar: 'https://github.com/guanxuc.png',
+    name: 'Guan Xu',
+    profile: 'https://github.com/guanxuc',
+    termStart: '10th Jan 2026',
   },
 ]
 
