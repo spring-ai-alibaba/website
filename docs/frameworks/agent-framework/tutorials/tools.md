@@ -1,7 +1,7 @@
 ---
 title: Tools 工具
-description: 了解如何创建和使用Tools让Agent与外部系统交互，包括API、数据库和文件系统的集成方法
-keywords: [Tools, 工具调用, FunctionToolCallback, API集成, 数据库交互, 外部系统, Agent工具]
+description: 了解如何创建和使用 Tools 让 Agent 与外部系统交互，包括 API、数据库和文件系统的集成方法
+keywords: [Tools, 工具调用, FunctionToolCallback, API 集成, 数据库交互, 外部系统, Agent 工具]
 ---
 
 # Tools
@@ -1058,7 +1058,7 @@ public class ConversationSummaryTool implements BiFunction<String, ToolContext, 
         // update to extraState will be returned to the Agent loop.
         Map<String, Object> extraState = (Map<String, Object>) toolContext.getContext().get("extraState");
 
-        // 从state中获取消息
+        // 从 state 中获取消息
         List<Message> messages = (List<Message>) state.get("messages", new ArrayList<>());
 
         if (messages == null) {
@@ -1161,7 +1161,7 @@ public class AccountInfoTool implements BiFunction<String, ToolContext, String> 
 
     @Override
     public String apply(String query, ToolContext toolContext) {
-    	// 在agent调用时设置 user_id，在工具中可以拿到参数
+    	// 在 agent 调用时设置 user_id，在工具中可以拿到参数
     	// RunnableConfig config = RunnableConfig.builder().addMetadata("user_id", "1");
     	// agent.call("", config);
                 RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
@@ -1585,6 +1585,380 @@ ReactAgent agent = ReactAgent.builder()
 // 使用 Agent
 AssistantMessage response = agent.call("What's the weather like in San Francisco?");
 System.out.println(response.getText());`}
+</Code>
+
+### React Agent 远程 MCP 工具调用示例
+
+在实际的 React Agent 应用中，我们多数情况需要接入三方平台或其他应用所提供的 MCP 工具，且目前已经有众多的 MCP 工具平台，大多数工具不需要自己手动定义，你可以通过构建 MCP Client 来使用远端 MCP Server 平台（ModelScope、百炼等）提供的工具。-
+
+#### 1. 基于 Spring Boot 的自动发现构建 MCP Client 为 React Agent 提供工具
+
+在使用这种方式前，你必须引入以下依赖：
+
+```xml
+    <dependencies>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-mcp-client</artifactId>
+		</dependency>
+    </dependencies>
+```
+
+并且注入相关 MCP 的配置项：
+
+```yaml
+spring:
+  ai:
+    mcp: # 结合 Spring AI 使用 MCP 的必须配置
+      client: 
+        enabled: true # 启用 Spring AI MCP Client
+        name: saa-mcp-client
+        toolcallback:
+          enabled: true
+        type: async
+        streamable-http: # 定义 streamableHttp 的 MCP 工具
+          connections:
+            amap-maps:
+              url: ${MODEL_SCOPE_AMAP_BASE_URL} # 从魔搭社区获取调用 url，移除尾部 endpoint,例如: https://mcp.api-inference.modelscope.net/?????????/
+              endpoint: mcp
+        sse: # 定义基于 sse 的 MCP 工具
+          connections:
+            12306-mcp:
+              url: ${MODEL_SCOPE_12306_BASE_URL}  # 从魔搭社区获取调用 url，移除尾部 endpoint,例如: https://mcp.api-inference.modelscope.net/?????????/
+              sse-endpoint: sse
+```
+
+在配置完成后，你可以很容易地在 React Agent 中使用这些远程的 MCP 工具。
+
+<Code
+  language="java"
+  title="基于 Spring Boot 的自动发现构建 MCP Client 为 React Agent 提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
+>
+{`
+import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.agent.Builder;
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.exception.GraphRunnerException;
+import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
+import com.alibaba.fastjson2.JSON;
+import org.jspecify.annotations.NonNull;
+import org.springframework.ai.chat.messages.ToolResponseMessage;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+
+@Service
+public class RemoteMcpToolsExample {
+
+    @Autowired
+    private final ToolCallbackProvider toolCallbackProvider;
+
+    public RemoteMcpToolsExample(ToolCallbackProvider toolCallbackProvider) {this.toolCallbackProvider = toolCallbackProvider;}
+
+    /**
+     * 示例 17：基于 Spring Boot 使用远端 MCP 工具 -- React Agent
+     */
+    public void remoteMcpToolsReactWithSpringBootExample() throws GraphRunnerException {
+        DashScopeApi dashScopeApi = DashScopeApi.builder().apiKey(System.getenv("AI_DASHSCOPE_API_KEY")).build();
+        DashScopeChatModel chatModel = DashScopeChatModel.builder().dashScopeApi(dashScopeApi).build();
+
+        //Get Tools From Spring AI ToolCallbackProvider which the tools config in application.yml
+        ToolCallback[] toolCallbacks = toolCallbackProvider.getToolCallbacks();
+        System.out.printf("""
+                        ==============================Find the tools from spring ToolCallbackProvider==============================
+                        %s
+                        """,
+                JSON.toJSONString(toolCallbacks));
+        //Run React Agent With MCP Tools
+        Builder builder = ReactAgent.builder()
+                .name("travel_planning_assistant")
+                .model(chatModel)
+                .description("Your Travel Assistant")
+                .instruction("You are a helpful assistant with travel route planning and train ticket search.")
+                .saver(new MemorySaver());
+
+        //==============================Add Tools==============================
+        //set the ToolCallbackProvider
+        builder.toolCallbackProviders(toolCallbackProvider);
+        //you can also get the ToolCallback[],do some filter or choose that which you want to use in this React Agent Session
+        //builder.tools(toolCallbacks);
+        //==============================Add Tools==============================
+
+        ReactAgent agent = builder.build();
+
+        RunnableConfig config = RunnableConfig.builder()
+                .threadId("travel_planning_session")
+                .build();
+
+        //stream
+        Flux<NodeOutput> stream = agent.stream("""
+                I plan to travel from Shanghai to Beijing tomorrow.
+                1. Please check at which stations I can alight (i.e., the available arrival/drop-off stations) for my journey.
+                2. Please check the available train numbers and their departure times.
+                3. Please also check Beijing’s weather forecast for tomorrow.
+                """, config);
+        StringBuffer answerString = new StringBuffer();
+        stream.doOnNext(output -> {
+                    if (output.node().equals("_AGENT_MODEL_")) {
+                        answerString.append(((StreamingOutput<?>) output).message().getText());
+                    }
+                    else if (output.node().equals("_AGENT_TOOL_")) {
+                        answerString.append("\nTool Call:").append(((ToolResponseMessage) ((StreamingOutput<?>) output).message()).getResponses().get(0)).append("\n");
+                    }
+                })
+                .doOnComplete(() -> System.out.println(answerString))
+                .doOnError(e -> System.err.println("Stream Processing Error: " + e.getMessage()))
+                .blockLast();
+    }
+}`}
+</Code>
+
+#### 2. 使用 MCP SDK 为 React Agent 提供工具
+
+如果项目不依赖于 Spring Boot 脚手架，你也可以通过如下方式自行构建可供 React Agent 使用的工具。
+
+<Code
+  language="java"
+  title="使用 MCP SDK 为 React Agent 提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
+>
+{`
+import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.cloud.ai.graph.NodeOutput;
+import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.agent.Builder;
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
+import com.alibaba.cloud.ai.graph.exception.GraphRunnerException;
+import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.modelcontextprotocol.client.McpClient;
+import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
+import io.modelcontextprotocol.client.transport.HttpClientStreamableHttpTransport;
+import io.modelcontextprotocol.json.jackson.JacksonMcpJsonMapper;
+import io.modelcontextprotocol.spec.McpClientTransport;
+import io.modelcontextprotocol.spec.McpSchema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.messages.ToolResponseMessage;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+import reactor.core.publisher.Flux;
+
+import java.net.http.HttpClient;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class RemoteMcpToolsExample {
+    private static final Logger log = LoggerFactory.getLogger(RemoteMcpToolsExample.class);
+
+    /**
+     * 示例 18：解耦 Spring Boot 使用远端 MCP 工具 -- React Agent
+     * <p>
+     * 不使用 Spring 依赖注入的情况下，直接使用 MCP 客户端
+     * 获取远程工具，并将其转换为 Spring AI 的 ToolCallback，最后在 ReactAgent 中使用。</p>
+     *
+     * <p>关键步骤：</p>
+     * <ol>
+     *   <li>创建 MCP 客户端传输层 (HttpClientSseClientTransport)</li>
+     *   <li>构建并初始化 MCP 同步客户端</li>
+     *   <li>调用 listTools() 获取远程服务器的工具列表</li>
+     *   <li>将 MCP 工具转换为 Spring AI 的 ToolCallback</li>
+     * </ol>
+     */
+    public void remoteMcpToolsReactWithoutSpringBootExample() throws GraphRunnerException {
+        DashScopeApi dashScopeApi = DashScopeApi.builder().apiKey(System.getenv("AI_DASHSCOPE_API_KEY")).build();
+
+        DashScopeChatModel chatModel = DashScopeChatModel.builder().dashScopeApi(dashScopeApi).build();
+
+        //  Get Remote MCP Server Endpoint Configuration
+        String modelScope12306BaseUrlSse = System.getenv("MODEL_SCOPE_12306_BASE_URL");
+        String modelScopeAmapBaseUrlSse = System.getenv("MODEL_SCOPE_AMAP_BASE_URL");
+
+        //  Create HTTP Client Builder (Reusable)
+        HttpClient.Builder httpBuilder = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(60));
+
+        List<ToolCallback> toolCallbacks = new ArrayList<>();
+        List<McpSyncClient> clientsToClose = new ArrayList<>();
+
+        try {
+            // get MCP Tools
+            List<ToolCallback> tools12306 = fetchMcpTools(modelScope12306BaseUrlSse, "sse", httpBuilder, clientsToClose, "12306", false);
+            toolCallbacks.addAll(tools12306);
+
+            List<ToolCallback> toolsAmap = fetchMcpTools(modelScopeAmapBaseUrlSse, "mcp", httpBuilder, clientsToClose, "amap", true);
+            toolCallbacks.addAll(toolsAmap);
+
+            //...... also you can build these toolCallback into a ToolCallbackProvider ......
+            System.out.printf("""
+                            ==============================Find the tools from MCP Servers==============================
+                            Found %d Tools From MCP Servers
+                            """,
+                    toolCallbacks.size());
+
+            //Run React Agent With MCP Tools
+            Builder builder = ReactAgent.builder().name("travel_planning_assistant").model(chatModel).description("Your Travel Assistant").instruction("You are a helpful assistant with travel route planning, train ticket search, and map services.").saver(new MemorySaver());
+            builder.tools(toolCallbacks);
+
+            ReactAgent agent = builder.build();
+
+            RunnableConfig config = RunnableConfig.builder()
+                    .threadId("travel_planning_session_no_spring")
+                    .build();
+
+            //stream
+            Flux<NodeOutput> stream = agent.stream("""
+                    I plan to travel from Shanghai to Beijing tomorrow.
+                    1. Please check at which stations I can alight (i.e., the available arrival/drop-off stations) for my journey.
+                    2. Please check the available train numbers and their departure times.
+                    3. Please also check Beijing's weather forecast for tomorrow.
+                    4. Please help me find the route from Beijing South Station to Tiananmen Square.
+                    """, config);
+            StringBuffer answerString = new StringBuffer();
+            stream.doOnNext(output -> {
+                        if (output.node().equals("_AGENT_MODEL_")) {
+                            answerString.append(((StreamingOutput<?>) output).message().getText());
+                        }
+                        else if (output.node().equals("_AGENT_TOOL_")) {
+                            answerString.append("\nTool Call:").append(((ToolResponseMessage) ((StreamingOutput<?>) output).message()).getResponses().get(0)).append("\n");
+                        }
+                    })
+                    .doOnComplete(() -> System.out.println(answerString))
+                    .doOnError(e -> System.err.println("Stream Processing Error: " + e.getMessage()))
+                    .blockLast();
+        } catch (Exception e) {
+            log.error("execute MCP Agent error", e);
+        } finally {
+            //close all MCP client
+            for (McpSyncClient client : clientsToClose) {
+                try {
+                    if (client != null) {
+                        client.close();
+                        log.info("MCP Client Is Closed");
+                    }
+                } catch (Exception e) {
+                    log.warn("Close MCP Client Error", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 从指定的 MCP 服务器获取工具并转换为 ToolCallback 列表
+     *
+     * @param baseUrl        MCP 服务器的基础 URL
+     * @param endpoint       SSE 端点路径（如 "sse"）
+     * @param httpBuilder    HTTP 客户端构建器
+     * @param clientsToClose 需要关闭的客户端列表（用于资源管理）
+     * @param serverName     服务器名称（用于日志和工具名称前缀）
+     *
+     * @return ToolCallback 列表
+     */
+    private List<ToolCallback> fetchMcpTools(String baseUrl,String endpoint,HttpClient.Builder httpBuilder,
+            List<McpSyncClient> clientsToClose,String serverName,boolean isStreamable) {
+
+        List<ToolCallback> toolCallbacks = new ArrayList<>();
+        McpSyncClient mcpClient;
+
+        try {
+            //...... build mcp client ......
+
+            //register to ToolCallback
+            for (McpSchema.Tool mcpTool : mcpTools) {
+                log.info("[{}] Register MCP Tool: name={}, description={}",
+                        serverName, mcpTool.name(), mcpTool.description());
+                ToolCallback toolCallback = createToolCallback(mcpTool, mcpClient, serverName);
+                toolCallbacks.add(toolCallback);
+            }
+        } catch (Exception e) {
+            log.error("[{}] Fetch MCP Tools Error", serverName, e);
+        }
+        return toolCallbacks;
+    }
+
+    /** Convert MCP Tools to ToolCallback */
+    private ToolCallback createToolCallback(McpSchema.Tool mcpTool, McpSyncClient mcpClient, String serverName) {
+        return FunctionToolCallback.builder(
+                        mcpTool.name(),
+                        (Map<String, Object> functionInput) -> {
+                            //...... the true mcp call ......
+                        })
+                .description(mcpTool.description())
+                .inputType(Map.class)
+                .build();
+    }
+}`}
+</Code>
+
+#### 3. 为 ChatClient 提供 MCP 工具
+
+结合示例 1 和示例 2，你可以通过 Spring Boot 或 任意一种可以构建 ToolCallbackProvider 的方式来为 ChatClient 提供 MCP 工具。
+
+<Code
+  language="java"
+  title="为 ChatClient 提供 MCP 工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
+>
+{`
+import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.fastjson2.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RemoteMcpToolsExample {
+
+    private static final Logger log = LoggerFactory.getLogger(RemoteMcpToolsExample.class);
+    @Autowired
+    private final ToolCallbackProvider toolCallbackProvider;
+
+    public RemoteMcpToolsExample(ToolCallbackProvider toolCallbackProvider) {this.toolCallbackProvider = toolCallbackProvider;}
+
+    /**
+     * 示例 19：基于 Spring Boot 使用远端 MCP 工具 -- Only ChatClient
+     */
+    public void remoteMcpToolsWithChatCliAndSpringBootExample() {
+        DashScopeApi dashScopeApi = DashScopeApi.builder().apiKey(System.getenv("AI_DASHSCOPE_API_KEY")).build();
+        DashScopeChatModel chatModel = DashScopeChatModel.builder().dashScopeApi(dashScopeApi).build();
+        ChatClient chatClient = ChatClient.builder(chatModel).build();
+        //Get Tools From Spring AI ToolCallbackProvider which the tools config in application.yml
+        ToolCallback[] toolCallbacks = toolCallbackProvider.getToolCallbacks();
+        System.out.printf("""
+                        ==============================Find the tools from spring ToolCallbackProvider==============================
+                        %s
+                        """,
+                JSON.toJSONString(toolCallbacks));
+        ChatClient.ChatClientRequestSpec doChat =
+                chatClient.prompt("You are a helpful assistant with travel route planning and train ticket search.")
+                        .user("""
+                                I plan to travel from Shanghai to Beijing tomorrow.
+                                1. Please check at which stations I can alight (i.e., the available arrival/drop-off stations) for my journey.
+                                2. Please check the available train numbers and their departure times.
+                                3. Please also check Beijing’s weather forecast for tomorrow.
+                                """)
+                        .toolCallbacks(toolCallbackProvider);
+        //check the logs from DefaultToolCallingManager
+        String text = doChat.call().chatResponse().getResult().getOutput().getText();
+        System.out.println(text);
+    }
+}`}
 </Code>
 
 ## 相关资源
