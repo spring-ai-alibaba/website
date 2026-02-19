@@ -36,20 +36,20 @@ keywords: [版本, versions, releases, Spring AI Alibaba, Spring AI 版本适配
             <type>pom</type>
             <scope>import</scope>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-bom</artifactId>
-			<version>1.1.2</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba.cloud.ai</groupId>
-			<artifactId>spring-ai-alibaba-extensions-bom</artifactId>
-			<version>1.1.2.1</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-bom</artifactId>
+            <version>1.1.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-extensions-bom</artifactId>
+            <version>1.1.2.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
 </dependencyManagement>
 
 <dependencies>
@@ -58,11 +58,12 @@ keywords: [版本, versions, releases, Spring AI Alibaba, Spring AI 版本适配
         <artifactId>spring-ai-alibaba-agent-framework</artifactId>
     </dependency>
     <dependency>
-		<groupId>com.alibaba.cloud.ai</groupId>
-		<artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-	</dependency>
+        <groupId>com.alibaba.cloud.ai</groupId>
+        <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+    </dependency>
 </dependencies>
 ```
+
 ---
 
 ## 组件与生态版本
