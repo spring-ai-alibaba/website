@@ -78,6 +78,7 @@ _        _streamable-http:
 <dependency>
   <groupId>com.alibaba.cloud.ai</groupId>
   <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>
+  <version>${spring-ai-extensions.version}</version>
 </dependency>
 ```
 
@@ -123,7 +124,7 @@ restful 接收请求
 
 ### 使用SAA Distributed MCP Client
 
-启动gateway服务，可以看到gateway已经通过registry模块自动注册为nacos服务，endpoint信息也已经正确的注册
+启动gateway服务，可以看到gateway已经通过registry模块自动注册为nacos服务，endpoint 信息也已经正确注册
 
 ![nacos-gateway-registry-nacos-1](/img/blog/extensions/mcp/nacos-gateway-registry-nacos-1.png)
 ![nacos-gateway-registry-nacos-2](/img/blog/extensions/mcp/nacos-gateway-registry-nacos-2.png)
