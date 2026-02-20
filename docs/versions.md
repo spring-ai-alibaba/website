@@ -36,20 +36,20 @@ keywords: [版本, versions, releases, Spring AI Alibaba, Spring AI 版本适配
             <type>pom</type>
             <scope>import</scope>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-bom</artifactId>
-			<version>1.1.2</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba.cloud.ai</groupId>
-			<artifactId>spring-ai-alibaba-extensions-bom</artifactId>
-			<version>1.1.2.1</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-bom</artifactId>
+            <version>1.1.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-extensions-bom</artifactId>
+            <version>1.1.2.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
 </dependencyManagement>
 
 <dependencies>
@@ -58,11 +58,12 @@ keywords: [版本, versions, releases, Spring AI Alibaba, Spring AI 版本适配
         <artifactId>spring-ai-alibaba-agent-framework</artifactId>
     </dependency>
     <dependency>
-		<groupId>com.alibaba.cloud.ai</groupId>
-		<artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-	</dependency>
+        <groupId>com.alibaba.cloud.ai</groupId>
+        <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+    </dependency>
 </dependencies>
 ```
+
 ---
 
 ## 组件与生态版本
@@ -115,11 +116,11 @@ keywords: [版本, versions, releases, Spring AI Alibaba, Spring AI 版本适配
 |------|-------------|------|
 | **入门** | [概览](overview.md) | 项目定位、架构、核心能力与安装方式 |
 | | [快速开始](quick-start.md) | 从零搭建 ReactAgent，含环境、依赖、API Key、示例代码 |
-| **Agent 框架教程** | [frameworks/agent-framework/tutorials/](frameworks/agent-framework/tutorials/) | Agents、Models、Tools、Hooks、Memory、Messages、Skills、Structured Output 等 |
-| **Agent 框架进阶** | [frameworks/agent-framework/advanced/](frameworks/agent-framework/advanced/) | RAG、多智能体、人机协同、上下文工程、A2A、Workflow 等 |
+| **Agent 框架教程** | [frameworks/agent-framework/tutorials/](frameworks/agent-framework/tutorials/agents.md) | Agents、Models、Tools、Hooks、Memory、Messages、Skills、Structured Output 等 |
+| **Agent 框架进阶** | [frameworks/agent-framework/advanced/](frameworks/agent-framework/advanced/context-engineering.md) | RAG、多智能体、人机协同、上下文工程、A2A、Workflow 等 |
 | **Graph 核心** | [frameworks/graph-core/quick-start.md](frameworks/graph-core/quick-start.md) | Graph 快速上手 |
-| | [frameworks/graph-core/core/](frameworks/graph-core/core/) | 核心库、持久化、内存、流式等 |
-| | [frameworks/graph-core/examples/](frameworks/graph-core/examples/) | 子图、并行、取消、MCP、持久化、人机协同等示例 |
+| | [frameworks/graph-core/core/](frameworks/graph-core/core/core-library.md) | 核心库、持久化、内存、流式等 |
+| | [frameworks/graph-core/examples/](frameworks/graph-core/examples/llm-streaming-springai.md) | 子图、并行、取消、MCP、持久化、人机协同等示例 |
 | **Studio** | [frameworks/studio/quick-start.md](frameworks/studio/quick-start.md) | Studio 嵌入式调试与使用 |
 
 ---

@@ -101,7 +101,7 @@ checklinks: ## Check for broken links in the docs
 
 .PHONY: lint
 lint: ## Run all lint checks
-lint: markdown yamllint npm-lint pangu-lint yamllint codespell
+lint: markdown yamllint npm-lint pangu-lint codespell
 	@echo "All lint checks passed!"
 
 .PHONY: npm-lint

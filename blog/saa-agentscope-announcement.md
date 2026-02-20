@@ -14,13 +14,13 @@
 
 Spring AI 的核心目标是连接企业的数据和 API 与 AI 模型，简化 AI 集成。包含模型接入、函数调用、MCP 调用和发现、对话记忆和 RAG、可观测等功能。Spring AI Alibaba 在其基础之上做了非常多的探索，包括：
 
-*  Spring AI Extensions：将 Spring AI 的能力和阿里云的模型、工具、RAG、异步消息、网关、可观测等云原生基础设施进行了适配，并提供了最佳实践。
+* Spring AI Extensions：将 Spring AI 的能力和阿里云的模型、工具、RAG、异步消息、网关、可观测等云原生基础设施进行了适配，并提供了最佳实践。
 
-*   Spring AI Alibaba Graph：提供 Agentic、Multi-Agent 编排能力，包括 SupervisorAgent、SequentialAgent、LoopAgent 等，内置上下文工程、Human In The Loop 等核心能力。
+* Spring AI Alibaba Graph：提供 Agentic、Multi-Agent 编排能力，包括 SupervisorAgent、SequentialAgent、LoopAgent 等，内置上下文工程、Human In The Loop 等核心能力。
 
-*   Spring AI Alibaba Graph：侧重 Workflow 形态的工作流编排，在很多企业级业务场景实现了规模化落地。
+* Spring AI Alibaba Graph：侧重 Workflow 形态的工作流编排，在很多企业级业务场景实现了规模化落地。
 
-*   Spring AI Alibaba Admin：是我们在 Agent 开发提效方面的一类探索，包含了提示词维护、可观测、评估，其中，提示词维护是基于 Nacos，可观测能力建设则是基于 LoongSuite。
+* Spring AI Alibaba Admin：是我们在 Agent 开发提效方面的一类探索，包含了提示词维护、可观测、评估，其中，提示词维护是基于 Nacos，可观测能力建设则是基于 LoongSuite。
 
 在开源的过程中，我们逐步观察到，开放框架呈现出两种不同的发展趋势。一种是以 Spring AI Alibaba 为代表的，以 Graph 为核心设计理念的应用框架，强调工作流编排在 AI 应用开发过程中的重要性。一种是 AgentScope 为代表的，以 Agentic 为核心设计理念的应用框架，最大化利用基础大模型的能力。
 
@@ -32,14 +32,13 @@ Spring AI 的核心目标是连接企业的数据和 API 与 AI 模型，�
 
 AgentScope 是由阿里巴巴通义实验室在2024年2月开源的多智能体开发框架，旨在为开发者提供一种简单、高效、可扩展的方式来构建基于大语言模型的智能体应用。AgentScope 的架构主要包括三层：核心框架 (Agent 构建与编排)、Runtime (安全运行时)、Studio (可视化监控与评估)。AgentScope 拥有强大的算法和工程团队，面向全球开发者提供开源服务。其中，截止v1.0.7，核心框架仓库已发布21个版本，获得1.5w star。
 
-*   GitHub：[https://github.com/agentscope-ai/](https://github.com/agentscope-ai/agentscope)
+* GitHub：[https://github.com/agentscope-ai/](https://github.com/agentscope-ai/agentscope)
 
-*   官网：[https://agentscope.io/](https://agentscope.io/)
+* 官网：[https://agentscope.io/](https://agentscope.io/)
 
-*   Disord：[https://discord.gg/Rnf2JCSKZp](https://discord.gg/Rnf2JCSKZp)
+* Disord：[https://discord.gg/Rnf2JCSKZp](https://discord.gg/Rnf2JCSKZp)
 
-*   钉钉群：105130040570
-
+* 钉钉群：105130040570
 
 AgentScope-Java 是我们和 AgentScope 共同推出的面向 Java 开发群体智能体开发框架，同时共享以上社区资源，Java 开发者们若遇到使用问题，可以通过以上方式联系到我们。
 
@@ -61,11 +60,11 @@ AgentScope 是一个以 Agentic 为核心设计理念的应用框架，提供
 
 是的，会持续投入的。主要体现在以下两个方向：
 
-*   跟进 Spring AI 的演进，持续发版解决企业应用过程中遇到的问题。
+* 跟进 Spring AI 的演进，持续发版解决企业应用过程中遇到的问题。
 
-*   对底层进行升级，支持 AgentScope，做好阿里云、AgentScope 与 Spring 生态连接，提供企业级智能体解决方案。
+* 对底层进行升级，支持 AgentScope，做好阿里云、AgentScope 与 Spring 生态连接，提供企业级智能体解决方案。
 
-*   全面升级 Admin 平台，打造企业级 Agent 构建与交付平台。
+* 全面升级 Admin 平台，打造企业级 Agent 构建与交付平台。
 
 ![admin](/img/blog/saa-agentscope/img_4.png)
 
