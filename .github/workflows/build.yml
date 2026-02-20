@@ -21,6 +21,7 @@ jobs:
       - name: Lint Checks
         run: |
           make install-tools
+          make install
           make lint
   build:
     name: Build
