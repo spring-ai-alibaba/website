@@ -77,6 +77,6 @@
   },
   "link.item.label.DeepResearch": {
     "message": "DeepResearch",
-    "description": "The label of footer link with label=DeepResearch linking to /docs/agents/deepresearch/quick-start"
+    "description": "The label of footer link with label=DeepResearch linking to /docs/agents/deepresearch/graph/quick-start"
   }
 }

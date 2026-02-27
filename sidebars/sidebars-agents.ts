@@ -10,7 +10,8 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'DeepResearch',
       items: [
-        'deepresearch/quick-start',
+        { type: 'doc', id: 'deepresearch/graph/quick-start', label: 'DeepResearch(Graph)快速开始' },
+        { type: 'doc', id: 'deepresearch/agentic/quick-start', label: 'DeepResearch(Agentic)快速开始' },
       ],
     },
     {

@@ -104,7 +104,7 @@ const productItems: EcosystemItem[] = [
     descriptionId: 'ecosystem.product.deepresearch.description',
     icon: '🔬',
     repoUrl: 'https://github.com/spring-ai-alibaba/deep-research',
-    docUrl: '/agents/deepresearch/quick-start',
+    docUrl: '/agents/deepresearch/graph/quick-start',
     stars: 'deep-research',
   },
 ]
