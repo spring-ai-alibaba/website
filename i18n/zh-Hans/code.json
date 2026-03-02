@@ -1164,5 +1164,9 @@
   "contributing.codeOfConductTitle": {
     "message": "行为准则",
     "description": "Code of conduct title"
+  },
+  "theme.common.reportAnIssue": {
+    "message": "问题反馈",
+    "description": "The link label to report an issue for the current page"
   }
 }

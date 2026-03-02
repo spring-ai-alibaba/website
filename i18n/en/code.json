@@ -1048,5 +1048,9 @@
   "team.termStart": {
     "message": "Term Start",
     "description": "Term start label"
+  },
+  "theme.common.reportAnIssue": {
+    "message": "Report an issue",
+    "description": "The link label to report an issue for the current page"
   }
 }

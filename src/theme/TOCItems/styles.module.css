@@ -1,0 +1,31 @@
+.docPageLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  font-size: 0.8rem;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ifm-color-emphasis-700);
+  text-decoration: none;
+  transition: color var(--ifm-transition-fast);
+  line-height: 1.4;
+}
+
+.link:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: currentColor;
+}

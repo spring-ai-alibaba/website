@@ -11,8 +11,14 @@ export interface ProjectConfig {
     website?: string
   }
 
-  // GitHub repository information
+  // GitHub repository information (project code repo)
   github: {
+    username: string
+    repoName: string
+  }
+
+  // Docs/website repository information
+  docsGithub: {
     username: string
     repoName: string
   }
@@ -56,10 +62,16 @@ const projectConfig: ProjectConfig = {
     website: 'https://java2ai.com', // optional
   },
 
-  // GitHub repository information
+  // GitHub repository information (project code repo)
   github: {
     username: 'alibaba',
     repoName: 'spring-ai-alibaba',
+  },
+
+  // Docs/website repository information
+  docsGithub: {
+    username: 'spring-ai-alibaba',
+    repoName: 'website',
   },
 
   // Website deployment configuration
@@ -96,14 +108,18 @@ export const getGitHubUrls = (config: ProjectConfig) => {
   const { username, repoName } = config.github
   const baseUrl = `https://github.com/${username}/${repoName}`
 
+  const { username: docsUsername, repoName: docsRepoName } = config.docsGithub
+  const docsBaseUrl = `https://github.com/${docsUsername}/${docsRepoName}`
+
   return {
     repo: baseUrl,
     discussions: `${baseUrl}/discussions`,
     issues: `${baseUrl}/issues`,
     license: `${baseUrl}/blob/main/LICENSE`,
     contributing: `${baseUrl}/blob/main/CONTRIBUTING.md`,
-    editDocs: `${baseUrl}/tree/main/docs/`,
-    editBlog: `${baseUrl}/tree/main/blog/`,
+    editDocs: `${docsBaseUrl}/tree/main/`,
+    editBlog: `${docsBaseUrl}/tree/main/blog/`,
+    docsRepo: docsBaseUrl,
   }
 }
 
