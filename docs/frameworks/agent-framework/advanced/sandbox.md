@@ -14,7 +14,7 @@ keywords:
   ]
 ---
 
-# 沙箱运行时（Sandbox）
+# 沙箱（Sandbox）
 
 大型语言模型能够决定“做什么”，但真正执行 Python、Shell 命令或浏览器操作时，仍然需要一个安全、可控、可回收的运行时环境。
 
@@ -110,7 +110,7 @@ sandbox:
   docker:
     host: "unix:///var/run/docker.sock"
   pool:
-    size: 5
+    size: 1
 ```
 
 其中：
@@ -119,11 +119,9 @@ sandbox:
 - `sandbox.pool.size` 控制预热容器数量
 - `size: 0` 表示按需创建
 
-:::info
-在 macOS 上，Docker Desktop 的实际 socket 有时不在 `/var/run/docker.sock`，而是在 `${HOME}/.docker/run/docker.sock`。如果你遇到 Docker 连接失败，需要优先检查这个路径。
-:::
 
-## 实现方式一：执行型 Sandbox
+
+## 案例1：执行型 Sandbox
 
 如果你的目标是给 Agent 增加 Python、Shell 或基础浏览器能力，最直接的方式是参考 `sandbox-simple-tool` 模块。
 
@@ -215,13 +213,7 @@ curl -X POST http://localhost:8080/api/chat \
 curl http://localhost:8080/api/chat/tools
 ```
 
-这个模式适合：
-
-- 快速搭建 PoC
-- 给 Agent 增加执行代码/命令的能力
-- 将 Sandbox 作为现有工具体系的一部分接入
-
-## 实现方式二：会话化 Browser Sandbox
+## 案例2：会话化 Browser Sandbox
 
 如果你的目标不是“一次性执行命令”，而是让 Agent 持续操作浏览器、维护会话上下文，并把浏览器画面实时展示给前端，那么更适合参考 `sandbox-browser-fullstack` 模块。
 
