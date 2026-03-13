@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
             'frameworks/agent-framework/advanced/multi-agent',
             'frameworks/agent-framework/advanced/agent-tool',
             'frameworks/agent-framework/advanced/workflow',
+            'frameworks/agent-framework/advanced/sandbox',
             'frameworks/agent-framework/advanced/rag',
             'frameworks/agent-framework/advanced/a2a',
           ],
