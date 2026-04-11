@@ -50,6 +50,7 @@ keywords: [版本, versions, releases, Spring AI Alibaba, Spring AI 版本适配
             <type>pom</type>
             <scope>import</scope>
         </dependency>
+    </dependencies>
 </dependencyManagement>
 
 <dependencies>
