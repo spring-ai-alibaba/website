@@ -82,7 +82,7 @@ public class AgentExample {
 
 * **ReactAgent**：构建具有推理和行动能力的智能代理，遵循 ReAct（推理 + 行动）范式，用于迭代解决问题。
 
-* **多代理编排**：使用内置模式（包括 `SequentialAgent1、`ParallelAgent`、`LlmRoutingAgent`和`LoopAgent`）组合多个代理，以执行复杂的任务。
+* **多代理编排**：使用内置模式（包括 `SequentialAgent`、`ParallelAgent`、`LlmRoutingAgent`和`LoopAgent`）组合多个代理，以执行复杂的任务。
 
 * **上下文工程**：内置快速工程、上下文管理和对话流控制的最佳实践，以提高代理的可靠性和性能。
 
