@@ -136,7 +136,7 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 | spring.ai.dashscope.chat.options.thinkingBudget | 思考过程的最大长度，在 enable_thinking 为 true 时生效，适用于 Qwen3 全系统模型。 | - |
 | spring.ai.dashscope.chat.options.vlHighResolutionImages | 将 token 限制更改为 16384 用于 vl 模型，仅支持 vl 模型，包括 qwen-vl-max、qwen-vl-max-0809、qwen-vl-plus-0809。 | - |
 | spring.ai.dashscope.chat.options.vlEnableImageHwOutput | 是否启用视觉语言模型的图像硬件输出。 | false |
-| spring.ai.dashscope.chat.options.multiModel | 指示请求是否涉及多个模型。 | false |
+| spring.ai.dashscope.chat.options.multiModel | 是否使用 DashScope 多模态生成接口。 | false |
 | spring.ai.dashscope.chat.options.modalities | 您希望模型为此请求生成的输出类型。大多数模型能够生成文本，这是默认值。某些模型也可以用于生成音频。 | - |
 | spring.ai.dashscope.chat.options.audio | 音频生成的音频参数。当通过 `modalities`: `audio` 请求音频输出时必需。 | - |
 | spring.ai.dashscope.chat.options.asrOptions | 自动语音识别（ASR）选项。 | - |
