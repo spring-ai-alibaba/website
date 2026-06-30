@@ -1048,15 +1048,19 @@ import java.util.function.BiFunction;
 import java.util.List;
 import java.util.Map;
 
+import static com.alibaba.cloud.ai.graph.agent.tools.ToolContextConstants.AGENT_STATE_CONTEXT_KEY;
+import static com.alibaba.cloud.ai.graph.agent.tools.ToolContextConstants.AGENT_CONFIG_CONTEXT_KEY;
+import static com.alibaba.cloud.ai.graph.agent.tools.ToolContextConstants.AGENT_STATE_FOR_UPDATE_CONTEXT_KEY;
+
 // 访问当前对话状态
 public class ConversationSummaryTool implements BiFunction<String, ToolContext, String> {
 
     @Override
     public String apply(String input, ToolContext toolContext) {
-        OverAllState state = (OverAllState) toolContext.getContext().get("state");
-        RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
+        OverAllState state = (OverAllState) toolContext.getContext().get(AGENT_STATE_CONTEXT_KEY);
+        RunnableConfig config = (RunnableConfig) toolContext.getContext().get(AGENT_CONFIG_CONTEXT_KEY);
         // update to extraState will be returned to the Agent loop.
-        Map<String, Object> extraState = (Map<String, Object>) toolContext.getContext().get("extraState");
+        Map<String, Object> extraState = (Map<String, Object>) toolContext.getContext().get(AGENT_STATE_FOR_UPDATE_CONTEXT_KEY);
 
         // 从 state 中获取消息
         List<Message> messages = (List<Message>) state.get("messages", new ArrayList<>());
@@ -1142,6 +1146,8 @@ public class UpdateStateHook extends ModelHook {
 import java.util.function.BiFunction;
 import java.util.Map;
 
+import static com.alibaba.cloud.ai.graph.agent.tools.ToolContextConstants.AGENT_CONFIG_CONTEXT_KEY;
+
 public class AccountInfoTool implements BiFunction<String, ToolContext, String> {
 
     private static final Map<String, Map<String, Object>> USER_DATABASE = Map.of(
@@ -1164,7 +1170,7 @@ public class AccountInfoTool implements BiFunction<String, ToolContext, String> 
     	// 在 agent 调用时设置 user_id，在工具中可以拿到参数
     	// RunnableConfig config = RunnableConfig.builder().addMetadata("user_id", "1");
     	// agent.call("", config);
-                RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
+                RunnableConfig config = (RunnableConfig) toolContext.getContext().get(AGENT_CONFIG_CONTEXT_KEY);
                 String userId = (String) config.metadata("user_id").orElse(null);
 
         if (userId == null) {
