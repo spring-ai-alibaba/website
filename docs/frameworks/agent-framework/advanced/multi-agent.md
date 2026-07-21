@@ -102,7 +102,7 @@ ReactAgent reviewerAgent = ReactAgent.builder()
 >
 > 4. **`outputKey`**：指定输出内容的键名，可被后续 Agent 通过占位符引用（如 `{outputKey}`）。使用有意义的 `outputKey` 名称，便于后续 Agent 引用和状态管理。
 >
-> 5. **`systemPrompt` 和 `instruction`（Routing 和 Supervisor）**：`LlmRoutingAgent` 和 `SupervisorAgent` 还支持定制 `systemPrompt` 和 `instruction`，用于覆盖默认实现，控制后续任务流转的行为。`systemPrompt` 定义路由决策的整体框架，`instruction` 提供具体的路由指导。
+> 5. **`systemPrompt` 和 `instruction`**：`LlmRoutingAgent` 以及用作监督者的 `ReactAgent` 都支持定制提示词，用于控制任务路由和后续处理行为。`systemPrompt` 定义整体决策框架，`instruction` 提供具体的执行指导。
 
 在**交接**模式中，Agent可以直接将控制权传递给彼此。"活动"Agent会发生变化，用户与当前拥有控制权的Agent进行交互。
 
@@ -597,231 +597,86 @@ LlmRoutingAgent routingAgent = LlmRoutingAgent.builder()
 > - 使用 `instruction` 来提供特定场景的路由指导或额外上下文
 > - 两者可以配合使用，提供更精确的路由控制
 
-### 监督者（SupervisorAgent）
+### 监督者（AgentTool）
 
-在**监督者模式**中，使用大语言模型（LLM）作为监督者，动态决定将任务路由到哪个子Agent，并支持**多步骤循环路由**。与 `LlmRoutingAgent` 不同，`SupervisorAgent` 支持子Agent执行完成后返回监督者，监督者可以根据执行结果继续路由到其他Agent或完成任务。
+在当前版本中，监督者是一种**组合模式**，而不是一个独立的 `SupervisorAgent` 类型。使用一个 `ReactAgent` 作为控制器，并通过 `AgentTool` 将专业 Agent 暴露为工具；控制器可以按需调用一个或多个专业 Agent，最后汇总结果。
+
+> **版本说明**：从 1.1.2.2 起不再提供 `SupervisorAgent`。旧示例中的 `.mainAgent(...)`、`.subAgents(...)` 以及要求模型返回 JSON 路由数组的配置不适用于当前版本，请使用下面的 `ReactAgent + AgentTool` 方式。
 
 流程：
 
-1. **监督者Agent**接收用户输入或前序Agent的输出
-2. **LLM**分析当前状态并决定最合适的子Agent
-3. **选中的子Agent**处理任务
-4. **子Agent执行完成后返回监督者**
-5. **监督者**根据结果决定：
-   - 继续路由到另一个子Agent（多步骤任务）
-   - 返回 `FINISH` 完成任务
+1. **监督者 Agent** 接收用户输入
+2. **LLM** 根据工具描述决定调用哪个专业 Agent
+3. **专业 Agent** 在自己的上下文中执行任务并返回结果
+4. **监督者 Agent** 可以继续调用其他工具，或汇总结果并完成任务
 
-![Spring AI Alibaba SupervisorAgent](/img/agent/multi-agent/supervisor.png)
+![Spring AI Alibaba Supervisor](/img/agent/multi-agent/supervisor.png)
 
 #### 实现
 
 <Code
   language="java"
-  title="SupervisorAgent 基础示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-agent-framework/src/test/java/com/alibaba/cloud/ai/graph/agent/SupervisorAgentTest.java"
+  title="基于 AgentTool 的监督者示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/multiagent-patterns/supervisor/src/main/java/com/alibaba/cloud/ai/examples/multiagents/supervisor/SupervisorConfig.java"
 >
-{`import com.alibaba.cloud.ai.graph.agent.flow.agent.SupervisorAgent;
+{`import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.agent.AgentTool;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 
-// 创建专业化的子Agent
+import java.util.Optional;
+
+// 创建专业化的子 Agent
 ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_agent")
     .model(chatModel)
-    .description("擅长创作各类文章，包括散文、诗歌等文学作品")
-    .instruction("你是一个知名的作家，擅长写作和创作。请根据用户的提问进行回答。")
-    .outputKey("writer_output")
+    .description("擅长创作文章")
+    .systemPrompt("你是一名专业作家，请根据收到的写作任务创作文章。")
+    .inputType(String.class)
     .build();
 
 ReactAgent translatorAgent = ReactAgent.builder()
     .name("translator_agent")
     .model(chatModel)
-    .description("擅长将文章翻译成各种语言")
-    .instruction("你是一个专业的翻译家，能够准确地将文章翻译成目标语言。")
-    .outputKey("translator_output")
+    .description("擅长翻译文章")
+    .systemPrompt("你是一名专业翻译，请准确翻译收到的内容。")
+    .inputType(String.class)
     .build();
 
-// 创建监督者Agent
-SupervisorAgent supervisorAgent = SupervisorAgent.builder()
+// ReactAgent 作为监督者，将专业 Agent 注册为工具
+ReactAgent supervisorAgent = ReactAgent.builder()
     .name("content_supervisor")
-    .description("内容管理监督者，负责协调写作、翻译等任务")
-    .model(chatModel) 
-    .subAgents(List.of(writerAgent, translatorAgent)) 
+    .model(chatModel)
+    .description("协调写作和翻译任务")
+    .systemPrompt("""
+        你负责协调内容处理任务。
+        根据用户需求调用写作或翻译工具；复杂任务可以依次调用多个工具。
+        获得所需结果后，向用户返回完整的汇总结果。
+        """)
+    .tools(
+        AgentTool.getFunctionToolCallback(writerAgent),
+        AgentTool.getFunctionToolCallback(translatorAgent)
+    )
     .build();
 
-// 使用 - 监督者会根据任务自动路由并支持多步骤处理
-Optional<OverAllState> result = supervisorAgent.invoke("帮我写一篇关于春天的短文");`}
+Optional<OverAllState> result =
+    supervisorAgent.invoke("写一篇关于春天的短文，然后翻译成英文");`}
 </Code>
 
-#### 自定义系统提示
-
-你可以通过 `systemPrompt` 为监督者提供详细的决策规则和上下文：
-
-<Code
-  language="java"
-  title="SupervisorAgent 自定义系统提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-agent-framework/src/test/java/com/alibaba/cloud/ai/graph/agent/SupervisorAgentTest.java"
->
-{`final String SUPERVISOR_SYSTEM_PROMPT = """
-你是一个智能的内容管理监督者，负责协调和管理多个专业Agent来完成用户的内容处理需求。
-
-## 你的职责
-1. 分析用户需求，将其分解为合适的子任务
-2. 根据任务特性，选择合适的Agent进行处理
-3. 监控任务执行状态，决定是否需要继续处理或完成任务
-4. 当所有任务完成时，返回FINISH结束流程
-
-## 可用的子Agent及其职责
-
-### writer_agent
-- **功能**: 擅长创作各类文章，包括散文、诗歌等文学作品
-- **适用场景**: 
-  * 用户需要创作新文章、散文、诗歌等原创内容
-  * 简单的写作任务，不需要后续评审或修改
-- **输出**: writer_output
-
-### translator_agent
-- **功能**: 擅长将文章翻译成各种语言
-- **适用场景**: 当文章需要翻译成其他语言时
-- **输出**: translator_output
-
-## 决策规则
-
-1. **单一任务判断**:
-   - 如果用户只需要简单写作，选择 writer_agent
-   - 如果用户需要翻译，选择 translator_agent
-
-2. **多步骤任务处理**:
-   - 如果用户需求包含多个步骤（如"先写文章，然后翻译"），需要分步处理
-   - 先路由到第一个合适的Agent，等待其完成
-   - 完成后，根据剩余需求继续路由到下一个Agent
-   - 直到所有步骤完成，返回FINISH
-
-3. **任务完成判断**:
-   - 当用户的所有需求都已满足时，返回FINISH
-
-## 响应格式
-只返回Agent名称（writer_agent、translator_agent）或FINISH，不要包含其他解释。
-""";
-
-SupervisorAgent supervisorAgent = SupervisorAgent.builder()
-    .name("content_supervisor")
-    .description("内容管理监督者")
-    .model(chatModel)
-    .systemPrompt(SUPERVISOR_SYSTEM_PROMPT) 
-    .subAgents(List.of(writerAgent, translatorAgent))
-    .build();`}
-</Code>
-
-#### 使用 Instruction 占位符
-
-`SupervisorAgent` 支持通过 `instruction` 使用占位符来读取前序Agent的输出，这在 `SupervisorAgent` 作为 `SequentialAgent` 的子Agent时特别有用：
-
-<Code
-  language="java"
-  title="SupervisorAgent 使用占位符示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-agent-framework/src/test/java/com/alibaba/cloud/ai/graph/agent/SupervisorAgentTest.java"
->
-{`// 第一个Agent：写文章
-ReactAgent articleWriterAgent = ReactAgent.builder()
-    .name("article_writer")
-    .model(chatModel)
-    .description("专业写作Agent，负责创作文章")
-    .instruction("你是一个知名的作家，擅长写作和创作。请根据用户的提问进行回答：{input}。")
-    .outputKey("article_content") 
-    .build();
-
-// 监督者的子Agent
-ReactAgent translatorAgent = ReactAgent.builder()
-    .name("translator_agent")
-    .model(chatModel)
-    .description("擅长将文章翻译成各种语言")
-    .instruction("你是一个专业的翻译家，能够准确地将文章翻译成目标语言。待翻译文章：\n\n {article_content}。")
-    .outputKey("translator_output")
-    .build();
-
-ReactAgent reviewerAgent = ReactAgent.builder()
-    .name("reviewer_agent")
-    .model(chatModel)
-    .description("擅长对文章进行评审和修改")
-    .instruction("你是一个知名的评论家，擅长对文章进行评论和修改。待评审文章：\n\n {article_content}。")
-    .outputKey("reviewer_output")
-    .build();
-
-// 监督者的instruction使用占位符读取前序Agent的输出
-final String SUPERVISOR_INSTRUCTION = """
-你是一个智能的内容处理监督者，你可以看到前序Agent的聊天历史与任务处理记录。当前，你收到了以下文章内容：
-
-{article_content} 
-
-请根据文章内容的特点，决定是进行翻译还是评审：
-- 如果文章是中文且需要翻译，选择 translator_agent
-- 如果文章需要评审和改进，选择 reviewer_agent
-- 如果任务完成，返回 FINISH
-""";
-
-final String SUPERVISOR_SYSTEM_PROMPT = """
-你是一个智能的内容处理监督者，负责协调翻译和评审任务。
-
-## 可用的子Agent及其职责
-
-### translator_agent
-- **功能**: 擅长将文章翻译成各种语言
-- **输出**: translator_output
-
-### reviewer_agent
-- **功能**: 擅长对文章进行评审和修改
-- **输出**: reviewer_output
-
-## 响应格式
-只返回Agent名称（translator_agent、reviewer_agent）或FINISH，不要包含其他解释。
-""";
-
-// 创建SupervisorAgent，instruction中包含占位符
-SupervisorAgent supervisorAgent = SupervisorAgent.builder()
-    .name("content_supervisor")
-    .description("内容处理监督者，根据前序Agent的输出决定翻译或评审")
-    .model(chatModel)
-    .systemPrompt(SUPERVISOR_SYSTEM_PROMPT)
-    .instruction(SUPERVISOR_INSTRUCTION) 
-    .subAgents(List.of(translatorAgent, reviewerAgent))
-    .build();
-
-// 创建SequentialAgent，SupervisorAgent作为子Agent
-SequentialAgent sequentialAgent = SequentialAgent.builder()
-    .name("content_processing_workflow")
-    .description("内容处理工作流：先写文章，然后根据文章内容决定翻译或评审")
-    .subAgents(List.of(articleWriterAgent, supervisorAgent)) 
-    .build();
-
-// 使用
-Optional<OverAllState> result = sequentialAgent.invoke("帮我写一篇关于春天的短文，然后翻译成英文");`}
-</Code>
-
-#### 关键特性
-
-1. **多步骤循环路由**：子Agent执行完成后会返回监督者，监督者可以继续路由到其他Agent，实现多步骤任务处理
-2. **智能决策**：使用LLM分析当前状态和任务需求，动态选择最合适的子Agent
-3. **Instruction占位符支持**：`instruction` 支持使用占位符（如 `{article_content}`）读取前序Agent的输出
-4. **自定义系统提示**：通过 `systemPrompt` 提供详细的决策规则和上下文
-5. **自动重试机制**：内置重试机制（最多2次），确保路由决策的可靠性
-6. **任务完成控制**：监督者可以返回 `FINISH` 来结束任务流程
+这种方式不需要监督者模型生成额外的 JSON 路由数组。Spring AI 的工具调用协议负责选择和调用专业 Agent，因此也不会遇到旧 `SupervisorAgent` 示例中的 `mainAgent must be provided` 或路由数组解析错误。
 
 #### 与 LlmRoutingAgent 的区别
 
-| 特性 | LlmRoutingAgent | SupervisorAgent |
+| 特性 | LlmRoutingAgent | ReactAgent + AgentTool |
 | --- | --- | --- |
-| 路由次数 | 单次路由 | 支持多步骤循环路由 |
-| 子Agent返回 | 直接结束 | 返回监督者继续决策 |
-| 多步骤任务 | ❌ 不支持 | ✅ 支持 |
-| Instruction占位符 | ❌ 不支持 | ✅ 支持 |
-| 适用场景 | 简单的单次路由 | 复杂的多步骤任务编排 |
+| 路由方式 | 选择一个子 Agent 执行 | 将专业 Agent 作为工具调用 |
+| 多步骤任务 | 适合单次路由 | 可以连续调用一个或多个专业 Agent |
+| 最终响应 | 通常由被路由的 Agent 返回 | 由监督者汇总工具结果后返回 |
+| 适用场景 | 分类、分流 | 多步骤协调、任务编排 |
 
-#### 最佳实践
+#### 与 A2A 一起使用
 
-1. **清晰的系统提示**：提供详细的决策规则和子Agent职责描述，帮助LLM做出准确的路由决策
-2. **利用占位符**：在 `instruction` 中使用占位符读取前序Agent的输出，实现上下文感知的路由
-3. **明确的输出键**：为每个子Agent设置有意义的 `outputKey`，便于后续Agent引用
-4. **任务分解**：将复杂任务分解为多个步骤，让监督者逐步协调完成
-5. **嵌套使用**：可以将 `SupervisorAgent` 作为 `SequentialAgent` 的子Agent，实现更复杂的工作流
+启用 `spring-ai-alibaba-starter-a2a-nacos` 的服务端能力时，对外发布的根 Agent 必须是 `ReactAgent` 或 `A2aRemoteAgent`。在监督者模式下，应将上面的 `supervisorAgent` 作为根 Agent；`writerAgent`、`translatorAgent` 等专业 Agent 通过 `AgentTool` 留在监督者内部。如果应用不需要对外提供 A2A 服务，则不要启用 A2A server 配置。
 
-> 💡 **提示**：`SupervisorAgent` 特别适合需要多步骤任务编排的场景，例如"先写文章，然后翻译，最后评审"这样的复杂工作流。
+更多输入输出控制、上下文隔离和完整示例，请参阅 [AgentTool 文档](./agent-tool.md) 与 [Supervisor 示例](https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/multiagent-patterns/supervisor)。
 
 ### 自定义（Customized）
 
