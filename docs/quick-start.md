@@ -76,17 +76,24 @@ ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .build();
 
+// 定义天气查询请求参数
+record WeatherRequest(String city) {
+}
+// 定义天气查询响应
+record WeatherResponse(String weather) {
+}
+
 // 定义天气查询工具
-public class WeatherTool implements BiFunction<String, ToolContext, String> {
+class WeatherTool implements BiFunction<WeatherRequest, ToolContext, WeatherResponse> {
     @Override
-    public String apply(String city, ToolContext toolContext) {
-        return "It's always sunny in " + city + "!";
+    public WeatherResponse apply(WeatherRequest weatherRequest, ToolContext toolContext) {
+        return new WeatherResponse("It's always sunny in " + weatherRequest.city + "!");
     }
 }
 
 ToolCallback weatherTool = FunctionToolCallback.builder("get_weather", new WeatherTool())
     .description("Get weather for a given city")
-    .inputType(String.class)
+    .inputType(WeatherRequest.class)
     .build();
 
 // 创建 agent
