@@ -76,17 +76,24 @@ ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .build();
 
+// 工具的入参必须是一个 JSON 对象（record / POJO），不能是 String。
+// DashScope 要求 function 的 parameters 为 object，
+// 否则模型返回的 function.arguments 不是合法 JSON，服务端会报 400。
+public record WeatherRequest(
+    @ToolParam(description = "The city name") String city) {
+}
+
 // 定义天气查询工具
-public class WeatherTool implements BiFunction<String, ToolContext, String> {
+public class WeatherTool implements BiFunction<WeatherRequest, ToolContext, String> {
     @Override
-    public String apply(String city, ToolContext toolContext) {
-        return "It's always sunny in " + city + "!";
+    public String apply(WeatherRequest request, ToolContext toolContext) {
+        return "It's always sunny in " + request.city() + "!";
     }
 }
 
 ToolCallback weatherTool = FunctionToolCallback.builder("get_weather", new WeatherTool())
     .description("Get weather for a given city")
-    .inputType(String.class)
+    .inputType(WeatherRequest.class)
     .build();
 
 // 创建 agent
@@ -107,7 +114,7 @@ System.out.println(response.getText());
 
 接下来，构建一个实用的天气预报 agent，演示关键的生产概念：
 
-1. **详细的 System Prom** - 获得更好的 agent 行为
+1. **详细的 System Prompt** - 获得更好的 agent 行为
 2. **创建工具** - 与外部数据集成
 3. **模型配置** - 获得一致的响应
 4. **结构化输出** - 获得可预测的结果
@@ -126,8 +133,8 @@ String SYSTEM_PROMPT = """
 
     You have access to two tools:
 
-    - get_weather_for_location: use this to get the weather for a specific location
-    - get_user_location: use this to get the user's location
+    - getWeatherForLocation: use this to get the weather for a specific location
+    - getUserLocation: use this to get the user's location
 
     If a user asks you for the weather, make sure you know the location.
     If you can tell from the question that they mean wherever they are,
@@ -149,21 +156,32 @@ import org.springframework.ai.tool.function.FunctionToolCallback;
 
 import java.util.function.BiFunction;
 
+// 工具入参：@ToolParam 写在 record 组件上才会进入发给模型的 schema，
+// 写在 apply() 的参数上是不生效的。
+public record WeatherForLocationRequest(
+    @ToolParam(description = "The city name") String city) {
+}
+
 // 天气查询工具
-public class WeatherForLocationTool implements BiFunction<String, ToolContext, String> {
+public class WeatherForLocationTool implements BiFunction<WeatherForLocationRequest, ToolContext, String> {
     @Override
     public String apply(
-        @ToolParam(description = "The city name") String city,
+        WeatherForLocationRequest request,
         ToolContext toolContext) {
-        return "It's always sunny in " + city + "!";
+        return "It's always sunny in " + request.city() + "!";
     }
 }
 
+// 用户位置工具的入参
+public record UserLocationRequest(
+    @ToolParam(description = "User query") String query) {
+}
+
 // 用户位置工具 - 使用上下文
-public class UserLocationTool implements BiFunction<String, ToolContext, String> {
+public class UserLocationTool implements BiFunction<UserLocationRequest, ToolContext, String> {
     @Override
     public String apply(
-        @ToolParam(description = "User query") String query,
+        UserLocationRequest request,
         ToolContext toolContext) {
         // 从上下文中获取用户信息
         String userId = "";
@@ -185,13 +203,13 @@ public class UserLocationTool implements BiFunction<String, ToolContext, String>
 ToolCallback getWeatherTool = FunctionToolCallback
     .builder("getWeatherForLocation", new WeatherForLocationTool())
     .description("Get weather for a given city")
-    .inputType(String.class)
+    .inputType(WeatherForLocationRequest.class)
     .build();
 
 ToolCallback getUserLocationTool = FunctionToolCallback
     .builder("getUserLocation", new UserLocationTool())
     .description("Retrieve user location based on user ID")
-    .inputType(String.class)
+    .inputType(UserLocationRequest.class)
     .build();
 ```
 
@@ -229,7 +247,7 @@ ChatModel chatModel = DashScopeChatModel.builder()
 <dependency>
  <groupId>com.alibaba.cloud.ai</groupId>
  <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
- <version>1.1.2.1</version>
+ <version>1.1.2.0</version>
 </dependency>
 
 <!-- OpenAI-->
@@ -418,7 +436,7 @@ import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 
 // 创建 hook
 Hook humanInTheLoopHook = HumanInTheLoopHook.builder()
- .approvalOn("getWeatherTool", ToolConfig.builder().description("Please confirm tool execution.")
+ .approvalOn("getWeatherForLocation", ToolConfig.builder().description("Please confirm tool execution.")
     .build())
  .build();       
 
