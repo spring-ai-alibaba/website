@@ -212,6 +212,43 @@ String answer = chatClient.prompt()
 
 您还可以使用 `DocumentPostProcessor` API 在将检索到的文档传递给模型之前对它们进行后处理。例如，您可以使用这样的接口根据文档与查询的相关性对检索到的文档执行重新排序，删除不相关或冗余的文档，或压缩每个文档的内容以减少噪音和冗余。
 
+## Extensions 的 HyDE 与 Elasticsearch 混合检索
+
+在 [版本对照](/docs/2.0.x/versions) 对应的 Extensions BOM 下添加 `com.alibaba.cloud.ai:spring-ai-alibaba-starter-rag`。Elasticsearch 存储与向量配置见 [Elasticsearch 接入](vectordbs/elasticsearch.md)。该版本线覆盖了 Elasticsearch 9.4.9 的检索回归。索引中的向量维度须与当前嵌入模型一致。
+
+- **HyDE** 用 `HyDeTransformer` 生成与问题对应的假设文档，再由 `HyDeRetriever` 通过向量库召回。将元数据过滤作为 `HyDeRetriever.FILTER_EXPRESSION` 放到查询上下文。
+- **混合检索** 用 `HybridElasticsearchRetriever` 组合 BM25 与 KNN，可通过构建器的 `useRrf(true)` 启用 RRF 融合排序。构造时使用已有索引对应的 `ElasticsearchVectorStoreOptions`、`ElasticsearchClient` 和 `EmbeddingModel`。在查询上下文使用 `HybridElasticsearchRetriever.FILTER_EXPRESSION`。两个检索器都可携带 64 位整型元数据过滤。
+
+```java
+import com.alibaba.cloud.ai.rag.preretrieval.transformation.HyDeTransformer;
+import com.alibaba.cloud.ai.rag.retrieval.search.HyDeRetriever;
+import org.springframework.ai.rag.Query;
+import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
+
+var retriever = HyDeRetriever.builder()
+    .hyDeTransformer(HyDeTransformer.builder().chatClientBuilder(chatClientBuilder).build())
+    .vectorStore(elasticsearchVectorStore)
+    .topK(5)
+    .build();
+
+var filter = new FilterExpressionBuilder().eq("revision", 2_147_483_648L).build();
+var query = Query.builder()
+    .text(question)
+    .context(Map.of(HyDeRetriever.FILTER_EXPRESSION, filter))
+    .build();
+var documents = retriever.retrieve(query);
+```
+
+使用混合检索时，在同一个查询位置换用 `HybridElasticsearchRetriever.FILTER_EXPRESSION`。数值字段按索引实际映射传入，避免先把 long 值转换为 int。可把所选检索器交给 `RetrievalAugmentationAdvisor`。
+
+[Extensions RAG 模块](https://github.com/spring-ai-alibaba/spring-ai-extensions/tree/v2.0.3.0/rag/spring-ai-alibaba-rag)
+
+## 使用现有百炼知识库
+
+Extensions 2.0.3.0 可通过 `spring-ai-alibaba-starter-rag-bailian` 使用 `BailianDocumentRetriever`。它接受 `BailianClient`、知识库 ID 和 `BailianDocumentRetrieverOptions`，按选项配置检索数量、分数阈值和字符串字段过滤。由 DashScope Pipeline 管理的索引可用 `DashScopeDocumentRetriever` 和 `DashScopeDocumentRetrieverOptions`，以索引名称、召回数和 `searchFilters` 配置检索。
+
+[2.0.3.0 百炼检索 Starter](https://github.com/spring-ai-alibaba/spring-ai-extensions/tree/v2.0.3.0/starters/spring-ai-alibaba-starter-rag-bailian) · [2.1.x 百炼 Knowledge API 迁移](/integration/rag/bailian-knowledge)
+
 ## Modules
 
 Spring AI 实现了一个模块化 RAG 架构，其灵感来自论文 "https://arxiv.org/abs/2407.21059[Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks]" 中详述的模块化概念。

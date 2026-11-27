@@ -67,6 +67,10 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 
 > **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI Alibaba BOM 添加到您的构建文件中。
 
+### 选择 HTTP 或 SDK
+
+通过 [Extensions BOM](/docs/2.0.x/versions) 对齐依赖。HTTP 使用 `spring-ai-alibaba-starter-dashscope` 和 `spring.ai.dashscope.chat.*`。SDK 使用 `spring-ai-alibaba-starter-dashscope-sdk`，设置 `spring.ai.model.chat=dashscope-sdk`，将聊天设置放在 `spring.ai.dashscope.sdk.chat.*`。升级自 1.x 时，把 `chat.options.model`、`chat.options.temperature` 等属性改到对应的 `chat` 层。
+
 ### Chat Properties
 
 #### Retry Properties
@@ -91,7 +95,7 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 |----------|-------------|---------|
 | spring.ai.dashscope.base-url | 要连接到的 URL | https://dashscope.aliyuncs.com |
 | spring.ai.dashscope.api-key | API Key | - |
-| spring.ai.dashscope.work-space-id | 可选地，您可以指定用于 API 请求的工作空间 ID。 | - |
+| spring.ai.dashscope.workspace-id | 可选地，您可以指定用于 API 请求的工作空间 ID。 | - |
 
 > **提示：** 对于属于多个工作空间的用户，您可以可选地指定用于 API 请求的工作空间 ID。
 > 这些 API 请求的使用量将计入指定工作空间的使用量。
@@ -115,7 +119,7 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 | spring.ai.dashscope.chat.base-url | 可选覆盖 `spring.ai.dashscope.base-url` 属性以提供 chat 特定的 URL。 | - |
 | spring.ai.dashscope.chat.completions-path | 要附加到 base URL 的路径。 | `/api/v1/services/aigc/text-generation/generation` |
 | spring.ai.dashscope.chat.api-key | 可选覆盖 `spring.ai.dashscope.api-key` 以提供 chat 特定的 API Key。 | - |
-| spring.ai.dashscope.chat.work-space-id | 可选地，您可以指定用于 API 请求的工作空间 ID。 | - |
+| spring.ai.dashscope.chat.workspace-id | 可选地，您可以指定用于 API 请求的工作空间 ID。 | - |
 | spring.ai.dashscope.chat.model | 要使用的 DashScope chat model 名称。您可以在以下模型之间选择：`qwen-plus`、`qwen-turbo`、`qwen-max`、`qwen-max-longcontext`、`qwen-vl-plus`、`qwen-vl-max` 等。有关更多信息，请参阅 [DashScope 模型列表](https://help.aliyun.com/zh/model-studio/getting-started/models)。 | `qwen-plus` |
 | spring.ai.dashscope.chat.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。范围：[0, 2)，系统默认：0.85。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.85 |
 | spring.ai.dashscope.chat.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 `top_p` 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。范围：(0, 1.0)，默认：0.8。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | 0.8 |
@@ -147,9 +151,6 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 | spring.ai.dashscope.chat.outputFormat | 输出格式。 | - |
 | spring.ai.dashscope.chat.streamOptions | 流式选项。 | - |
 | spring.ai.dashscope.chat.httpHeaders | 要添加到 chat completion 请求的可选 HTTP headers。 | - |
-| spring.ai.dashscope.chat.toolNames | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.dashscope.chat.toolCallbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.dashscope.chat.internalToolExecutionEnabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
 > **注意：** 您可以为 `ChatModel` 和 `EmbeddingModel` 实现覆盖通用的 `spring.ai.dashscope.base-url` 和 `spring.ai.dashscope.api-key`。
 > 如果设置了 `spring.ai.dashscope.chat.base-url` 和 `spring.ai.dashscope.chat.api-key` 属性，则优先于通用属性。
@@ -159,7 +160,7 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 
 ## Runtime Options [[chat-options]]
 
-[DashScopeChatOptions.java](https://github.com/alibaba/spring-ai-alibaba/blob/main/dashscope/chat/DashScopeChatOptions.java) 类提供模型配置，例如要使用的模型、temperature、top_p、top_k 等。
+[DashScopeChatOptions.java](https://github.com/spring-ai-alibaba/spring-ai-extensions/blob/v2.0.3.0/models/spring-ai-alibaba-dashscope/src/main/java/com/alibaba/cloud/ai/dashscope/chat/DashScopeChatOptions.java) 类提供模型配置，例如要使用的模型、temperature、top_p、top_k 等。
 
 在启动时，可以使用 `DashScopeChatModel` 构建器或 `spring.ai.dashscope.chat.*` 属性来配置默认选项。
 
@@ -179,13 +180,31 @@ ChatResponse response = chatModel.call(
     ));
 ```
 
-> **提示：** 除了模型特定的 [DashScopeChatOptions](https://github.com/alibaba/spring-ai-alibaba/blob/main/dashscope/chat/DashScopeChatOptions.java) 之外，您还可以使用可移植的 [ChatOptions](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/prompt/ChatOptions.java) 实例，该实例使用 [ChatOptions#builder()](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/prompt/DefaultChatOptionsBuilder.java) 创建。
+> **提示：** 除了模型特定的 [DashScopeChatOptions](https://github.com/spring-ai-alibaba/spring-ai-extensions/blob/v2.0.3.0/models/spring-ai-alibaba-dashscope/src/main/java/com/alibaba/cloud/ai/dashscope/chat/DashScopeChatOptions.java) 之外，您还可以使用可移植的 [ChatOptions](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/prompt/ChatOptions.java) 实例，该实例使用 [ChatOptions#builder()](https://github.com/spring-projects/spring-ai/blob/main/spring-ai-model/src/main/java/org/springframework/ai/chat/prompt/DefaultChatOptionsBuilder.java) 创建。
 
 ## Function Calling
 
-您可以将自定义 Java functions 注册到 `DashScopeChatModel`，并让 DashScope 模型智能地选择输出包含参数以调用一个或多个已注册 functions 的 JSON 对象。
-这是一种将 LLM 功能与外部工具和 APIs 连接的强大技术。
-了解更多关于 [Tool Calling](../toolcalls/tool-calls)。
+在 `ChatClient` 请求上绑定 `ToolCallback`，模型可选择本次请求的工具并生成参数。工具执行由 Advisor 管理，完整用法见 [DashScope 工具执行](../toolcalls/tool-calls.md#dashscope-工具执行)。
+
+## 多轮工具调用的 Token 用量
+
+DashScope HTTP 和 SDK 会把同一次请求内多轮模型推理的用量汇总到最终响应。同步请求使用 `chatResponse().getMetadata().getUsage()`。流式请求保留最后一次带有效用量的 `ChatResponse`，包括没有文本的用量事件。应用应读取该汇总值，避免把各文本片段的用量再次加总。
+
+HTTP 响应可通过 `Usage.getCacheReadInputTokens()` 和 `getCacheWriteInputTokens()` 取得提供商返回的缓存 token 数，未返回时为 `null`。缓存字段用于拆分观测，应按模型实际返回的口径统计总量。
+
+使用 HTTP starter 自动创建的 `ChatClient.Builder` 可保留流式工具轮次间的缓存用量。手动创建 ChatClient 时，给 Spring AI 2.0.3 的五参数构造入口传入 `DashScopeToolCallingAdvisor.builder()`。
+
+```java
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeToolCallingAdvisor;
+import io.micrometer.observation.ObservationRegistry;
+
+ChatClient client = ChatClient.builder(
+    chatModel, ObservationRegistry.NOOP, null, null,
+    DashScopeToolCallingAdvisor.builder().toolCallingManager(toolCallingManager)
+).build();
+```
+
+[Extensions 2.0.3.0 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.0.3.0)
 
 ## Multimodal
 

@@ -109,34 +109,34 @@ dependencies {
 | spring.ai.dashscope.image.base-url | 可选覆盖 `spring.ai.dashscope.base-url` 以提供图像特定的 URL | - |
 | spring.ai.dashscope.image.api-key | 可选覆盖 `spring.ai.dashscope.api-key` 以提供图像特定的 API Key | - |
 | spring.ai.dashscope.image.work-space-id | 可选，您可以指定用于 API 请求的工作空间 ID | - |
-| spring.ai.dashscope.image.options.model | 用于图像生成的模型。可用模型：`qwen-image`（默认）、`qwen-image-plus`、`qwen-image-edit`、`qwen-mt-image`、`wan2.2-t2i-plus`、`wan2.2-t2i-flash`、`wanx2.1-imageedit`、`wan2.2-t2i-preview` | qwen-image |
-| spring.ai.dashscope.image.options.n | 要生成的图像数量。必须在 1 到 4 之间 | 1 |
-| spring.ai.dashscope.image.options.width | 生成的图像宽度。必须是 720、1024 或 1280 之一 | - |
-| spring.ai.dashscope.image.options.height | 生成的图像高度。必须是 720、1024 或 1280 之一 | - |
-| spring.ai.dashscope.image.options.size | 生成的图像大小。必须是 `1024*1024`、`720*1280` 或 `1280*720` 之一 | - |
-| spring.ai.dashscope.image.options.style | 生成的图像样式。必须是 `photography`、`portrait`、`3d cartoon`、`anime`、`oil painting`、`watercolor`、`sketch`、`chinese painting`、`flat illustration`、`auto` 之一 | - |
-| spring.ai.dashscope.image.options.seed | 用于生成的随机种子。必须在 0 到 4294967290 之间 | - |
-| spring.ai.dashscope.image.options.ref-img | 参考图像 URL。支持 jpg、png、tiff、webp 格式 | - |
-| spring.ai.dashscope.image.options.ref-strength | 参考强度。必须在 0.0 到 1.0 之间 | - |
-| spring.ai.dashscope.image.options.ref-mode | 参考模式。必须是 `repaint` 或 `refonly` 之一 | - |
-| spring.ai.dashscope.image.options.negative-prompt | 负面提示词 | - |
-| spring.ai.dashscope.image.options.prompt-extend | 是否启用提示词扩展 | - |
-| spring.ai.dashscope.image.options.watermark | 是否添加水印 | - |
-| spring.ai.dashscope.image.options.function | 功能类型 | - |
-| spring.ai.dashscope.image.options.base-image-url | 基础图像 URL（用于图像编辑） | - |
-| spring.ai.dashscope.image.options.mask-image-url | 遮罩图像 URL（用于图像编辑） | - |
-| spring.ai.dashscope.image.options.sketch-image-url | 草图图像 URL（用于图像生成） | - |
-| spring.ai.dashscope.image.options.sketch-weight | 草图权重 | - |
-| spring.ai.dashscope.image.options.sketch-extraction | 是否启用草图提取 | - |
-| spring.ai.dashscope.image.options.sketch-color | 草图颜色（二维数组） | - |
-| spring.ai.dashscope.image.options.mask-color | 遮罩颜色（二维数组） | - |
-| spring.ai.dashscope.image.options.response-format | 返回生成的图像的格式。必须是 `url` 或 `b64_json` 之一 | url |
+| spring.ai.dashscope.image.model | 用于图像生成的模型。可用模型：`qwen-image`（默认）、`qwen-image-plus`、`qwen-image-edit`、`qwen-mt-image`、`wan2.2-t2i-plus`、`wan2.2-t2i-flash`、`wanx2.1-imageedit`、`wan2.2-t2i-preview` | qwen-image |
+| spring.ai.dashscope.image.n | 要生成的图像数量。必须在 1 到 4 之间 | 1 |
+| spring.ai.dashscope.image.width | 生成的图像宽度。必须是 720、1024 或 1280 之一 | - |
+| spring.ai.dashscope.image.height | 生成的图像高度。必须是 720、1024 或 1280 之一 | - |
+| spring.ai.dashscope.image.size | 生成的图像大小。必须是 `1024*1024`、`720*1280` 或 `1280*720` 之一 | - |
+| spring.ai.dashscope.image.style | 生成的图像样式。必须是 `photography`、`portrait`、`3d cartoon`、`anime`、`oil painting`、`watercolor`、`sketch`、`chinese painting`、`flat illustration`、`auto` 之一 | - |
+| spring.ai.dashscope.image.seed | 用于生成的随机种子。必须在 0 到 4294967290 之间 | - |
+| spring.ai.dashscope.image.ref-img | 参考图像 URL。支持 jpg、png、tiff、webp 格式 | - |
+| spring.ai.dashscope.image.ref-strength | 参考强度。必须在 0.0 到 1.0 之间 | - |
+| spring.ai.dashscope.image.ref-mode | 参考模式。必须是 `repaint` 或 `refonly` 之一 | - |
+| spring.ai.dashscope.image.negative-prompt | 负面提示词 | - |
+| spring.ai.dashscope.image.prompt-extend | 是否启用提示词扩展 | - |
+| spring.ai.dashscope.image.watermark | 是否添加水印 | - |
+| spring.ai.dashscope.image.function | 功能类型 | - |
+| spring.ai.dashscope.image.base-image-url | 基础图像 URL（用于图像编辑） | - |
+| spring.ai.dashscope.image.mask-image-url | 遮罩图像 URL（用于图像编辑） | - |
+| spring.ai.dashscope.image.sketch-image-url | 草图图像 URL（用于图像生成） | - |
+| spring.ai.dashscope.image.sketch-weight | 草图权重 | - |
+| spring.ai.dashscope.image.sketch-extraction | 是否启用草图提取 | - |
+| spring.ai.dashscope.image.sketch-color | 草图颜色（二维数组） | - |
+| spring.ai.dashscope.image.mask-color | 遮罩颜色（二维数组） | - |
+| spring.ai.dashscope.image.response-format | 返回生成的图像的格式。必须是 `url` 或 `b64_json` 之一 | url |
 
 > **NOTE**: 您可以覆盖通用的 `spring.ai.dashscope.base-url`、`spring.ai.dashscope.api-key`、`spring.ai.dashscope.work-space-id` 属性。
 > 如果设置了 `spring.ai.dashscope.image.base-url`、`spring.ai.dashscope.image.api-key`、`spring.ai.dashscope.image.work-space-id` 属性，它们优先于通用属性。
 > 如果您想为不同的模型和不同的模型端点使用不同的 DashScope 账户，这很有用。
 
-> **TIP**: 所有以 `spring.ai.dashscope.image.options` 为前缀的属性都可以在运行时覆盖。
+> **TIP**: 所有以 `spring.ai.dashscope.image` 为前缀的属性都可以在运行时覆盖。
 
 ## Runtime Options
 
@@ -356,3 +356,5 @@ Integer imageCount = (Integer) metadata.get("imageCount");
 ## Example Code
 
 完整的示例代码可以参考项目中的测试文件，展示了如何使用 DashScope Image API 的各种功能。
+
+[百炼多模态模型与 API](../dashscope-multimodal.md)

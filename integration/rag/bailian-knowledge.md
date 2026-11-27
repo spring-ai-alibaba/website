@@ -42,7 +42,24 @@ String answer = chatClient.prompt().user(question).advisors(advisor).call().cont
 
 `retrieve` 的过滤配置遵循百炼的 `search_filters`，多个 OR 条件可通过 `_operator` 和 `_conditions` 表达。应用已发布为知识服务时，也可以使用 `DashScopeRagDocumentRetriever.forService(ragApi, agentId, filters)`。
 
-[SearchFilters 语法](https://docs.bailian.console.aliyun.com/zh/model-studio/rag-api-overview) · [Spring AI RAG Advisor](retrieval-augmented-generation.md)
+[SearchFilters 语法](https://docs.bailian.console.aliyun.com/zh/model-studio/how-to-use-search-filters) · [Spring AI RAG Advisor](retrieval-augmented-generation.md)
+
+### 同一字段的多个过滤条件
+
+以下配置按部门字段做 OR。字段名称和值要与知识库实际的可过滤元数据一致。多个顶层子分组之间按 AND 组合。
+
+```java
+List<Map<String, Object>> filters = List.of(Map.of(
+    "_operator", "OR",
+    "_conditions", List.of(
+        Map.of("department", "support"),
+        Map.of("department", "research")
+    )
+));
+var documents = ragApi.retrieve(indexId, question, 5, filters);
+```
+
+`DashScopeRagApi.RagApiException` 暴露 `getCode()` 和 `getRequestId()`，便于按业务错误和请求 ID 定位问题。
 
 ## 导入文档
 

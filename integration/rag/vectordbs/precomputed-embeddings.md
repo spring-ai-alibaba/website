@@ -26,4 +26,16 @@ var matches = vectorStore.similaritySearch(
 - `SearchRequest` 负责设置 Top K、阈值和后端支持的元数据过滤。查询向量由单独的 `float[]` 参数提供。
 - 两条预计算路径直接使用传入向量，跳过 `EmbeddingModel` 推理。文本 `add` 和文本 `similaritySearch` 继续使用配置的嵌入模型。
 
+## 对齐后端索引维度
+
+| 向量库 | 确认维度的位置 |
+| --- | --- |
+| AnalyticDB | `spring.ai.vectorstore.analyticdb.dimensions` 或已有集合的向量维度 |
+| OceanBase | `spring.ai.vectorstore.oceanbase.dimension` 或表中向量列的维度 |
+| 阿里云 OpenSearch | `spring.ai.vectorstore.opensearch.dimensions`，应与服务端向量字段一致 |
+| Tablestore | 知识库索引的向量维度，由 `KnowledgeStoreImpl.getEmbeddingDimension()` 提供 |
+| Tair | `spring.ai.vectorstore.tair.options.dimensions` 或已有索引的 `dimension` |
+
+预计算写入前校验批次中每条向量。查询向量维度不匹配时，修正应用的生成配置或切换到同维度的索引，再重试。使用自动配置时，向量库 Bean 仍可能需要 `EmbeddingModel` 作为构造依赖，以支持普通文本路径。
+
 [Extensions 2.1.0.0 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.1.0.0)

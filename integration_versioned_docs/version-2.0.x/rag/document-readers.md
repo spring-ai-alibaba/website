@@ -224,6 +224,19 @@ public class RAGDocumentLoader {
 }
 ```
 
+## EML 邮件解析
+
+使用 `spring-ai-alibaba-starter-document-reader-email` 和 `EmlEmailDocumentReader` 解析本地 EML。第二个构造参数决定是否提取附件。
+
+```java
+import com.alibaba.cloud.ai.reader.email.eml.EmlEmailDocumentReader;
+
+var reader = new EmlEmailDocumentReader(filePath, true);
+var documents = reader.get();
+```
+
+2.0.3.0 中，单个附件触发 [Tika 文本提取上限](document-parsers.md#tika-文本提取上限) 时，读取器会跳过该附件，保留邮件正文和其他可解析附件。批量导入时可根据附件解析日志追踪跳过的文件。
+
 ## 支持的扩展实现
 
 下表列出了 Spring AI Alibaba 提供的所有 Document Reader 扩展实现：

@@ -684,6 +684,38 @@ SimpleLoggerAdvisor customLogger = new SimpleLoggerAdvisor(
 
 Spring AI 2.1 将 `ChatMemory` 标记为废弃。新项目可以引入 `org.springframework.ai:spring-ai-session-advisor`，通过 `SessionMemoryAdvisor` 读取并保存会话历史，按需添加负责轮次边界和压缩的 `SessionTurnAdvisor`。每次请求传入唯一且稳定的会话 ID。已有应用应按迁移指南将历史映射到 Session 事件仓库。
 
+### DashScope Session Memory
+
+添加 `com.alibaba.cloud.ai:spring-ai-alibaba-starter-model-chat-memory`，开启 `spring.ai.alibaba.session.enabled=true`。在没有配置其他仓库时，starter 提供内存仓库。持久化时可加 Spring AI 的 `spring-ai-starter-model-session-jdbc`，并按部署环境初始化会话表。
+
+```java
+import org.springframework.ai.chat.client.advisor.ToolCallingAdvisor;
+import org.springframework.ai.session.advisor.SessionAdvisors;
+
+var toolAdvisor = ToolCallingAdvisor.builder()
+    .toolCallingManager(toolCallingManager)
+    .disableInternalConversationHistory()
+    .build();
+
+ChatClient client = chatClientBuilder
+    .defaultAdvisors(SessionAdvisors.builder(sessionService).build())
+    .defaultAdvisors(toolAdvisor)
+    .build();
+
+ChatResponse reply = client.prompt()
+    .user(question)
+    .toolCallbacks(lookupCallback)
+    .advisors(SessionAdvisors.session(sessionId))
+    .call()
+    .chatResponse();
+```
+
+同一用户请求可能在暂停前已执行其他工具。将 Session Advisor 保持在工具循环内并让它负责历史，能保存这些较早的调用和结果。恢复时从 `sessionService.getMessages(sessionId)` 重建管理器所需的 Prompt，并附上当前获准使用的回调。
+
+迁移已有历史时，用 `LegacyChatMemorySessionImporter.importConversation(repository, conversationId, target)`，其中 `target` 是提供显式会话 ID 的 `CreateSessionRequest`。同一来源和目标可以重试导入。工具确认恢复时，用同一会话 ID 发送新生成的工具结果消息。
+
+[DashScope 工具执行与恢复](toolcalls/tool-calls.md#调用确认与恢复) · [Extensions Session Memory 配置](https://github.com/spring-ai-alibaba/spring-ai-extensions/tree/v2.1.0.0#chatmemory)
+
 [Session Memory 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/memory/session/index.html) · [ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/session-memory.html)
 
 ## 实现说明

@@ -74,27 +74,27 @@ dependencies {
 | spring.ai.dashscope.audio.speech.base-url | 连接的 URL | https://dashscope.aliyuncs.com |
 | spring.ai.dashscope.audio.speech.api-key | API Key | - |
 | spring.ai.dashscope.audio.speech.work-space-id | 可选，您可以指定用于 API 请求的工作空间 ID | - |
-| spring.ai.dashscope.audio.speech.options.model | 用于生成音频的模型 ID。可用模型：`cosyvoice-v1`（默认）、`cosyvoice-v2`、`cosyvoice-v3`、`cosyvoice-v3-plus` 以及各种 `sambert-*` 系列模型 | cosyvoice-v1 |
-| spring.ai.dashscope.audio.speech.options.voice | 用于合成的语音。不同模型支持不同的音色，例如 `longhua`、`zhiqi`、`zhichu` 等 | longhua |
-| spring.ai.dashscope.audio.speech.options.response-format | 音频输出的格式。支持的格式有 `mp3`、`wav`、`pcm` | mp3 |
-| spring.ai.dashscope.audio.speech.options.speed | 语音合成的速度。可接受的范围是从 0.5 到 2.0 | 1.0 |
-| spring.ai.dashscope.audio.speech.options.sample-rate | 合成音频的采样率 | 48000 |
-| spring.ai.dashscope.audio.speech.options.volume | 合成音频的音量。范围：0-100 | 50 |
-| spring.ai.dashscope.audio.speech.options.pitch | 合成音频的音调。范围：0.5-2.0 | 1.0 |
-| spring.ai.dashscope.audio.speech.options.request-text-type | 输入文本类型。支持 `PlainText` 或 `SSML` | PlainText |
-| spring.ai.dashscope.audio.speech.options.enable-ssml | 是否启用 SSML。当设置为 true 时，仅允许发送一次文本，支持纯文本或包含 SSML 的文本 | false |
-| spring.ai.dashscope.audio.speech.options.enable-word-timestamp | 是否启用词级别时间戳 | false |
-| spring.ai.dashscope.audio.speech.options.enable-phoneme-timestamp | 是否启用音素级别时间戳 | false |
-| spring.ai.dashscope.audio.speech.options.bit-rate | 音频比特率 | - |
-| spring.ai.dashscope.audio.speech.options.seed | 用于生成的随机种子，用于影响可重现性 | - |
-| spring.ai.dashscope.audio.speech.options.language-hints | 合成文本语言提示 | - |
-| spring.ai.dashscope.audio.speech.options.instruction | 设置提示词。仅 `cosyvoice-v3` 和 `cosyvoice-v3-plus` 支持此功能。目前仅支持情绪 | - |
+| spring.ai.dashscope.audio.speech.model | 用于生成音频的模型 ID。可用模型：`cosyvoice-v1`（默认）、`cosyvoice-v2`、`cosyvoice-v3`、`cosyvoice-v3-plus` 以及各种 `sambert-*` 系列模型 | cosyvoice-v1 |
+| spring.ai.dashscope.audio.speech.voice | 用于合成的语音。不同模型支持不同的音色，例如 `longhua`、`zhiqi`、`zhichu` 等 | longhua |
+| spring.ai.dashscope.audio.speech.response-format | 音频输出的格式。支持的格式有 `mp3`、`wav`、`pcm` | mp3 |
+| spring.ai.dashscope.audio.speech.speed | 语音合成的速度。可接受的范围是从 0.5 到 2.0 | 1.0 |
+| spring.ai.dashscope.audio.speech.sample-rate | 合成音频的采样率 | 48000 |
+| spring.ai.dashscope.audio.speech.volume | 合成音频的音量。范围：0-100 | 50 |
+| spring.ai.dashscope.audio.speech.pitch | 合成音频的音调。范围：0.5-2.0 | 1.0 |
+| spring.ai.dashscope.audio.speech.request-text-type | 输入文本类型。支持 `PlainText` 或 `SSML` | PlainText |
+| spring.ai.dashscope.audio.speech.enable-ssml | 是否启用 SSML。当设置为 true 时，仅允许发送一次文本，支持纯文本或包含 SSML 的文本 | false |
+| spring.ai.dashscope.audio.speech.enable-word-timestamp | 是否启用词级别时间戳 | false |
+| spring.ai.dashscope.audio.speech.enable-phoneme-timestamp | 是否启用音素级别时间戳 | false |
+| spring.ai.dashscope.audio.speech.bit-rate | 音频比特率 | - |
+| spring.ai.dashscope.audio.speech.seed | 用于生成的随机种子，用于影响可重现性 | - |
+| spring.ai.dashscope.audio.speech.language-hints | 合成文本语言提示 | - |
+| spring.ai.dashscope.audio.speech.instruction | 设置提示词。仅 `cosyvoice-v3` 和 `cosyvoice-v3-plus` 支持此功能。目前仅支持情绪 | - |
 
 > **NOTE**: 您可以覆盖通用的 `spring.ai.dashscope.base-url`、`spring.ai.dashscope.api-key`、`spring.ai.dashscope.work-space-id` 属性。
 > 如果设置了 `spring.ai.dashscope.audio.speech.base-url`、`spring.ai.dashscope.audio.speech.api-key`、`spring.ai.dashscope.audio.speech.work-space-id` 属性，它们优先于通用属性。
 > 如果您想为不同的模型和不同的模型端点使用不同的 DashScope 账户，这很有用。
 
-> **TIP**: 所有以 `spring.ai.dashscope.audio.speech.options` 为前缀的属性都可以在运行时覆盖。
+> **TIP**: 所有以 `spring.ai.dashscope.audio.speech` 为前缀的属性都可以在运行时覆盖。
 
 ## Runtime Options
 

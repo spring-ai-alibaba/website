@@ -74,6 +74,27 @@ spring:
             service-name: webflux-mcp-server ## 指定服务名称
 ```
 
+## 注册 Modern MCP 服务
+
+使用相同的 Nacos Registry starter，将服务配置改为 `spring.ai.mcp.server.protocol=MODERN`，并用 `spring.ai.mcp.server.modern.mcp-endpoint` 指定 HTTP 路径。示例切换为 `/mcp-modern` 时，用下面的配置替换前面示例的 `spring.ai.mcp.server` 段，保留 Nacos 地址、命名空间和注册配置。
+
+```yaml
+spring:
+  ai:
+    mcp:
+      server:
+        name: ticket-tools
+        version: 1.0.0
+        type: SYNC
+        protocol: MODERN
+        modern:
+          mcp-endpoint: /mcp-modern
+```
+
+注册器在 Nacos 写入兼容的 `mcp-streamable` 记录，并在其引用的服务名上自动附加 `::mcp-2026-07-28`。Extensions 客户端和网关据此识别实际的 Modern MCP 传输。迁移时为 Modern 和旧协议服务分配独立的服务名或版本，避免覆盖同一名称和版本的旧记录。
+
+[Modern MCP 自动配置](https://github.com/spring-ai-alibaba/spring-ai-extensions/blob/v2.1.0.0/auto-configurations/mcp/spring-ai-alibaba-autoconfigure-mcp-registry/src/main/java/com/alibaba/cloud/ai/autoconfigure/mcp/register/NacosModernMcpRegisterAutoConfiguration.java)
+
 ## 启动及工具类
 
 ```java

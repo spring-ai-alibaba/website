@@ -315,6 +315,10 @@ public class RAGDocumentProcessor {
 }
 ```
 
+## Tika 文本提取上限
+
+Extensions 2.0.3.0 默认解析最多 1,000 万字符，超出时抛出 `TikaTextExtractionLimitException`。有明确文档大小和内存预算时，可以通过 `new TikaDocumentParser(maxCharacters, ExtractedTextFormatter.defaults())` 调整上限。邮件附件超限时的处理见 [EML 邮件解析](document-readers.md#eml-邮件解析)。
+
 ## 支持的扩展实现
 
 下表列出了 Spring AI Alibaba 提供的所有 Document Parser 扩展实现：

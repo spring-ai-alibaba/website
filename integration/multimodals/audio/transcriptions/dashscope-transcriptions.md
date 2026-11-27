@@ -73,35 +73,35 @@ dependencies {
 | spring.ai.dashscope.audio.transcription.base-url | 连接的 URL | https://dashscope.aliyuncs.com |
 | spring.ai.dashscope.audio.transcription.api-key | API Key | - |
 | spring.ai.dashscope.audio.transcription.work-space-id | 可选，您可以指定用于 API 请求的工作空间 ID | - |
-| spring.ai.dashscope.audio.transcription.options.model | 用于转录的模型 ID。可用模型：`paraformer-v1`、`paraformer-8k-v1`、`paraformer-v2`、`paraformer-8k-v2`、`paraformer-mtl-v1`、`paraformer-realtime-v1`、`paraformer-realtime-8k-v1`、`paraformer-realtime-v2`、`paraformer-realtime-8k-v2`、`fun-asr`、`fun-asr-mtl`、`fun-asr-realtime`、`gummy-realtime-v1`、`gummy-chat-v1` | paraformer-v1 |
-| spring.ai.dashscope.audio.transcription.options.format | 音频格式。支持的格式：`pcm`、`wav`、`mp3`、`opus`、`speex`、`aac`、`amr` | pcm |
-| spring.ai.dashscope.audio.transcription.options.sample-rate | 音频采样率 | - |
-| spring.ai.dashscope.audio.transcription.options.vocabulary-id | 自定义热词表 ID | - |
-| spring.ai.dashscope.audio.transcription.options.resource-id | 资源 ID（用于 paraformer 系列模型） | - |
-| spring.ai.dashscope.audio.transcription.options.channel-id | 声道 ID 列表 | [0] |
-| spring.ai.dashscope.audio.transcription.options.disfluency-removal-enabled | 是否启用流畅度移除 | false |
-| spring.ai.dashscope.audio.transcription.options.timestamp-alignment-enabled | 是否启用时间戳对齐 | false |
-| spring.ai.dashscope.audio.transcription.options.special-word-filter | 特殊词过滤 | - |
-| spring.ai.dashscope.audio.transcription.options.language-hints | 语言提示列表 | ["zh", "en"] |
-| spring.ai.dashscope.audio.transcription.options.diarization-enabled | 是否启用说话人分离 | false |
-| spring.ai.dashscope.audio.transcription.options.speaker-count | 说话人数量 | - |
-| spring.ai.dashscope.audio.transcription.options.semantic-punctuation-enabled | 是否启用语义标点 | false |
-| spring.ai.dashscope.audio.transcription.options.max-sentence-silence | 最大句子静音时长（毫秒） | 800 |
-| spring.ai.dashscope.audio.transcription.options.multi-threshold-mode-enabled | 是否启用多阈值模式 | false |
-| spring.ai.dashscope.audio.transcription.options.punctuation-prediction-enabled | 是否启用标点预测 | true |
-| spring.ai.dashscope.audio.transcription.options.heartbeat | 是否启用心跳 | false |
-| spring.ai.dashscope.audio.transcription.options.inverse-text-normalization-enabled | 是否启用逆文本规范化 | true |
-| spring.ai.dashscope.audio.transcription.options.source-language | 源语言 | - |
-| spring.ai.dashscope.audio.transcription.options.transcription-enabled | 是否启用转录 | true |
-| spring.ai.dashscope.audio.transcription.options.translation-enabled | 是否启用翻译 | false |
-| spring.ai.dashscope.audio.transcription.options.translation-target-languages | 翻译目标语言列表 | - |
-| spring.ai.dashscope.audio.transcription.options.max-end-silence | 最大结束静音时长（毫秒） | 800 |
+| spring.ai.dashscope.audio.transcription.model | 用于转录的模型 ID。可用模型：`paraformer-v1`、`paraformer-8k-v1`、`paraformer-v2`、`paraformer-8k-v2`、`paraformer-mtl-v1`、`paraformer-realtime-v1`、`paraformer-realtime-8k-v1`、`paraformer-realtime-v2`、`paraformer-realtime-8k-v2`、`fun-asr`、`fun-asr-mtl`、`fun-asr-realtime`、`gummy-realtime-v1`、`gummy-chat-v1` | paraformer-v1 |
+| spring.ai.dashscope.audio.transcription.format | 音频格式。支持的格式：`pcm`、`wav`、`mp3`、`opus`、`speex`、`aac`、`amr` | pcm |
+| spring.ai.dashscope.audio.transcription.sample-rate | 音频采样率 | - |
+| spring.ai.dashscope.audio.transcription.vocabulary-id | 自定义热词表 ID | - |
+| spring.ai.dashscope.audio.transcription.resource-id | 资源 ID（用于 paraformer 系列模型） | - |
+| spring.ai.dashscope.audio.transcription.channel-id | 声道 ID 列表 | [0] |
+| spring.ai.dashscope.audio.transcription.disfluency-removal-enabled | 是否启用流畅度移除 | false |
+| spring.ai.dashscope.audio.transcription.timestamp-alignment-enabled | 是否启用时间戳对齐 | false |
+| spring.ai.dashscope.audio.transcription.special-word-filter | 特殊词过滤 | - |
+| spring.ai.dashscope.audio.transcription.language-hints | 语言提示列表 | ["zh", "en"] |
+| spring.ai.dashscope.audio.transcription.diarization-enabled | 是否启用说话人分离 | false |
+| spring.ai.dashscope.audio.transcription.speaker-count | 说话人数量 | - |
+| spring.ai.dashscope.audio.transcription.semantic-punctuation-enabled | 是否启用语义标点 | false |
+| spring.ai.dashscope.audio.transcription.max-sentence-silence | 最大句子静音时长（毫秒） | 800 |
+| spring.ai.dashscope.audio.transcription.multi-threshold-mode-enabled | 是否启用多阈值模式 | false |
+| spring.ai.dashscope.audio.transcription.punctuation-prediction-enabled | 是否启用标点预测 | true |
+| spring.ai.dashscope.audio.transcription.heartbeat | 是否启用心跳 | false |
+| spring.ai.dashscope.audio.transcription.inverse-text-normalization-enabled | 是否启用逆文本规范化 | true |
+| spring.ai.dashscope.audio.transcription.source-language | 源语言 | - |
+| spring.ai.dashscope.audio.transcription.transcription-enabled | 是否启用转录 | true |
+| spring.ai.dashscope.audio.transcription.translation-enabled | 是否启用翻译 | false |
+| spring.ai.dashscope.audio.transcription.translation-target-languages | 翻译目标语言列表 | - |
+| spring.ai.dashscope.audio.transcription.max-end-silence | 最大结束静音时长（毫秒） | 800 |
 
 > **NOTE**: 您可以覆盖通用的 `spring.ai.dashscope.base-url`、`spring.ai.dashscope.api-key`、`spring.ai.dashscope.work-space-id` 属性。
 > 如果设置了 `spring.ai.dashscope.audio.transcription.base-url`、`spring.ai.dashscope.audio.transcription.api-key`、`spring.ai.dashscope.audio.transcription.work-space-id` 属性，它们优先于通用属性。
 > 如果您想为不同的模型和不同的模型端点使用不同的 DashScope 账户，这很有用。
 
-> **TIP**: 所有以 `spring.ai.dashscope.audio.transcription.options` 为前缀的属性都可以在运行时覆盖。
+> **TIP**: 所有以 `spring.ai.dashscope.audio.transcription` 为前缀的属性都可以在运行时覆盖。
 
 ## Runtime Options
 
@@ -294,3 +294,5 @@ AudioTranscriptionResponse response = dashScopeTranscriptionModel.call(prompt);
 ## Example Code
 
 完整的示例代码可以参考项目中的测试文件，展示了如何使用 DashScope Transcription API 的各种功能。
+
+[百炼多模态模型与 API](../../dashscope-multimodal.md)

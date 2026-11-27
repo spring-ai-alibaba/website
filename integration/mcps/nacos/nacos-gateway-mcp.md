@@ -140,8 +140,8 @@ Gateway 被触发调用 restful 服务
 
 ## 与 Modern MCP 服务共存
 
-Extensions 2.1.0.0 识别 Nacos 注册记录中的 `mcp-modern`。注册 Modern 服务时声明真实服务协议和端点；发现、路由和网关按照每条记录选择 Modern、Streamable HTTP 或 SSE。升级时可保留已有记录，同时为新服务注册独立的 Modern 入口。
+Extensions 2.1.0.0 的网关可同时代理 Modern、Streamable HTTP 和 SSE。对于 Nacos 上的 Modern MCP，网关通过兼容的 `mcp-streamable` 注册记录及其 Modern 服务名后缀解析真实协议。为新服务配置独立的入口，保留已有的 SSE 与 Streamable HTTP 入口。
 
 消费端可使用同步或异步方式调用 `listTools` 和 `callTool`。在逐服务迁移时，用匹配的协议遍历工具与执行只读调用，核对服务端点、请求头、认证和超时。
 
-[配置 Spring AI Modern MCP 客户端](../mcp-client-boot-starter-docs.md#modern-mcp-2026-07-28) · [Extensions 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.1.0.0)
+[注册 Modern MCP](nacos-registery-mcp.md#注册-modern-mcp-服务) · [配置 Spring AI Modern MCP 客户端](../mcp-client-boot-starter-docs.md#modern-mcp-2026-07-28) · [Extensions 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.1.0.0)

@@ -5,6 +5,7 @@ Spring AI Alibaba 提供了丰富的 Tool Calling 扩展实现，允许 AI 模�
 ## 目录
 
 - [概述](#概述)
+- [DashScope 工具执行](#dashscope-工具执行)
 - [详细使用说明](#详细使用说明)
 - [支持的扩展实现](#支持的扩展实现)
 
@@ -25,6 +26,48 @@ Spring AI Alibaba 扩展了 Spring AI 的 Tool Calling 功能，提供了多种�
 - 数据服务（天气、快递、新闻等）
 - 开发工具（GitHub、JSON 处理、正则表达式等）
 - 其他工具（时间、Python 执行、敏感词过滤等）
+
+## DashScope 工具执行
+
+Extensions 2.0.3.0 的 `DashScopeAsyncToolCallingManager` 和 ARMS 集成使用的 `ObservableToolCallingManager` 都使用请求绑定的回调。用 `ChatClient` 让工具 Advisor 执行模型返回的完整调用。通过 `ChatModel.call(Prompt)` 接入时，需要由应用负责运行工具并回传结果。
+
+```java
+ChatResponse reply = chatClient.prompt()
+    .user(question)
+    .toolCallbacks(lookupCallback)
+    .call()
+    .chatResponse();
+```
+
+`ToolCallbackResolver` 回退默认关闭，应用级注册的同名 Bean 不会自动加入当前请求。确实要保留按名称解析的旧应用可以设置 `spring.ai.tools.resolution.fallback.enabled=true`，并将 Resolver 暴露的工具限制在该应用希望共享的范围内。
+
+### 异步执行、ARMS 和调用预算
+
+安装 `spring-ai-alibaba-starter-arms-observation` 后，可以同时开启异步执行和工具观测。一次用户轮次默认允许每个工具调用 40 次，所有工具合计 150 次。通过以下配置可为单个工具设更低的预算，并决定超限时如何响应。
+
+```yaml
+spring:
+  ai:
+    alibaba:
+      tool:
+        async:
+          enabled: true
+      arms:
+        enabled: true
+        tool:
+          enabled: true
+    tools:
+      limits:
+        max-calls-per-tool-default: 40
+        max-calls-per-tool:
+          lookup: 5
+        max-total-tool-calls: 150
+        on-limit-exceeded: RETURN_ERROR_RESPONSE
+```
+
+`RETURN_ERROR_RESPONSE` 将超限作为工具结果返回模型。默认的 `THROW` 结束本轮循环。单工具和总上限可分别设为 `-1` 关闭。计数以当前用户轮次为范围，应用可通过 ARMS 观察异步回调的耗时与执行结果状态。
+
+[Extensions 2.0.3.0 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.0.3.0)
 
 ## 详细使用说明
 
@@ -82,7 +125,7 @@ public class PythonToolService {
     public String executeCalculation(String question) {
         // 创建 ChatClient 并添加 Python Tool
         ChatClient chatClient = ChatClient.builder(chatModel)
-            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
 
         // 使用工具进行对话
@@ -130,7 +173,7 @@ public class ComplexCalculationExample {
 
     public ComplexCalculationExample(ChatModel chatModel, PythonTool pythonTool) {
         this.chatClient = ChatClient.builder(chatModel)
-            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
     }
 
@@ -202,7 +245,7 @@ public class PythonToolAgent {
     @Autowired
     public PythonToolAgent(ChatModel chatModel, PythonTool pythonTool) {
         this.chatClient = ChatClient.builder(chatModel)
-            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
     }
 
@@ -254,7 +297,7 @@ public class MultiToolExample {
         TimeTool timeTool = new TimeTool();
 
         return ChatClient.builder(chatModel)
-            .tools(
+            .toolCallbacks(
                 pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION),
                 timeTool.createTimeToolCallback(TimeTool.DESCRIPTION)
             )
@@ -315,7 +358,7 @@ public class PythonToolAgentService {
 
     public PythonToolAgentService(ChatModel chatModel, PythonTool pythonTool) {
         this.chatClient = ChatClient.builder(chatModel)
-            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
     }
 
@@ -403,20 +446,12 @@ public class PythonToolAgentService {
 
 1. **添加依赖**：在 `pom.xml` 或 `build.gradle` 中添加相应的依赖
 2. **自动配置**：大多数工具都支持 Spring Boot 自动配置，会自动注册为 `ToolCallback`
-3. **在 ChatClient 中使用**：通过 `ChatClient.builder().tools(...)` 添加工具
+3. **在 ChatClient 中使用**：用 `prompt().toolCallbacks(...)` 为当前请求绑定回调，或用 `builder().defaultToolCallbacks(...)` 在当前客户端注册默认回调
 4. **AI 模型调用**：AI 模型会根据对话内容自动决定是否调用工具
 
 ### 通用接口
 
-所有 Tool 都实现了 `BiFunction<Request, ToolContext, String>` 接口，并通过 `FunctionToolCallback` 包装为 `ToolCallback`：
-
-```java
-public interface ToolCallback {
-    String getName();
-    String getDescription();
-    ToolResponse call(ToolRequest request);
-}
-```
+使用 `ToolCallback` 时，通过 `getToolDefinition()` 读取工具定义，`call(String toolInput)` 执行 JSON 参数。需要运行时上下文的实现可以重写 `call(String toolInput, ToolContext toolContext)`。普通方法可以使用 `@Tool`，函数或自定义回调可以使用 `FunctionToolCallback`。
 
 ### 配置说明
 

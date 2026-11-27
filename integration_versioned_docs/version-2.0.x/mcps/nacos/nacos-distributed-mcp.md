@@ -60,7 +60,7 @@ spring:
         name: my-mcp-client
         version: 1.0.0
         request-timeout: 30s
-        type: ASYNC  # or ASYNC for reactive applications
+        type: ASYNC  # 同步应用使用 SYNC
 
     alibaba:
       mcp:
@@ -80,8 +80,9 @@ spring:
                 password: nacos
 ```
 
-1. 支持发现 sse、streamable 类型 MCP 服务
-2. 支持发现不同命名空间下的 MCP 服务
+Extensions 2.0.3.0 使用 MCP Java SDK 2.1.0。从 `nacos.client.sse.connections` 查找 SSE 服务，从 `nacos.client.streamable.connections` 查找 HTTP 服务。各连接可配置自己的 Nacos 命名空间，并通过 `service-name` 与 `version` 指向注册记录。
+
+`SYNC` 和 `ASYNC` 均支持列出工具（`listTools`）与调用工具（`callTool`）。根据客户端类型注入 `distributedSyncToolCallback` 或 `distributedAsyncToolCallback`，把该 provider 返回的回调绑定到 ChatClient。
 
 ## 启动
 
