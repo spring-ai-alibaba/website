@@ -143,4 +143,6 @@ AssistantMessage reply = agent.call("What is Spring AI?");
 
 模型选择决定可用的媒体、结构化输出和工具能力。ReactAgent 负责 Agent 工具和状态循环。对需要解析为 Java 类型的输出，见 [结构化输出](structured-output.md)。
 
+如果应用按任务选择不同模型，或需要在窗口超限时回退，参见[配置模型容量、路由与回退](../advanced/context-engineering.md#capacity-routing-fallback)。
+
 [Spring AI Decision Model](https://docs.spring.io/spring-ai/reference/api/decision.html) · [可运行的 ModelsExample](https://github.com/alibaba/spring-ai-alibaba/blob/e01219fd20ecfff2dd9d1a1facfe58e5349c3e07/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ModelsExample.java)

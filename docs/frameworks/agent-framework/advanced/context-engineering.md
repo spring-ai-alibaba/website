@@ -1,6 +1,6 @@
 ---
 title: 上下文工程（Context Engineering）
-description: 学习如何通过上下文工程提高Agent的可靠性，包括模型上下文、工具上下文和生命周期上下文的管理
+description: 管理 Agent 的模型预算、会话压缩、工具归档、按需加载和子 Agent 上下文
 keywords:
   [
     上下文工程,
@@ -45,9 +45,9 @@ keywords:
 
 | 上下文类型                               | 你控制的内容                                                | 瞬态或持久 |
 | ---------------------------------------- | ----------------------------------------------------------- | ---------- |
-| **[模型上下文](#model-context)**         | 模型调用中包含什么（指令、消息历史、工具、响应格式）        | 瞬态       |
-| **[工具上下文](#tool-context)**          | 工具可以访问和产生什么（对状态、存储、运行时上下文的读/写） | 持久       |
-| **[生命周期上下文](#lifecycle-context)** | 模型和工具调用之间发生什么（摘要、防护栏、日志等）          | 持久       |
+| **[模型上下文](#模型上下文model-context)**         | 模型调用中包含什么（指令、消息历史、工具、响应格式）        | 瞬态       |
+| **[工具上下文](#工具上下文tool-context)**          | 工具可以访问和产生什么（对状态、存储、运行时上下文的读/写） | 持久       |
+| **[生命周期上下文](#生命周期上下文lifecycle-context)** | 模型和工具调用之间发生什么（摘要、防护栏、日志等）          | 持久       |
 
 > - 瞬态上下文。LLM 在单次调用中看到的内容。你可以修改消息、工具或提示，而不改变状态中保存的内容。
 > - 持久上下文。跨轮次保存在状态中的内容。生命周期钩子和工具写入会永久修改它。
@@ -72,6 +72,161 @@ keywords:
 - 跳转到 Agent 生命周期的不同步骤
 
 在本指南中，你将看到频繁使用 Hook 和 Interceptor API 作为上下文工程的手段。
+
+## 管理上下文窗口和会话状态 {#context-management}
+
+将模型请求、会话状态、运行时配置和长期存储分别配置，便于在缩小模型输入的同时保留恢复所需的数据。
+
+| 需求 | 配置 | 生效范围 |
+| --- | --- | --- |
+| 模型容量、路由与回退 | `ModelCapacity`、`ContextWindowPolicy`、`ModelRoutingPolicy`、`ModelFallbackInterceptor` | 每次实际模型调用 |
+| 压缩旧对话 | `CheckpointContextCompaction` 和 checkpoint saver | 同一会话的后续模型请求 |
+| 归档长工具结果 | `ToolResultArchive` 和 Store | 按所有者、会话和 Agent 隔离 |
+| 控制发送给模型的工具 | `ToolSelectionInterceptor` 和 `DeferredToolCatalog` | 单次请求的筛选与当前执行的工具加载 |
+| 委派任务 | `AgentToolContext` | 单次子 Agent 委派 |
+| 按需读取知识 | `SkillsAgentHook` 和 `LongTermMemoryTools` | 已注册的 Skills 和应用解析的记忆命名空间 |
+
+### 为不同模型设置预算和回退 {#capacity-routing-fallback}
+
+按实际部署配置共享上下文窗口、独立输入上限和输出预留。框架使用独立输入上限与扣除输出预算后的窗口大小中较小的值，在系统提示、消息、工具定义和 Advisor 变更生效后校验最终输入。例如，下面用两个不同预算配置同一 Agent。
+
+```java
+var compactBudget = ContextWindowPolicy.builder(new ModelCapacity(8192, 6000, 1024)).build();
+var wideBudget = ContextWindowPolicy.builder(new ModelCapacity(32768, 24000, 2048)).build();
+
+var routing = ModelRoutingPolicy.builder("general")
+    .route("general", new ModelTarget(wideModel, wideBudget))
+    .route("compact", new ModelTarget(compactModel, compactBudget))
+    .selector(request -> "inventory".equals(request.getContext().get("workload"))
+        ? "compact" : "general")
+    .build();
+
+var agent = ReactAgent.builder()
+    .name("inventory")
+    .modelRouting(routing)
+    .interceptors(ModelFallbackInterceptor.builder()
+        .addFallbackModel(wideModel, wideBudget)
+        .build())
+    .build();
+```
+
+路由在本次执行中选定，暂停恢复时沿用已保存的路由。回退模型按自己的原生选项和预算重新组装请求。如果主模型输入超限，备用模型需要显式配置预算才能接手。流式调用只在首个响应片段发出前回退。
+
+应用可以通过 `inputOverflowDetector` 识别适配器返回的窗口超限异常。以 Spring AI 原生 OpenAI Chat Completions 为例，可匹配异常原因链中的 `OpenAIServiceException` 和 `context_length_exceeded`。在同一模型上重试之前，框架要求能生成更小的请求，且最多重试一次。
+
+### 保存摘要和归档工具结果 {#checkpoint-and-archive}
+
+为 Agent 配置 saver、旧轮次压缩策略和归档 Store。压缩触发阈值用于决定何时尝试生成摘要，模型输入的硬上限仍由模型预算控制。
+
+```java
+var archive = ToolResultArchive.builder(new FileSystemStore(dataDir.resolve("archives")))
+    .ownerScope(config -> config.metadata("tenant").filter(String.class::isInstance)
+        .map(String.class::cast).orElse(""))
+    .thresholdChars(4000)
+    .pageSizeChars(1000)
+    .build();
+
+var agent = ReactAgent.builder()
+    .name("inventory")
+    .model(model)
+    .saver(FileSystemSaver.builder().targetFolder(dataDir.resolve("checkpoints")).build())
+    .checkpointContextCompaction(CheckpointContextCompaction.builder(summarizer, 6000)
+        .keepRecentTurns(2)
+        .build())
+    .toolResultArchive(archive)
+    .build();
+
+var config = RunnableConfig.builder()
+    .threadId(threadId)
+    .addMetadata("tenant", authenticatedTenant)
+    .build();
+```
+
+- 压缩只处理已完成的旧轮次，保留最近轮次及工具调用与结果的配对。checkpoint 仍保存原始历史、摘要和重建模型输入所需的锚点。
+- 归档写入成功后，模型收到预览和引用。调用 `read_archived_tool_result` 时传入 `reference` 和 `page`，从第 1 页读取并跟随返回的 `nextPage`。
+- 应用重建 Agent 后，使用同一个 `threadId`、所有者及持久化目录即可继续会话。审批暂停时，传入从中断记录生成的反馈和空输入来继续待执行任务。详见[人工审批与恢复](./human-in-the-loop.md)。
+
+### 先发现工具，再加载定义 {#deferred-tools}
+
+向 `DeferredToolCatalog` 注册名称、描述和回调工厂。首次请求提供常驻工具，以及目录的 `search_tools` 和 `load_tools` 入口。模型先用描述搜索，加载后才在后续请求中看到延迟工具的定义。加载状态属于当前执行，不同任务可以分别选择需要的工具。
+
+```java
+var catalog = DeferredToolCatalog.builder()
+    .tool("inventory_lookup", "查询库存明细", inventoryCallbackFactory)
+    .build();
+var selector = ToolSelectionInterceptor.builder()
+    .selectionModel(selectionModel)
+    .maxTools(4)
+    .maxToolSchemaTokens(2000)
+    .alwaysInclude(ToolResultArchive.READ_TOOL_NAME)
+    .build();
+
+var agent = ReactAgent.builder()
+    .name("inventory")
+    .model(model)
+    .toolResultArchive(archive)
+    .deferredTools(catalog)
+    .interceptors(selector)
+    .build();
+```
+
+选择器按相关性筛选可用工具，并保留已配置的必选工具和发现入口。工具定义的预算是估算值，所有最终输入仍受模型窗口限制。在同一批工具调用中，刚完成加载的工具要等到下一次模型请求绑定后才可执行。
+
+### 隔离子 Agent 的上下文 {#delegated-context}
+
+使用 `AgentTool.create(child)` 时，子 Agent 从独立执行开始，模型收到委派任务和子 Agent 自己的指令。若业务需要共享数据，在注册工具时明确列出状态键、运行时元数据和回传字段。
+
+```java
+var delegation = AgentToolContext.builder()
+    .stateKeys("case_id")
+    .metadataKeys("tenant")
+    .outputKeys("review")
+    .maxContextCharacters(4096)
+    .build();
+var analystTool = AgentTool.create(analyst, delegation);
+```
+
+这里的 `case_id` 作为参考数据进入子 Agent 的请求和图状态，`tenant` 供子 Agent 的运行时使用。父 Agent 通过工具结果接收最终答案和已选输出，子 Agent 的中间消息仍保存在自己的会话。详见[将子 Agent 注册为工具](./agent-tool.md)。
+
+### 按需加载 Skills 和长期记忆 {#skills-and-memory}
+
+```java
+var skills = SkillsAgentHook.builder()
+    .skillRegistry(registry)
+    .onDemand(5, 2048)
+    .build();
+
+var memoryTools = LongTermMemoryTools.builder()
+    .store(memoryStore)
+    .namespace(config -> config.metadata("tenant").filter(String.class::isInstance)
+        .map(String.class::cast)
+        .map(tenant -> List.of("inventory", tenant))
+        .orElseGet(List::of))
+    .maxSearchResults(5)
+    .pageCharacters(2048)
+    .build();
+
+var analyst = ReactAgent.builder()
+    .name("inventory_analyst")
+    .model(model)
+    .hooks(List.of(skills))
+    .tools(memoryTools.tools())
+    .outputKey("review")
+    .build();
+```
+
+启用按需模式后，`search_skills` 返回简短描述，`read_skill` 按已注册名称读取正文。成功读取可激活当前执行的关联工具。长期记忆的 `search_memory` 返回键，`read_memory` 在应用确定的精确命名空间内读取。两类正文工具都返回 `nextOffset` 供续读。命名空间应从应用认证得到的身份解析，缺少身份时返回空列表即可拒绝访问。
+
+### 运行可重复的示例 {#run-context-examples}
+
+从 Spring AI Alibaba 仓库根目录运行分项示例，依次验证模型预算回退、checkpoint 和归档回读，以及子 Agent 对按需上下文的访问。示例使用本地模型响应，无需配置 API 密钥。
+
+```bash
+mvn -B -pl :spring-ai-alibaba-bom,:spring-ai-alibaba-agent-framework -am -DskipTests install
+mvn -B -f examples/documentation/pom.xml -Dtest=ContextManagementRecipesTest test
+```
+
+[示例源码](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextManagementRecipes.java) · [运行说明](https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation#context-management-recipes)
 
 ## 模型上下文（Model Context）
 
@@ -384,47 +539,7 @@ ReactAgent agent = ReactAgent.builder()
 
 ### 模型选择（Model）
 
-根据任务复杂度或用户偏好动态选择模型。
-
-<Code
-  language="java"
-  title="DynamicModelInterceptor 动态模型选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
->
-{`class DynamicModelInterceptor extends ModelInterceptor {
-    private final ChatModel simpleModel;
-    private final ChatModel complexModel;
-
-    public DynamicModelInterceptor(ChatModel simpleModel, ChatModel complexModel) {
-        this.simpleModel = simpleModel;
-        this.complexModel = complexModel;
-    }
-
-    @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
-        // 分析任务复杂度
-        boolean isComplexTask = analyzeComplexity(request.getMessages());
-
-        // 选择合适的模型
-        ChatModel selectedModel = isComplexTask ? complexModel : simpleModel;
-
-        // 注意：在实际实现中，你可能需要在Agent级别切换模型
-        // 这里展示的是概念性示例
-
-        return handler.call(request);
-    }
-
-    private boolean analyzeComplexity(List<Message> messages) {
-        // 实现复杂度分析逻辑
-        // 例如：检查消息长度、关键词等
-        return messages.size() > 5;
-    }
-
-    @Override
-    public String getName() {
-        return "DynamicModelInterceptor";
-    }
-}`}
-</Code>
+根据任务复杂度、运行时标识或用户偏好选择模型时，用 `ModelRoutingPolicy` 注册目标和各自的预算。选择器返回已注册的路由名，框架在同一请求链上调用目标模型。[模型容量、路由与回退配置](#capacity-routing-fallback)
 
 ### 响应格式（Response Format）
 
@@ -609,6 +724,8 @@ ReactAgent agent = ReactAgent.builder()
 </Code>
 
 ### 消息摘要 Hook
+
+如果需要保留原始历史并在重建 Agent 后继续使用摘要，使用[基于 checkpoint 的会话压缩](#checkpoint-and-archive)。
 
 <Code
   language="java"

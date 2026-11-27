@@ -8,6 +8,8 @@ keywords: [记忆管理, Memory, 检查点, Checkpoint, 状态持久化, 对话�
 
 Spring AI Alibaba 的 Agent 使用持久化机制来实现长期记忆功能。这是一个高级主题，需要对 Spring AI Alibaba 的 Agent 框架有一定了解。
 
+对于需要重启后继续的会话，可以[在 checkpoint 中保存摘要和归档引用](./context-engineering.md#checkpoint-and-archive)。如果需要让模型自行搜索并读取当前身份可访问的资料，可以[注册按需长期记忆工具](./context-engineering.md#skills-and-memory)。
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                     ReactAgent                          │

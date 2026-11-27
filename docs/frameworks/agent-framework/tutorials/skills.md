@@ -273,6 +273,8 @@ ChatClient chatClient = ChatClient.builder(chatModel)
 
 ## 最佳实践与性能建议
 
+技能目录较大时，可通过 `SkillsAgentHook.builder().skillRegistry(registry).onDemand()` 启用按需模式。模型通过 `search_skills` 搜索描述，再用 `read_skill` 按名称读取并分页续读。[Skills 与长期记忆按需加载](../advanced/context-engineering.md#skills-and-memory)
+
 - **控制 SKILL.md 大小**：单文件建议约 1.5k–2k tokens，长内容放 `references/` 并在正文中列路径。
 - **技能名称一致**：`name`、`read_skill` 参数、`groupedTools` 的 key 保持一致。
 - **按需使用 groupedTools**：仅需「随技能激活」的工具用 groupedTools，其余用 Agent 的 `.tools()` 即可。
