@@ -1,24 +1,54 @@
 ---
 title: "流式输出"
-description: "用 Reactor Flux 消费节点进度、模型片段和完成状态。"
+description: "用 Reactor 消费类型化运行事件、模型增量、节点进度及子图状态。"
 ---
 
 # 流式输出
 
-`CompiledGraph.stream(inputs, config)` 返回 Reactor 的 `Flux<NodeOutput>`。一次订阅驱动一次执行。应用负责在同一订阅上处理数据、错误和终止事件。
+Graph Core 提供类型化运行事件和节点输出两种流式入口。两种入口每次订阅都执行一次图。如果同一次运行需要同时消费多种事件，可使用 `eventRun`。
 
 ## 选择执行入口
 
 | 需要 | 入口 |
 | --- | --- |
+| 按事件类型和调用路径消费模型、进度、状态及子图事件 | `streamEvents` |
+| 在同一次执行中读取多个流式视图和最终结果 | `eventRun` |
 | 节点输出、模型文本片段、人工暂停 | `stream` |
 | 随执行观察检查点快照 | `streamSnapshots`，并配置检查点器 |
 | 底层响应和完成结果 | `graphResponseStream` |
 | 同步获取最终状态 | `invoke` |
 
-收到 `StreamingOutput` 后，可用 `node()` 关联节点，用 `chunk()` 读取非空文本片段。没有文本的事件仍可以携带状态或生命周期信息。终止时用最终状态读取合并后的数据。人工审批流可用 `InterruptionMetadata` 判断当前需要反馈。
+## 类型化运行事件
+
+`CompiledGraph.streamEvents(inputs, config, options)` 返回 `Flux<RunEvent>`。这里的事件 API 需要使用包含 `streamEvents` 的 2.1.x 构建，示例可用当前框架源码运行。
+
+```java
+var options = StreamOptions.defaults().withNested(true);
+Flux<RunEvent> events = graph.streamEvents(Map.of("input", "Spring AI"), config, options);
+```
+
+每条事件有 `type()`、`data()`、`runId()`、`sequence()` 和 `scope()`。在同一运行内，`sequence()` 按交付顺序递增。`scope().namespace()` 描述从根图到当前节点、工具或子图的调用路径。按路径段的 `id()` 区分同名分支和重复调用，按 `ModelDelta.modelCallId()` 归并一次模型调用的增量。
+
+| 通道 | 常用事件 |
+| --- | --- |
+| `LIFECYCLE` | 图和节点的开始、完成、失败或暂停 |
+| `MESSAGES` | `MODEL_DELTA` 和 `MODEL_COMPLETED`，分别携带内容增量和最终模型消息及用量 |
+| `TOOLS` | 工具实际执行时的开始、输出增量和终态 |
+| `CUSTOM` | 节点或工具发送的业务进度 |
+| `UPDATES` / `VALUES` | 已提交的有序写入和完整状态快照 |
+| `CHECKPOINTS` | 配置检查点器后发出的 `CHECKPOINT_SAVED` |
+
+`StreamOptions.defaults()` 选择根图的生命周期和模型事件。用 `withNested(true)` 接收子图和子 Agent 事件。按需启用推理内容、模型工具参数以及全量状态快照。根终态始终可读。用 `event.scope().root()` 区分根终态与子图完成事件，根 `RUN_COMPLETED` 的负载是 `RunEvent.State`，`RUN_PAUSED` 提供中断信息，`RUN_FAILED` 提供执行错误。订阅建立或事件交付本身发生错误时，通过 Reactor 的 `onError` 处理。
+
+`eventRun(inputs, config, options)` 返回一个显式启动的 `RunStream`。在 `start()` 前注册需要的 `messages()`、`toolCalls()`、`values()` 或 `subgraphs()`。各视图共享同一次执行，`output()` 可重复读取根终态。子图视图可以读取有限窗口内的近期事件，跟不上的订阅会收到错误。关闭运行句柄会取消执行。
+
+用同一 `threadId` 和检查点恢复图时，恢复会生成新的 `runId`。SSE 事件序号用于标识当前运行内的交付顺序，检查点用来恢复执行进度。
+
+[可运行的 GraphEventStreamingExample](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/GraphEventStreamingExample.java)
 
 ## 本地运行流式节点
+
+`stream(inputs, config)` 返回 `Flux<NodeOutput>`。使用该入口时，通过 `StreamingOutput.node()` 识别节点，通过 `chunk()` 读取文本片段，通过最终状态读取聚合结果。人工审批流可以用 `InterruptionMetadata` 表示需要反馈的节点。
 
 示例用两个预置的 Spring AI `ChatResponse` 片段模拟模型。Graph Core 对同一节点的片段做聚合，下游可以在 `messages` 里读取完整的 `AssistantMessage`。
 
@@ -47,7 +77,9 @@ public static String runLocalStream() throws GraphStateException {
 
 ## 发送业务进度
 
-处理批量任务时，节点可以通过 Flux 发送自定义业务对象。订阅者从 `StreamingOutput.getOriginData()` 读取进度。节点在正常完成时用 `GraphResponse.done(updates)` 提交下游需要的状态。在示例里，两个 `Progress` 事件用于显示进度，`processedCount` 交给汇总节点。
+类型化事件流中，通过 `RunnableConfig.streamWriter()` 发送命名进度，订阅选项需包含 `CUSTOM`。例如，在节点内调用 `config.streamWriter().tryEmit("progress", "Writing the draft")`，客户端从 `RunEvent.Custom` 读取名称和值。检查 `tryEmit` 的返回值可判断写入是否成功，包括通道未启用、缓冲区满和作用域已关闭的情况。需要持久化的数据随节点返回值提交。
+
+使用 `stream()` 时，节点也可以通过 Flux 发送自定义对象，订阅者从 `StreamingOutput.getOriginData()` 读取。示例里，两个 `Progress` 对象用于显示进度，节点用 `GraphResponse.done(updates)` 提交汇总节点需要的 `processedCount`。
 
 ```java title="ProgressStreamingExample.java"
 public record Progress(String item, int completed, int total) {

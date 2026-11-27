@@ -185,3 +185,25 @@ ReactAgent 的人工审批通过 Graph checkpoint 暂停和恢复。使用同一
 远程工具可通过 MCP 的 `ToolCallbackProvider` 注册。见 [MCP 客户端](/integration/mcps/mcp-client-boot-starter-docs) 和 [DashScope 扩展工具](/integration/toolcalls/tool-calls)。
 
 [可运行的 ToolsExample](https://github.com/alibaba/spring-ai-alibaba/blob/e01219fd20ecfff2dd9d1a1facfe58e5349c3e07/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java)
+
+## 流式工具与进度
+
+同步或异步工具可以通过 `ToolContextHelper.streamWriter(context)` 发布命名进度，订阅方通过 `CUSTOM` 通道读取。工具本身也需要向用户逐步展示输出时，可以实现 `StreamingToolCallback`，再通过 `.tools(callback)` 注册到 ReactAgent。
+
+```java title="AgentEventStreamingExample.java"
+@Override
+public Flux<ToolStreamPart> stream(String arguments, ToolContext context, CancellationToken cancellation) {
+    return Flux.defer(() -> {
+        cancellation.throwIfCancelled();
+        ToolContextHelper.streamWriter(context).tryEmit("inventory.progress", "Checking the warehouse");
+        return Flux.just(new ToolStreamPart.Delta("Warehouse checked"),
+                new ToolStreamPart.Completed("7 items available"));
+    });
+}
+```
+
+工具可产生零到多个 `Delta`，随后必须产生一个 `Completed` 并正常结束 Publisher。模型收到 `Completed` 中的最终结果，客户端通过 `TOOLS` 通道接收 `TOOL_DELTA` 及工具终态。缺少最终结果、出现多个最终结果或最终结果之后继续输出都会导致工具执行失败。并行工具的事件可能交错，模型收到的结果仍按请求中的调用顺序排列。
+
+`MODEL_DELTA` 中的工具参数表示模型正在生成调用请求。真正执行工具时才会发出 `TOOL_STARTED`，执行结果增量由 `TOOL_DELTA` 交付。工具事件可以用 `scope().scopeId()` 标识本次执行，用 `toolCallId()` 和 `toolCallIndex()` 关联模型请求。
+
+[可运行的 StockTool 示例](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentEventStreamingExample.java) · [Agent 类型化运行事件](agents.md#类型化运行事件)
