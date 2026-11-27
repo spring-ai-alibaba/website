@@ -1,10 +1,25 @@
-# Retrieval Augmented Generation
+---
+title: RAG 检索组件与 Advisor
+description: 了解 Spring AI 模块化检索组件、数据接入和 Spring AI Alibaba 的 RAG 编排入口。
+---
 
-Retrieval Augmented Generation (RAG) 是一种有用的技术，用于克服大型语言模型的局限性，这些模型在处理长文本内容、事实准确性和上下文感知方面存在困难。
+# RAG 检索组件与 Advisor
 
-Spring AI 通过提供模块化架构支持 RAG，允许您自己构建自定义 RAG 流程，或使用 `Advisor` API 使用开箱即用的 RAG 流程。
+检索增强生成（RAG）在回答问题时把知识源中的相关证据提供给模型。Spring AI 提供统一的 `Query`、`Document` 和模块化检索 API。Spring AI Alibaba 在此基础上提供 Graph 和 Agent 编排，以及百炼等知识源集成。
 
-注意：在 [概念](https://docs.spring.io/spring-ai/reference/concepts.html#concept-rag) 部分了解更多关于 Retrieval Augmented Generation 的信息。
+## 从知识源到回答
+
+| 要解决的问题 | 接入方式 |
+| --- | --- |
+| 将应用文件建成可检索索引 | [ETL](etl-pipeline.md) 读取、解析和切分文档，通过[嵌入模型](embeddings.md)和 `VectorStore` 写入索引 |
+| 查询现有知识库或搜索服务 | 用 `DocumentRetriever` 把搜索结果映射为 Spring AI `Document`。已有百炼知识库可使用[百炼检索器](bailian-knowledge.md) |
+| 每次回答前固定检索 | 使用 [`QuestionAnswerAdvisor`](#questionansweradvisor) 或 [`RetrievalAugmentationAdvisor`](#retrievalaugmentationadvisor) |
+| 按证据质量决定重查、生成或拒答 | 用 [Graph 混合 RAG](/docs/frameworks/graph-core/examples/rag-workflow) 编排检索和条件边 |
+| 让 Agent 按任务选择搜索源或反复检索 | 将同一个检索器包装为 [Agent 工具](/docs/frameworks/agent-framework/advanced/rag#agentic-rag) |
+
+自建索引时，上传文档和在线问答是两个独立流程。现有托管知识库由平台负责索引和召回，同一个检索器可以用于 Advisor、Graph 节点和 Agent 工具。运行时保留来源、文档 ID 或切片 ID，以便把生成结果追溯到原始证据。
+
+[Spring AI RAG 参考](https://docs.spring.io/spring-ai/reference/api/retrieval-augmented-generation.html) · [两步、Agentic 与混合 RAG](/docs/frameworks/agent-framework/advanced/rag)
 
 ## Advisors
 
@@ -130,6 +145,8 @@ Spring AI 包含一个 [RAG 模块库](#modules)，您可以使用它来构建�
 </dependency>
 ```
 
+Advisor 依次转换问题、扩展查询、检索、合并、后处理并注入上下文。可用 `.call().chatClientResponse().context().get(RetrievalAugmentationAdvisor.DOCUMENT_CONTEXT)` 读取传给模型的文档。需要用户可见的引用时，在提示中提供可引用的 ID，并在响应后按实际命中校验。
+
 #### 顺序 RAG 流程
 
 ##### Naive RAG
@@ -222,7 +239,7 @@ String answer = chatClient.prompt()
 
 若配置 Redis `SemanticCacheAdvisor`，2.1 要求提供 `SemanticCacheScopeResolver`。自动配置只有在找到该解析器 Bean 时才会注册 Advisor。作用域应覆盖身份或租户、权限、系统提示和影响答案的知识库或检索配置。作用域为空时跳过缓存。有细粒度权限的请求可以绕过共享缓存，避免复用其他权限上下文的答案。参见 [Spring AI 2.1 升级说明](https://docs.spring.io/spring-ai/reference/upgrade-notes.html)。
 
-## Extensions 的 HyDE 与 Elasticsearch 混合检索
+## Extensions 的 HyDE 与 Elasticsearch 混合检索 {#extensions-hyde-hybrid-search}
 
 在 [版本对照](/docs/versions) 对应的 Extensions BOM 下添加 `com.alibaba.cloud.ai:spring-ai-alibaba-starter-rag`。Elasticsearch 存储与向量配置见 [Elasticsearch 接入](vectordbs/elasticsearch.md)。Extensions 2.0.3.0 的发布验证覆盖 Elasticsearch 9.4.9 检索。索引中的向量维度须与当前嵌入模型一致。
 
@@ -259,7 +276,18 @@ var documents = retriever.retrieve(query);
 
 ## Modules
 
-Spring AI 实现了一个模块化 RAG 架构，其灵感来自论文 "https://arxiv.org/abs/2407.21059[Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks]" 中详述的模块化概念。
+各模块可通过 Java API 单独调用，也可由 `RetrievalAugmentationAdvisor` 组合运行。
+
+| 阶段 | 接口 | 常用实现与用途 |
+| --- | --- | --- |
+| 查询转换 | `QueryTransformer` | 压缩对话、改写问题、翻译检索词 |
+| 扩展查询 | `QueryExpander` | `MultiQueryExpander` 产生多个查询，扩大覆盖范围 |
+| 检索 | `DocumentRetriever` | `VectorStoreDocumentRetriever`、百炼检索器，也可包装搜索或数据库查询 |
+| 合并 | `DocumentJoiner` | `ConcatenationDocumentJoiner` 按文档 ID 去重并按分数排序 |
+| 文档后处理 | `DocumentPostProcessor` | [Decision Model](decision-post-processors.md) 过滤、评分或重排，也可压缩上下文 |
+| 查询增强 | `QueryAugmenter` | `ContextualQueryAugmenter` 生成模型所需的上下文 |
+
+不同来源的分数尺度可能不同。跨源合并时可按排名融合或统一重排，给各来源保留可区分的文档 ID，便于去重和引用。
 
 ### Pre-Retrieval
 
@@ -396,12 +424,14 @@ List<Document> documents = retriever.retrieve(new Query("What are the KPIs for t
 您还可以通过 `Query` API 提供特定于请求的过滤表达式，使用 `FILTER_EXPRESSION` 参数。
 如果同时提供了特定于请求和特定于检索器的过滤表达式，则特定于请求的过滤表达式优先。
 
+多租户应用应由服务端将授权条件与业务条件组合，再放入请求上下文。Advisor 可以在线程池中运行检索。应用如果使用线程本地上下文读取身份，应确认执行器能传播该上下文，或直接传入根据授权生成的过滤表达式。
+
 ```java
 Query query = Query.builder()
     .text("Who is Anacletus?")
     .context(Map.of(VectorStoreDocumentRetriever.FILTER_EXPRESSION, "location == 'Whispering Woods'"))
     .build();
-List<Document> retrievedDocuments = documentRetriever.retrieve(query);
+List<Document> retrievedDocuments = retriever.retrieve(query);
 ```
 
 #### Document Join
