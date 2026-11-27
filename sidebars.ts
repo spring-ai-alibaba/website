@@ -17,6 +17,7 @@ const sidebars: SidebarsConfig = {
     'quick-start',
     'versions',
     'release-highlights',
+    'frameworks/multimodality',
     {
       type: 'category',
       label: 'Agent Framework',
@@ -28,6 +29,7 @@ const sidebars: SidebarsConfig = {
             'frameworks/agent-framework/tutorials/agents',
             'frameworks/agent-framework/tutorials/models',
             'frameworks/agent-framework/tutorials/messages',
+            'frameworks/agent-framework/tutorials/multimodality',
             'frameworks/agent-framework/tutorials/tools',
             'frameworks/agent-framework/tutorials/memory',
             'frameworks/agent-framework/tutorials/hooks',
@@ -72,6 +74,7 @@ const sidebars: SidebarsConfig = {
           label: '示例',
           items: [
             'frameworks/graph-core/examples/llm-streaming-springai',
+            'frameworks/graph-core/examples/multimodal-workflow',
             'frameworks/graph-core/examples/rag-workflow',
             'frameworks/graph-core/examples/review-loop',
             'frameworks/graph-core/examples/persistence',
