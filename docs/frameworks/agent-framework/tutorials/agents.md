@@ -369,11 +369,11 @@ AssistantMessage response = agent.call("你的问题", runnableConfig);`}
 
 #### 使用 outputType
 
-通过 Java 类定义输出结构，Agent 会自动生成对应的 JSON Schema：
+通过 Java 类定义输出结构。Agent 自动生成 JSON Schema，校验最终结果，并可直接返回 Java 对象。
 
 <Code
   language="java"
-  title="PoemOutput 结构化输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+  title="PoemOutput 结构化输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`public class PoemOutput {
     private String title;
@@ -398,18 +398,17 @@ ReactAgent agent = ReactAgent.builder()
     .saver(new MemorySaver())
     .build();
 
-AssistantMessage response = agent.call("写一首关于春天的诗");
-// 输出会遵循 PoemOutput 的结构
-System.out.println(response.getText());`}
+PoemOutput poem = agent.callStructured("写一首关于春天的诗", PoemOutput.class);
+System.out.println(poem.getTitle());`}
 </Code>
 
 #### 使用 outputSchema
 
-使用 `BeanOutputConverter` 生成输出 Schema，提供类型安全和自动 schema 生成：
+用 `outputSchema` 提供自定义 JSON Schema，搭配 `outputType` 校验到 Java 类型的转换。
 
 <Code
   language="java"
-  title="使用 outputSchema 自定义输出格式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+  title="使用 outputSchema 自定义输出格式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import org.springframework.ai.converter.BeanOutputConverter;
 
@@ -433,21 +432,21 @@ public static class TextAnalysisResult {
 
 // 使用 BeanOutputConverter 生成 outputSchema
 BeanOutputConverter<TextAnalysisResult> outputConverter = new BeanOutputConverter<>(TextAnalysisResult.class);
-String format = outputConverter.getFormat();
+String schema = outputConverter.getJsonSchema();
 
 ReactAgent agent = ReactAgent.builder()
     .name("analysis_agent")
     .model(chatModel)
-    .outputSchema(format)
+    .outputSchema(schema)
+    .outputType(TextAnalysisResult.class)
     .saver(new MemorySaver())
     .build();
 
-AssistantMessage response = agent.call("分析这段文本：春天来了，万物复苏。");`}
+TextAnalysisResult analysis = agent.callStructured(
+    "分析这段文本：春天来了，万物复苏。", TextAnalysisResult.class);`}
 </Code>
 
-**选择建议**：
-- `outputType`：类型安全，适合结构固定的场景（**推荐**）
-- `outputSchema`：使用 `BeanOutputConverter` 生成时提供类型安全，手动提供字符串时灵活性高，适合动态或复杂的输出格式
+默认优先使用模型原生 JSON Schema，按模型能力依次回退到工具调用和提示词。参见[结构化输出](./structured-output.md)。
 
 ### Memory（记忆）
 
