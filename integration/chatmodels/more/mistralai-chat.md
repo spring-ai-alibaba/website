@@ -118,31 +118,30 @@ dependencies {
 | spring.ai.model.chat | 启用 Mistral AI chat model。 | mistral |
 | spring.ai.mistralai.chat.base-url | 可选覆盖 `spring.ai.mistralai.base-url` 属性以提供 chat 特定的 URL。 | - |
 | spring.ai.mistralai.chat.api-key | 可选覆盖 `spring.ai.mistralai.api-key` 以提供 chat 特定的 API Key。 | - |
-| spring.ai.mistralai.chat.options.model | 要使用的 Mistral AI Chat model | `open-mistral-7b`、`open-mixtral-8x7b`、`open-mixtral-8x22b`、`mistral-small-latest`、`mistral-large-latest` |
-| spring.ai.mistralai.chat.options.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.8 |
-| spring.ai.mistralai.chat.options.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。 | - |
-| spring.ai.mistralai.chat.options.safePrompt | 指示是否在所有对话之前注入安全 prompt。 | false |
-| spring.ai.mistralai.chat.options.randomSeed | 此功能处于 Beta 阶段。如果指定，我们的系统将尽最大努力进行确定性采样，以便使用相同的 seed 和参数重复请求应返回相同的结果。 | - |
-| spring.ai.mistralai.chat.options.stop | 如果检测到此 token，则停止生成。或者在提供数组时检测到这些 tokens 之一。 | - |
-| spring.ai.mistralai.chat.options.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 top_p 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | - |
-| spring.ai.mistralai.chat.options.responseFormat | 指定模型必须输出的格式的对象。设置为 `{ "type": "json_object" }` 启用 JSON mode，这保证了模型生成的消息是有效的 JSON。 | - |
-| spring.ai.mistralai.chat.options.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
-| spring.ai.mistralai.chat.options.toolChoice | 控制模型调用哪个（如果有）function。`none` 意味着模型不会调用 function，而是生成消息。`auto` 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type: "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，`none` 是默认值。如果存在 functions，`auto` 是默认值。 | - |
-| spring.ai.mistralai.chat.options.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.mistralai.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.mistralai.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
+| spring.ai.mistralai.chat.model | 要使用的 Mistral AI Chat model | `open-mistral-7b`、`open-mixtral-8x7b`、`open-mixtral-8x22b`、`mistral-small-latest`、`mistral-large-latest` |
+| spring.ai.mistralai.chat.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.8 |
+| spring.ai.mistralai.chat.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。 | - |
+| spring.ai.mistralai.chat.safePrompt | 指示是否在所有对话之前注入安全 prompt。 | false |
+| spring.ai.mistralai.chat.randomSeed | 此功能处于 Beta 阶段。如果指定，我们的系统将尽最大努力进行确定性采样，以便使用相同的 seed 和参数重复请求应返回相同的结果。 | - |
+| spring.ai.mistralai.chat.stop | 如果检测到此 token，则停止生成。或者在提供数组时检测到这些 tokens 之一。 | - |
+| spring.ai.mistralai.chat.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 top_p 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | - |
+| spring.ai.mistralai.chat.responseFormat | 指定模型必须输出的格式的对象。设置为 `{ "type": "json_object" }` 启用 JSON mode，这保证了模型生成的消息是有效的 JSON。 | - |
+| spring.ai.mistralai.chat.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
+| spring.ai.mistralai.chat.toolChoice | 控制模型调用哪个（如果有）function。`none` 意味着模型不会调用 function，而是生成消息。`auto` 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type: "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，`none` 是默认值。如果存在 functions，`auto` 是默认值。 | - |
+| spring.ai.mistralai.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
+| spring.ai.mistralai.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
 
 > **注意：** 您可以为 `ChatModel` 和 `EmbeddingModel` 实现覆盖通用的 `spring.ai.mistralai.base-url` 和 `spring.ai.mistralai.api-key`。
 > 如果设置了 `spring.ai.mistralai.chat.base-url` 和 `spring.ai.mistralai.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 Mistral AI 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.mistralai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.mistralai.chat` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
 [MistralAiChatOptions.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-mistral-ai/src/main/java/org/springframework/ai/mistralai/MistralAiChatOptions.java) 提供模型配置，例如要使用的模型、temperature、frequency penalty 等。
 
-在启动时，可以使用 `MistralAiChatModel(api, options)` 构造函数或 `spring.ai.mistralai.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `MistralAiChatModel(api, options)` 构造函数或 `spring.ai.mistralai.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项。
 例如，要覆盖特定请求的默认模型和 temperature：
@@ -223,7 +222,7 @@ view of the fruit inside.
 ## OpenAI API Compatibility
 
 Mistral 与 OpenAI API 兼容，您可以使用 [Spring AI OpenAI](../openai-chat) 客户端与 Mistrial 通信。
-为此，您需要将 OpenAI base URL 配置为 Mistral AI 平台：`spring.ai.openai.chat.base-url=https://api.mistral.ai`，并选择 Mistral 模型：`spring.ai.openai.chat.options.model=mistral-small-latest` 并设置 Mistral AI API key：`spring.ai.openai.chat.api-key=<YOUR MISTRAL API KEY`。
+为此，您需要将 OpenAI base URL 配置为 Mistral AI 平台：`spring.ai.openai.chat.base-url=https://api.mistral.ai/v1`，并选择 Mistral 模型：`spring.ai.openai.chat.model=mistral-small-latest` 并设置 Mistral AI API key：`spring.ai.openai.chat.api-key=<YOUR MISTRAL API KEY`。
 
 查看 [MistralWithOpenAiChatModelIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/chat/proxy/MistralWithOpenAiChatModelIT.java) 测试以了解通过 Spring AI OpenAI 使用 Mistral 的示例。
 
@@ -235,8 +234,8 @@ Mistral 与 OpenAI API 兼容，您可以使用 [Spring AI OpenAI](../openai-cha
 
 ```properties
 spring.ai.mistralai.api-key=YOUR_API_KEY
-spring.ai.mistralai.chat.options.model=mistral-small
-spring.ai.mistralai.chat.options.temperature=0.7
+spring.ai.mistralai.chat.model=mistral-small
+spring.ai.mistralai.chat.temperature=0.7
 ```
 
 > **提示：** 将 `api-key` 替换为您的 Mistral AI 凭据。

@@ -108,11 +108,11 @@ dependencies {
 | Property | Description | Default |
 |----------|-------------|---------|
 | spring.ai.model.embedding.text | 启用 Google GenAI Embedding API 模型。 | google-genai |
-| spring.ai.google.genai.embedding.text.options.model | 要使用的 https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding[Google GenAI Text Embedding model]。支持的模型包括 `text-embedding-004` 和 `text-multilingual-embedding-002` | text-embedding-004 |
-| spring.ai.google.genai.embedding.text.options.task-type | 预期的下游应用程序，以帮助模型产生更高质量的 embeddings。可用的 link:https://ai.google.dev/api/embeddings#tasktype[task-types]：`RETRIEVAL_QUERY`、`RETRIEVAL_DOCUMENT`、`SEMANTIC_SIMILARITY`、`CLASSIFICATION`、`CLUSTERING`、`QUESTION_ANSWERING`、`FACT_VERIFICATION` | `RETRIEVAL_DOCUMENT` |
-| spring.ai.google.genai.embedding.text.options.title | 可选标题，仅在 task_type=RETRIEVAL_DOCUMENT 时有效。 | - |
-| spring.ai.google.genai.embedding.text.options.dimensions | 结果输出 embeddings 应具有的维度数。支持模型版本 004 及更高版本。您可以使用此参数来减少 embedding 大小，例如，用于存储优化。 | - |
-| spring.ai.google.genai.embedding.text.options.auto-truncate | 设置为 true 时，输入文本将被截断。设置为 false 时，如果输入文本长于模型支持的最大长度，则返回错误。 | true |
+| spring.ai.google.genai.embedding.text.model | 要使用的 https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding[Google GenAI Text Embedding model]。支持的模型包括 `text-embedding-004` 和 `text-multilingual-embedding-002` | text-embedding-004 |
+| spring.ai.google.genai.embedding.text.task-type | 预期的下游应用程序，以帮助模型产生更高质量的 embeddings。可用的 link:https://ai.google.dev/api/embeddings#tasktype[task-types]：`RETRIEVAL_QUERY`、`RETRIEVAL_DOCUMENT`、`SEMANTIC_SIMILARITY`、`CLASSIFICATION`、`CLUSTERING`、`QUESTION_ANSWERING`、`FACT_VERIFICATION` | `RETRIEVAL_DOCUMENT` |
+| spring.ai.google.genai.embedding.text.title | 可选标题，仅在 task_type=RETRIEVAL_DOCUMENT 时有效。 | - |
+| spring.ai.google.genai.embedding.text.dimensions | 结果输出 embeddings 应具有的维度数。支持模型版本 004 及更高版本。您可以使用此参数来减少 embedding 大小，例如，用于存储优化。 | - |
+| spring.ai.google.genai.embedding.text.auto-truncate | 设置为 true 时，输入文本将被截断。设置为 false 时，如果输入文本长于模型支持的最大长度，则返回错误。 | true |
 
 ## 示例 Controller
 
@@ -124,7 +124,7 @@ https://start.spring.io/[创建] 一个新的 Spring Boot 项目，并将 `sprin
 
 ```properties
 spring.ai.google.genai.embedding.api-key=YOUR_API_KEY
-spring.ai.google.genai.embedding.text.options.model=text-embedding-004
+spring.ai.google.genai.embedding.text.model=text-embedding-004
 ```
 
 ### 使用 Vertex AI
@@ -132,7 +132,7 @@ spring.ai.google.genai.embedding.text.options.model=text-embedding-004
 ```properties
 spring.ai.google.genai.embedding.project-id=YOUR_PROJECT_ID
 spring.ai.google.genai.embedding.location=YOUR_PROJECT_LOCATION
-spring.ai.google.genai.embedding.text.options.model=text-embedding-004
+spring.ai.google.genai.embedding.text.model=text-embedding-004
 ```
 
 这将创建一个 `GoogleGenAiTextEmbeddingModel` 实现，您可以将其注入到您的类中。

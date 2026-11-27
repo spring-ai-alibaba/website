@@ -203,7 +203,7 @@ EmbeddingResponse embeddingResponse = this.embeddingModel
 	.embedForResponse(List.of("Hello World")); // 注意 titan 不支持批量 embedding。
 ```
 
-## 低级 TitanEmbeddingBedrockApi 客户端
+## 低级 TitanEmbeddingBedrockApi 客户端 {#low-level-api}
 
 https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-bedrock/src/main/java/org/springframework/ai/bedrock/titan/api/TitanEmbeddingBedrockApi.java[TitanEmbeddingBedrockApi] 是在 AWS Bedrock https://docs.aws.amazon.com/bedrock/latest/userguide/titan-multiemb-models.html[Titan Embedding models] 之上的轻量级 Java 客户端。
 

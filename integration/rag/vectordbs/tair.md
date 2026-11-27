@@ -24,7 +24,7 @@
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-tair</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-tair</artifactId>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-tair'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-tair'
 }
 ```
 
@@ -98,12 +98,12 @@ spring:
 
 ## Manual Configuration
 
-不使用 Spring Boot auto-configuration，您可以手动配置 Tair 向量存储。为此，您需要将 `spring-ai-alibaba-starter-store-tair` 添加到您的项目：
+不使用 Spring Boot auto-configuration，您可以手动配置 Tair 向量存储。为此，您需要将 `spring-ai-alibaba-starter-vector-store-tair` 添加到您的项目：
 
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-tair</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-tair</artifactId>
 </dependency>
 ```
 
@@ -111,7 +111,7 @@ spring:
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-tair'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-tair'
 }
 ```
 

@@ -31,7 +31,7 @@ MCP Server Starter 提供：
 ```xml
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-mcp-server-spring-boot-starter</artifactId>
+    <artifactId>spring-ai-starter-mcp-server</artifactId>
 </dependency>
 ```
 

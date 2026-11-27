@@ -259,7 +259,7 @@ public class ClientHandlers {
 
         return CreateMessageResult.builder()
             .role(Role.ASSISTANT)
-            .content(new TextContent(response.getResult().getOutput().getContent()))
+            .content(new TextContent(response.getResult().getOutput().getText()))
             .model(request.modelPreferences().hints().get(0).name())
             .build();
     }
@@ -671,7 +671,7 @@ public class McpClientApplication {
         return args -> {
 
             ChatClient chatClient = ChatClient.builder(openAiChatModel)
-                    .defaultToolCallbacks(mcpToolProvider)
+                    .defaultTools(mcpToolProvider)
                     .build();
 
             String userQuestion = """

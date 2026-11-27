@@ -477,7 +477,7 @@ McpSyncClient client(
 
 ```java
 var chatResponse = chatClient.prompt("Prompt the LLM to do the thing")
-        .toolCallbacks(new SyncMcpToolCallbackProvider(mcpClient1, mcpClient2, mcpClient3))
+        .tools(new SyncMcpToolCallbackProvider(mcpClient1, mcpClient2, mcpClient3))
         .call()
         .content();
 ```

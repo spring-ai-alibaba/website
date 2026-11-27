@@ -26,7 +26,7 @@
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-oceanbase</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-oceanbase</artifactId>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-oceanbase'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-oceanbase'
 }
 ```
 
@@ -162,7 +162,7 @@ vectorStore.similaritySearch(SearchRequest.builder()
 
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-oceanbase</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-oceanbase</artifactId>
 </dependency>
 ```
 

@@ -28,7 +28,7 @@
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-tablestore</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-tablestore</artifactId>
 </dependency>
 ```
 
@@ -36,7 +36,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-tablestore'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-tablestore'
 }
 ```
 
@@ -104,12 +104,12 @@ vectorStore.similaritySearch(SearchRequest.builder()
 
 ## Manual Configuration
 
-不使用 Spring Boot auto-configuration，您可以手动配置 Tablestore 向量存储。为此，您需要将 `spring-ai-alibaba-starter-store-tablestore` 添加到您的项目：
+不使用 Spring Boot auto-configuration，您可以手动配置 Tablestore 向量存储。为此，您需要将 `spring-ai-alibaba-starter-vector-store-tablestore` 添加到您的项目：
 
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-tablestore</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-tablestore</artifactId>
 </dependency>
 ```
 
@@ -117,7 +117,7 @@ vectorStore.similaritySearch(SearchRequest.builder()
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-tablestore'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-tablestore'
 }
 ```
 

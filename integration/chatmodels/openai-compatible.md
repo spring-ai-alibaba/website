@@ -30,13 +30,14 @@ OpenAi API 兼容模型指的是提供了 OpenAI API 兼容的一系列大模型
     ```yaml
     spring:
       application:
-      name: spring-ai-alibaba-openai-compatible-chat-model-example
+        name: spring-ai-alibaba-openai-compatible-chat-model-example
 
       ai:
         openai:
           api-key: ${OPENAI_API_KEY}
           base-url: ${OPENAI_BASE_URL}
           chat:
+            api: chat-completions
             model: ${MODEL_NAME}
     ```
 
@@ -49,7 +50,7 @@ OpenAi API 兼容模型指的是提供了 OpenAI API 兼容的一系列大模型
 
     ```shell
     export OPENAI_API_KEY=your-api-key-get-from-dashscope
-    export OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode
+    export OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
     export MODEL_NAME=qwen-max
     ```
 

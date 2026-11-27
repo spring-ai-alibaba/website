@@ -602,7 +602,7 @@ public class McpConfiguration {
 
 ### Tool Context to MCP Meta Converter
 
-MCP Client Boot Starter 通过 `ToolContextToMcpMetaConverter` 接口支持将 Spring AI 的 [ToolContext](../toolcalls/tool-calls#_tool_context) 转换为 MCP 工具调用元数据的可自定义转换。
+MCP Client Boot Starter 通过 `ToolContextToMcpMetaConverter` 接口支持将 Spring AI 的 [ToolContext](../toolcalls/tool-calls#tool-context) 转换为 MCP 工具调用元数据的可自定义转换。
 此功能允许您将额外的上下文信息（例如用户 ID、密钥令牌）作为元数据与 LLM 生成的调用参数一起传递。
 
 例如，您可以将 MCP `progressToken` 传递到工具上下文中的 [MCP Progress Flow](https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress#progress-flow) 以跟踪长时间运行操作的进度：
@@ -851,4 +851,4 @@ spring:
 
 省略 `protocol` 的连接继续使用原有 Streamable HTTP。配置 `type: ASYNC` 使用异步客户端。两种客户端均支持 `listTools` 和 `callTool`。使用 SDK 时，Modern 类型位于 `io.modelcontextprotocol.modern.client`。启用 Modern 服务端时设置 `spring.ai.mcp.server.protocol=MODERN`，在同一部署中保留相应旧协议的服务入口。
 
-[Nacos 网关](nacos/nacos-gateway-mcp.md) · [Spring AI Modern MCP 客户端](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/mcp/client/modern.html)
+[Nacos 网关](nacos/nacos-gateway-mcp.md) · [Spring AI Modern MCP 客户端](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-client-boot-starter-docs.html)

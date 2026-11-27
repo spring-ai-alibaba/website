@@ -106,7 +106,7 @@ public class DistributedApplication {
 
         return args -> {
             var chatClient = chatClientBuilder
-                    .defaultToolCallbacks(toolCallbacks)
+                    .defaultTools(toolCallbacks)
                     .build();
 
             Scanner scanner = new Scanner(System.in);

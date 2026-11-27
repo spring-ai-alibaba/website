@@ -118,7 +118,6 @@ dependencies {
 | spring.ai.deepseek.chat.topLogprobs | 介于 0 和 20 之间的整数，指定在每个 token 位置返回的最可能的 tokens 数量，每个都有相关的 log probability。如果使用此参数，必须将 logprobs 设置为 true。 | - |
 | spring.ai.deepseek.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
 | spring.ai.deepseek.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.deepseek.chat.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
 > **注意：** 您可以为 `ChatModel` 实现覆盖通用的 `spring.ai.deepseek.base-url` 和 `spring.ai.deepseek.api-key`。
 > 如果设置了 `spring.ai.deepseek.chat.base-url` 和 `spring.ai.deepseek.chat.api-key` 属性，则优先于通用属性。

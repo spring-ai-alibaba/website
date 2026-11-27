@@ -23,6 +23,27 @@ Spring AI Alibaba 的 `ReactAgent.Builder` 通过 `outputSchema` 和 `outputType
     .build();`}
 </Code>
 
+## Spring AI ChatClient 的结构化结果
+
+对于普通 ChatClient，使用 `.call().entity(类型)` 将响应转换为 Java 对象。模型支持原生 JSON Schema 时，可以在单次调用上开启 `useProviderStructuredOutput()`。需要校验和自修复时，可组合 `validateSchema()`。
+
+```java
+import org.springframework.ai.chat.client.GuardrailRefusalException;
+
+try {
+    ContactInfo contact = chatClient.prompt("Extract the contact from: Ada, ada@example.com")
+        .call()
+        .entity(ContactInfo.class, spec -> spec.useProviderStructuredOutput().validateSchema());
+}
+catch (GuardrailRefusalException refusal) {
+    // Handle the policy refusal as an application outcome.
+}
+```
+
+Spring AI 2.1 把 Guardrail 拒答作为独立结果处理，`entity(...)` 遇到这种拒答会抛出 `GuardrailRefusalException`。格式校验失败可按策略重试，拒答沿应用的拒答流程处理。ReactAgent 的 `outputType(...)` 和 `outputSchema(...)` 适用于下文的 Graph 执行流程。
+
+[Spring AI 结构化输出](https://docs.spring.io/spring-ai/reference/api/structured-output.html) · [可运行的 StructuredOutputExample](https://github.com/alibaba/spring-ai-alibaba/blob/e01219fd20ecfff2dd9d1a1facfe58e5349c3e07/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java)
+
 ## 输出格式选项
 
 Spring AI Alibaba 支持两种方式控制结构化输出：

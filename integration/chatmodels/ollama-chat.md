@@ -80,7 +80,7 @@ Spring AI 为 Ollama chat 集成提供 Spring Boot auto-configuration。
 >
 > 此更改是为了允许配置多个模型。
 
-前缀 `spring.ai.ollama.chat.options` 是用于配置 Ollama chat model 的属性前缀。
+前缀 `spring.ai.ollama.chat` 是用于配置 Ollama chat model 的属性前缀。
 它包括 Ollama 请求（高级）参数，例如 `model`、`keep-alive` 和 `format`，以及 Ollama 模型 `options` 属性。
 
 以下是 Ollama chat model 的高级请求参数：
@@ -89,49 +89,48 @@ Spring AI 为 Ollama chat 集成提供 Spring Boot auto-configuration。
 |----------|-------------|---------|
 | spring.ai.ollama.chat.enabled (Removed and no longer valid) | 启用 Ollama chat model。 | true |
 | spring.ai.model.chat | 启用 Ollama chat model。 | ollama |
-| spring.ai.ollama.chat.options.model | 要使用的 [supported model](https://github.com/ollama/ollama?tab=readme-ov-file#model-library) 名称。 | mistral |
-| spring.ai.ollama.chat.options.format | 返回响应的格式。目前，唯一接受的值是 `json` | - |
-| spring.ai.ollama.chat.options.keep_alive | 控制模型在请求后保持在内存中的时间 | 5m |
+| spring.ai.ollama.chat.model | 要使用的 [supported model](https://github.com/ollama/ollama?tab=readme-ov-file#model-library) 名称。 | mistral |
+| spring.ai.ollama.chat.format | 返回响应的格式。目前，唯一接受的值是 `json` | - |
+| spring.ai.ollama.chat.keep_alive | 控制模型在请求后保持在内存中的时间 | 5m |
 
 其余的 `options` 属性基于 [Ollama Valid Parameters and Values](https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values) 和 [Ollama Types](https://github.com/ollama/ollama/blob/main/api/types.go)。默认值基于 [Ollama Types Defaults](https://github.com/ollama/ollama/blob/b538dc3858014f94b099730a592751a5454cab0a/api/types.go#L364)。
 
 | Property | Description | Default |
 |----------|-------------|---------|
-| spring.ai.ollama.chat.options.numa | 是否使用 NUMA。 | false |
-| spring.ai.ollama.chat.options.num-ctx | 设置用于生成下一个 token 的上下文窗口大小。 | 2048 |
-| spring.ai.ollama.chat.options.num-batch | Prompt 处理的最大批次大小。 | 512 |
-| spring.ai.ollama.chat.options.num-gpu | 要发送到 GPU(s) 的层数。在 macOS 上，默认值为 1 以启用 metal 支持，0 以禁用。这里的 1 表示 NumGPU 应该动态设置 | -1 |
-| spring.ai.ollama.chat.options.main-gpu | 使用多个 GPU 时，此选项控制哪个 GPU 用于小张量，对于这些张量，在所有 GPU 之间分割计算的开销是不值得的。有问题的 GPU 将使用稍多的 VRAM 来存储临时结果的暂存缓冲区。 | 0 |
-| spring.ai.ollama.chat.options.low-vram | - | false |
-| spring.ai.ollama.chat.options.f16-kv | - | true |
-| spring.ai.ollama.chat.options.logits-all | 返回所有 tokens 的 logits，而不仅仅是最后一个。要启用 completions 返回 logprobs，这必须为 true。 | - |
-| spring.ai.ollama.chat.options.vocab-only | 仅加载词汇表，不加载权重。 | - |
-| spring.ai.ollama.chat.options.use-mmap | 默认情况下，模型被映射到内存中，这允许系统根据需要仅加载模型的必要部分。但是，如果模型大于您的总 RAM 量，或者您的系统可用内存不足，使用 mmap 可能会增加页面输出的风险，从而对性能产生负面影响。禁用 mmap 会导致加载时间变慢，但如果您不使用 mlock，可能会减少页面输出。请注意，如果模型大于总 RAM 量，关闭 mmap 将完全阻止模型加载。 | null |
-| spring.ai.ollama.chat.options.use-mlock | 将模型锁定在内存中，防止在内存映射时被交换出去。这可以提高性能，但通过需要更多 RAM 来运行并可能减慢加载时间，因为模型加载到 RAM 中，从而牺牲了内存映射的一些优势。 | false |
-| spring.ai.ollama.chat.options.num-thread | 设置计算期间要使用的线程数。默认情况下，Ollama 会检测此值以获得最佳性能。建议将此值设置为系统具有的物理 CPU 核心数（而不是逻辑核心数）。0 = 让运行时决定 | 0 |
-| spring.ai.ollama.chat.options.num-keep | - | 4 |
-| spring.ai.ollama.chat.options.seed | 设置用于生成的随机数种子。将此设置为特定数字将使模型为相同的 prompt 生成相同的文本。 | -1 |
-| spring.ai.ollama.chat.options.num-predict | 生成文本时预测的最大 tokens 数。（-1 = 无限生成，-2 = 填充上下文） | -1 |
-| spring.ai.ollama.chat.options.top-k | 减少生成无意义的可能性。较高的值（例如，100）将提供更多样化的答案，而较低的值（例如，10）将更加保守。 | 40 |
-| spring.ai.ollama.chat.options.top-p | 与 top-k 一起工作。较高的值（例如，0.95）将导致更多样化的文本，而较低的值（例如，0.5）将生成更加聚焦和保守的文本。 | 0.9 |
-| spring.ai.ollama.chat.options.min-p | top_p 的替代方案，旨在确保质量和多样性的平衡。参数 p 表示 token 被考虑的最小概率，相对于最可能的 token 的概率。例如，p=0.05 且最可能的 token 的概率为 0.9，则值小于 0.045 的 logits 将被过滤掉。 | 0.0 |
-| spring.ai.ollama.chat.options.tfs-z | Tail-free sampling 用于减少输出中不太可能的 tokens 的影响。较高的值（例如，2.0）将减少影响更多，而值为 1.0 则禁用此设置。 | 1.0 |
-| spring.ai.ollama.chat.options.typical-p | - | 1.0 |
-| spring.ai.ollama.chat.options.repeat-last-n | 设置模型回看多远以防止重复。（默认值：64，0 = 禁用，-1 = num_ctx） | 64 |
-| spring.ai.ollama.chat.options.temperature | 模型的 temperature。增加 temperature 将使模型回答更具创造性。 | 0.8 |
-| spring.ai.ollama.chat.options.repeat-penalty | 设置对重复的惩罚强度。较高的值（例如，1.5）将更强烈地惩罚重复，而较低的值（例如，0.9）将更加宽松。 | 1.1 |
-| spring.ai.ollama.chat.options.presence-penalty | - | 0.0 |
-| spring.ai.ollama.chat.options.frequency-penalty | - | 0.0 |
-| spring.ai.ollama.chat.options.mirostat | 启用 Mirostat sampling 以控制困惑度。（默认值：0，0 = 禁用，1 = Mirostat，2 = Mirostat 2.0） | 0 |
-| spring.ai.ollama.chat.options.mirostat-tau | 控制输出的一致性和多样性之间的平衡。较低的值将导致更加聚焦和一致的文本。 | 5.0 |
-| spring.ai.ollama.chat.options.mirostat-eta | 影响算法对生成文本反馈的响应速度。较低的学习率将导致较慢的调整，而较高的学习率将使算法更具响应性。 | 0.1 |
-| spring.ai.ollama.chat.options.penalize-newline | - | true |
-| spring.ai.ollama.chat.options.stop | 设置要使用的停止序列。遇到此模式时，LLM 将停止生成文本并返回。可以通过在 modelfile 中指定多个单独的 stop 参数来设置多个停止模式。 | - |
-| spring.ai.ollama.chat.options.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.ollama.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.ollama.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
+| spring.ai.ollama.chat.numa | 是否使用 NUMA。 | false |
+| spring.ai.ollama.chat.num-ctx | 设置用于生成下一个 token 的上下文窗口大小。 | 2048 |
+| spring.ai.ollama.chat.num-batch | Prompt 处理的最大批次大小。 | 512 |
+| spring.ai.ollama.chat.num-gpu | 要发送到 GPU(s) 的层数。在 macOS 上，默认值为 1 以启用 metal 支持，0 以禁用。这里的 1 表示 NumGPU 应该动态设置 | -1 |
+| spring.ai.ollama.chat.main-gpu | 使用多个 GPU 时，此选项控制哪个 GPU 用于小张量，对于这些张量，在所有 GPU 之间分割计算的开销是不值得的。有问题的 GPU 将使用稍多的 VRAM 来存储临时结果的暂存缓冲区。 | 0 |
+| spring.ai.ollama.chat.low-vram | - | false |
+| spring.ai.ollama.chat.f16-kv | - | true |
+| spring.ai.ollama.chat.logits-all | 返回所有 tokens 的 logits，而不仅仅是最后一个。要启用 completions 返回 logprobs，这必须为 true。 | - |
+| spring.ai.ollama.chat.vocab-only | 仅加载词汇表，不加载权重。 | - |
+| spring.ai.ollama.chat.use-mmap | 默认情况下，模型被映射到内存中，这允许系统根据需要仅加载模型的必要部分。但是，如果模型大于您的总 RAM 量，或者您的系统可用内存不足，使用 mmap 可能会增加页面输出的风险，从而对性能产生负面影响。禁用 mmap 会导致加载时间变慢，但如果您不使用 mlock，可能会减少页面输出。请注意，如果模型大于总 RAM 量，关闭 mmap 将完全阻止模型加载。 | null |
+| spring.ai.ollama.chat.use-mlock | 将模型锁定在内存中，防止在内存映射时被交换出去。这可以提高性能，但通过需要更多 RAM 来运行并可能减慢加载时间，因为模型加载到 RAM 中，从而牺牲了内存映射的一些优势。 | false |
+| spring.ai.ollama.chat.num-thread | 设置计算期间要使用的线程数。默认情况下，Ollama 会检测此值以获得最佳性能。建议将此值设置为系统具有的物理 CPU 核心数（而不是逻辑核心数）。0 = 让运行时决定 | 0 |
+| spring.ai.ollama.chat.num-keep | - | 4 |
+| spring.ai.ollama.chat.seed | 设置用于生成的随机数种子。将此设置为特定数字将使模型为相同的 prompt 生成相同的文本。 | -1 |
+| spring.ai.ollama.chat.num-predict | 生成文本时预测的最大 tokens 数。（-1 = 无限生成，-2 = 填充上下文） | -1 |
+| spring.ai.ollama.chat.top-k | 减少生成无意义的可能性。较高的值（例如，100）将提供更多样化的答案，而较低的值（例如，10）将更加保守。 | 40 |
+| spring.ai.ollama.chat.top-p | 与 top-k 一起工作。较高的值（例如，0.95）将导致更多样化的文本，而较低的值（例如，0.5）将生成更加聚焦和保守的文本。 | 0.9 |
+| spring.ai.ollama.chat.min-p | top_p 的替代方案，旨在确保质量和多样性的平衡。参数 p 表示 token 被考虑的最小概率，相对于最可能的 token 的概率。例如，p=0.05 且最可能的 token 的概率为 0.9，则值小于 0.045 的 logits 将被过滤掉。 | 0.0 |
+| spring.ai.ollama.chat.tfs-z | Tail-free sampling 用于减少输出中不太可能的 tokens 的影响。较高的值（例如，2.0）将减少影响更多，而值为 1.0 则禁用此设置。 | 1.0 |
+| spring.ai.ollama.chat.typical-p | - | 1.0 |
+| spring.ai.ollama.chat.repeat-last-n | 设置模型回看多远以防止重复。（默认值：64，0 = 禁用，-1 = num_ctx） | 64 |
+| spring.ai.ollama.chat.temperature | 模型的 temperature。增加 temperature 将使模型回答更具创造性。 | 0.8 |
+| spring.ai.ollama.chat.repeat-penalty | 设置对重复的惩罚强度。较高的值（例如，1.5）将更强烈地惩罚重复，而较低的值（例如，0.9）将更加宽松。 | 1.1 |
+| spring.ai.ollama.chat.presence-penalty | - | 0.0 |
+| spring.ai.ollama.chat.frequency-penalty | - | 0.0 |
+| spring.ai.ollama.chat.mirostat | 启用 Mirostat sampling 以控制困惑度。（默认值：0，0 = 禁用，1 = Mirostat，2 = Mirostat 2.0） | 0 |
+| spring.ai.ollama.chat.mirostat-tau | 控制输出的一致性和多样性之间的平衡。较低的值将导致更加聚焦和一致的文本。 | 5.0 |
+| spring.ai.ollama.chat.mirostat-eta | 影响算法对生成文本反馈的响应速度。较低的学习率将导致较慢的调整，而较高的学习率将使算法更具响应性。 | 0.1 |
+| spring.ai.ollama.chat.penalize-newline | - | true |
+| spring.ai.ollama.chat.stop | 设置要使用的停止序列。遇到此模式时，LLM 将停止生成文本并返回。可以通过在 modelfile 中指定多个单独的 stop 参数来设置多个停止模式。 | - |
+| spring.ai.ollama.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
+| spring.ai.ollama.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
 
-> **提示：** 所有前缀为 `spring.ai.ollama.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.ollama.chat` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
@@ -139,7 +138,7 @@ Spring AI 为 Ollama chat 集成提供 Spring Boot auto-configuration。
 
 > **重要：** `OllamaOptions` 类已被弃用。对于 chat models 使用 `OllamaChatOptions`，对于 embedding models 使用 `OllamaEmbeddingOptions`。新类提供类型安全、模型特定的配置选项。
 
-在启动时，可以使用 `OllamaChatModel(api, options)` 构造函数或 `spring.ai.ollama.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `OllamaChatModel(api, options)` 构造函数或 `spring.ai.ollama.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项。
 例如，要覆盖特定请求的默认模型和 temperature：
@@ -248,7 +247,7 @@ ChatResponse response = chatModel.call(
 
 // Access the thinking process
 String thinking = response.getResult().getMetadata().get("thinking");
-String answer = response.getResult().getOutput().getContent();
+String answer = response.getResult().getOutput().getText();
 ```
 
 您也可以显式禁用 thinking：
@@ -320,7 +319,7 @@ System.out.println("Reasoning: " + thinking);
 // Output: "17 × 20 = 340, 17 × 3 = 51, 340 + 51 = 391"
 
 // Get the final answer
-String answer = response.getResult().getOutput().getContent();
+String answer = response.getResult().getOutput().getText();
 System.out.println("Answer: " + answer);
 // Output: "The answer is 391"
 ```
@@ -341,7 +340,7 @@ Flux<ChatResponse> stream = chatModel.stream(
 
 stream.subscribe(response -> {
     String thinking = response.getResult().getMetadata().get("thinking");
-    String content = response.getResult().getOutput().getContent();
+    String content = response.getResult().getOutput().getText();
 
     if (thinking != null && !thinking.isEmpty()) {
         System.out.println("[Thinking] " + thinking);
@@ -477,7 +476,7 @@ MathReasoning mathReasoning = this.outputConverter.convert(this.content);
 ## OpenAI API Compatibility
 
 Ollama 是 OpenAI API 兼容的，您可以使用 [Spring AI OpenAI](openai-chat) 客户端与 Ollama 通信并使用工具。
-为此，您需要将 OpenAI base URL 配置为您的 Ollama 实例：`spring.ai.openai.chat.base-url=http://localhost:11434` 并选择提供的 Ollama 模型之一：`spring.ai.openai.chat.options.model=mistral`。
+为此，您需要将 OpenAI base URL 配置为您的 Ollama 实例：`spring.ai.openai.chat.base-url=http://localhost:11434/v1` 并选择提供的 Ollama 模型之一：`spring.ai.openai.chat.model=mistral`。
 
 > **提示：** 使用 OpenAI 客户端与 Ollama 时，您可以使用 [extraBody option](openai-chat#openai-compatible-servers) 传递 Ollama 特定的参数（如 `top_k`、`repeat_penalty`、`num_predict`）。
 > 这允许您在 using OpenAI 客户端时利用 Ollama 的完整功能。
@@ -486,48 +485,29 @@ Ollama 是 OpenAI API 兼容的，您可以使用 [Spring AI OpenAI](openai-chat
 
 ### Reasoning Content via OpenAI Compatibility
 
-Ollama 的 OpenAI 兼容 endpoint 支持支持 thinking 的模型（如 `qwen3:*-thinking`、`deepseek-r1`、`deepseek-v3.1`）的 `reasoning_content` 字段。
-使用 Spring AI OpenAI 客户端与 Ollama 时，模型的推理过程会自动捕获并通过响应 metadata 提供。
-
-> **注意：** 这是使用 Ollama 原生 thinking mode API（在上面 【Thinking Mode (Reasoning)】 中记录）的替代方案。
-> 两种方法都适用于 Ollama 的 thinking 模型，但 OpenAI 兼容 endpoint 使用 `reasoning_content` 字段名称而不是 `thinking`。
-
-以下是通过 OpenAI 客户端从 Ollama 访问推理内容的示例：
+通过 Ollama 的 OpenAI 兼容端点使用已拉取的推理模型时，可直接配置 `OpenAiChatOptions`：
 
 ```java
-// Configure Spring AI OpenAI client to point to Ollama
-@Configuration
-class OllamaConfig {
-    @Bean
-    OpenAiChatModel ollamaChatModel() {
-        var openAiApi = new OpenAiApi("http://localhost:11434", "ollama");
-        return new OpenAiChatModel(openAiApi,
-            OpenAiChatOptions.builder()
-                .model("deepseek-r1")  // or qwen3, deepseek-v3.1, etc.
-                .build());
-    }
-}
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
 
-// Use the model with thinking-capable models
-ChatResponse response = chatModel.call(
-    new Prompt("How many letter 'r' are in the word 'strawberry'?"));
+var model = OpenAiChatModel.builder()
+        .options(OpenAiChatOptions.builder()
+                .baseUrl("http://localhost:11434/v1")
+                .apiKey("ollama")
+                .model("deepseek-r1")
+                .build())
+        .build();
 
-// Access the reasoning process from metadata
-String reasoning = response.getResult().getMetadata().get("reasoningContent");
-if (reasoning != null && !reasoning.isEmpty()) {
-    System.out.println("Model's reasoning process:");
-    System.out.println(reasoning);
-}
-
-// Get the final answer
-String answer = response.getResult().getOutput().getContent();
-System.out.println("Answer: " + answer);
+var message = model.call(new Prompt("How can I check this inventory count?"))
+        .getResult()
+        .getOutput();
+var reasoning = message.getReasoning();
+String answer = message.getText();
 ```
 
-> **提示：** Ollama 中支持 thinking 的模型（0.12+）在通过 OpenAI 兼容 endpoint 访问时自动启用 thinking mode。
-> 推理内容会自动捕获，无需额外配置。
-
-请查看 [OllamaWithOpenAiChatModelIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/chat/proxy/OllamaWithOpenAiChatModelIT.java) 测试，了解通过 Spring AI OpenAI 使用 Ollama 的示例。
+推理片段取决于兼容端点返回的字段。需要保留原生 Ollama 参数和推理特性时，使用原生 `OllamaChatModel`。
 
 ## HuggingFace Models
 
@@ -535,11 +515,11 @@ Ollama 可以开箱即用地访问所有 [GGUF Hugging Face](https://huggingface
 您可以通过名称拉取这些模型中的任何一个：`ollama pull hf.co/<username>/<model-repository>` 或配置自动拉取策略：[Auto-pulling Models](#auto-pulling-models)：
 
 ```properties
-spring.ai.ollama.chat.options.model=hf.co/bartowski/gemma-2-2b-it-GGUF
+spring.ai.ollama.chat.model=hf.co/bartowski/gemma-2-2b-it-GGUF
 spring.ai.ollama.init.pull-model-strategy=always
 ```
 
-- `spring.ai.ollama.chat.options.model`: 指定要使用的 [Hugging Face GGUF model](https://huggingface.co/models?library=gguf&sort=trending)。
+- `spring.ai.ollama.chat.model`: 指定要使用的 [Hugging Face GGUF model](https://huggingface.co/models?library=gguf&sort=trending)。
 - `spring.ai.ollama.init.pull-model-strategy=always`: （可选）在启动时启用自动模型拉取。
 > 对于生产，您应该预下载模型以避免延迟：`ollama pull hf.co/bartowski/gemma-2-2b-it-GGUF`。
 
@@ -555,9 +535,8 @@ spring:
     ollama:
       base-url: http://localhost:11434
       chat:
-        options:
-          model: mistral
-          temperature: 0.7
+        model: mistral
+        temperature: 0.7
 ```
 
 > **提示：** 将 `base-url` 替换为您的 Ollama 服务器 URL。

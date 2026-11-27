@@ -80,11 +80,11 @@ dependencies {
 |----------|-------------|---------|
 | spring.ai.vertex.ai.embedding.text.enabled (已移除且不再有效) | 启用 Vertex AI Embedding API 模型。 | true |
 | spring.ai.model.embedding.text | 启用 Vertex AI Embedding API 模型。 | vertexai |
-| spring.ai.vertex.ai.embedding.text.options.model | 这是要使用的 link:https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#supported-models[Vertex Text Embedding model] | text-embedding-004 |
-| spring.ai.vertex.ai.embedding.text.options.task-type | 预期的下游应用程序，以帮助模型产生更高质量的 embeddings。可用的 link:https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#request_body[task-types] | `RETRIEVAL_DOCUMENT` |
-| spring.ai.vertex.ai.embedding.text.options.title | 可选标题，仅在 task_type=RETRIEVAL_DOCUMENT 时有效。 | - |
-| spring.ai.vertex.ai.embedding.text.options.dimensions | 结果输出 embeddings 应具有的维度数。支持模型版本 004 及更高版本。您可以使用此参数来减少 embedding 大小，例如，用于存储优化。 | - |
-| spring.ai.vertex.ai.embedding.text.options.auto-truncate | 设置为 true 时，输入文本将被截断。设置为 false 时，如果输入文本长于模型支持的最大长度，则返回错误。 | true |
+| spring.ai.vertex.ai.embedding.text.model | 这是要使用的 link:https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#supported-models[Vertex Text Embedding model] | text-embedding-004 |
+| spring.ai.vertex.ai.embedding.text.task-type | 预期的下游应用程序，以帮助模型产生更高质量的 embeddings。可用的 link:https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#request_body[task-types] | `RETRIEVAL_DOCUMENT` |
+| spring.ai.vertex.ai.embedding.text.title | 可选标题，仅在 task_type=RETRIEVAL_DOCUMENT 时有效。 | - |
+| spring.ai.vertex.ai.embedding.text.dimensions | 结果输出 embeddings 应具有的维度数。支持模型版本 004 及更高版本。您可以使用此参数来减少 embedding 大小，例如，用于存储优化。 | - |
+| spring.ai.vertex.ai.embedding.text.auto-truncate | 设置为 true 时，输入文本将被截断。设置为 false 时，如果输入文本长于模型支持的最大长度，则返回错误。 | true |
 
 ## 示例 Controller
 
@@ -95,7 +95,7 @@ https://start.spring.io/[创建] 一个新的 Spring Boot 项目，并将 `sprin
 ```properties
 spring.ai.vertex.ai.embedding.project-id=<YOUR_PROJECT_ID>
 spring.ai.vertex.ai.embedding.location=<YOUR_PROJECT_LOCATION>
-spring.ai.vertex.ai.embedding.text.options.model=text-embedding-004
+spring.ai.vertex.ai.embedding.text.model=text-embedding-004
 ```
 
 这将创建一个 `VertexAiTextEmbeddingModel` 实现，您可以将其注入到您的类中。

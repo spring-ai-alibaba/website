@@ -88,11 +88,11 @@ dependencies {
 |----------|-------------|---------|
 | spring.ai.vertex.ai.embedding.multimodal.enabled (已移除且不再有效) | 启用 Vertex AI Embedding API 模型。 | true |
 | spring.ai.model.embedding.multimodal=vertexai | 启用 Vertex AI Embedding API 模型。 | vertexai |
-| spring.ai.vertex.ai.embedding.multimodal.options.model | 您可以使用以下模型获取多模态 embeddings： | multimodalembedding@001 |
-| spring.ai.vertex.ai.embedding.multimodal.options.dimensions | 指定较低维度的 embeddings。默认情况下，embedding 请求为数据类型返回 1408 个浮点向量。您还可以为文本和图像数据指定较低维度的 embeddings（128、256 或 512 个浮点向量）。 | 1408 |
-| spring.ai.vertex.ai.embedding.multimodal.options.video-start-offset-sec | 视频段的开始偏移（以秒为单位）。如果未指定，则使用 max(0, endOffsetSec - 120) 计算。 | - |
-| spring.ai.vertex.ai.embedding.multimodal.options.video-end-offset-sec | 视频段的结束偏移（以秒为单位）。如果未指定，则使用 min(video length, startOffSec + 120) 计算。如果同时指定了 startOffSec 和 endOffSec，则 endOffsetSec 调整为 min(startOffsetSec+120, endOffsetSec)。 | - |
-| spring.ai.vertex.ai.embedding.multimodal.options.video-interval-sec | 将生成 embedding 的视频间隔。interval_sec 的最小值为 4。如果间隔小于 4，则返回 InvalidArgumentError。间隔的最大值没有限制。但是，如果间隔大于 min(video length, 120s)，则会影响生成的 embeddings 的质量。默认值：16。 | - |
+| spring.ai.vertex.ai.embedding.multimodal.model | 您可以使用以下模型获取多模态 embeddings： | multimodalembedding@001 |
+| spring.ai.vertex.ai.embedding.multimodal.dimensions | 指定较低维度的 embeddings。默认情况下，embedding 请求为数据类型返回 1408 个浮点向量。您还可以为文本和图像数据指定较低维度的 embeddings（128、256 或 512 个浮点向量）。 | 1408 |
+| spring.ai.vertex.ai.embedding.multimodal.video-start-offset-sec | 视频段的开始偏移（以秒为单位）。如果未指定，则使用 max(0, endOffsetSec - 120) 计算。 | - |
+| spring.ai.vertex.ai.embedding.multimodal.video-end-offset-sec | 视频段的结束偏移（以秒为单位）。如果未指定，则使用 min(video length, startOffSec + 120) 计算。如果同时指定了 startOffSec 和 endOffSec，则 endOffsetSec 调整为 min(startOffsetSec+120, endOffsetSec)。 | - |
+| spring.ai.vertex.ai.embedding.multimodal.video-interval-sec | 将生成 embedding 的视频间隔。interval_sec 的最小值为 4。如果间隔小于 4，则返回 InvalidArgumentError。间隔的最大值没有限制。但是，如果间隔大于 min(video length, 120s)，则会影响生成的 embeddings 的质量。默认值：16。 | - |
 
 ## 手动配置
 

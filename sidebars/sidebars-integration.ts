@@ -17,12 +17,15 @@ const sidebars: SidebarsConfig = {
         'chatmodels/gemini-chat',
         'chatmodels/ollama-chat',
         'chatmodels/openai-chat',
+        'chatmodels/openai-responses',
+        'chatmodels/moderation',
         'chatmodels/openai-compatible',
         'chatmodels/qwq',
         {
           type: 'category',
           label: 'More',
           items: [
+            'chatmodels/more/anthropic-chat',
             'chatmodels/more/azure-openai-chat',
             'chatmodels/more/bedrock-converse',
             'chatmodels/more/dmr-chat',
@@ -48,12 +51,14 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    'decision-models/overview',
     {
       type: 'category',
       label: 'Multimodals',
       items: [
         'multimodals/multimodality',
         'multimodals/dashscope-multimodal',
+        'multimodals/google-genai',
         {
           type: 'category',
           label: 'Audio',
@@ -99,6 +104,7 @@ const sidebars: SidebarsConfig = {
       label: 'RAG',
       items: [
         'rag/retrieval-augmented-generation',
+        'rag/decision-post-processors',
         'rag/bailian-knowledge',
         'rag/etl-pipeline',
         'rag/document-readers',
@@ -138,6 +144,7 @@ const sidebars: SidebarsConfig = {
           label: 'Vector Databases',
           items: [
             'rag/vectordbs/precomputed-embeddings',
+            'rag/vectordbs/managed-vector-services',
             'rag/vectordbs/analyticdb',
             'rag/vectordbs/elasticsearch',
             'rag/vectordbs/milvus',
@@ -181,6 +188,7 @@ const sidebars: SidebarsConfig = {
         'mcps/mcp-security',
         'mcps/mcp-client-boot-starter-docs',
         'mcps/mcp-server-boot-starter-docs',
+        'mcps/mcp-modern-server-boot-starter-docs',
         'mcps/mcp-stateless-server-boot-starter-docs',
         'mcps/mcp-stdio-sse-server-boot-starter-docs',
         'mcps/mcp-streamable-http-server-boot-starter-docs',
@@ -225,6 +233,7 @@ const sidebars: SidebarsConfig = {
       label: 'Tool Calls',
       items: [
         'toolcalls/tool-calls',
+        'toolcalls/tool-search',
       ],
     },
   ],

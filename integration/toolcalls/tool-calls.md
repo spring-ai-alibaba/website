@@ -34,7 +34,7 @@ Extensions 2.1.0.0 的 `DashScopeAsyncToolCallingManager` 和 ARMS 集成使用�
 ```java
 ChatResponse reply = chatClient.prompt()
     .user(question)
-    .toolCallbacks(lookupCallback)
+    .tools(lookupCallback)
     .call()
     .chatResponse();
 ```
@@ -147,7 +147,7 @@ public class PythonToolService {
     public String executeCalculation(String question) {
         // 创建 ChatClient 并添加 Python Tool
         ChatClient chatClient = ChatClient.builder(chatModel)
-            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
 
         // 使用工具进行对话
@@ -164,6 +164,8 @@ public class PythonToolService {
 
 ```java
 import com.alibaba.cloud.ai.agent.python.tool.PythonTool;
+import java.util.Map;
+
 import org.springframework.ai.chat.model.ToolContext;
 
 public class DirectPythonToolUsage {
@@ -175,7 +177,7 @@ public class DirectPythonToolUsage {
         PythonTool.PythonRequest request = new PythonTool.PythonRequest("2 + 2");
         
         // 执行 Python 代码
-        String result = pythonTool.apply(request, new ToolContext());
+        String result = pythonTool.apply(request, new ToolContext(Map.of()));
         
         System.out.println("Result: " + result); // 输出: Result: 4
     }
@@ -195,7 +197,7 @@ public class ComplexCalculationExample {
 
     public ComplexCalculationExample(ChatModel chatModel, PythonTool pythonTool) {
         this.chatClient = ChatClient.builder(chatModel)
-            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
     }
 
@@ -218,13 +220,15 @@ public class ComplexCalculationExample {
 
 ```java
 import com.alibaba.cloud.ai.agent.python.tool.PythonTool;
+import java.util.Map;
+
 import org.springframework.ai.chat.model.ToolContext;
 
 public class StringProcessingExample {
 
     public void processStrings() {
         PythonTool pythonTool = new PythonTool();
-        ToolContext toolContext = new ToolContext();
+        ToolContext toolContext = new ToolContext(Map.of());
 
         // 字符串连接
         PythonTool.PythonRequest request1 = new PythonTool.PythonRequest(
@@ -267,7 +271,7 @@ public class PythonToolAgent {
     @Autowired
     public PythonToolAgent(ChatModel chatModel, PythonTool pythonTool) {
         this.chatClient = ChatClient.builder(chatModel)
-            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
     }
 
@@ -319,7 +323,7 @@ public class MultiToolExample {
         TimeTool timeTool = new TimeTool();
 
         return ChatClient.builder(chatModel)
-            .toolCallbacks(
+            .tools(
                 pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION),
                 timeTool.createTimeToolCallback(TimeTool.DESCRIPTION)
             )
@@ -380,7 +384,7 @@ public class PythonToolAgentService {
 
     public PythonToolAgentService(ChatModel chatModel, PythonTool pythonTool) {
         this.chatClient = ChatClient.builder(chatModel)
-            .toolCallbacks(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
+            .tools(pythonTool.createPythonToolCallback(PythonTool.DESCRIPTION))
             .build();
     }
 
@@ -468,12 +472,16 @@ public class PythonToolAgentService {
 
 1. **添加依赖**：在 `pom.xml` 或 `build.gradle` 中添加相应的依赖
 2. **自动配置**：大多数工具都支持 Spring Boot 自动配置，会自动注册为 `ToolCallback`
-3. **在 ChatClient 中使用**：用 `prompt().toolCallbacks(...)` 为当前请求绑定回调，或用 `builder().defaultToolCallbacks(...)` 在当前客户端注册默认回调
+3. **在 ChatClient 中使用**：用 `prompt().tools(...)` 为当前请求绑定回调，或用 `builder().defaultTools(...)` 在当前客户端注册默认回调
 4. **AI 模型调用**：AI 模型会根据对话内容自动决定是否调用工具
 
 ### 通用接口
 
 使用 `ToolCallback` 时，通过 `getToolDefinition()` 读取工具定义，`call(String toolInput)` 执行 JSON 参数。需要运行时上下文的实现可以重写 `call(String toolInput, ToolContext toolContext)`。普通方法可以使用 `@Tool`，函数或自定义回调可以使用 `FunctionToolCallback`。
+
+### ToolContext {#tool-context}
+
+通过 `ChatClient.toolContext(Map<String, Object>)` 传递请求级的应用上下文，例如调用方标识或权限数据。有上下文参数的工具可以接收 `ToolContext`，并通过 `getContext()` 读取。应用上下文用于工具执行，MCP 客户端可按配置选择将其中部分信息映射到请求元数据。
 
 ### 配置说明
 

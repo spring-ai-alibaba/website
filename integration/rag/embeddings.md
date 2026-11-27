@@ -152,6 +152,6 @@ public class Embedding implements ModelResult<float[]> {
 }
 ```
 
-## Available Implementations [[available-implementations]]
+## Available Implementations {#available-implementations}
 
 Internally the various `EmbeddingModel` implementations use different low-level libraries and APIs to perform the embedding tasks. The following are some of the available implementations of the `EmbeddingModel` implementations:

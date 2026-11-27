@@ -78,17 +78,17 @@ Spring AI 通过以下 Spring Boot starters 提供 MCP 集成：
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [SSE WebMVC](mcp-stdio-sse-server-boot-starter-docs#_sse_webmvc_serve) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=SSE` or empty |
-| [Streamable-HTTP WebMVC](mcp-streamable-http-server-boot-starter-docs#_streamable_http_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STREAMABLE` |
-| [Stateless Streamable-HTTP WebMVC](mcp-stateless-server-boot-starter-docs#_stateless_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STATELESS` |
+| [SSE WebMVC](mcp-stdio-sse-server-boot-starter-docs#sse-webmvc-server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=SSE` or empty |
+| [Streamable-HTTP WebMVC](mcp-streamable-http-server-boot-starter-docs#streamable-http-webmvc-server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STREAMABLE` |
+| [Stateless Streamable-HTTP WebMVC](mcp-stateless-server-boot-starter-docs#stateless-webmvc-server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STATELESS` |
 
 #### WebMVC (Reactive)
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [SSE WebFlux](mcp-stdio-sse-server-boot-starter-docs#_sse_webflux_serve) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=SSE` or empty |
-| [Streamable-HTTP WebFlux](mcp-streamable-http-server-boot-starter-docs#_streamable_http_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
-| [Stateless Streamable-HTTP WebFlux](mcp-stateless-server-boot-starter-docs#_stateless_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
+| [SSE WebFlux](mcp-stdio-sse-server-boot-starter-docs#sse-webflux-server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=SSE` or empty |
+| [Streamable-HTTP WebFlux](mcp-streamable-http-server-boot-starter-docs#streamable-http-webflux-server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
+| [Stateless Streamable-HTTP WebFlux](mcp-stateless-server-boot-starter-docs#stateless-webflux-server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
 
 ## [Spring AI MCP Annotations](annotations/mcp-annotations-overview)
 

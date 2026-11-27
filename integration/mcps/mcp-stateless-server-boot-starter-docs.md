@@ -5,7 +5,7 @@ Stateless Streamable-HTTP MCP 服务器专为简化部署而设计，在请求�
 
 > **提示：** 设置 `spring.ai.mcp.server.protocol=STATELESS` 属性
 
-> **提示：** 使用 [Streamable-HTTP clients](mcp-client-boot-starter-docs#_streamable_http_transport_properties) 连接到无状态服务器。
+> **提示：** 使用 [Streamable-HTTP clients](mcp-client-boot-starter-docs#streamable-http-transport-properties) 连接到无状态服务器。
 
 **注意：** 无状态服务器不支持向 MCP 客户端发送消息请求（例如，elicitation、sampling、ping）。
 

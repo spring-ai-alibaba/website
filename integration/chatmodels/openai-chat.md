@@ -157,7 +157,6 @@ Spring AI 自动向 OpenAI 发送带有 `User-Agent: spring-ai` header 的所有
 | spring.ai.openai.chat.http-headers | 要添加到 chat completion 请求的可选 HTTP headers。要覆盖 `api-key`，您需要使用 `Authorization` header key，并且必须在 key 值前加上 `Bearer` 前缀。 | - |
 | spring.ai.openai.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
 | spring.ai.openai.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.openai.chat.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 | spring.ai.openai.chat.service-tier | 指定用于服务请求的 [processing type](https://platform.openai.com/docs/api-reference/responses/create#responses_create-service_tier)。 | - |
 | spring.ai.openai.chat.extra-body | 要包含在请求中的其他参数。接受任何键值对，这些键值对被展平到 JSON 请求的顶层。用于与支持标准 OpenAI API 之外参数的 OpenAI 兼容服务器（vLLM、Ollama 等）一起使用。官方 OpenAI API 会忽略未知参数。有关详细信息，请参阅 【openai-compatible-servers】。 | - |
 
@@ -355,7 +354,7 @@ ChatResponse response = chatModel.call(new Prompt(List.of(userMessage),
             .outputAudio(new AudioParameters(Voice.ALLOY, AudioResponseFormat.WAV))
             .build()));
 
-String text = response.getResult().getOutput().getContent(); // audio transcript
+String text = response.getResult().getOutput().getText(); // audio transcript
 
 byte[] waveAudio = response.getResult().getOutput().getMedia().get(0).getDataAsByteArray(); // audio data
 ```
@@ -443,7 +442,7 @@ Prompt prompt = new Prompt("how can I solve 8x + 7 = -23",
             .build());
 
 ChatResponse response = this.openAiChatModel.call(this.prompt);
-String content = this.response.getResult().getOutput().getContent();
+String content = this.response.getResult().getOutput().getText();
 
 MathReasoning mathReasoning = this.outputConverter.convert(this.content);
 ```
@@ -530,9 +529,9 @@ Spring AI 2.x 的 `spring-ai-openai` 模块使用 OpenAI Java SDK。升级使用
 
 文件上传和管理直接调用 OpenAI Java SDK 的文件接口。
 
-[OpenAI Java SDK](https://github.com/openai/openai-java) · [Spring AI 2.0 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/spring-ai-2-0.html)
+[OpenAI Java SDK](https://github.com/openai/openai-java) · [Spring AI 2.0 迁移](https://docs.spring.io/spring-ai/reference/upgrade-notes.html)
 
-## Using Extra Parameters with OpenAI-Compatible Servers [[openai-compatible-servers]]
+## Using Extra Parameters with OpenAI-Compatible Servers {#openai-compatible-servers}
 
 OpenAI 兼容的推理服务器（如 vLLM、Ollama 等）通常支持标准 OpenAI API 定义之外的其他参数。
 例如，这些服务器可能接受 `top_k`、`repetition_penalty` 或其他官方 OpenAI API 不认识的采样控制参数。
@@ -633,22 +632,8 @@ ChatResponse response = chatModel.call(new Prompt("Generate text", options));
 
 使用返回推理内容的兼容提供商时，可从 `response.getResult().getOutput().getReasoning()` 读取 `ReasoningPart`。流式处理或保存历史时保留 `getParts()` 的顺序和提供商数据。对拒绝历史推理字段的服务可设置 `spring.ai.openai.chat.replay-reasoning-content=false`。
 
-[Spring AI OpenAI Chat 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/integrations/models/openai/chat.html)
+[Spring AI OpenAI Chat 参考](https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html)
 
 ## Responses API
 
-Spring AI 2.1 可在同一个 OpenAI starter 中选择 Responses API。应用继续注入 `ChatModel` 或 `ChatClient.Builder`，底层使用 `OpenAiResponsesChatModel`。
-
-```yaml
-spring:
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY}
-      chat:
-        api: responses
-        model: gpt-5-mini
-```
-
-Responses API 支持提供商托管工具和加密推理回放。在多轮请求间保留消息部分及其不透明负载。如果正在接入 OpenAI 兼容服务，请确认其实现的 API，Chat Completions 仍为默认模式。
-
-[Spring AI OpenAI Responses](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/integrations/models/openai/responses.html)
+Spring AI 2.1 在同一个 OpenAI starter 中提供 Responses。切换端点、选择模型与保留推理片段的用法见 [OpenAI Responses API](openai-responses.md)。

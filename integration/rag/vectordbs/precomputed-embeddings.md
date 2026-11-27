@@ -1,11 +1,11 @@
 ---
 title: 预计算向量
-description: 将已有嵌入向量写入五种阿里云向量库，并直接执行向量相似度检索。
+description: 将已有嵌入向量写入支持的 Spring AI 和 Alibaba Extensions 向量库，并直接检索。
 ---
 
 # 写入与检索预计算向量
 
-Extensions 2.1.0.0 支持在 [AnalyticDB](analyticdb.md)、[OceanBase](oceanbase.md)、[阿里云 OpenSearch](opensearch.md)、[Tablestore](more/tablestore.md) 和 [Tair](tair.md) 中使用预计算的向量。适用于离线批处理或由外部服务统一生成嵌入的场景。
+Spring AI 2.1 的 `VectorStore` 提供预计算向量写入和检索接口。Extensions 2.1.0.0 支持在 [AnalyticDB](analyticdb.md)、[OceanBase](oceanbase.md)、[阿里云 OpenSearch](opensearch.md)、[Tablestore](more/tablestore.md) 和 [Tair](tair.md) 中使用预计算的向量。适用于离线批处理或由外部服务统一生成嵌入的场景。
 
 ```java
 import org.springframework.ai.document.Document;
@@ -25,6 +25,14 @@ var matches = vectorStore.similaritySearch(
 - 文档向量和查询向量应来自同一嵌入模型及版本，以便计算有意义的相似度。
 - `SearchRequest` 负责设置 Top K、阈值和后端支持的元数据过滤。查询向量由单独的 `float[]` 参数提供。
 - 两条预计算路径直接使用传入向量，跳过 `EmbeddingModel` 推理。文本 `add` 和文本 `similaritySearch` 继续使用配置的嵌入模型。
+
+## Spring AI 2.1 后端
+
+Spring AI 2.1.0 支持预计算写入与检索的后端包括 Chroma、Couchbase、Elasticsearch、MariaDB、MongoDB Atlas、Neo4j、OpenSearch、PgVector、Qdrant、Redis 和 Typesense。Spring AI 的 OpenSearch 与 Extensions 的阿里云 OpenSearch 使用各自的适配器。其他后端依实现而定，调用前核对支持的操作。
+
+`upsert` 按文档标识插入或更新。若使用外部批处理更新文档，应复用业务文档 ID。若采用 [RAG 检索 Advisor](../retrieval-augmented-generation.md)，可在自定义 `DocumentRetriever` 中使用查询向量。
+
+[Spring AI 2.1 向量存储参考](https://docs.spring.io/spring-ai/reference/api/vectordbs.html)
 
 ## 对齐后端索引维度
 

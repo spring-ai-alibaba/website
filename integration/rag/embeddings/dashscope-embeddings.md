@@ -119,9 +119,9 @@ dependencies {
 | spring.ai.dashscope.embedding.api-key | 可选覆盖 `spring.ai.dashscope.api-key` 以提供 embedding 特定的 api-key | - |
 | spring.ai.dashscope.embedding.work-space-id | 可选地，您可以指定用于 API 请求的工作空间 ID。 | - |
 | spring.ai.dashscope.embedding.metadata-mode | 文档内容提取模式。 | EMBED |
-| spring.ai.dashscope.embedding.options.model | 要使用的模型。可用模型：`text-embedding-v2`（默认）、`text-embedding-v1`、`text-embedding-v3`、`text-embedding-v4`、`qwen2.5-vl-embedding`、`tongyi-embedding-vision-plus` | text-embedding-v2 |
-| spring.ai.dashscope.embedding.options.text-type | 文本类型。可以是 `query` 或 `document`。用于区分查询文本和文档文本，以优化 embedding 质量 | document |
-| spring.ai.dashscope.embedding.options.dimensions | 结果输出 embeddings 应具有的维度数。不同模型支持不同的维度：`text-embedding-v3` 支持 1,024（默认）、768、512、256、128 或 64；`text-embedding-v4` 支持 2,048、1,536、1,024（默认）、768、512、256、128 或 64 | - |
+| spring.ai.dashscope.embedding.model | 要使用的模型。可用模型：`text-embedding-v2`、`text-embedding-v1`、`text-embedding-v3`（默认）、`text-embedding-v4`、`qwen2.5-vl-embedding`、`tongyi-embedding-vision-plus` | text-embedding-v3 |
+| spring.ai.dashscope.embedding.text-type | 文本类型。可以是 `query` 或 `document`。用于区分查询文本和文档文本，以优化 embedding 质量 | document |
+| spring.ai.dashscope.embedding.dimensions | 结果输出 embeddings 应具有的维度数。不同模型支持不同的维度：`text-embedding-v3` 支持 1,024（默认）、768、512、256、128 或 64；`text-embedding-v4` 支持 2,048、1,536、1,024（默认）、768、512、256、128 或 64 | - |
 
 注意：您可以为 `ChatModel` 和 `EmbeddingModel` 实现覆盖通用的 `spring.ai.dashscope.base-url` 和 `spring.ai.dashscope.api-key`。
 如果设置了 `spring.ai.dashscope.embedding.base-url` 和 `spring.ai.dashscope.embedding.api-key` 属性，它们优先于通用属性。
@@ -158,7 +158,7 @@ EmbeddingResponse embeddingResponse = embeddingModel.call(
 
 ```properties
 spring.ai.dashscope.api-key=YOUR_API_KEY
-spring.ai.dashscope.embedding.options.model=text-embedding-v2
+spring.ai.dashscope.embedding.model=text-embedding-v2
 ```
 
 ```java
