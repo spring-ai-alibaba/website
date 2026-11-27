@@ -1,756 +1,118 @@
 ---
-title: Memory 短期记忆
-description: 了解如何使用短期记忆让Agent记住先前交互，管理对话历史和线程级持久化
-keywords: [短期记忆, Short-term Memory, 对话历史, 线程, Thread, Checkpointer, 会话管理, 上下文窗口]
+title: 会话记忆
+description: 使用 Spring AI 2.1 Session Memory 管理多轮对话、工具历史、压缩和召回，区分 Graph checkpoint。
+keywords: [Session Memory, ChatMemory, SessionService, ChatClient, ReactAgent, Checkpoint]
 ---
 
-## 概述
+# 会话记忆
 
-记忆可以让 Agent 记住之前的会话内容。对于 AI Agent，记忆至关重要，因为它让它们能够记住先前的交互、从反馈中学习并适应用户偏好。随着 Agent 处理更复杂的任务和大量用户交互，这种能力对于效率和用户满意度都变得至关重要。
+Spring AI 2.1 的 Session API 用事件日志记录多轮对话。应用在每个请求中传入会话 ID，`SessionMemoryAdvisor` 读取可用于当前推理的历史并保存新消息，`SessionTurnAdvisor` 记录轮次并负责可选的上下文压缩。新会话可从 Session API 开始，Spring AI 2.1 已将 `ChatMemory` 和 `ChatMemoryRepository` 标记为废弃，已有应用可按迁移指南逐步升级。
 
-短期记忆让你的应用程序能够在单个线程或会话中记住先前的交互。
+| 组件 | 保存什么 |
+| --- | --- |
+| Spring AI Session Memory | 会话、消息、工具交换以及压缩等事件 |
+| Alibaba Graph checkpoint | 工作流状态、执行位置、暂停与恢复所需信息 |
+| 应用长期存储或知识库 | 跨会话的业务数据和可检索知识 |
 
-> **注意**：会话可以隔离同一个 Agent 实例中的多个不同交互，类似于电子邮件在单个对话中分组消息的方式。
+[Spring AI Session API](https://docs.spring.io/spring-ai/reference/api/session.html)
 
-## 理解 ReactAgent 中的短期记忆
-Spring AI Alibaba 将短期记忆作为 Agent 状态的一部分进行管理。
+## 让 ChatClient 记住同一会话
 
+用 Spring AI 2.1 的 BOM 对齐 `org.springframework.ai:spring-ai-session-advisor`。该模块集成了 ChatClient Advisor 和 Session API。下例使用内存仓库，适合在开发环境验证多轮对话。
 
-通过将这些存储在 Graph 的状态中，Agent 可以访问给定对话的完整上下文，同时保持不同对话之间的分离。状态使用 checkpointer 持久化到数据库（或内存），以便可以随时恢复线程。短期记忆在调用 Agent 或完成步骤（如工具调用）时更新，并在每个步骤开始时读取状态。
+```java
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.session.DefaultSessionService;
+import org.springframework.ai.session.InMemorySessionRepository;
+import org.springframework.ai.session.advisor.SessionAdvisors;
 
-## 记忆带来的上下文过长问题
-保留所有对话历史是实现短期记忆最常见的形式。但较长的对话对历史可能会导致大模型 LLM 上下文窗口超限，导致上下文丢失或报错。
+var repository = InMemorySessionRepository.builder().build();
+var service = DefaultSessionService.builder().sessionRepository(repository).build();
 
-即使你在使用的大模型上下文长度足够大，大多数模型在处理较长上下文时的表现仍然很差。因为很多模型会被过时或偏离主题的内容"分散注意力"。同时，过长的上下文，还会带来响应时间变长、Token 成本增加等问题。
+var client = ChatClient.builder(chatModel)
+    .defaultAdvisors(SessionAdvisors.builder(service).build())
+    .build();
 
-在 Spring AI ALibaba 中，ReactAgent 使用 [messages](./messages.md) 记录和传递上下文，其中包括指令（SystemMessage）和输入（UserMessage）。在 ReactAgent 中，消息（Message）在用户输入和模型响应之间交替，导致消息列表随着时间的推移变得越来越长。由于上下文窗口有限，许多应用程序可以从使用技术来移除或"忘记"过时信息中受益，即 “上下文工程”。
+client.prompt("My project is Atlas.")
+    .advisors(SessionAdvisors.session(sessionId))
+    .call()
+    .chatResponse();
 
+var reply = client.prompt("What is my project?")
+    .advisors(SessionAdvisors.session(sessionId))
+    .call()
+    .chatResponse();
+```
 
-## 使用方法
+在同一对话的请求中复用会话 ID，应用应验证会话归属后再将 ID 交给 Advisor。发送当前请求的新消息即可，Advisor 会载入先前历史。启动前保存在系统配置中的指令、业务状态和长期知识，可通过独立的应用逻辑提供。
 
-在 Spring AI Alibaba 中，要向 Agent 添加短期记忆（会话级持久化），你需要在创建 Agent 时指定 `checkpointer`。
+## 工具历史和 Session 事件
 
-<Code
-  language="java"
-  title="配置短期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+`SessionService.getMessages(sessionId)` 读取消息历史，`getActiveMessages(sessionId)` 读取压缩后用于推理的视图，`getEvents(sessionId)` 还包括轮次与压缩事件。工具回复应保存完整 [Message Parts](messages.md#读取与保留-message-parts)。
 
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
+使用默认的 `SessionAdvisors` 组合时，记忆 Advisor 位于 Spring AI 工具循环内，能够保存模型与工具的每次交换。若应用显式创建 `ToolCallingAdvisor` 并让记忆负责重建历史，可用 `.disableInternalConversationHistory()` 让工具循环交由记忆维护上下文。
 
-// 配置 checkpointer
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
+工具暂停后，从会话存储取得当前轮的消息和工具结果，并附上原请求授权的回调，交给工具管理器执行审批决定。恢复 ChatClient 时只提交新产生的结果消息，并复用同一会话 ID。见 [调用确认与恢复](tools.md#调用确认与恢复)。
+
+## 压缩与召回
+
+会话历史较长时，可以按完结轮次触发压缩。窗口策略把最近的轮次保留在活跃视图中，适合避免把长历史全部传给模型。旧事件可供应用搜索或按保留策略管理。
+
+```java
+import org.springframework.ai.session.compaction.TurnCountTrigger;
+import org.springframework.ai.session.compaction.WindowCompactionStrategy;
+import org.springframework.ai.session.tool.SessionRecallTools;
+
+var memoryAdvisors = SessionAdvisors.builder(service)
+    .compaction(new TurnCountTrigger(20),
+        WindowCompactionStrategy.builder().lastTurns(10).build())
+    .sessionIdInToolContext(true)
+    .build();
+
+var client = ChatClient.builder(chatModel)
+    .defaultAdvisors(memoryAdvisors)
+    .defaultTools(SessionRecallTools.builder(service).build())
+    .build();
+```
+
+`conversation_search` 提供当前会话的关键词检索，适用于召回已离开活跃窗口的信息。上例通过 Turn Advisor 传递已验证的会话 ID，工具可从 `ToolContext` 读取。也可以只在需要召回的请求显式传入工具上下文。启用前应考虑所有可能接收该上下文的工具。
+
+[轮次与压缩](https://docs.spring.io/spring-ai/reference/api/session/compaction.html) · [会话召回](https://docs.spring.io/spring-ai/reference/api/session/recall.html)
+
+## 持久化与 ChatMemory 迁移
+
+Spring Boot 应用可用 `spring-ai-starter-model-session-jdbc` 和配置好的 `DataSource` 持久化事件，按数据库和环境初始化会话表，再注入 `SessionService`。内存示例在进程重启后会丢失历史。
+
+迁移既有对话时，确定旧 `conversationId` 到新 `sessionId` 的映射，并明确并行读写阶段的归属。使用 Alibaba Extensions 的情况下，可调用 `LegacyChatMemorySessionImporter.importConversation(repository, conversationId, target)`，其中 `target` 是带显式 ID 的 `CreateSessionRequest`。同一来源和目标可重试导入。应用应核对消息顺序、工具结果和会话归属，再切换流量。
+
+[JDBC Session Repository](https://docs.spring.io/spring-ai/reference/api/session/jdbc.html) · [ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/api/chat-memory.html) · [Extensions 会话导入](https://github.com/spring-ai-alibaba/spring-ai-extensions/tree/v2.1.0.0#chatmemory)
+
+## ReactAgent 的 Graph checkpoint
+
+`ReactAgent` 可用 `MemorySaver` 做进程内 checkpoint。用同一 `threadId` 继续同一工作流，生产持久化可选项目支持的外部 Saver。对工具审批、恢复执行和其他工作流状态，同样使用 Graph 的线程和 checkpoint。
+
+```java
+var agent = ReactAgent.builder()
+    .name("project-agent")
     .model(chatModel)
-    .tools(getUserInfoTool)
     .saver(new MemorySaver())
     .build();
 
-// 使用 thread_id 维护对话上下文
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("1") // threadId 指定会话 ID
-    .build();
-
-agent.call("你好！我叫 Bob。", config);`}
-</Code>
-
-### 在生产环境中
-
-在生产环境中，使用数据库支持的 checkpointer：
-
-**示例：使用 Redis Checkpointer**：
-
-<Code
-  language="java"
-  title="使用 Redis Checkpointer 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.checkpoint.savers.RedisSaver;
-import org.redisson.api.RedissonClient;
-
-// 配置 Redis checkpointer
-RedisSaver redisSaver = new RedisSaver(redissonClient);
-
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .tools(getUserInfoTool)
-    .saver(redisSaver)
-    .build();`}
-</Code>
-
-## 自定义 Agent 记忆
-
-默认情况下，Agent 使用状态通过 `messages` 键管理短期记忆，特别是对话历史。
-
-你可以通过在工具或 Hook 中访问和修改状态来扩展记忆功能。
-
-<Code
-  language="java"
-  title="自定义记忆 Hook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.OverAllState;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.Message;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-
-// 在 Hook 中访问和修改状态
-public class CustomMemoryHook extends ModelHook {
-
-    @Override
-    public String getName() {
-        return "custom_memory";
-    }
-
-    @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        // 访问消息历史
-        Optional<Object> messagesOpt = state.value("messages");
-        if (messagesOpt.isPresent()) {
-            List<Message> messages = (List<Message>) messagesOpt.get();
-            // 处理消息...
-        }
-
-        // 添加自定义状态
-        return CompletableFuture.completedFuture(Map.of(
-            "user_id", "user_123",
-            "preferences", Map.of("theme", "dark")
-        ));
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        return CompletableFuture.completedFuture(Map.of());
-    }
-}`}
-</Code>
-
-## 常见模式
-
-启用[短期记忆](#使用方法)后，长对话可能超过 LLM 的上下文窗口。常见的解决方案包括：
-
-* 修剪消息。在调用 LLM 之前移除前 N 条或后 N 条消息
-* 删除消息。从 Graph 状态中永久删除消息
-* 总结消息。总结历史中较早的消息并用摘要替换它们
-* 自定义策略。自定义策略（例如消息过滤等）
-
-这允许 Agent 在 reasoning-acting 循环中持续跟踪对话而不超过 LLM 的上下文窗口。
-
-### 修剪消息
-
-大多数 LLM 都有最大支持的上下文窗口（以 token 计）。
-
-决定何时截断消息的一种方法是计算消息历史中的 token 数量，并在接近该限制时进行截断。
-
-要在 Agent 中修剪消息历史，请使用 `MessagesModelHook`：
-
-<Code
-  language="java"
-  title="MessageTrimmingHook 修剪消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.Message;
-import java.util.ArrayList;
-import java.util.List;
-
-@HookPositions({HookPosition.BEFORE_MODEL})
-public class MessageTrimmingHook extends MessagesModelHook {
-
-    private static final int MAX_MESSAGES = 3;
-
-    @Override
-    public String getName() {
-        return "message_trimming";
-    }
-
-    @Override
-    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
-        if (previousMessages.size() <= MAX_MESSAGES) {
-            return new AgentCommand(previousMessages); // 无需更改
-        }
-
-        // 保留第一条消息和最后几条消息
-        Message firstMsg = previousMessages.get(0);
-        int keepCount = previousMessages.size() % 2 == 0 ? 3 : 4;
-        List<Message> recentMessages = previousMessages.subList(
-            previousMessages.size() - keepCount,
-            previousMessages.size()
-        );
-
-        List<Message> trimmedMessages = new ArrayList<>();
-        trimmedMessages.add(firstMsg);
-        trimmedMessages.addAll(recentMessages);
-
-        // 使用 REPLACE 策略替换消息列表，只保留需要的消息
-        return new AgentCommand(trimmedMessages, UpdatePolicy.REPLACE);
-    }
-}
-
-// 使用
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .tools(tools)
-    .hooks(new MessageTrimmingHook())
-    .saver(new MemorySaver())
-    .build();
-
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("1")
-    .build();
-
-agent.call("你好，我叫 bob", config);
-agent.call("写一首关于猫的短诗", config);
-agent.call("现在对狗做同样的事情", config);
-AssistantMessage finalResponse = agent.call("我叫什么名字？", config);
-
-System.out.println(finalResponse.getText());
-// 输出：你的名字是 Bob。你之前告诉我的。`}
-</Code>
-
-### 删除消息
-
-你可以从 Graph 状态中删除消息以管理消息历史。
-
-这在你想要删除特定消息或清除整个消息历史时很有用。
-
-要从 Graph 状态中删除消息，你可以在 Hook 中返回新的消息列表：
-
-<Code
-  language="java"
-  title="MessageDeletionHook 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.Message;
-import java.util.List;
-
-@HookPositions({HookPosition.AFTER_MODEL})
-public class MessageDeletionHook extends MessagesModelHook {
-
-    @Override
-    public String getName() {
-        return "message_deletion";
-    }
-
-    @Override
-    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
-        if (previousMessages.size() > 2) {
-            // 删除最早的两条消息，只保留剩余的消息
-            List<Message> remainingMessages = previousMessages.subList(2, previousMessages.size());
-            return new AgentCommand(remainingMessages, UpdatePolicy.REPLACE);
-        }
-
-        return new AgentCommand(previousMessages);
-    }
-}`}
-</Code>
-
-**删除所有消息**：
-
-<Code
-  language="java"
-  title="ClearAllMessagesHook 删除所有消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.Message;
-import java.util.ArrayList;
-import java.util.List;
-
-@HookPositions({HookPosition.AFTER_MODEL})
-public class ClearAllMessagesHook extends MessagesModelHook {
-
-    @Override
-    public String getName() {
-        return "clear_all_messages";
-    }
-
-    @Override
-    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
-        // 删除所有消息，返回空列表
-        return new AgentCommand(new ArrayList<>(), UpdatePolicy.REPLACE);
-    }
-}`}
-</Code>
-
-**警告**：删除消息时，**确保**生成的消息历史有效。检查你使用的 LLM 提供商的限制。例如：
-
-* 某些提供商期望消息历史以 `user` 消息开始
-* 大多数提供商要求带有工具调用的 `assistant` 消息后跟相应的 `tool` 结果消息
-
-<Code
-  language="java"
-  title="DeleteOldMessagesHook 删除旧消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.Message;
-import java.util.List;
-
-@HookPositions({HookPosition.AFTER_MODEL})
-public class DeleteOldMessagesHook extends MessagesModelHook {
-
-    @Override
-    public String getName() {
-        return "delete_old_messages";
-    }
-
-    @Override
-    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
-        if (previousMessages.size() > 2) {
-            // 删除最早的两条消息，只保留剩余的消息
-            List<Message> remainingMessages = previousMessages.subList(2, previousMessages.size());
-            return new AgentCommand(remainingMessages, UpdatePolicy.REPLACE);
-        }
-
-        return new AgentCommand(previousMessages);
-    }
-}
-
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .systemPrompt("请简洁明了。")
-    .hooks(new DeleteOldMessagesHook())
-    .saver(new MemorySaver())
-    .build();
-
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("1")
-    .build();
-
-// 第一次调用
-agent.call("你好！我是 bob", config);
-// 输出：[('human', "你好！我是 bob"), ('assistant', '你好 Bob！很高兴见到你...')]
-
-// 第二次调用
-agent.call("我叫什么名字？", config);
-// 输出：[('human', "我叫什么名字？"), ('assistant', '你的名字是 Bob...')]`}
-</Code>
-
-### 总结消息
-
-如上所示，修剪或删除消息的问题在于你可能会丢失消息队列淘汰的信息。因此，一些应用程序受益于使用聊天模型总结消息历史的更复杂方法。
-
-要在 Agent 中总结消息历史，可以使用自定义 Hook：
-
-<Code
-  language="java"
-  title="MessageSummarizationHook 总结消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import java.util.ArrayList;
-import java.util.List;
-
-@HookPositions({HookPosition.BEFORE_MODEL})
-public class MessageSummarizationHook extends MessagesModelHook {
-
-    private final ChatModel summaryModel;
-    private final int maxTokensBeforeSummary;
-    private final int messagesToKeep;
-
-    public MessageSummarizationHook(
-        ChatModel summaryModel,
-        int maxTokensBeforeSummary,
-        int messagesToKeep
-    ) {
-        this.summaryModel = summaryModel;
-        this.maxTokensBeforeSummary = maxTokensBeforeSummary;
-        this.messagesToKeep = messagesToKeep;
-    }
-
-    @Override
-    public String getName() {
-        return "message_summarization";
-    }
-
-    @Override
-    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
-        // 估算 token 数量（简化版）
-        int estimatedTokens = previousMessages.stream()
-            .mapToInt(m -> m.getText().length() / 4)
-            .sum();
-
-        if (estimatedTokens < maxTokensBeforeSummary) {
-            return new AgentCommand(previousMessages);
-        }
-
-        // 需要总结
-        int messagesToSummarize = previousMessages.size() - messagesToKeep;
-        if (messagesToSummarize <= 0) {
-            return new AgentCommand(previousMessages);
-        }
-
-        List<Message> oldMessages = previousMessages.subList(0, messagesToSummarize);
-        List<Message> recentMessages = previousMessages.subList(messagesToSummarize, previousMessages.size());
-
-        // 生成摘要
-        String summary = generateSummary(oldMessages);
-
-        // 创建摘要消息
-        SystemMessage summaryMessage = new SystemMessage(
-            "## 之前对话摘要:\n" + summary
-        );
-
-        // 构建新的消息列表：摘要消息 + 保留的最近消息
-        List<Message> newMessages = new ArrayList<>();
-        newMessages.add(summaryMessage);
-        newMessages.addAll(recentMessages);
-
-        // 使用 REPLACE 策略替换消息列表
-        return new AgentCommand(newMessages, UpdatePolicy.REPLACE);
-    }
-
-    private String generateSummary(List<Message> messages) {
-        StringBuilder conversation = new StringBuilder();
-        for (Message msg : messages) {
-            conversation.append(msg.getMessageType())
-                      .append(": ")
-                      .append(msg.getText())
-                      .append("\n");
-        }
-
-        String summaryPrompt = "请简要总结以下对话:\n\n" + conversation;
-
-        ChatResponse response = summaryModel.call(
-            new Prompt(new UserMessage(summaryPrompt))
-        );
-
-        return response.getResult().getOutput().getText();
-    }
-}
-
-// 使用
-ChatModel summaryModel = // ... 用于总结的模型（可以是更便宜的模型）
-
-MessageSummarizationHook summarizationHook = new MessageSummarizationHook(
-    summaryModel,
-    4000,  // 在 4000 tokens 时触发总结
-    20     // 总结后保留最后 20 条消息
-);
-
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .hooks(summarizationHook)
-    .saver(new MemorySaver())
-    .build();
-
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("1")
-    .build();
-
-agent.call("你好，我叫 bob", config);
-agent.call("写一首关于猫的短诗", config);
-agent.call("现在对狗做同样的事情", config);
-AssistantMessage finalResponse = agent.call("我叫什么名字？", config);
-
-System.out.println(finalResponse.getText());
-// 输出：你的名字是 Bob！`}
-</Code>
-
-## 访问记忆
-
-你可以通过多种方式访问和修改 Agent 的短期记忆（状态）：
-
-### 工具
-
-#### 在工具中读取短期记忆
-
-使用 `ToolContext` 参数在工具中访问短期记忆（状态）。
-
-`toolContext` 参数从工具签名中隐藏（因此模型看不到它），但工具可以通过它访问状态。
-
-<Code
-  language="java"
-  title="在工具中读取短期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.function.FunctionToolCallback;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import java.util.function.BiFunction;
-
-public class UserInfoTool implements BiFunction<String, ToolContext, String> {
-
-    @Override
-    public String apply(String query, ToolContext toolContext) {
-        // 从上下文中获取用户信息
-        RunnableConfig config = (RunnableConfig) toolContext.getContext().get("config");
-        String userId = (String) config.metadata("user_id").orElse("");
-
-        if ("user_123".equals(userId)) {
-            return "用户是 John Smith";
-        } else {
-            return "未知用户";
-        }
-    }
-}
-
-// 创建工具
-ToolCallback getUserInfoTool = FunctionToolCallback
-    .builder("get_user_info", new UserInfoTool())
-    .description("查找用户信息")
-    .inputType(String.class)
-    .build();
-
-// 使用
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .tools(getUserInfoTool)
-    .saver(new MemorySaver())
-    .build();
-
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("1")
-    .addMetadata("user_id", "user_123")
-    .build();
-
-AssistantMessage response = agent.call("获取用户信息", config);
-System.out.println(response.getText());`}
-</Code>
-
-#### 从工具写入短期记忆
-
-要在执行期间修改 Agent 的短期记忆（状态），你可以在 Hook 中更新状态，或者使用工具返回的信息更新状态。
-
-这对于持久化中间结果或使信息对后续工具或提示可访问很有用。
-
-### 提示
-
-在 Hook 中访问短期记忆（状态）以基于对话历史或自定义状态字段创建动态提示。
-
-<Code
-  language="java"
-  title="DynamicPromptInterceptor 动态提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
-import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
-import com.alibaba.cloud.ai.graph.agent.interceptor.ModelResponse;
-import com.alibaba.cloud.ai.graph.agent.interceptor.ModelCallHandler;
-
-public class DynamicPromptInterceptor extends ModelInterceptor {
-
-    @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
-        // 从上下文中获取用户名
-        Map<String, Object> context = request.getContext();
-        String userName = (String) context.get("user_name");
-
-        // 创建动态系统提示
-        String systemPrompt = "你是一个有帮助的助手。称呼用户为 " + userName + "。";
-
-        // 创建修改后的请求（示例），实际使用中需要根据具体 API 进行调整
-		SystemMessage enhancedSystemMessage;
-		if (request.getSystemMessage() == null) {
-			enhancedSystemMessage = new SystemMessage(systemPrompt);
-		} else {
-			enhancedSystemMessage = new SystemMessage(request.getSystemMessage().getText() + "\n\n" + systemPrompt);
-		}
-
-		// Create enhanced request
-		ModelRequest enhancedRequest = ModelRequest.builder(request)
-				.systemMessage(enhancedSystemMessage)
-				.build();
-
-        return handler.call(enhancedRequest);
-    }
-
-    @Override
-    public String getName() {
-        return "DynamicPromptInterceptor";
-    }
-}
-
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .tools(getWeatherTool)
-    .interceptors(new DynamicPromptInterceptor())
-    .build();
-
-// 使用时传递上下文
-Map<String, Object> context = Map.of("user_name", "John Smith");`}
-</Code>
-
-### Before Model
-
-在 `beforeModel` Hook 中访问短期记忆（状态）以在模型调用之前处理消息。
-
-<Code
-  language="java"
-  title="TrimMessagesHook Before Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.Message;
-import java.util.ArrayList;
-import java.util.List;
-
-@HookPositions({HookPosition.BEFORE_MODEL})
-public class TrimMessagesHook extends MessagesModelHook {
-
-    @Override
-    public String getName() {
-        return "trim_messages";
-    }
-
-    @Override
-    public AgentCommand beforeModel(List<Message> previousMessages, RunnableConfig config) {
-        if (previousMessages.size() <= 3) {
-            return new AgentCommand(previousMessages); // 无需更改
-        }
-
-        // 保留第一条和最后几条消息
-        Message firstMsg = previousMessages.get(0);
-        List<Message> recentMessages = previousMessages.subList(
-            previousMessages.size() - 3,
-            previousMessages.size()
-        );
-
-        List<Message> trimmedMessages = new ArrayList<>();
-        trimmedMessages.add(firstMsg);
-        trimmedMessages.addAll(recentMessages);
-
-        // 使用 REPLACE 策略替换消息列表，只保留需要的消息
-        return new AgentCommand(trimmedMessages, UpdatePolicy.REPLACE);
-    }
-}
-
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .tools(tools)
-    .hooks(new TrimMessagesHook())
-    .saver(new MemorySaver())
-    .build();`}
-</Code>
-
-### After Model
-
-在 `afterModel` Hook 中访问短期记忆（状态）以在模型调用之后处理消息。
-
-<Code
-  language="java"
-  title="ValidateResponseHook After Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
-import com.alibaba.cloud.ai.graph.agent.hook.messages.UpdatePolicy;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.Message;
-import java.util.ArrayList;
-import java.util.List;
-
-@HookPositions({HookPosition.AFTER_MODEL})
-public class ValidateResponseHook extends MessagesModelHook {
-
-    private static final List<String> STOP_WORDS =
-        List.of("password", "secret", "api_key");
-
-    @Override
-    public String getName() {
-        return "validate_response";
-    }
-
-    @Override
-    public AgentCommand afterModel(List<Message> previousMessages, RunnableConfig config) {
-        if (previousMessages.isEmpty()) {
-            return new AgentCommand(previousMessages);
-        }
-
-        Message lastMessage = previousMessages.get(previousMessages.size() - 1);
-        String content = lastMessage.getText();
-
-        // 检查是否包含敏感词
-        for (String stopWord : STOP_WORDS) {
-            if (content.toLowerCase().contains(stopWord)) {
-                // 移除包含敏感词的消息，替换为安全消息
-                List<Message> filtered = new ArrayList<>(
-                    previousMessages.subList(0, previousMessages.size() - 1)
-                );
-                filtered.add(new AssistantMessage("抱歉，我无法提供该信息。"));
-                return new AgentCommand(filtered, UpdatePolicy.REPLACE);
-            }
-        }
-
-        return new AgentCommand(previousMessages);
-    }
-}
-
-ReactAgent agent = ReactAgent.builder()
-    .name("secure_agent")
-    .model(chatModel)
-    .hooks(new ValidateResponseHook())
-    .saver(new MemorySaver())
-    .build();`}
-</Code>
-
-## 相关资源
-
-* [Agents 文档](./agents.md) - 了解 ReactAgent 的核心概念
-* [Hooks 和 Interceptors](./hooks.md) - 了解如何扩展 Agent 功能
-* [Messages 文档](./messages.md) - 了解消息类型和使用
+var config = RunnableConfig.builder().threadId(threadId).build();
+agent.call("My project is Atlas.", config);
+var reply = agent.call("What is my project?", config);
+```
+
+需裁剪、总结或编辑 Agent 状态时，用 Graph 支持的消息 Hook 和状态更新规则。对工具消息应保持调用及对应结果完整。详见 [Agent 记忆与上下文管理](../advanced/memory.md)。
 
 ## 在 LlmNode 中使用 Session Memory
 
-Spring AI 2.1 将 `ChatMemory` 和 `ChatMemoryRepository` 标记为废弃。构建新会话时，可使用 Session API 保存有序的消息、工具事件和压缩记录。Graph checkpoint 继续负责工作流状态和恢复位置，模型会话由 `SessionService` 管理。
+在 Graph 的模型节点里可显式启用 Spring AI 会话历史。将当前问题和非空会话 ID 提前写入 Graph state，并为后续轮次复用已验证的会话 ID。
 
 ```java
 import com.alibaba.cloud.ai.graph.node.LlmNode;
-import org.springframework.ai.session.SessionService;
 
-// sessionService 由应用提供，conversationId 在进入该节点前写入 Graph state。
-LlmNode node = LlmNode.builder()
+var node = LlmNode.builder()
     .chatClient(chatClient)
     .userPromptTemplateKey("question")
     .sessionMemory(sessionService, "conversationId")
@@ -758,6 +120,6 @@ LlmNode node = LlmNode.builder()
     .build();
 ```
 
-`conversationId` 应为非空字符串，在同一对话的后续轮次复用，并按用户或租户隔离。使用 JDBC 仓库时，按 Spring AI 的 Session schema 初始化数据库；已有 `ChatMemoryRepository` 的应用应明确历史消息的迁移及会话 ID 映射。
+Graph checkpoint 可以继续保存工作流状态。已经由 Session Advisor 加载历史时，节点输入保持为当前请求，可避免把整段历史送入模型两次。
 
-[Session Memory 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/memory/session/index.html) · [从 ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/session-memory.html)
+[可运行的 MemoryExample](https://github.com/alibaba/spring-ai-alibaba/blob/e01219fd20ecfff2dd9d1a1facfe58e5349c3e07/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java)

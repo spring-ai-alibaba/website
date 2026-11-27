@@ -31,6 +31,8 @@ ReAct（Reasoning + Acting）是一种将推理和行动相结合的 Agent 范�
 - 处理需要多次工具调用的任务
 - 在不确定的环境中做出决策
 
+选择接口时，可以先从 Spring AI 的 [ChatModel 与 ChatClient](models.md) 开始。学习模型、消息和工具的直接交互后，需要把工具循环放入 Graph、应用 Hooks 或从 checkpoint 恢复时，再使用 ReactAgent。ReactAgent 自己负责 Graph 工具调度和审批，普通 ChatClient 则通过 `ToolCallingAdvisor` 驱动工具循环。
+
 ### ReactAgent 的工作原理
 
 Spring AI Alibaba 中的`ReactAgent` 基于 **Graph 运行时**构建。Graph 由节点（steps）和边（connections）组成，定义了 Agent 如何处理信息。Agent 在这个 Graph 中移动，执行如下节点：
@@ -113,7 +115,7 @@ ChatModel chatModel = DashScopeChatModel.builder()
 
 <Code
   language="java"
-  title="SearchTool 自定义工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
+  title="SearchTool 自定义工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/e01219fd20ecfff2dd9d1a1facfe58e5349c3e07/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentsExample.java"
 >
 {`import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
@@ -140,6 +142,7 @@ ReactAgent agent = ReactAgent.builder()
     .name("search_agent")
     .model(chatModel)
     .tools(searchTool)
+    .toolCallLimits(3, 10)
     .build();`}
 </Code>
 

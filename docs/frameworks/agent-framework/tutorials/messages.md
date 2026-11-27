@@ -1,560 +1,119 @@
 ---
-title: Messages 消息
-description: 了解Messages作为模型交互的基本单元，学习消息角色、内容和元数据的使用方法
-keywords: [Messages, 消息, Role, Content, Metadata, UserMessage, SystemMessage, AssistantMessage, LLM交互]
+title: 消息与 Message Parts
+description: 构建 Spring AI 2.1 消息，保留有序文本、媒体、推理、工具请求和结果。
+keywords: [Message, MessagePart, Prompt, AssistantMessage, ToolResponseMessage]
 ---
 
-Messages 是 Spring AI Alibaba 中模型交互的基本单元。它们代表模型的输入和输出，携带在与 LLM 交互时表示对话状态所需的内容和元数据。
+# 消息与 Message Parts
 
-Messages 是包含以下内容的对象：
+`Prompt` 用有序消息描述模型看到的对话。消息类型说明每条内容的来源，`MessagePart` 说明一条消息内部有什么内容。Spring AI 2.1 将文本、媒体、推理和工具交换放入有序部分，应用可以保留提供商需要回放的完整内容。
 
-* **Role（角色）** - 标识消息类型（如 `system`、`user`、`assistant`）
-* **Content（内容）** - 表示消息的实际内容（如文本、图像、音频、文档等）
-* **Metadata（元数据）** - 可选字段，如响应信息、消息 ID 和 token 使用情况
+| 消息类型 | 内容 |
+| --- | --- |
+| `SystemMessage` | 面向模型的系统规则与角色 |
+| `UserMessage` | 用户文本及模型支持的图片、音频等输入 |
+| `AssistantMessage` | 模型生成的文本、推理、媒体或工具调用 |
+| `ToolResponseMessage` | 应用执行工具后给模型的结果 |
 
-Spring AI Alibaba 提供了一个标准的消息类型系统，可在所有模型提供商之间工作，确保无论调用哪个模型都具有一致的行为。
-
-## 基础使用
-
-使用 messages 最简单的方式是创建消息对象并在调用模型时传递它们。
-
-<Code
-  language="java"
-  title="基础消息使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import java.util.List;
-
-// 使用 DashScope ChatModel
-ChatModel chatModel = // ... 初始化 ChatModel
-
-SystemMessage systemMsg = new SystemMessage("你是一个有帮助的助手。");
-UserMessage userMsg = new UserMessage("你好，你好吗？");
-
-// 与聊天模型一起使用
-List<org.springframework.ai.chat.messages.Message> messages = List.of(systemMsg, userMsg);
-Prompt prompt = new Prompt(messages);
-ChatResponse response = chatModel.call(prompt);  // 返回 ChatResponse，包含 AssistantMessage`}
-</Code>
-
-### 文本提示
-
-文本提示是字符串 - 适用于简单的生成任务，不需要保留对话历史。
-
-<Code
-  language="java"
-  title="文本提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`// 使用字符串直接调用
-String response = chatModel.call("写一首关于春天的俳句");`}
-</Code>
-
-**使用文本提示的场景**：
-
-* 有单个独立的请求
-* 不需要对话历史
-* 想要最小的代码复杂性
-
-### 消息提示
-
-或者，你可以通过提供消息对象列表向模型传递消息列表。
-
-<Code
-  language="java"
-  title="消息提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import java.util.List;
-
-List<org.springframework.ai.chat.messages.Message> messages = List.of(
-    new SystemMessage("你是一个诗歌专家"),
-    new UserMessage("写一首关于春天的俳句"),
-    new AssistantMessage("樱花盛开时...")
-);
-Prompt prompt = new Prompt(messages);
-ChatResponse response = chatModel.call(prompt);`}
-</Code>
-
-**使用消息提示的场景**：
-
-* 管理多轮对话
-* 处理多模态内容（图像、音频、文件）
-* 包含系统指令
-
-## 消息类型
-
-* **System Message（系统消息）** - 告诉模型如何行为并为交互提供上下文
-* **User Message（用户消息）** - 表示用户输入和与模型的交互
-* **Assistant Message（助手消息）** - 模型生成的响应，包括文本内容、工具调用和元数据
-* **Tool Response Message（工具响应消息）** - 表示工具调用的输出
-
-### System Message
-
-`SystemMessage` 表示一组初始指令，用于引导模型的行为。你可以使用系统消息来设置语气、定义模型的角色并建立响应指南。
-
-<Code
-  language="java"
-  title="SystemMessage 基础指令示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`// 基础指令
-SystemMessage systemMsg = new SystemMessage("你是一个有帮助的编程助手。");
-
-List<org.springframework.ai.chat.messages.Message> messages = List.of(
-    systemMsg,
-    new UserMessage("如何创建 REST API？")
-);
-ChatResponse response = chatModel.call(new Prompt(messages));`}
-</Code>
-
-<Code
-  language="java"
-  title="SystemMessage 详细角色设定示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`// 详细的角色设定
-SystemMessage systemMsg = new SystemMessage("""
-    你是一位资深的 Java 开发者，擅长 Web 框架。
-    始终提供代码示例并解释你的推理。
-    在解释中要简洁但透彻。
-    """);
-
-List<org.springframework.ai.chat.messages.Message> messages = List.of(
-    systemMsg,
-    new UserMessage("如何创建 REST API？")
-);
-ChatResponse response = chatModel.call(new Prompt(messages));`}
-</Code>
-
-### User Message
-
-`UserMessage` 表示用户输入和交互。它们可以包含文本、图像、音频、文件和任何其他数量的多模态内容。
-
-#### 文本内容
-
-<Code
-  language="java"
-  title="UserMessage 文本内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`// 使用消息对象
-ChatResponse response = chatModel.call(
-    new Prompt(List.of(new UserMessage("什么是机器学习？")))
-);
-
-// 使用字符串快捷方式
-// 使用字符串是单个 UserMessage 的快捷方式
-String response = chatModel.call("什么是机器学习？");`}
-</Code>
-
-#### 消息元数据
-
-<Code
-  language="java"
-  title="UserMessage 消息元数据示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import java.util.Map;
-
-UserMessage userMsg = UserMessage.builder()
-    .text("你好！")
-    .metadata(Map.of(
-        "user_id", "alice",  // 可选：识别不同用户
-        "session_id", "sess_123"  // 可选：会话标识符
-    ))
-    .build();`}
-</Code>
-
-**注意**：元数据字段的行为因提供商而异 - 有些用于用户识别，有些则忽略它。要检查，请参考模型提供商的文档。
-
-#### 多模态内容
-
-`UserMessage` 可以包含多模态内容，如图像：
-
-<Code
-  language="java"
-  title="UserMessage 多模态内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.content.Media;
-import org.springframework.util.MimeTypeUtils;
-import java.net.URL;
-
-// 从 URL 创建图像
-UserMessage userMsg = UserMessage.builder()
-    .text("描述这张图片的内容。")
-    .media(Media.builder()
-        .mimeType(MimeTypeUtils.IMAGE_JPEG)
-        .data(new URL("https://example.com/image.jpg"))
-        .build())
-    .build();`}
-</Code>
-
-### Assistant Message
-
-`AssistantMessage` 表示模型调用的输出。它们可以包括多模态数据、工具调用以及你稍后可以访问的提供商特定元数据。
-
-<Code
-  language="java"
-  title="AssistantMessage 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`ChatResponse response = chatModel.call(new Prompt("解释 AI"));
-AssistantMessage aiMessage = response.getResult().getOutput();
-System.out.println(aiMessage.getText());`}
-</Code>
-
-`AssistantMessage` 对象由模型调用返回，其中包含响应中的所有相关元数据。
-
-提供商对消息类型的权重/上下文化方式不同，这意味着有时手动创建新的 `AssistantMessage` 对象并将其插入消息历史中（就像它来自模型一样）会很有帮助。
-
-<Code
-  language="java"
-  title="手动创建 AssistantMessage 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.chat.messages.AssistantMessage;
+```java
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
-
-// 手动创建 AI 消息（例如，用于对话历史）
-AssistantMessage aiMsg = new AssistantMessage("我很乐意帮助你回答这个问题！");
-
-// 添加到对话历史
-List<org.springframework.ai.chat.messages.Message> messages = List.of(
-    new SystemMessage("你是一个有帮助的助手"),
-    new UserMessage("你能帮我吗？"),
-    aiMsg,  // 插入，就像它来自模型一样
-    new UserMessage("太好了！2+2 等于多少？")
-);
-
-ChatResponse response = chatModel.call(new Prompt(messages));`}
-</Code>
-
-**AssistantMessage 属性**：
-
-- **text**: 消息的文本内容
-- **metadata**: 消息的元数据映射
-- **toolCalls**: 模型进行的工具调用列表
-- **media**: 媒体内容列表（如果有）
-
-#### 工具调用
-
-当模型进行工具调用时，它们包含在 `AssistantMessage` 中：
-
-<Code
-  language="java"
-  title="AssistantMessage 工具调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
-
-ChatResponse response = chatModel.call(prompt);
-AssistantMessage aiMessage = response.getResult().getOutput();
-
-if (aiMessage.hasToolCalls()) {
-    for (ToolCall toolCall : aiMessage.getToolCalls()) {
-        System.out.println("Tool: " + toolCall.name());
-        System.out.println("Args: " + toolCall.arguments());
-        System.out.println("ID: " + toolCall.id());
-    }
-}`}
-</Code>
-
-#### Token 使用
-
-Spring AI Alibaba 的 `ChatResponse` 可以在其元数据中保存 token 计数和其他使用元数据：
-
-<Code
-  language="java"
-  title="Token 使用信息访问示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`ChatResponse response = chatModel.call(new Prompt("你好！"));
-ChatResponseMetadata metadata = response.getMetadata();
-
-// 访问使用信息
-if (metadata != null && metadata.getUsage() != null) {
-    System.out.println("Input tokens: " + metadata.getUsage().getPromptTokens());
-    System.out.println("Output tokens: " + metadata.getUsage().getCompletionTokens());
-    System.out.println("Total tokens: " + metadata.getUsage().getTotalTokens());
-}`}
-</Code>
-
-#### 流式和块
-
-在流式传输期间，你将收到可以组合成完整消息对象的块：
-
-<Code
-  language="java"
-  title="流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import reactor.core.publisher.Flux;
-
-Flux<ChatResponse> responseStream = chatModel.stream(new Prompt("你好"));
-
-StringBuilder fullResponse = new StringBuilder();
-responseStream.subscribe(
-    chunk -> {
-        String content = chunk.getResult().getOutput().getText();
-        fullResponse.append(content);
-        System.out.print(content);
-    }
-);`}
-</Code>
-
-**了解更多**：
-- 从聊天模型流式传输 tokens
-- 从 agents 流式传输 tokens 和/或步骤
-
-### Tool Response Message
-
-对于支持工具调用的模型，AI 消息可以包含工具调用。工具消息用于将单个工具执行的结果传回模型。
-
-<Code
-  language="java"
-  title="ToolResponseMessage 工具响应消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.chat.messages.ToolResponseMessage;
-import org.springframework.ai.chat.messages.ToolResponseMessage.ToolResponse;
-
-// 在模型进行工具调用后
-AssistantMessage aiMessage = AssistantMessage.builder()
-    .content("")
-    .toolCalls(List.of(
-        new AssistantMessage.ToolCall(
-            "call_123",
-            "tool",
-            "get_weather",
-            "{\"location\": \"San Francisco\"}"
-        )
-    ))
-    .build();
-
-// 执行工具并创建结果消息
-String weatherResult = "晴朗，22°C";
-ToolResponseMessage toolMessage = ToolResponseMessage.builder()
-    .responses(List.of(
-        new ToolResponse("call_123", "get_weather", weatherResult)
-    ))
-    .build();
-
-// 继续对话
-List<org.springframework.ai.chat.messages.Message> messages = List.of(
-    new UserMessage("旧金山的天气怎么样？"),
-    aiMessage,      // 模型的工具调用
-    toolMessage     // 工具执行结果
-);
-ChatResponse response = chatModel.call(new Prompt(messages));`}
-</Code>
-
-**ToolResponseMessage 属性**：
-
-- **responses**: ToolResponse 对象列表，每个包含：
-  - **id**: 工具调用 ID（必须与 AIMessage 中的工具调用 ID 匹配）
-  - **name**: 调用的工具名称
-  - **responseData**: 工具调用的字符串化输出
-
-## 多模态内容
-
-**多模态性**指的是处理不同形式数据的能力，如文本、音频、图像和视频。Spring AI Alibaba 包含这些数据的标准类型，可以跨提供商使用。
-
-聊天模型可以接受多模态数据作为输入并生成它作为输出。下面我们展示包含多模态数据的输入消息的简短示例。
-
-### 图像输入
-
-<Code
-  language="java"
-  title="图像输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.content.Media;
-import org.springframework.util.MimeTypeUtils;
-import java.net.URL;
-
-// 从 URL
-UserMessage message = UserMessage.builder()
-    .text("描述这张图片的内容。")
-    .media(Media.builder()
-        .mimeType(MimeTypeUtils.IMAGE_JPEG)
-        .data(new URL("https://example.com/image.jpg"))
-        .build())
-    .build();
-
-// 从本地文件
-import org.springframework.core.io.ClassPathResource;
-
-UserMessage message = UserMessage.builder()
-    .text("描述这张图片的内容。")
-    .media(new Media(
-        MimeTypeUtils.IMAGE_JPEG,
-        new ClassPathResource("images/photo.jpg")
-    ))
-    .build();`}
-</Code>
-
-### 音频输入
-
-<Code
-  language="java"
-  title="音频输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.content.Media;
-import org.springframework.util.MimeTypeUtils;
-
-UserMessage message = UserMessage.builder()
-    .text("描述这段音频的内容。")
-    .media(new Media(
-        MimeTypeUtils.parseMimeType("audio/wav"),
-        new ClassPathResource("audio/recording.wav")
-    ))
-    .build();`}
-</Code>
-
-### 视频输入
-
-<Code
-  language="java"
-  title="视频输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.content.Media;
-import org.springframework.util.MimeTypeUtils;
-
-UserMessage message = UserMessage.builder()
-    .text("描述这段视频的内容。")
-    .media(Media.builder()
-        .mimeType(MimeTypeUtils.parseMimeType("video/mp4"))
-        .data(new URL("https://example.com/path/to/video.mp4"))
-        .build())
-    .build();`}
-</Code>
-
-**警告**：并非所有模型都支持所有文件类型。请查看模型提供商的文档以了解支持的格式和大小限制。
-
-## 与 Chat Models 一起使用
-
-Chat models 接受消息对象序列作为输入并返回 `ChatResponse`（包含 `AssistantMessage`）作为输出。交互通常是无状态的，因此简单的对话循环涉及使用不断增长的消息列表调用模型。
-
-### 基础对话示例
-
-<Code
-  language="java"
-  title="基础对话示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.prompt.Prompt;
-import java.util.ArrayList;
-import java.util.List;
 
-ChatModel chatModel = // ... 初始化
+var prompt = new Prompt(List.of(
+    new SystemMessage("Answer concisely."),
+    new UserMessage("Explain how a tool call works.")
+));
+var reply = chatModel.call(prompt);
+```
 
-List<Message> conversationHistory = new ArrayList<>();
-
-// 第一轮对话
-conversationHistory.add(new UserMessage("你好！"));
-ChatResponse response1 = chatModel.call(new Prompt(conversationHistory));
-conversationHistory.add(response1.getResult().getOutput());
-
-// 第二轮对话
-conversationHistory.add(new UserMessage("你能帮我学习 Java 吗？"));
-ChatResponse response2 = chatModel.call(new Prompt(conversationHistory));
-conversationHistory.add(response2.getResult().getOutput());
-
-// 第三轮对话
-conversationHistory.add(new UserMessage("从哪里开始？"));
-ChatResponse response3 = chatModel.call(new Prompt(conversationHistory));`}
-</Code>
-
-### 使用 Builder 模式
-
-Spring AI Alibaba 的消息类提供了 builder 模式以便于构建：
-
-<Code
-  language="java"
-  title="Builder 模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`// UserMessage with builder
-UserMessage userMsg = UserMessage.builder()
-    .text("你好，我想学习 Spring AI Alibaba")
-    .metadata(Map.of("user_id", "user_123"))
-    .build();
-
-// SystemMessage with builder
-SystemMessage systemMsg = SystemMessage.builder()
-    .text("你是一个 Spring 框架专家")
-    .metadata(Map.of("version", "1.0"))
-    .build();
-
-// AssistantMessage with builder
-AssistantMessage assistantMsg = AssistantMessage.builder()
-    .content("我很乐意帮助你学习 Spring AI Alibaba！")
-    .build();`}
-</Code>
-
-### 消息复制和修改
-
-<Code
-  language="java"
-  title="消息复制和修改示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`// 复制消息
-UserMessage original = new UserMessage("原始消息");
-UserMessage copy = original.copy();
-
-// 使用 mutate 创建修改的副本
-UserMessage modified = original.mutate()
-    .text("修改后的消息")
-    .metadata(Map.of("modified", true))
-    .build();`}
-</Code>
-
-## 在 ReactAgent 中使用
-
-ReactAgent 自动管理消息历史，但你也可以直接使用消息：
-
-<Code
-  language="java"
-  title="在 ReactAgent 中使用消息" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.messages.AssistantMessage;
-
-ReactAgent agent = ReactAgent.builder()
-    .name("my_agent")
-    .model(chatModel)
-    .systemPrompt("你是一个有帮助的助手")
-    .build();
-
-// 使用字符串
-AssistantMessage response1 = agent.call("你好");
-
-// 使用 UserMessage
-UserMessage userMsg = new UserMessage("帮我写一首诗");
-AssistantMessage response2 = agent.call(userMsg);
-
-// 使用消息列表
-List<Message> messages = List.of(
-    new UserMessage("我喜欢春天"),
-    new UserMessage("写一首关于春天的诗")
-);
-AssistantMessage response3 = agent.call(messages);`}
-</Code>
+元数据是应用或提供商附加的数据，可用于跟踪来源和诊断。正文、媒体、工具交换和推理应保存在实际内容部分。将业务身份等运行参数通过应用上下文传递，可避免把它们混入模型看到的消息。
 
 ## 读取与保留 Message Parts
 
-Spring AI 2.1 的 `Message.getParts()` 返回原始顺序的内容。读取普通文本可继续用 `getText()`。处理工具、媒体或推理时应保留原消息，避免从拼接后的文本重建消息。
+读取正文用 `getText()`。需要重放、审计或修改消息时，用 `getParts()` 取得原始顺序。助手消息的 `getReasoning()` 返回有序的 `ReasoningPart`，可按提供商返回的 `summary()` 或 `text()` 展示。不要把无可读内容的载荷转成正文。
+
+| 部分 | 用途 |
+| --- | --- |
+| `TextPart` | 可读文本 |
+| `MediaPart` | 带 MIME 类型的媒体 |
+| `ReasoningPart` | 可读推理或摘要，以及可选的回放载荷 |
+| `ToolCallPart` | 调用 ID、工具名和参数，可能携带提供商签名 |
+| `ToolResultPart` | 调用对应的有序结果内容，含错误标记 |
+| `UnknownPart` | 当前应用无法解释的提供商内容 |
 
 ```java
-List<MessagePart> parts = assistantMessage.getParts();
-List<ReasoningPart> reasoning = assistantMessage.getReasoning();
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.part.OpaquePayload;
+import org.springframework.ai.chat.messages.part.ReasoningPart;
+import org.springframework.ai.chat.messages.part.TextPart;
+import org.springframework.ai.chat.messages.part.ToolCallPart;
 
-// 更新文本时保留推理、媒体、工具调用和提供商数据。
-AssistantMessage revised = assistantMessage.mutate()
-    .content(revisedText)
+var reasoning = new ReasoningPart(null, "Looking up the order",
+    new OpaquePayload("example-provider", "reasoning", "opaque-example"), Map.of());
+
+var assistant = AssistantMessage.builder()
+    .part(reasoning)
+    .part(TextPart.of("I will check the order."))
+    .part(ToolCallPart.of(new AssistantMessage.ToolCall(
+        "order-1", "function", "lookupOrder", "{\"orderId\":\"42\"}")))
+    .build();
+
+var revised = assistant.mutate().content("Checking order 42.").build();
+```
+
+示例载荷用于说明数据形状。实际应用应保留提供商返回的 `OpaquePayload` 和未知部分，并按其适用提供商回放。只改正文时用 `mutate().content(...)` 保留其余部分。需要跨轮或持久化时，保留消息类型、完整 parts 与所需元数据。单独保存 `getText()` 会丢失工具关联、媒体和回放数据。Graph 的 checkpoint 也可保留这些内容。
+
+## 构造多模态消息
+
+```java
+import java.net.URI;
+import org.springframework.ai.content.Media;
+import org.springframework.util.MimeTypeUtils;
+
+var image = Media.builder()
+    .mimeType(MimeTypeUtils.IMAGE_PNG)
+    .data(URI.create("https://example.com/diagram.png"))
+    .build();
+
+var user = UserMessage.builder()
+    .text("Describe this diagram.")
+    .media(image)
     .build();
 ```
 
-自定义存储应保留 `UnknownPart` 和 `OpaquePayload`，以便提供商回放。工具响应中的 `ToolResultPart` 可标识错误。直接处理流式模型事件时，可展示未完成的工具参数片段。工具执行应读取完整调用，`getToolCalls()` 会排除这些部分。
+`Media.Builder.data(...)` 使用 `URI`、`URL`、`String`、`byte[]` 或 `Resource` 等具体类型。音频、视频和图片所支持的格式、大小与传输方式由模型决定。使用百炼可从 [多模态接入](/integration/multimodals/dashscope-multimodal) 核对对应选项。
 
-[Spring AI 消息参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/models/chat.html) · [DashScope 多轮推理](/integration/chatmodels/dashScope#百炼模型路由与多轮推理)
+## 在历史中保留工具请求和结果
+
+保持用户请求、助手工具调用、工具结果和随后助手回答的顺序。结果中使用相同的调用 ID。需要表达工具失败时，可以在结果部分保留错误状态。使用 `getResults()` 可以读取这些结构化结果，`getResponses()` 适合旧式文本结果视图。
+
+```java
+import org.springframework.ai.chat.messages.ToolResponseMessage;
+import org.springframework.ai.chat.messages.part.ToolResultPart;
+
+var failure = ToolResponseMessage.builder()
+    .result(new ToolResultPart("order-1", "lookupOrder",
+        List.of(TextPart.of("Order not found")), true, null, Map.of()))
+    .build();
+```
+
+工具 Advisor 会为执行结果构建响应消息。自行管理循环时，把工具结果与对应的助手调用一起传回模型。详见 [工具循环](tools.md#工具循环异常与预算)。
+
+## 流式参数与聚合
+
+提供商可用同一部分索引返回连续的工具参数增量。`StreamingParts.partIndex(part)` 和 `isPartial(part)` 可帮助展示增量。助手消息的 `getToolCalls()` 会跳过未完成部分。工具执行应等待完整调用，历史中保存聚合后的助手消息。
+
+```java
+import org.springframework.ai.chat.model.MessageAggregator;
+
+var stream = new MessageAggregator().aggregate(chatModel.stream(prompt), complete -> {
+    var finalReply = complete.getResult();
+    var usage = complete.getMetadata().getUsage();
+    // Store the full message and usage when present.
+});
+```
+
+聚合器返回原流，订阅这条流以展示增量，完成回调可用于处理聚合结果。流事件可能只包含用量，直接读取 `chunk.getResult()` 前应判断结果是否存在。判断工具审批时读取工具 Advisor 的最后事件，因为待审批元数据位于该事件中。
+
+[Spring AI 消息与 Prompt](https://docs.spring.io/spring-ai/reference/api/chatmodel.html) · [可运行的 MessagesExample](https://github.com/alibaba/spring-ai-alibaba/blob/e01219fd20ecfff2dd9d1a1facfe58e5349c3e07/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java)
