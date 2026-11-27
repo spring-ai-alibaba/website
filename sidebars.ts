@@ -72,6 +72,7 @@ const sidebars: SidebarsConfig = {
           label: '示例',
           items: [
             'frameworks/graph-core/examples/llm-streaming-springai',
+            'frameworks/graph-core/examples/review-loop',
             'frameworks/graph-core/examples/persistence',
             'frameworks/graph-core/examples/checkpoint-redis',
             'frameworks/graph-core/examples/time-travel',
@@ -87,8 +88,10 @@ const sidebars: SidebarsConfig = {
             'frameworks/graph-core/examples/multi-agent-supervisor',
             'frameworks/graph-core/examples/plantuml',
             'frameworks/graph-core/examples/cancellation',
+            'frameworks/graph-core/examples/runtime-preview',
           ],
         },
+        'frameworks/graph-core/troubleshooting',
       ],
     },
     {
