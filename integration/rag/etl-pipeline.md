@@ -1,10 +1,13 @@
 # ETL Pipeline
 
-ETL（Extract、Transform、Load）框架是 Retrieval Augmented Generation (RAG) 用例中数据处理的支柱。
+ETL（Extract、Transform、Load）把原始数据读取为 `Document`，切分为可独立检索的片段，再写入索引。索引建立后，可通过 [`VectorStoreDocumentRetriever`](retrieval-augmented-generation.md#vectorstoredocumentretriever) 在问答时查询。使用[百炼托管知识库](bailian-knowledge.md)时，在百炼完成文档导入与索引。
 
-ETL pipeline 编排从原始数据源到结构化向量存储的流程，确保数据以 AI 模型检索的最佳格式存在。
+## 设计可更新的索引 {#index-design}
 
-RAG 用例是通过从数据体中检索相关信息来增强生成模型能力的文本，以提高生成输出的质量和相关性。
+1. **读入与切分**。按文件类型选择[读取器](document-readers.md)或[解析器](document-parsers.md)。使用标题、页码或段落边界帮助维护每个片段的语义，并用实际查询验证切片大小和重叠策略。
+2. **保留来源与权限**。记录来源、文档或切片 ID、位置和版本。将租户或可见范围写入可过滤的元数据，由服务端在检索时强制执行。业务引用应能回到原文位置。
+3. **写入和更新**。索引与查询使用兼容的嵌入模型和维度。采用稳定的文档和切片标识维护更新关系。文件更新或删除时，清理已失效的切片。如果更换模型或切片策略，验证新索引再切换查询。
+4. **验证可检索性**。用已知命中、无结果和无权限的查询检查索引，再接入 [Advisor 或 Graph 和 Agent](retrieval-augmented-generation.md)。
 
 ## API 概述
 
