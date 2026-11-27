@@ -84,7 +84,7 @@ dependencies {
 > 如果设置了 `spring.ai.openai.audio.transcription.base-url`、`spring.ai.openai.audio.transcription.api-key`、`spring.ai.openai.audio.transcription.organization-id` 和 `spring.ai.openai.audio.transcription.project-id` 属性，它们优先于通用属性。
 > 如果您想为不同的模型和不同的模型端点使用不同的 OpenAI 账户，这很有用。
 
-> **TIP**: 所有以 `spring.ai.openai.transcription.options` 为前缀的属性都可以在运行时覆盖。
+> **TIP**: 所有以 `spring.ai.openai.audio.transcription` 为前缀的属性都可以在运行时覆盖。
 
 ## Runtime Options
 
@@ -148,3 +148,16 @@ AudioTranscriptionResponse response = openAiTranscriptionModel.call(this.transcr
 ## Example Code
 
 * [OpenAiTranscriptionModelIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/audio/transcription/OpenAiTranscriptionModelIT.java) 测试提供了一些如何使用该库的通用示例。
+
+## 流式转录
+
+Spring AI 2.1 的 `OpenAiAudioTranscriptionModel` 支持流式返回转录内容。使用支持流式转录的模型，并传入已准备好的音频 `Resource`：
+
+```java
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
+
+var transcript = openAiAudioTranscriptionModel.stream(new AudioTranscriptionPrompt(audioResource))
+        .map(response -> response.getResult().getOutput());
+```
+
+按顺序消费服务返回的转录片段。模型、格式和事件各有支持范围，详见 [OpenAI 转录参考](https://platform.openai.com/docs/guides/speech-to-text)。

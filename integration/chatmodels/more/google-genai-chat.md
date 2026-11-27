@@ -4,7 +4,7 @@
 Google GenAI API 支持 multimodal prompts 作为输入，输出 text 或 code。
 multimodal model 能够处理来自多种模态的信息，包括图像、视频和文本。例如，您可以向模型发送一盘饼干的照片，并要求它为您提供这些饼干的配方。
 
-Gemini 是由 Google DeepMind 开发的生成式 AI 模型系列，专为 multimodal 用例设计。Gemini API 让您可以访问 [Gemini 2.0 Flash](https://ai.google.dev/gemini-api/docs/models#gemini-2.0-flash)、[Gemini 2.0 Flash-Lite](https://ai.google.dev/gemini-api/docs/models#gemini-2.0-flash-lite) 和 [Gemini Pro](https://ai.google.dev/gemini-api/docs/models) 模型。
+Gemini 是由 Google DeepMind 开发的生成式 AI 模型系列，专为 multimodal 用例设计。Gemini API 让您可以访问 [Gemini 2.0 Flash](https://ai.google.dev/gemini-api/docs/models#gemini-2.5-flash)、[Gemini 2.0 Flash-Lite](https://ai.google.dev/gemini-api/docs/models#gemini-2.5-flash-lite) 和 [Gemini Pro](https://ai.google.dev/gemini-api/docs/models) 模型。
 
 此实现提供两种身份验证模式：
 
@@ -86,29 +86,28 @@ dependencies {
 
 | Property | Description | Default |
 |----------|-------------|---------|
-| spring.ai.google.genai.chat.options.model | 支持的 [Google GenAI Chat models](https://ai.google.dev/gemini-api/docs/models) 包括 `gemini-2.0-flash`、`gemini-2.0-flash-lite`、`gemini-pro` 和 `gemini-1.5-flash`。 | gemini-2.0-flash |
-| spring.ai.google.genai.chat.options.response-mime-type | 生成的候选文本的输出响应 mimetype。 | `text/plain`:（默认）文本输出或 `application/json`: JSON 响应。 |
-| spring.ai.google.genai.chat.options.google-search-retrieval | 使用 Google search Grounding 功能 | `true` 或 `false`，默认 `false`。 |
-| spring.ai.google.genai.chat.options.temperature | 控制输出的随机性。值可以在 [0.0,1.0] 范围内（包含）。接近 1.0 的值将产生更多样化的响应，而接近 0.0 的值通常会导致生成器的响应不那么令人惊讶。 | 0.7 |
-| spring.ai.google.genai.chat.options.top-k | 采样时要考虑的最大 tokens 数。生成器使用组合的 Top-k 和 nucleus sampling。Top-k sampling 考虑 topK 最可能的 tokens 集合。 | - |
-| spring.ai.google.genai.chat.options.top-p | 采样时要考虑的最大累积概率。生成器使用组合的 Top-k 和 nucleus sampling。Nucleus sampling 考虑概率总和至少为 topP 的最小 tokens 集合。 | - |
-| spring.ai.google.genai.chat.options.candidate-count | 要返回的生成响应消息数。此值必须在 [1, 8] 范围内（包含）。默认为 1。 | 1 |
-| spring.ai.google.genai.chat.options.max-output-tokens | 要生成的最大 tokens 数。 | - |
-| spring.ai.google.genai.chat.options.frequency-penalty | 用于减少重复的频率惩罚。 | - |
-| spring.ai.google.genai.chat.options.presence-penalty | 用于减少重复的存在惩罚。 | - |
-| spring.ai.google.genai.chat.options.thinking-budget | 思考过程的思考预算。 | - |
-| spring.ai.google.genai.chat.options.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.google.genai.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.google.genai.chat.options.internal-tool-execution-enabled | 如果为 true，应执行 tool execution，否则将模型的响应返回给用户。默认为 null，但如果为 null，将考虑 `ToolCallingChatOptions.DEFAULT_TOOL_EXECUTION_ENABLED`（为 true） | - |
-| spring.ai.google.genai.chat.options.safety-settings | 用于控制安全过滤器的安全设置列表，如 [Google GenAI Safety Settings](https://ai.google.dev/gemini-api/docs/safety-settings) 所定义。每个安全设置可以有一个 method、threshold 和 category。 | - |
+| spring.ai.google.genai.chat.model | 支持的 [Google GenAI Chat models](https://ai.google.dev/gemini-api/docs/models) 包括 `gemini-2.5-flash`、`gemini-2.5-flash-lite`、`gemini-pro` 和 `gemini-1.5-flash`。 | gemini-2.5-flash |
+| spring.ai.google.genai.chat.response-mime-type | 生成的候选文本的输出响应 mimetype。 | `text/plain`:（默认）文本输出或 `application/json`: JSON 响应。 |
+| spring.ai.google.genai.chat.google-search-retrieval | 使用 Google search Grounding 功能 | `true` 或 `false`，默认 `false`。 |
+| spring.ai.google.genai.chat.temperature | 控制输出的随机性。值可以在 [0.0,1.0] 范围内（包含）。接近 1.0 的值将产生更多样化的响应，而接近 0.0 的值通常会导致生成器的响应不那么令人惊讶。 | 0.7 |
+| spring.ai.google.genai.chat.top-k | 采样时要考虑的最大 tokens 数。生成器使用组合的 Top-k 和 nucleus sampling。Top-k sampling 考虑 topK 最可能的 tokens 集合。 | - |
+| spring.ai.google.genai.chat.top-p | 采样时要考虑的最大累积概率。生成器使用组合的 Top-k 和 nucleus sampling。Nucleus sampling 考虑概率总和至少为 topP 的最小 tokens 集合。 | - |
+| spring.ai.google.genai.chat.candidate-count | 要返回的生成响应消息数。此值必须在 [1, 8] 范围内（包含）。默认为 1。 | 1 |
+| spring.ai.google.genai.chat.max-output-tokens | 要生成的最大 tokens 数。 | - |
+| spring.ai.google.genai.chat.frequency-penalty | 用于减少重复的频率惩罚。 | - |
+| spring.ai.google.genai.chat.presence-penalty | 用于减少重复的存在惩罚。 | - |
+| spring.ai.google.genai.chat.thinking-budget | 思考过程的思考预算。 | - |
+| spring.ai.google.genai.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
+| spring.ai.google.genai.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
+| spring.ai.google.genai.chat.safety-settings | 用于控制安全过滤器的安全设置列表，如 [Google GenAI Safety Settings](https://ai.google.dev/gemini-api/docs/safety-settings) 所定义。每个安全设置可以有一个 method、threshold 和 category。 | - |
 
-> **提示：** 所有前缀为 `spring.ai.google.genai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.google.genai.chat` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime options [[chat-options]]
 
 [GoogleGenAiChatOptions.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-google-genai/src/main/java/org/springframework/ai/google/genai/GoogleGenAiChatOptions.java) 提供模型配置，例如 temperature、topK 等。
 
-在启动时，可以使用 `GoogleGenAiChatModel(client, options)` 构造函数或 `spring.ai.google.genai.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `GoogleGenAiChatModel(client, options)` 构造函数或 `spring.ai.google.genai.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项。
 例如，要覆盖特定请求的默认 temperature：
@@ -166,6 +165,17 @@ String response = ChatClient.create(this.chatModel)
 
 在 [Tools](../../toolcalls/tool-calls) 文档中查找更多信息。
 
+### 控制工具选择
+
+Spring AI 2.1 支持通过 `spring.ai.google.genai.chat.tool-choice.mode` 配置 `AUTO`、`ANY`、`VALIDATED` 或 `NONE`。需要模型从指定工具列表选用工具时，可配置：
+
+```properties
+spring.ai.google.genai.chat.tool-choice.mode=ANY
+spring.ai.google.genai.chat.tool-choice.allowed-function-names[0]=get_weather
+```
+
+允许的工具名仅在 `ANY` 和 `VALIDATED` 模式下生效。注册回调、执行工具和读取结果仍遵循 [Spring AI 工具调用](../../toolcalls/tool-calls.md)。
+
 ## Multimodal
 
 Multimodality 是指模型同时理解和处理来自各种（输入）来源的信息的能力，包括 `text`、`pdf`、`images`、`audio` 和其他数据格式。
@@ -217,8 +227,8 @@ var response = this.chatModel.call(new Prompt(List.of(userMessage)));
 
 ```properties
 spring.ai.google.genai.api-key=YOUR_API_KEY
-spring.ai.google.genai.chat.options.model=gemini-2.0-flash
-spring.ai.google.genai.chat.options.temperature=0.5
+spring.ai.google.genai.chat.model=gemini-2.5-flash
+spring.ai.google.genai.chat.temperature=0.5
 ```
 
 ### Using Vertex AI
@@ -226,8 +236,8 @@ spring.ai.google.genai.chat.options.temperature=0.5
 ```properties
 spring.ai.google.genai.project-id=PROJECT_ID
 spring.ai.google.genai.location=LOCATION
-spring.ai.google.genai.chat.options.model=gemini-2.0-flash
-spring.ai.google.genai.chat.options.temperature=0.5
+spring.ai.google.genai.chat.model=gemini-2.5-flash
+spring.ai.google.genai.chat.temperature=0.5
 ```
 
 > **提示：** 将 `project-id` 替换为您的 Google Cloud Project ID，`location` 是 Google Cloud Region，如 `us-central1`、`europe-west1` 等...
@@ -297,11 +307,11 @@ Client genAiClient = Client.builder()
 
 var chatModel = new GoogleGenAiChatModel(genAiClient,
     GoogleGenAiChatOptions.builder()
-        .model(ChatModel.GEMINI_2_0_FLASH)
+        .model("gemini-2.5-flash")
         .temperature(0.4)
     .build());
 
-ChatResponse response = this.chatModel.call(
+ChatResponse response = chatModel.call(
     new Prompt("Generate the names of 5 famous pirates."));
 ```
 
@@ -316,11 +326,11 @@ Client genAiClient = Client.builder()
 
 var chatModel = new GoogleGenAiChatModel(genAiClient,
     GoogleGenAiChatOptions.builder()
-        .model(ChatModel.GEMINI_2_0_FLASH)
+        .model("gemini-2.5-flash")
         .temperature(0.4)
     .build());
 
-ChatResponse response = this.chatModel.call(
+ChatResponse response = chatModel.call(
     new Prompt("Generate the names of 5 famous pirates."));
 ```
 
@@ -354,3 +364,5 @@ ChatResponse response = this.chatModel.call(
 
 Google GenAI 实现基于新的 Google GenAI Java SDK 构建，该 SDK 提供了用于访问 Gemini 模型的现代、简化的 API。
 
+
+新的图像生成、语音合成和转录接口见 [Google GenAI 多模态](../../multimodals/google-genai.md)。

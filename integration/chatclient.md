@@ -297,7 +297,7 @@ String answer = ChatClient.create(chatModel).prompt()
 Spring AI 还提供了一个 `NoOpTemplateRenderer`，用于不需要模板处理的情况。
 
 > **NOTE:** 直接在 `ChatClient` 上配置的 `TemplateRenderer`（通过 `.templateRenderer()`）仅适用于在 `ChatClient` 构建器链中直接定义的 prompt 内容（例如，通过 `.user()`、`.system()`）。
-> 它*不会*影响 [Advisors](rag/retrieval-augmented-generation#_questionansweradvisor)（如 `QuestionAnswerAdvisor`）内部使用的模板，它们有自己的模板自定义机制（请参阅 [自定义 Advisor 模板](rag/retrieval-augmented-generation#_custom_template)）。
+> 它*不会*影响 [Advisors](rag/retrieval-augmented-generation#questionansweradvisor)（如 `QuestionAnswerAdvisor`）内部使用的模板，它们有自己的模板自定义机制（请参阅 [自定义 Advisor 模板](rag/retrieval-augmented-generation#custom-template)）。
 
 如果您想使用不同的模板引擎，可以直接向 ChatClient 提供 `TemplateRenderer` 接口的自定义实现。您也可以继续使用默认的 `StTemplateRenderer`，但使用自定义配置。
 
@@ -623,7 +623,7 @@ ChatClient.builder(chatModel)
 在此配置中，`SessionMemoryAdvisor` 将首先执行，将对话历史添加到 prompt。
 然后，`QuestionAnswerAdvisor` 将基于用户的问题和添加的对话历史执行搜索，可能提供更相关的结果。
 
-[了解 Question Answer Advisor](rag/retrieval-augmented-generation#_questionansweradvisor)
+[了解 Question Answer Advisor](rag/retrieval-augmented-generation#questionansweradvisor)
 
 ### Retrieval Augmented Generation
 
@@ -704,7 +704,7 @@ ChatClient client = chatClientBuilder
 
 ChatResponse reply = client.prompt()
     .user(question)
-    .toolCallbacks(lookupCallback)
+    .tools(lookupCallback)
     .advisors(SessionAdvisors.session(sessionId))
     .call()
     .chatResponse();
@@ -716,9 +716,26 @@ ChatResponse reply = client.prompt()
 
 [DashScope 工具执行与恢复](toolcalls/tool-calls.md#调用确认与恢复) · [Extensions Session Memory 配置](https://github.com/spring-ai-alibaba/spring-ai-extensions/tree/v2.1.0.0#chatmemory)
 
-[Session Memory 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/memory/session/index.html) · [ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/session-memory.html)
+[Session Memory 参考](https://docs.spring.io/spring-ai/reference/api/session.html) · [ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/upgrade-notes.html)
 
-## 实现说明
+## 处理内容过滤与用量
+
+Spring AI 2.1 的 `ChatGenerationMetadata.getFinishReasonCategory()` 可用于判断生成是完成、截断、进入工具调用还是被过滤。需要服务特有细节时，再读取原始结束原因。使用结构化输出的 `entity(...)` 时，可捕获 `ContentFilteredException` 并转换为应用的拒绝响应。由 Advisor 产生的 `GuardrailRefusalException` 同样会进入这条路径。
+
+```java
+import org.springframework.ai.chat.client.ContentFilteredException;
+
+try {
+    return chatClient.prompt().user(input).call().entity(OrderSummary.class);
+}
+catch (ContentFilteredException ex) {
+    return OrderSummary.filtered();
+}
+```
+
+从 `ChatResponse.getMetadata().getUsage()` 可读取提供方返回的用量。一次工具调用循环可能包含多轮模型请求，`ToolCallingAdvisor` 会累计这些轮次的用量。应用级的调用、延迟、模型和 token 指标可通过 Micrometer 接入。Spring AI 2.1 同样支持跟踪 Decision Model、图像、部分语音与转录模型。详见 [用量处理](https://docs.spring.io/spring-ai/reference/api/usage-handling.html) 和 [可观测性](https://docs.spring.io/spring-ai/reference/observability/index.html)。
+
+## 实现说明 {#implementation-notes}
 
 `ChatClient` 中命令式和响应式编程模型的结合使用是 API 的一个独特方面。
 通常，应用程序要么是响应式的，要么是命令式的，但不是两者兼而有之。

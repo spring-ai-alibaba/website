@@ -83,17 +83,17 @@ dependencies {
 |----------|-------------|---------|
 | spring.ai.bedrock.converse.chat.enabled (Removed and no longer valid) | 启用 Bedrock Converse chat model。 | true |
 | spring.ai.model.chat | 启用 Bedrock Converse chat model。 | bedrock-converse |
-| spring.ai.bedrock.converse.chat.options.model | 要使用的模型 ID。您可以使用 [Supported models and model features](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html) | None。从 AWS Bedrock 控制台选择您的 [modelId](https://us-east-1.console.aws.amazon.com/bedrock/home?region=us-east-1#/models)。 |
-| spring.ai.bedrock.converse.chat.options.temperature | 控制输出的随机性。值可以在 [0.0,1.0] 范围内 | 0.8 |
-| spring.ai.bedrock.converse.chat.options.top-p | 采样时要考虑的最大累积概率。 | AWS Bedrock 默认值 |
-| spring.ai.bedrock.converse.chat.options.top-k | 用于生成下一个 token 的 token 选择数量。 | AWS Bedrock 默认值 |
-| spring.ai.bedrock.converse.chat.options.max-tokens | 生成响应中的最大 tokens 数。 | 500 |
+| spring.ai.bedrock.converse.chat.model | 要使用的模型 ID。您可以使用 [Supported models and model features](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html) | None。从 AWS Bedrock 控制台选择您的 [modelId](https://us-east-1.console.aws.amazon.com/bedrock/home?region=us-east-1#/models)。 |
+| spring.ai.bedrock.converse.chat.temperature | 控制输出的随机性。值可以在 [0.0,1.0] 范围内 | 0.8 |
+| spring.ai.bedrock.converse.chat.top-p | 采样时要考虑的最大累积概率。 | AWS Bedrock 默认值 |
+| spring.ai.bedrock.converse.chat.top-k | 用于生成下一个 token 的 token 选择数量。 | AWS Bedrock 默认值 |
+| spring.ai.bedrock.converse.chat.max-tokens | 生成响应中的最大 tokens 数。 | 500 |
 
 ## Runtime Options [[chat-options]]
 
 使用可移植的 `ChatOptions` 或 `BedrockChatOptions` 可移植构建器来创建模型配置，例如 temperature、maxToken、topP 等。
 
-在启动时，可以使用 `BedrockConverseProxyChatModel(api, options)` 构造函数或 `spring.ai.bedrock.converse.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `BedrockConverseProxyChatModel(api, options)` 构造函数或 `spring.ai.bedrock.converse.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项：
 
@@ -849,8 +849,8 @@ spring.ai.bedrock.aws.secret-key=${AWS_SECRET_ACCESS_KEY}
 # session token is only required for temporary credentials
 spring.ai.bedrock.aws.session-token=${AWS_SESSION_TOKEN}
 
-spring.ai.bedrock.converse.chat.options.temperature=0.8
-spring.ai.bedrock.converse.chat.options.top-k=15
+spring.ai.bedrock.converse.chat.temperature=0.8
+spring.ai.bedrock.converse.chat.top-k=15
 ```
 
 以下是一个使用 chat model 的控制器示例：

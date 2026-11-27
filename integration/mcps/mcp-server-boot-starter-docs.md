@@ -1,5 +1,8 @@
 # MCP Server Boot Starter
 
+Spring AI 2.1 支持 MCP 2026-07-28。新协议的服务端属性、客户端混合连接和迁移说明见 [Modern MCP](mcp-modern-server-boot-starter-docs.md)。
+
+
 [Model Context Protocol (MCP) Servers](https://modelcontextprotocol.io/docs/learn/server-concepts) 是通过标准化协议接口向 AI 应用程序暴露特定功能的程序。
 每个服务器为特定领域提供聚焦的功能。
 
@@ -31,17 +34,17 @@ MCP 服务器支持多种协议和传输机制。
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [SSE WebMVC](mcp-stdio-sse-server-boot-starter-docs#_sse_webmvc_serve) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=SSE` or empty |
-| [Streamable-HTTP WebMVC](mcp-streamable-http-server-boot-starter-docs#_streamable_http_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STREAMABLE` |
-| [Stateless WebMVC](mcp-stateless-server-boot-starter-docs#_stateless_webmvc_server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STATELESS` |
+| [SSE WebMVC](mcp-stdio-sse-server-boot-starter-docs#sse-webmvc-server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=SSE` or empty |
+| [Streamable-HTTP WebMVC](mcp-streamable-http-server-boot-starter-docs#streamable-http-webmvc-server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STREAMABLE` |
+| [Stateless WebMVC](mcp-stateless-server-boot-starter-docs#stateless-webmvc-server) | `spring-ai-starter-mcp-server-webmvc` | `spring.ai.mcp.server.protocol=STATELESS` |
 
 ### WebMVC (Reactive)
 
 | Server Type | Dependency | Property |
 | --- | --- | --- |
-| [SSE WebFlux](mcp-stdio-sse-server-boot-starter-docs#_sse_webflux_serve) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=SSE` or empty |
-| [Streamable-HTTP WebFlux](mcp-streamable-http-server-boot-starter-docs#_streamable_http_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
-| [Stateless WebFlux](mcp-stateless-server-boot-starter-docs#_stateless_webflux_server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
+| [SSE WebFlux](mcp-stdio-sse-server-boot-starter-docs#sse-webflux-server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=SSE` or empty |
+| [Streamable-HTTP WebFlux](mcp-streamable-http-server-boot-starter-docs#streamable-http-webflux-server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STREAMABLE` |
+| [Stateless WebFlux](mcp-stateless-server-boot-starter-docs#stateless-webflux-server) | `spring-ai-starter-mcp-server-webflux` | `spring.ai.mcp.server.protocol=STATELESS` |
 
 ## Server Capabilities
 
@@ -62,7 +65,7 @@ MCP 服务器支持多种协议和传输机制。
 MCP 提供多种协议类型，包括：
 
 * [**STDIO**](mcp-stdio-sse-server-boot-starter-docs) - 进程内（例如，服务器在主机应用程序内运行）协议。通信通过标准输入和标准输出进行。要启用 `STDIO`，请设置 `spring.ai.mcp.server.stdio=true`。
-* [**SSE**](mcp-stdio-sse-server-boot-starter-docs#_sse_webmvc_server) - 用于实时更新的 Server-sent events 协议。服务器作为独立进程运行，可以处理多个客户端连接。
+* [**SSE**](mcp-stdio-sse-server-boot-starter-docs#sse-webmvc-server) - 用于实时更新的 Server-sent events 协议。服务器作为独立进程运行，可以处理多个客户端连接。
 * [**Streamable-HTTP**](mcp-streamable-http-server-boot-starter-docs) - [Streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) 允许 MCP 服务器作为独立进程运行，可以使用 HTTP POST 和 GET 请求处理多个客户端连接，并可选地使用 Server-Sent Events (SSE) 流式传输多个服务器消息。它取代了 SSE 传输。要启用 `STREAMABLE` 协议，请设置 `spring.ai.mcp.server.protocol=STREAMABLE`。
 * [**Stateless**](mcp-stateless-server-boot-starter-docs) - 无状态 MCP 服务器专为简化部署而设计，在请求之间不维护会话状态。
 它们非常适合微服务架构和云原生部署。要启用 `STATELESS` 协议，请设置 `spring.ai.mcp.server.protocol=STATELESS`。
@@ -90,10 +93,10 @@ MCP Server Boot Starters 为基于注解的服务器开发提供全面支持，�
 
 ### Key Annotations
 
-* [**@McpTool**](annotations/mcp-annotations-server#_mcptool) - 将方法标记为 MCP 工具，自动生成 JSON schema
-* [**@McpResource**](annotations/mcp-annotations-server#_mcpresource) - 通过 URI 模板提供资源访问
-* [**@McpPrompt**](annotations/mcp-annotations-server#_mcpprompt) - 为 AI 交互生成 prompt 消息
-* [**@McpComplete**](annotations/mcp-annotations-server#_mcpcomplete) - 为 prompts 提供自动完成功能
+* [**@McpTool**](annotations/mcp-annotations-server#mcptool) - 将方法标记为 MCP 工具，自动生成 JSON schema
+* [**@McpResource**](annotations/mcp-annotations-server#mcpresource) - 通过 URI 模板提供资源访问
+* [**@McpPrompt**](annotations/mcp-annotations-server#mcpprompt) - 为 AI 交互生成 prompt 消息
+* [**@McpComplete**](annotations/mcp-annotations-server#mcpcomplete) - 为 prompts 提供自动完成功能
 
 ### Special Parameters
 

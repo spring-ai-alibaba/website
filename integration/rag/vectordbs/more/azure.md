@@ -55,14 +55,7 @@ export OPENAI_API_KEY=<My Azure AI API Key> (Optional)
 </dependency>
 ```
 
-**Azure AI Embedding:**
-
-```xml
-<dependency>
- <groupId>org.springframework.ai</groupId>
- <artifactId>spring-ai-starter-model-azure-openai</artifactId>
-</dependency>
-```
+**Azure / Microsoft Foundry OpenAI Embedding:** 使用相同的 `spring-ai-starter-model-openai`，按 [Azure OpenAI Embedding 接入](../../embeddings/more/azure-openai-embeddings.md) 配置 Azure 连接和部署名。
 
 **Local Sentence Transformers Embedding:**
 
@@ -78,7 +71,7 @@ export OPENAI_API_KEY=<My Azure AI API Key> (Optional)
 ```xml
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-azure-store</artifactId>
+    <artifactId>spring-ai-starter-vector-store-azure</artifactId>
 </dependency>
 ```
 

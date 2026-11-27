@@ -471,7 +471,7 @@ renderAnswer(message.getText());
 
 处理流式响应时从各事件的消息读取推理部分，按提供商的增量顺序展示。为后续工具轮次保留原始消息和 `payload()`，只把摘要和可读文本送到展示层。
 
-[Spring AI 消息参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/models/chat.html)
+[Spring AI 消息参考](https://docs.spring.io/spring-ai/reference/api/chatmodel.html)
 
 ## 百炼模型路由与多轮推理
 

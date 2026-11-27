@@ -88,6 +88,8 @@ dependencies {
 
 > **TIP**: 所有以 `spring.ai.openai.audio.speech` 为前缀的属性都可以在运行时覆盖。
 
+对支持语音指令的模型，例如 `gpt-4o-mini-tts`，可通过 `spring.ai.openai.audio.speech.instructions` 或请求选项的 `instructions(...)` 控制语速、语气和停顿。流式播放用法见下方示例。
+
 ## Runtime Options
 
 `OpenAiAudioSpeechOptions` 类提供在进行 text-to-speech 请求时使用的选项。

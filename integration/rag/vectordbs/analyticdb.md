@@ -28,7 +28,7 @@
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-analyticdb</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-analyticdb</artifactId>
 </dependency>
 ```
 
@@ -36,13 +36,11 @@
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-analyticdb'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-analyticdb'
 }
 ```
 
-向量存储实现可以为您初始化所需的 schema，但您必须通过在 `application.properties` 文件中设置 `spring.ai.vectorstore.analytic.enabled=true` 来选择加入。
-
-> **注意：** 这是一个破坏性更改！在 Spring AI 的早期版本中，此 schema 初始化默认发生。
+如需由向量存储初始化集合，请设置 `spring.ai.vectorstore.analyticdb.initialize-schema=true`。复用已有集合时，保持默认值 `false`，并核对向量维度与索引类型。
 
 Vector Store 还需要一个 `EmbeddingModel` 实例来计算文档的嵌入。
 您可以选择一个可用的 [EmbeddingModel 实现](../embeddings#available-implementations)。
@@ -74,8 +72,9 @@ dependencies {
 spring:
   ai:
     vectorstore:
-      analytic:
+      analyticdb:
         enabled: true
+        initialize-schema: false
         collect-name: my_collection
         access-key-id: <your-access-key-id>
         access-key-secret: <your-access-key-secret>
@@ -119,21 +118,23 @@ List<Document> results = this.vectorStore.similaritySearch(SearchRequest.builder
 
 | Property | Description | Default value |
 |----------|-------------|---------------|
-| `spring.ai.vectorstore.analytic.enabled` | 是否启用 AnalyticDB 向量存储 | `true` |
-| `spring.ai.vectorstore.analytic.collect-name` | 集合（Collection）名称 | - |
-| `spring.ai.vectorstore.analytic.access-key-id` | 阿里云访问密钥 ID | - |
-| `spring.ai.vectorstore.analytic.access-key-secret` | 阿里云访问密钥 Secret | - |
-| `spring.ai.vectorstore.analytic.region-id` | 区域 ID | - |
-| `spring.ai.vectorstore.analytic.db-instance-id` | 数据库实例 ID | - |
-| `spring.ai.vectorstore.analytic.manager-account` | 管理账号 | - |
-| `spring.ai.vectorstore.analytic.manager-account-password` | 管理账号密码 | - |
-| `spring.ai.vectorstore.analytic.namespace` | 命名空间 | - |
-| `spring.ai.vectorstore.analytic.namespace-password` | 命名空间密码 | - |
-| `spring.ai.vectorstore.analytic.metrics` | 相似度度量方式（cosine、l2 等） | `cosine` |
-| `spring.ai.vectorstore.analytic.read-timeout` | 读取超时时间（毫秒） | `60000` |
-| `spring.ai.vectorstore.analytic.user-agent` | 用户代理 | `index` |
-| `spring.ai.vectorstore.analytic.default-top-k` | 默认返回的相似文档数量 | `4` |
-| `spring.ai.vectorstore.analytic.default-similarity-threshold` | 默认相似度阈值 | `0.0` |
+| `spring.ai.vectorstore.analyticdb.enabled` | 是否启用 AnalyticDB 向量存储 | `true` |
+| `spring.ai.vectorstore.analyticdb.initialize-schema` | 是否初始化集合 | `false` |
+| `spring.ai.vectorstore.analyticdb.dimensions` | 索引向量维度 | 自动确定 |
+| `spring.ai.vectorstore.analyticdb.collect-name` | 集合（Collection）名称 | - |
+| `spring.ai.vectorstore.analyticdb.access-key-id` | 阿里云访问密钥 ID | - |
+| `spring.ai.vectorstore.analyticdb.access-key-secret` | 阿里云访问密钥 Secret | - |
+| `spring.ai.vectorstore.analyticdb.region-id` | 区域 ID | - |
+| `spring.ai.vectorstore.analyticdb.db-instance-id` | 数据库实例 ID | - |
+| `spring.ai.vectorstore.analyticdb.manager-account` | 管理账号 | - |
+| `spring.ai.vectorstore.analyticdb.manager-account-password` | 管理账号密码 | - |
+| `spring.ai.vectorstore.analyticdb.namespace` | 命名空间 | - |
+| `spring.ai.vectorstore.analyticdb.namespace-password` | 命名空间密码 | - |
+| `spring.ai.vectorstore.analyticdb.metrics` | 相似度度量方式（cosine、l2 等） | `cosine` |
+| `spring.ai.vectorstore.analyticdb.read-timeout` | 读取超时时间（毫秒） | `60000` |
+| `spring.ai.vectorstore.analyticdb.user-agent` | 用户代理 | `index` |
+| `spring.ai.vectorstore.analyticdb.default-top-k` | 默认返回的相似文档数量，`-1` 表示沿用适配器默认值 | `-1` |
+| `spring.ai.vectorstore.analyticdb.default-similarity-threshold` | 默认相似度阈值，`-1.0` 表示沿用适配器默认值 | `-1.0` |
 
 ## Metadata filtering
 
@@ -180,7 +181,7 @@ vectorStore.similaritySearch(SearchRequest.builder()
 
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-analyticdb</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-analyticdb</artifactId>
 </dependency>
 ```
 

@@ -88,7 +88,7 @@ dependencies {
 
 提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
-### Embedding 属性
+### Embedding 属性 {#embedding-options}
 
 #### Retry 属性
 

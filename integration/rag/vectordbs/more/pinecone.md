@@ -73,7 +73,7 @@ spring.ai.vectorstore.pinecone.index-name=<your index name>
 spring.ai.openai.api.key=<api-key>
 ```
 
-请查看 [configuration parameters](#_configuration_properties) 列表以了解向量存储的默认值和配置选项。
+请查看 [configuration parameters](#configuration-properties) 列表以了解向量存储的默认值和配置选项。
 
 现在您可以在应用程序中自动装配 Pinecone Vector Store 并使用它
 

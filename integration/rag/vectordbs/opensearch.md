@@ -28,7 +28,7 @@
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-opensearch</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-opensearch</artifactId>
 </dependency>
 ```
 
@@ -36,7 +36,7 @@
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-opensearch'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-opensearch'
 }
 ```
 
@@ -136,12 +136,12 @@ spring:
 
 ## Manual Configuration
 
-不使用 Spring Boot auto-configuration，您可以手动配置 Alibaba OpenSearch 向量存储。为此，您需要将 `spring-ai-alibaba-starter-store-opensearch` 添加到您的项目：
+不使用 Spring Boot auto-configuration，您可以手动配置 Alibaba OpenSearch 向量存储。为此，您需要将 `spring-ai-alibaba-starter-vector-store-opensearch` 添加到您的项目：
 
 ```xml
 <dependency>
 	<groupId>com.alibaba.cloud.ai</groupId>
-	<artifactId>spring-ai-alibaba-starter-store-opensearch</artifactId>
+	<artifactId>spring-ai-alibaba-starter-vector-store-opensearch</artifactId>
 </dependency>
 ```
 
@@ -149,7 +149,7 @@ spring:
 
 ```groovy
 dependencies {
-    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-store-opensearch'
+    implementation 'com.alibaba.cloud.ai:spring-ai-alibaba-starter-vector-store-opensearch'
 }
 ```
 

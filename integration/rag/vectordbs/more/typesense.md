@@ -37,7 +37,7 @@ dependencies {
 
 > **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
 
-请查看 [configuration parameters](#_configuration_properties) 列表以了解向量存储的默认值和配置选项。
+请查看 [configuration parameters](#configuration-properties) 列表以了解向量存储的默认值和配置选项。
 
 > **提示：** 请参阅 [Artifact Repositories](https://docs.spring.io/spring-ai/reference/getting-started.html#artifact-repositories) 部分，将 Maven Central 和/或 Snapshot Repositories 添加到您的构建文件中。
 

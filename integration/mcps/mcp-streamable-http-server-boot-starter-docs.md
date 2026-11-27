@@ -6,7 +6,7 @@
 
 > **提示：** 设置 `spring.ai.mcp.server.protocol=STREAMABLE` 属性
 
-> **提示：** 使用 [Streamable-HTTP clients](mcp-client-boot-starter-docs#_streamable_http_transport_properties) 连接到 Streamable-HTTP 服务器。
+> **提示：** 使用 [Streamable-HTTP clients](mcp-client-boot-starter-docs#streamable-http-transport-properties) 连接到 Streamable-HTTP 服务器。
 
 ### Streamable-HTTP WebMVC Server
 
@@ -139,7 +139,7 @@ public List<McpServerFeatures.SyncToolSpecification> myTools(...) {
 
 #### Tool Context Support
 
-支持 [ToolContext](../toolcalls/tool-calls#_tool_context)，允许将上下文信息传递给工具调用。它在 `exchange` 键下包含一个 `McpSyncServerExchange` 实例，可通过 `McpToolUtils.getMcpExchange(toolContext)` 访问。请参阅此[示例](https://github.com/spring-projects/spring-ai-examples/blob/3fab8483b8deddc241b1e16b8b049616604b7767/model-context-protocol/sampling/mcp-weather-webmvc-server/src/main/java/org/springframework/ai/mcp/sample/server/WeatherService.java#L59-L126)，演示 `exchange.loggingNotification(...)` 和 `exchange.createMessage(...)`。
+支持 [ToolContext](../toolcalls/tool-calls#tool-context)，允许将上下文信息传递给工具调用。它在 `exchange` 键下包含一个 `McpSyncServerExchange` 实例，可通过 `McpToolUtils.getMcpExchange(toolContext)` 访问。请参阅此[示例](https://github.com/spring-projects/spring-ai-examples/blob/3fab8483b8deddc241b1e16b8b049616604b7767/model-context-protocol/sampling/mcp-weather-webmvc-server/src/main/java/org/springframework/ai/mcp/sample/server/WeatherService.java#L59-L126)，演示 `exchange.loggingNotification(...)` 和 `exchange.createMessage(...)`。
 
 ### [Resources](https://modelcontextprotocol.io/specification/2025-03-26/server/resources/)
 
@@ -235,7 +235,7 @@ public List<McpServerFeatures.SyncCompletionSpecification> myCompletions() {
 }
 ```
 
-在 MCP 客户端上，您可以注册[日志消费者](mcp-client-boot-starter-docs#_customization_types)来处理这些消息：
+在 MCP 客户端上，您可以注册[日志消费者](mcp-client-boot-starter-docs#customization-types)来处理这些消息：
 
 ```java
 mcpClientSpec.loggingConsumer((McpSchema.LoggingMessageNotification log) -> {

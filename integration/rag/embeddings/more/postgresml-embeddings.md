@@ -44,9 +44,9 @@ dependencies {
 
 提示：请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件。
 
-使用 `spring.ai.postgresml.embedding.options.*` 属性来配置您的 `PostgresMlEmbeddingModel`。
+使用 `spring.ai.postgresml.embedding.*` 属性来配置您的 `PostgresMlEmbeddingModel`。
 
-### Embedding 属性
+### Embedding 属性 {#embedding-options}
 
 [注意]
 ====
@@ -66,12 +66,12 @@ dependencies {
 | spring.ai.postgresml.embedding.enabled (已移除且不再有效) | 启用 PostgresML embedding 模型。 | true |
 | spring.ai.model.embedding | 启用 PostgresML embedding 模型。 | postgresml |
 | spring.ai.postgresml.embedding.create-extension | 执行 SQL 'CREATE EXTENSION IF NOT EXISTS pgml' 以启用扩展 | false |
-| spring.ai.postgresml.embedding.options.transformer | 用于 embedding 的 Hugging Face transformer 模型。 | distilbert-base-uncased |
-| spring.ai.postgresml.embedding.options.kwargs | 其他 transformer 特定选项。 | empty map |
-| spring.ai.postgresml.embedding.options.vectorType | 用于 embedding 的 PostgresML 向量类型。支持两个选项：`PG_ARRAY` 和 `PG_VECTOR`。 | PG_ARRAY |
-| spring.ai.postgresml.embedding.options.metadataMode | 文档元数据聚合模式 | EMBED |
+| spring.ai.postgresml.embedding.transformer | 用于 embedding 的 Hugging Face transformer 模型。 | distilbert-base-uncased |
+| spring.ai.postgresml.embedding.kwargs | 其他 transformer 特定选项。 | empty map |
+| spring.ai.postgresml.embedding.vectorType | 用于 embedding 的 PostgresML 向量类型。支持两个选项：`PG_ARRAY` 和 `PG_VECTOR`。 | PG_ARRAY |
+| spring.ai.postgresml.embedding.metadataMode | 文档元数据聚合模式 | EMBED |
 
-提示：所有前缀为 `spring.ai.postgresml.embedding.options` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
+提示：所有前缀为 `spring.ai.postgresml.embedding` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
 
 ## 运行时选项
 
@@ -99,10 +99,10 @@ EmbeddingResponse embeddingResponse = embeddingModel.call(
 以下是一个使用 `EmbeddingModel` 实现的简单 `@Controller` 类示例。
 
 ```properties
-spring.ai.postgresml.embedding.options.transformer=distilbert-base-uncased
-spring.ai.postgresml.embedding.options.vectorType=PG_ARRAY
-spring.ai.postgresml.embedding.options.metadataMode=EMBED
-spring.ai.postgresml.embedding.options.kwargs.device=cpu
+spring.ai.postgresml.embedding.transformer=distilbert-base-uncased
+spring.ai.postgresml.embedding.vectorType=PG_ARRAY
+spring.ai.postgresml.embedding.metadataMode=EMBED
+spring.ai.postgresml.embedding.kwargs.device=cpu
 ```
 
 ```java

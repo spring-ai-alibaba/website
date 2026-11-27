@@ -73,7 +73,7 @@ export AI_MODEL_EMBEDDING=bedrock-cohere
 java -Dspring.ai.model.embedding=bedrock-cohere -jar your-application.jar
 ```
 
-### Embedding 属性
+### Embedding 属性 {#embedding-options}
 
 前缀 `spring.ai.bedrock.aws` 是配置与 AWS Bedrock 连接的属性前缀。
 
@@ -104,8 +104,8 @@ java -Dspring.ai.model.embedding=bedrock-cohere -jar your-application.jar
 | spring.ai.model.embedding | 启用或禁用 Cohere 支持 | bedrock-cohere |
 | spring.ai.bedrock.cohere.embedding.enabled (已移除且不再有效) | 启用或禁用 Cohere 支持 | false |
 | spring.ai.bedrock.cohere.embedding.model | 要使用的模型 ID。请参阅 https://github.com/spring-projects/spring-ai/blob/056b95a00efa5b014a1f488329fbd07a46c02378/models/spring-ai-bedrock/src/main/java/org/springframework/ai/bedrock/cohere/api/CohereEmbeddingBedrockApi.java#L150[CohereEmbeddingModel] 以了解支持的模型。 | cohere.embed-multilingual-v3 |
-| spring.ai.bedrock.cohere.embedding.options.input-type | 添加特殊 token 以区分每种类型。您不应混合不同的类型，除非在搜索和检索时混合类型。在这种情况下，使用 search_document 类型嵌入您的语料库，使用 search_query 类型嵌入查询。 | SEARCH_DOCUMENT |
-| spring.ai.bedrock.cohere.embedding.options.truncate | 指定 API 如何处理超过最大 token 长度的输入。如果指定 LEFT 或 RIGHT，模型将丢弃输入，直到剩余输入恰好是模型的最大输入 token 长度。 | NONE |
+| spring.ai.bedrock.cohere.embedding.input-type | 添加特殊 token 以区分每种类型。您不应混合不同的类型，除非在搜索和检索时混合类型。在这种情况下，使用 search_document 类型嵌入您的语料库，使用 search_query 类型嵌入查询。 | SEARCH_DOCUMENT |
+| spring.ai.bedrock.cohere.embedding.truncate | 指定 API 如何处理超过最大 token 长度的输入。如果指定 LEFT 或 RIGHT，模型将丢弃输入，直到剩余输入恰好是模型的最大输入 token 长度。 | NONE |
 
 注意：通过 Amazon Bedrock 访问 Cohere 时，截断功能不可用。这是 Amazon Bedrock 的问题。Spring AI 类 `BedrockCohereEmbeddingModel` 将截断到 2048 个字符长度，这是模型支持的最大值。
 
@@ -113,13 +113,13 @@ java -Dspring.ai.model.embedding=bedrock-cohere -jar your-application.jar
 支持的值为：`cohere.embed-multilingual-v3` 和 `cohere.embed-english-v3`。
 模型 ID 值也可以在 https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids-arns.html[AWS Bedrock documentation for base model IDs] 中找到。
 
-提示：所有前缀为 `spring.ai.bedrock.cohere.embedding.options` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
+提示：所有前缀为 `spring.ai.bedrock.cohere.embedding` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
 
 ## 运行时选项
 
 https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-bedrock/src/main/java/org/springframework/ai/bedrock/cohere/BedrockCohereEmbeddingOptions.java[BedrockCohereEmbeddingOptions.java] 提供模型配置，例如 `input-type` 或 `truncate`。
 
-在启动时，可以使用 `BedrockCohereEmbeddingModel(api, options)` 构造函数或 `spring.ai.bedrock.cohere.embedding.options.*` 属性配置默认选项。
+在启动时，可以使用 `BedrockCohereEmbeddingModel(api, options)` 构造函数或 `spring.ai.bedrock.cohere.embedding.*` 属性配置默认选项。
 
 在运行时，您可以通过向 `EmbeddingRequest` 调用添加新的、特定于请求的选项来覆盖默认选项。
 例如，为特定请求覆盖默认输入类型：
@@ -144,7 +144,7 @@ spring.ai.bedrock.aws.access-key=${AWS_ACCESS_KEY_ID}
 spring.ai.bedrock.aws.secret-key=${AWS_SECRET_ACCESS_KEY}
 
 spring.ai.model.embedding=bedrock-cohere
-spring.ai.bedrock.cohere.embedding.options.input-type=search-document
+spring.ai.bedrock.cohere.embedding.input-type=search-document
 ```
 
 提示：将 `regions`、`access-key` 和 `secret-key` 替换为您的 AWS 凭据。
@@ -208,7 +208,7 @@ EmbeddingResponse embeddingResponse = this.embeddingModel
 	.embedForResponse(List.of("Hello World", "World is big and salvation is near"));
 ```
 
-## 低级 CohereEmbeddingBedrockApi 客户端
+## 低级 CohereEmbeddingBedrockApi 客户端 {#low-level-api}
 
 https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-bedrock/src/main/java/org/springframework/ai/bedrock/cohere/api/CohereEmbeddingBedrockApi.java[CohereEmbeddingBedrockApi] 是在 AWS Bedrock https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-cohere-command.html[Cohere Command models] 之上的轻量级 Java 客户端。
 

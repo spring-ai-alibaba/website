@@ -92,6 +92,8 @@ public interface DocumentWriter extends Consumer<List<Document>> {
 
 以下类图说明了 ETL 接口和实现。
 
+### ETL 类图 {#etl-class-diagram}
+
 ![ETL Class Diagram](/img/integration/etl-class-diagram.jpg)
 
 ## DocumentReaders
@@ -530,9 +532,23 @@ public class MyPagePdfDocumentReader {
 }
 ```
 
+#### 按物理页范围读取
+
+`PagePdfDocumentReader` 支持从 1 开始、包含首尾的页码范围。可多次调用 `addPageRange`。其他 PDF Reader 无法处理该选项时会拒绝配置。
+
+```java
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
+
+var reader = new PagePdfDocumentReader(pdfResource, PdfDocumentReaderConfig.builder()
+        .addPageRange(4, 12)
+        .build());
+var documents = reader.get();
+```
+
 ### Tika (DOCX, PPTX, HTML...)
 
-`TikaDocumentReader` 使用 Apache Tika 从各种文档格式（如 PDF、DOC/DOCX、PPT/PPTX 和 HTML）中提取文本。有关支持的格式的完整列表，请参阅 https://tika.apache.org/3.1.0/formats.html[Tika 文档]。
+`TikaDocumentReader` 使用 Apache Tika 从各种文档格式（如 PDF、DOC/DOCX、PPT/PPTX 和 HTML）中提取文本。有关支持的格式的完整列表，请参阅 [Apache Tika 格式参考](https://tika.apache.org/)。
 
 #### 依赖项
 
@@ -571,6 +587,21 @@ class MyTikaDocumentReader {
 }
 ```
 
+#### 限制 Tika 提取字符数
+
+Spring AI 2.1 默认每份文件最多提取 1000 万个字符。超限时抛出 `IllegalStateException`，入库任务可以将该文件标记为失败并继续处理下一份。应用也可按文件类型配置更小的上限：
+
+```java
+import org.springframework.ai.reader.ExtractedTextFormatter;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+
+var reader = new TikaDocumentReader(uploadedResource, 2_000_000,
+        ExtractedTextFormatter.defaults());
+var documents = reader.get();
+```
+
+提取文本保存在内存中。可在上传阶段限制文件大小，并按预期的文本体积选取提取上限。
+
 ## Transformers
 
 ### TextSplitter
@@ -580,6 +611,18 @@ class MyTikaDocumentReader {
 ### TokenTextSplitter
 
 `TokenTextSplitter` 是 `TextSplitter` 的实现，它使用 CL100K_BASE 编码基于 token 计数将文本拆分为块。
+
+#### 配置分块重叠
+
+默认块之间没有重叠。需要保留跨边界上下文时，可使用 `withChunkOverlap` 设置小于块大小的非负 token 数。重叠会增加索引体积和嵌入用量。
+
+```java
+var splitter = TokenTextSplitter.builder()
+        .withChunkSize(600)
+        .withChunkOverlap(80)
+        .build();
+var chunks = splitter.apply(documents);
+```
 
 #### 用法
 

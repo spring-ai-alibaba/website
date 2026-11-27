@@ -10,12 +10,12 @@ Spring AI 通过提供模块化架构支持 RAG，允许您自己构建自定义
 
 Spring AI 使用 `Advisor` API 为常见的 RAG 流程提供开箱即用的支持。
 
-要使用 `QuestionAnswerAdvisor` 或 `VectorStoreChatMemoryAdvisor`，您需要将 `spring-ai-advisors-vector-store` 依赖项添加到您的项目：
+要使用 `QuestionAnswerAdvisor` 或 `VectorStoreChatMemoryAdvisor`，您需要将 `spring-ai-vector-store-advisor` 依赖项添加到您的项目：
 
 ```xml
 <dependency>
    <groupId>org.springframework.ai</groupId>
-   <artifactId>spring-ai-advisors-vector-store</artifactId>
+   <artifactId>spring-ai-vector-store-advisor</artifactId>
 </dependency>
 ```
 
@@ -69,7 +69,7 @@ String content = this.chatClient.prompt()
 
 `FILTER_EXPRESSION` 参数允许您根据提供的表达式动态过滤搜索结果。
 
-#### 自定义模板
+#### 自定义模板 {#custom-template}
 
 `QuestionAnswerAdvisor` 使用默认模板来增强用户问题与检索到的文档。您可以通过 `.promptTemplate()` builder 方法提供自己的 `PromptTemplate` 对象来自定义此行为。
 
@@ -188,7 +188,7 @@ String answer = chatClient.prompt()
         .content();
 ```
 
-有关更多信息，请参阅 [VectorStoreDocumentRetriever](#_vectorstoredocumentretriever)。
+有关更多信息，请参阅 [VectorStoreDocumentRetriever](#vectorstoredocumentretriever)。
 
 ##### Advanced RAG
 
@@ -211,6 +211,16 @@ String answer = chatClient.prompt()
 ```
 
 您还可以使用 `DocumentPostProcessor` API 在将检索到的文档传递给模型之前对它们进行后处理。例如，您可以使用这样的接口根据文档与查询的相关性对检索到的文档执行重新排序，删除不相关或冗余的文档，或压缩每个文档的内容以减少噪音和冗余。
+
+## Spring AI 2.1 检索组件
+
+- 如果业务需要对候选文档做注入筛查、相关性判断或质量重排，使用 [Decision Model 文档后处理](decision-post-processors.md)，把筛查和排序接在 `RetrievalAugmentationAdvisor` 的检索环节之后。
+- 如果嵌入已由离线任务或外部服务生成，使用 [预计算向量写入与检索](vectordbs/precomputed-embeddings.md)。`VectorStoreDocumentRetriever` 默认按查询文本发起检索，需要复用查询向量时可实现 `DocumentRetriever` 并调用向量重载。
+- 如果接入托管知识库，可使用 [百炼知识库](bailian-knowledge.md) 或 [Amazon Bedrock Knowledge Base](vectordbs/managed-vector-services.md#bedrock-knowledge-base)，由对应服务执行索引与检索。
+
+### 在 RAG 请求中启用语义缓存
+
+若配置 Redis `SemanticCacheAdvisor`，2.1 要求提供 `SemanticCacheScopeResolver`。自动配置只有在找到该解析器 Bean 时才会注册 Advisor。作用域应覆盖身份或租户、权限、系统提示和影响答案的知识库或检索配置。作用域为空时跳过缓存。有细粒度权限的请求可以绕过共享缓存，避免复用其他权限上下文的答案。参见 [Spring AI 2.1 升级说明](https://docs.spring.io/spring-ai/reference/upgrade-notes.html)。
 
 ## Extensions 的 HyDE 与 Elasticsearch 混合检索
 

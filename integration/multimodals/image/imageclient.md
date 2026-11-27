@@ -158,7 +158,7 @@ public class ImageGeneration implements ModelResult<Image> {
 
 ## API Docs
 
-您可以在[这里](https://docs.spring.io/spring-ai/docs/current-SNAPSHOT/)找到 Javadoc。
+您可以在[这里](https://docs.spring.io/spring-ai/docs/current/api/)找到 Javadoc。
 
 ## Feedback and Contributions
 
