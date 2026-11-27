@@ -442,6 +442,21 @@ public class AgentWorkflowExample {
 
 **注意**：`outputKey` 是在创建 `ReactAgent` 时通过 `ReactAgent.builder().outputKey()` 设置的，用于指定 Agent 输出结果在状态中的键名。
 
+### 观察 Agent 节点的流式事件
+
+在父图上调用 `streamEvents()` 并启用嵌套事件，即可读取 Agent 内部的模型事件。启用 `TOOLS` 和 `CUSTOM` 通道后，还能读取工具增量和自定义进度。用 `scope().namespace()` 中的节点和 Agent 段定位来源。即使多个 Agent 都有名为 `model` 的节点，每个调用的路径 ID 也不同。
+
+```java
+var options = StreamOptions.defaults().withNested(true);
+Flux<RunEvent> events = compiledGraph.streamEvents(
+    Map.of("messages", List.of(new UserMessage("How many items are available?"))),
+    RunnableConfig.builder().build(), options);
+```
+
+`includeContents` 和 `returnReasoningContents` 影响父子图交换的消息。事件包含哪些内容由 `StreamOptions` 决定。需要单独观察 Agent 作为工具发起的委派时，使用主 Agent 的 `subagents()` 视图。
+
+[可运行的 Agent 节点示例](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentEventStreamingExample.java) · [类型化运行事件](../../graph-core/core/streaming.md#类型化运行事件)
+
 ### 多 Agent 协作工作流示例
 
 以下示例展示了一个完整的多 Agent 协作场景：

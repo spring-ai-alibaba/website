@@ -415,3 +415,24 @@ Optional<OverAllState> result = multiToolAgent.invoke(
 4. **顺序执行**：主Agent可以按顺序调用多个工具，实现复杂的工作流
 
 > **提示**：为每个子Agent提供清晰、准确的 `description` 非常重要，这直接影响主Agent如何选择合适的工具。描述应该简洁地说明Agent的职责和能力。
+
+### 观察子 Agent 的运行事件
+
+通过 `AgentTool.create(worker)` 注册委派工具，并在主 Agent 的流式选项中启用子作用域。读取整个事件流时，从 `scope().namespace()` 可以找到发起委派的工具和子 Agent。使用 `eventRun` 时，`subagents()` 会为每次子 Agent 调用返回独立视图，包含子运行自己的消息、工具和终态。
+
+```java
+var options = StreamOptions.all();
+try (var run = supervisor.eventRun("How many items are available?", config, options)) {
+    var children = run.subagents()
+        .flatMap(child -> child.output().doOnNext(outcome ->
+            System.out.println(child.scope().scopeId() + " " + outcome.type())))
+        .then().toFuture();
+    run.start();
+    RunEvent outcome = run.output().block(Duration.ofSeconds(5));
+    children.get(5, TimeUnit.SECONDS);
+}
+```
+
+同名子 Agent 被多次调用时，用 `scopeId()` 区分各次执行。子 Agent 的最终结果仍按 AgentTool 的委派输出配置返回主 Agent。需要审批时，用原线程和中断 ID 恢复主运行。订阅子运行事件与选择允许回传的业务状态是独立配置。
+
+[可运行的 AgentEventStreamingExample](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentEventStreamingExample.java) · [工具进度与输出增量](../tutorials/tools.md#流式工具与进度)

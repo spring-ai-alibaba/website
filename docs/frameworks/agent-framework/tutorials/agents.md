@@ -674,9 +674,29 @@ ReactAgent agent = ReactAgent.builder()
     .build();`}
 </Code>
 
+#### 类型化运行事件
+
+`agent.streamEvents(input, config, options)` 返回 `Flux<RunEvent>`。显示模型文本时读取 `RunEvent.ModelDelta.text()` 并按 `modelCallId()` 合并片段。读取完整模型消息和用量时使用 `MODEL_COMPLETED`，每轮 Agent 可能调用模型多次。根 `RUN_COMPLETED` 携带整次运行的最终状态。
+
+```java
+var config = RunnableConfig.builder().threadId("stock-42").build();
+var options = StreamOptions.defaults().withNested(true);
+Flux<RunEvent> events = agent.streamEvents("How many items are available?", config, options);
+
+events.subscribe(event -> {
+    if (event.data() instanceof RunEvent.ModelDelta delta && delta.text() != null) {
+        System.out.print(delta.text());
+    }
+}, error -> System.err.println(error.getMessage()));
+```
+
+应用要同时观察模型、工具和子 Agent 时，用 `eventRun` 共享一次执行，并在 `start()` 前注册所需视图。工具和自定义进度通道需在 `StreamOptions` 中显式开启。开启嵌套事件后，按作用域分组渲染子运行的文本，避免把不同调用拼成同一条回复。
+
+[可运行的 AgentEventStreamingExample](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/AgentEventStreamingExample.java) · [Graph 事件协议和订阅选项](../../graph-core/core/streaming.md#类型化运行事件)
+
 #### 流式输出
 
-在 Agent 场景中，流式输出的核心是处理 `StreamingOutput` 类型。无论是模型推理、工具调用还是 Hook 节点，输出都统一为这个类型。
+使用 `agent.stream()` 时，应用通过 `StreamingOutput` 读取模型、工具和 Hook 节点输出。
 
 **使用 OutputType 区分输出类型**：
 
@@ -685,7 +705,7 @@ ReactAgent agent = ReactAgent.builder()
 | OutputType | 说明 |
 |------------|------|
 | `AGENT_MODEL_STREAMING` | 模型推理的流式增量内容 |
-| `AGENT_MODEL_FINISHED` | 模型推理完成，可获取全量内容 |
+| `AGENT_MODEL_FINISHED` | 模型推理完成，完整消息可从运行终态中的 `messages` 读取 |
 | `AGENT_TOOL_STREAMING` | 工具调用的流式增量内容 |
 | `AGENT_TOOL_FINISHED` | 工具调用完成 |
 | `AGENT_HOOK_STREAMING` | Hook 节点的流式增量内容 |
@@ -713,7 +733,7 @@ stream.subscribe(
             OutputType type = streamingOutput.getOutputType();
             
             // 处理模型推理的流式输出
-            if (type == OutputType.AGENT_MODEL_STREAMING) {
+            if (type == OutputType.AGENT_MODEL_STREAMING && streamingOutput.message() != null) {
                 // 流式增量内容，逐步显示
                 System.out.print(streamingOutput.message().getText());
             } else if (type == OutputType.AGENT_MODEL_FINISHED) {
@@ -721,7 +741,7 @@ stream.subscribe(
                 System.out.println("\\n模型输出完成");
             }
             
-            // 处理工具调用完成（目前不支持 STREAMING）
+            // 处理节点输出中的工具完成消息
             if (type == OutputType.AGENT_TOOL_FINISHED) {
                 System.out.println("工具调用完成: " + output.node());
             }

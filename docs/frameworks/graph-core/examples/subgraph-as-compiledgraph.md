@@ -37,4 +37,28 @@ public static CompiledGraph useInParentGraph(CompiledGraph compiledSubGraph) thr
 
 运行 `SubgraphAsCompiledGraphExample`，预期输出 `Done: Processed: HELLO WORLD`。示例也复用同一个 `CompiledGraph` 实例作为多个节点，为每个位置分配自己的节点 ID。
 
-子图要跨执行暂停和恢复时，为父图和子图配置检查点器。用父图的 `threadId` 恢复整条流程。需要指定输入键和回写键时，参见[按值删除和子图状态边界](runtime-preview.md#按值删除和子图状态边界)。键名不同或需要转换数据时，参见[通过 NodeAction 调用子图](subgraph-as-nodeaction.md)。
+## 映射状态并恢复子图
+
+父图和子图使用不同的状态键时，可以在挂载时提供输入和输出映射。下例把父图的 `input` 传为子图的 `topic`，再把子图的 `draft` 映射为父图的 `answer`。输出映射也会作用于子图已提交的单步写入，因此要能接收缺少 `draft` 的部分更新。
+
+```java
+parent.addNode("compose", child,
+    state -> Map.of("topic", state.value("input", String.class).orElseThrow()),
+    write -> write.get("draft") instanceof AssistantMessage draft
+        ? Map.of("answer", draft.getText()) : Map.of());
+```
+
+要跨执行恢复，为父图和子图配置检查点器。用父图的 `threadId` 续跑。示例在子图的 `draft` 节点前暂停，接收根 `RUN_PAUSED` 后用空输入和 `run.withResume()` 继续执行。如果是需要用户反馈的暂停，则使用对应的中断 ID 提交反馈。
+
+```java
+var options = StreamOptions.defaults().withNested(true);
+var run = RunnableConfig.builder().threadId("draft-42").build();
+var paused = graph.streamEvents(Map.of("input", "Spring AI"), run, options)
+    .blockLast(Duration.ofSeconds(5));
+if (paused != null && paused.type() == RunEvent.Type.RUN_PAUSED) {
+    var completed = graph.streamEvents(Map.of(), run.withResume(), options)
+        .blockLast(Duration.ofSeconds(5));
+}
+```
+
+[可运行的 GraphEventStreamingExample](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/GraphEventStreamingExample.java) · [按值删除和子图状态边界](runtime-preview.md#按值删除和子图状态边界) · [通过 NodeAction 动态调用子图](subgraph-as-nodeaction.md)
