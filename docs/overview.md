@@ -21,6 +21,8 @@ Spring AI Alibaba 项目从架构上包含如下三层：
 * **Graph**，graph 是一个低级别的工作流和多代理协调框架，能够帮助开发者实现复杂的应用程序编排，它具备丰富的预置节点和简化的图状态定义，Graph 是 Agent Framework 的底层运行时基座。
 * **Augmented LLM**，以 Spring AI 框架底层原子抽象为基础，为构建大型语言模型（LLM）应用提供基础抽象，例如模型（Model）、工具（Tool）、多模态组件（MCP）、消息（Message）、向量存储（Vector Store）等。
 
+[版本与依赖](versions.md) · [新特性与迁移](release-highlights.md)
+
 ## 设计原则
 我们推荐您使用 Agent Framework 内置的 `ReactAgent` 抽象快速构建 Agent 应用。
 
@@ -34,13 +36,13 @@ Spring AI Alibaba 项目从架构上包含如下三层：
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.2.0</version>
+    <version>2.1.0.0</version>
 </dependency>
 
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.2.1</version>
+    <version>2.1.0.0</version>
 </dependency>
 ```
 

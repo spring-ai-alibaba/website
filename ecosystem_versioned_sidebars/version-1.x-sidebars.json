@@ -1,0 +1,11 @@
+{
+  "ecosystemSidebar": [
+    {
+      "type": "category",
+      "label": "Admin",
+      "items": [
+        "admin/quick-start"
+      ]
+    }
+  ]
+}

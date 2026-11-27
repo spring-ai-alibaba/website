@@ -57,7 +57,8 @@ dependencies {
 @Bean
 public EmbeddingModel embeddingModel() {
     // 可以是任何其他 EmbeddingModel 实现。
-    return new OpenAiEmbeddingModel(new OpenAiApi(System.getenv("OPENAI_API_KEY")));
+    return new OpenAiEmbeddingModel(MetadataMode.EMBED,
+        OpenAiEmbeddingOptions.builder().apiKey(System.getenv("OPENAI_API_KEY")).build());
 }
 ```
 

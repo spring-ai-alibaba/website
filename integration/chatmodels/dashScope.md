@@ -116,52 +116,52 @@ Spring AI Alibaba 为 DashScope Chat Client 提供 Spring Boot auto-configuratio
 | spring.ai.dashscope.chat.completions-path | 要附加到 base URL 的路径。 | `/api/v1/services/aigc/text-generation/generation` |
 | spring.ai.dashscope.chat.api-key | 可选覆盖 `spring.ai.dashscope.api-key` 以提供 chat 特定的 API Key。 | - |
 | spring.ai.dashscope.chat.work-space-id | 可选地，您可以指定用于 API 请求的工作空间 ID。 | - |
-| spring.ai.dashscope.chat.options.model | 要使用的 DashScope chat model 名称。您可以在以下模型之间选择：`qwen-plus`、`qwen-turbo`、`qwen-max`、`qwen-max-longcontext`、`qwen-vl-plus`、`qwen-vl-max` 等。有关更多信息，请参阅 [DashScope 模型列表](https://help.aliyun.com/zh/model-studio/getting-started/models)。 | `qwen-plus` |
-| spring.ai.dashscope.chat.options.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。范围：[0, 2)，系统默认：0.85。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.85 |
-| spring.ai.dashscope.chat.options.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 `top_p` 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。范围：(0, 1.0)，默认：0.8。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | 0.8 |
-| spring.ai.dashscope.chat.options.topK | 采样候选池的大小（top-k）。例如，top_k = 50 意味着只考虑 50 个得分最高的 tokens 进行随机采样。较大的值增加随机性；较小的值增加确定性。注意：如果 top_k 为 null 或 > 100，则禁用 top-k，仅应用 top-p。默认值为 null（即禁用）。 | - |
-| spring.ai.dashscope.chat.options.seed | 用于生成的随机种子，由用户控制以影响可重现性。Seed 支持无符号 64 位整数。当提供 seed 时，模型将尝试生成相同或相似的结果，但不保证完全可重现性。 | - |
-| spring.ai.dashscope.chat.options.stop | 最多 4 个序列，API 将停止生成更多 tokens。支持传入字符串数组或 token_ids 数组。 | - |
-| spring.ai.dashscope.chat.options.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。 | - |
-| spring.ai.dashscope.chat.options.maxInputTokens | 输入的最大 tokens 数。 | - |
-| spring.ai.dashscope.chat.options.repetitionPenalty | 用于控制模型生成过程中的重复程度。增加 repetition_penalty 可以减少模型生成的重复程度。值为 1.0 表示无惩罚。默认值为 1.1。 | 1.1 |
-| spring.ai.dashscope.chat.options.enableSearch | 模型内置了互联网搜索服务。此参数控制模型在生成文本时是否参考和使用互联网搜索结果。true：启用互联网搜索。false（默认）：禁用互联网搜索。 | false |
-| spring.ai.dashscope.chat.options.searchOptions | 联网搜索的策略。仅在 enable_search 为 true 时生效。 | - |
-| spring.ai.dashscope.chat.options.responseFormat | 模型可以指定返回内容的格式。有效值：`{"type": "text"}` 或 `{"type": "json_object"}`。 | - |
-| spring.ai.dashscope.chat.options.incrementalOutput | 控制是否在流式输出模式下启用增量输出，即后续输出内容是否包含之前输出的内容。当设置为 true 时，将启用增量输出模式，后续输出不会包含之前输出的内容。您需要自己拼接整体输出。当设置为 false 时，后续输出将包含之前输出的内容。 | true |
-| spring.ai.dashscope.chat.options.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
-| spring.ai.dashscope.chat.options.toolChoice | 控制模型调用哪个（如果有）function。`none` 意味着模型不会调用 function，而是生成消息。`auto` 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type": "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，`none` 是默认值。如果存在 functions，`auto` 是默认值。 | - |
-| spring.ai.dashscope.chat.options.parallelToolCalls | 是否在工具使用期间启用并行 function calling。 | - |
-| spring.ai.dashscope.chat.options.enableThinking | 是否启用模型的思考过程。适用于 Qwen3 全系统模型。 | false |
-| spring.ai.dashscope.chat.options.thinkingBudget | 思考过程的最大长度，在 enable_thinking 为 true 时生效，适用于 Qwen3 全系统模型。 | - |
-| spring.ai.dashscope.chat.options.vlHighResolutionImages | 将 token 限制更改为 16384 用于 vl 模型，仅支持 vl 模型，包括 qwen-vl-max、qwen-vl-max-0809、qwen-vl-plus-0809。 | - |
-| spring.ai.dashscope.chat.options.vlEnableImageHwOutput | 是否启用视觉语言模型的图像硬件输出。 | false |
-| spring.ai.dashscope.chat.options.multiModel | 是否使用 DashScope 多模态生成接口。 | false |
-| spring.ai.dashscope.chat.options.modalities | 您希望模型为此请求生成的输出类型。大多数模型能够生成文本，这是默认值。某些模型也可以用于生成音频。 | - |
-| spring.ai.dashscope.chat.options.audio | 音频生成的音频参数。当通过 `modalities`: `audio` 请求音频输出时必需。 | - |
-| spring.ai.dashscope.chat.options.asrOptions | 自动语音识别（ASR）选项。 | - |
-| spring.ai.dashscope.chat.options.ocrOptions | OCR（光学字符识别）选项。 | - |
-| spring.ai.dashscope.chat.options.logprobs | 是否返回每个输出 token 的对数概率。 | - |
-| spring.ai.dashscope.chat.options.topLogProbs | 返回每个输出 token 的 top logprobs 数量。 | - |
-| spring.ai.dashscope.chat.options.translationOptions | 翻译选项。 | - |
-| spring.ai.dashscope.chat.options.outputFormat | 输出格式。 | - |
-| spring.ai.dashscope.chat.options.streamOptions | 流式选项。 | - |
-| spring.ai.dashscope.chat.options.httpHeaders | 要添加到 chat completion 请求的可选 HTTP headers。 | - |
-| spring.ai.dashscope.chat.options.toolNames | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.dashscope.chat.options.toolCallbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.dashscope.chat.options.internalToolExecutionEnabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
+| spring.ai.dashscope.chat.model | 要使用的 DashScope chat model 名称。您可以在以下模型之间选择：`qwen-plus`、`qwen-turbo`、`qwen-max`、`qwen-max-longcontext`、`qwen-vl-plus`、`qwen-vl-max` 等。有关更多信息，请参阅 [DashScope 模型列表](https://help.aliyun.com/zh/model-studio/getting-started/models)。 | `qwen-plus` |
+| spring.ai.dashscope.chat.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。范围：[0, 2)，系统默认：0.85。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.85 |
+| spring.ai.dashscope.chat.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 `top_p` 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。范围：(0, 1.0)，默认：0.8。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | 0.8 |
+| spring.ai.dashscope.chat.topK | 采样候选池的大小（top-k）。例如，top_k = 50 意味着只考虑 50 个得分最高的 tokens 进行随机采样。较大的值增加随机性；较小的值增加确定性。注意：如果 top_k 为 null 或 > 100，则禁用 top-k，仅应用 top-p。默认值为 null（即禁用）。 | - |
+| spring.ai.dashscope.chat.seed | 用于生成的随机种子，由用户控制以影响可重现性。Seed 支持无符号 64 位整数。当提供 seed 时，模型将尝试生成相同或相似的结果，但不保证完全可重现性。 | - |
+| spring.ai.dashscope.chat.stop | 最多 4 个序列，API 将停止生成更多 tokens。支持传入字符串数组或 token_ids 数组。 | - |
+| spring.ai.dashscope.chat.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。 | - |
+| spring.ai.dashscope.chat.maxInputTokens | 输入的最大 tokens 数。 | - |
+| spring.ai.dashscope.chat.repetitionPenalty | 用于控制模型生成过程中的重复程度。增加 repetition_penalty 可以减少模型生成的重复程度。值为 1.0 表示无惩罚。默认值为 1.1。 | 1.1 |
+| spring.ai.dashscope.chat.enableSearch | 模型内置了互联网搜索服务。此参数控制模型在生成文本时是否参考和使用互联网搜索结果。true：启用互联网搜索。false（默认）：禁用互联网搜索。 | false |
+| spring.ai.dashscope.chat.searchOptions | 联网搜索的策略。仅在 enable_search 为 true 时生效。 | - |
+| spring.ai.dashscope.chat.responseFormat | 模型可以指定返回内容的格式。有效值：`{"type": "text"}` 或 `{"type": "json_object"}`。 | - |
+| spring.ai.dashscope.chat.incrementalOutput | 控制是否在流式输出模式下启用增量输出，即后续输出内容是否包含之前输出的内容。当设置为 true 时，将启用增量输出模式，后续输出不会包含之前输出的内容。您需要自己拼接整体输出。当设置为 false 时，后续输出将包含之前输出的内容。 | true |
+| spring.ai.dashscope.chat.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
+| spring.ai.dashscope.chat.toolChoice | 控制模型调用哪个（如果有）function。`none` 意味着模型不会调用 function，而是生成消息。`auto` 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type": "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，`none` 是默认值。如果存在 functions，`auto` 是默认值。 | - |
+| spring.ai.dashscope.chat.parallelToolCalls | 是否在工具使用期间启用并行 function calling。 | - |
+| spring.ai.dashscope.chat.enableThinking | 是否启用模型的思考过程。适用于 Qwen3 全系统模型。 | false |
+| spring.ai.dashscope.chat.thinkingBudget | 思考过程的最大长度，在 enable_thinking 为 true 时生效，适用于 Qwen3 全系统模型。 | - |
+| spring.ai.dashscope.chat.vlHighResolutionImages | 将 token 限制更改为 16384 用于 vl 模型，仅支持 vl 模型，包括 qwen-vl-max、qwen-vl-max-0809、qwen-vl-plus-0809。 | - |
+| spring.ai.dashscope.chat.vlEnableImageHwOutput | 是否启用视觉语言模型的图像硬件输出。 | false |
+| spring.ai.dashscope.chat.multiModel | 是否使用 DashScope 多模态生成接口。 | false |
+| spring.ai.dashscope.chat.modalities | 您希望模型为此请求生成的输出类型。大多数模型能够生成文本，这是默认值。某些模型也可以用于生成音频。 | - |
+| spring.ai.dashscope.chat.audio | 音频生成的音频参数。当通过 `modalities`: `audio` 请求音频输出时必需。 | - |
+| spring.ai.dashscope.chat.asrOptions | 自动语音识别（ASR）选项。 | - |
+| spring.ai.dashscope.chat.ocrOptions | OCR（光学字符识别）选项。 | - |
+| spring.ai.dashscope.chat.logprobs | 是否返回每个输出 token 的对数概率。 | - |
+| spring.ai.dashscope.chat.topLogProbs | 返回每个输出 token 的 top logprobs 数量。 | - |
+| spring.ai.dashscope.chat.translationOptions | 翻译选项。 | - |
+| spring.ai.dashscope.chat.outputFormat | 输出格式。 | - |
+| spring.ai.dashscope.chat.streamOptions | 流式选项。 | - |
+| spring.ai.dashscope.chat.httpHeaders | 要添加到 chat completion 请求的可选 HTTP headers。 | - |
+| spring.ai.dashscope.chat.toolNames | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
+| spring.ai.dashscope.chat.toolCallbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
+| spring.ai.dashscope.chat.internalToolExecutionEnabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
 > **注意：** 您可以为 `ChatModel` 和 `EmbeddingModel` 实现覆盖通用的 `spring.ai.dashscope.base-url` 和 `spring.ai.dashscope.api-key`。
 > 如果设置了 `spring.ai.dashscope.chat.base-url` 和 `spring.ai.dashscope.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 DashScope 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.dashscope.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.dashscope.chat` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
 [DashScopeChatOptions.java](https://github.com/alibaba/spring-ai-alibaba/blob/main/dashscope/chat/DashScopeChatOptions.java) 类提供模型配置，例如要使用的模型、temperature、top_p、top_k 等。
 
-在启动时，可以使用 `DashScopeChatModel(api, options)` 构造函数或 `spring.ai.dashscope.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `DashScopeChatModel` 构建器或 `spring.ai.dashscope.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项。
 例如，要覆盖特定请求的默认模型和 temperature：
@@ -292,8 +292,8 @@ ChatResponse response = chatModel.call(new Prompt(List.of(userMessage),
 
 ```properties
 spring.ai.dashscope.api-key=YOUR_API_KEY
-spring.ai.dashscope.chat.options.model=qwen-plus
-spring.ai.dashscope.chat.options.temperature=0.7
+spring.ai.dashscope.chat.model=qwen-plus
+spring.ai.dashscope.chat.temperature=0.7
 ```
 
 > **提示：** 将 `api-key` 替换为您的 DashScope 凭据。
@@ -445,99 +445,48 @@ DashScopeChatModel chatModel = DashScopeChatModel.builder()
 
 ## Reasoning Content from Reasoning Models
 
-一些支持推理模型的 DashScope 模型（如 Qwen3 系列）通过启用 `enable_thinking` 参数可以公开模型的内部 chain of thought。
-此字段包含模型用于得出最终答案的逐步推理过程。
-
-Spring AI Alibaba 将此字段从 JSON 响应映射到 AssistantMessage metadata 中的 `reasoningContent` key。
-
-### Accessing Reasoning Content
-
-使用支持推理的模型时，您可以从响应 metadata 访问推理内容。
-
-**直接使用 ChatModel：**
+模型返回推理摘要或文本时，通过 `AssistantMessage.getReasoning()` 读取。旧版手工读取 `reasoningContent` 元数据的代码，可以迁移到有序的 `ReasoningPart`。
 
 ```java
-// Configure to use Qwen3 with thinking enabled
-DashScopeChatOptions options = DashScopeChatOptions.builder()
-    .model("qwen3")
-    .enableThinking(true)
-    .thinkingBudget(1000)
-    .build();
+import org.springframework.ai.chat.messages.part.ReasoningPart;
 
-ChatResponse response = chatModel.call(
-    new Prompt("Which number is larger: 9.11 or 9.8?", options));
+var response = chatModel.call(new Prompt(question));
+var message = response.getResult().getOutput();
 
-// Get the assistant message
-AssistantMessage message = response.getResult().getOutput();
-
-// Access the reasoning content from metadata
-String reasoning = message.getMetadata().get("reasoningContent");
-if (reasoning != null && !reasoning.isEmpty()) {
-    System.out.println("Model's reasoning process:");
-    System.out.println(reasoning);
+for (ReasoningPart part : message.getReasoning()) {
+    String display = part.summary() != null ? part.summary() : part.text();
+    if (display != null) {
+        renderReasoning(display);
+    }
 }
-
-// The final answer is in the regular content
-System.out.println("\nFinal answer:");
-System.out.println(message.getContent());
+renderAnswer(message.getText());
 ```
 
-**使用 ChatClient：**
+处理流式响应时从各事件的消息读取推理部分，按提供商的增量顺序展示。为后续工具轮次保留原始消息和 `payload()`，只把摘要和可读文本送到展示层。
 
-```java
-ChatClient chatClient = ChatClient.create(chatModel);
+[Spring AI 消息参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/models/chat.html)
 
-String result = chatClient.prompt()
-    .user("Which number is larger: 9.11 or 9.8?")
-    .call()
-    .chatResponse()
-    .getResult()
-    .getOutput()
-    .getContent();
+## 百炼模型路由与多轮推理
 
-// To access reasoning content with ChatClient, retrieve the full response
-ChatResponse response = chatClient.prompt()
-    .user("Which number is larger: 9.11 or 9.8?")
-    .call()
-    .chatResponse();
+Extensions 2.1.0.0 为已适配型号选择原生生成接口。`qwen4-max`、`qwen3.8-flash` 和 `kimi-k3.1-pro` 即使只有文本输入也使用多模态端点，`glm-5.3` 使用文本端点。对自定义部署，可以显式设置 `multi-model`。实际可用模型按业务空间和地域确认。
 
-AssistantMessage message = response.getResult().getOutput();
-String reasoning = message.getMetadata().get("reasoningContent");
+```yaml
+spring:
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY}
+      chat:
+        model: qwen4-max
+        enable-thinking: true
+        reasoning-effort: low
+        thinking-display: summarized
+        preserve-thinking: true
 ```
 
-### Streaming Reasoning Content
+HTTP starter 使用 `spring.ai.dashscope.chat` 下的模型参数。SDK starter 以 `spring.ai.model.chat=dashscope-sdk` 启用，参数位于 `spring.ai.dashscope.sdk.chat`。配置自定义 SDK 基地址时包含 `/api/v1`。
 
-使用 streaming 响应时，推理内容像常规消息内容一样跨块累积：
+- Qwen4-Max 的一个请求使用 `reasoning-effort` 或 `thinking-budget` 其中一项。GLM 可通过 `clear-thinking: false` 保留过去的推理。Kimi-K3.1-Pro 使用默认采样参数。
+- 摘要推理模式下，将完整 AssistantMessage 放入历史记录，使适配器可以回放 `ReasoningPart` 及其不透明负载。HTTP 与 SDK 都保留有序 Message Parts。排查多轮工具对话时可读取 `getReasoning()`，同时保留原始 `getParts()`。
+- 由提供商直连的兼容模型依照该模型的 OpenAI 兼容 API 接入。按模型文档确认采样、流式工具与推理能力。
 
-```java
-DashScopeChatOptions options = DashScopeChatOptions.builder()
-    .model("qwen3")
-    .enableThinking(true)
-    .thinkingBudget(1000)
-    .build();
-
-Flux<ChatResponse> responseFlux = chatModel.stream(
-    new Prompt("Solve this logic puzzle...", options));
-
-StringBuilder reasoning = new StringBuilder();
-StringBuilder answer = new StringBuilder();
-
-responseFlux.subscribe(chunk -> {
-    AssistantMessage message = chunk.getResult().getOutput();
-
-    // Accumulate reasoning if present
-    String reasoningChunk = message.getMetadata().get("reasoningContent");
-    if (reasoningChunk != null) {
-        reasoning.append(reasoningChunk);
-    }
-
-    // Accumulate the final answer
-    if (message.getContent() != null) {
-        answer.append(message.getContent());
-    }
-});
-```
-
-> **注意：**
-> `reasoningContent` 的可用性完全取决于您使用的模型和是否启用了 `enable_thinking` 参数。
-> 请始终参考 DashScope 模型文档以了解哪些模型支持推理功能。
+[百炼 Qwen API](https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-dashscope) · [Extensions 配置](https://github.com/spring-ai-alibaba/spring-ai-extensions/tree/v2.1.0.0#dashscope-model-routing-and-reasoning)

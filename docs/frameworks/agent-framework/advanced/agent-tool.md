@@ -66,7 +66,7 @@ Multi-agent设计的核心是**上下文工程**——决定每个Agent看到什
 
 <Code
   language="java"
-  title="AgentTool 基础示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="AgentTool 基础示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -120,7 +120,7 @@ Optional<OverAllState> result = blogAgent.invoke("帮我写一个100字左右的
 
 <Code
   language="java"
-  title="使用 inputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="使用 inputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -168,7 +168,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于春�
 
 <Code
   language="java"
-  title="使用 inputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="使用 inputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -213,7 +213,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于秋�
 
 <Code
   language="java"
-  title="使用 outputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="使用 outputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -262,7 +262,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于冬天�
 
 <Code
   language="java"
-  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -301,7 +301,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于夏天�
 
 <Code
   language="java"
-  title="完整类型化示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="完整类型化示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -360,7 +360,7 @@ Optional<OverAllState> result = orchestratorAgent.invoke("请写一篇关于友�
 
 <Code
   language="java"
-  title="多个子Agent作为工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="多个子Agent作为工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;

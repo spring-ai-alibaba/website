@@ -20,7 +20,7 @@ Spring AI Alibaba 提供了一个标准的消息类型系统，可在所有模�
 
 <Code
   language="java"
-  title="基础消息使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="基础消息使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -47,7 +47,7 @@ ChatResponse response = chatModel.call(prompt);  // 返回 ChatResponse，包含
 
 <Code
   language="java"
-  title="文本提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="文本提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`// 使用字符串直接调用
 String response = chatModel.call("写一首关于春天的俳句");`}
@@ -65,7 +65,7 @@ String response = chatModel.call("写一首关于春天的俳句");`}
 
 <Code
   language="java"
-  title="消息提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="消息提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -101,7 +101,7 @@ ChatResponse response = chatModel.call(prompt);`}
 
 <Code
   language="java"
-  title="SystemMessage 基础指令示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="SystemMessage 基础指令示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`// 基础指令
 SystemMessage systemMsg = new SystemMessage("你是一个有帮助的编程助手。");
@@ -115,7 +115,7 @@ ChatResponse response = chatModel.call(new Prompt(messages));`}
 
 <Code
   language="java"
-  title="SystemMessage 详细角色设定示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="SystemMessage 详细角色设定示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`// 详细的角色设定
 SystemMessage systemMsg = new SystemMessage("""
@@ -139,7 +139,7 @@ ChatResponse response = chatModel.call(new Prompt(messages));`}
 
 <Code
   language="java"
-  title="UserMessage 文本内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="UserMessage 文本内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`// 使用消息对象
 ChatResponse response = chatModel.call(
@@ -155,7 +155,7 @@ String response = chatModel.call("什么是机器学习？");`}
 
 <Code
   language="java"
-  title="UserMessage 消息元数据示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="UserMessage 消息元数据示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import java.util.Map;
 
@@ -176,7 +176,7 @@ UserMessage userMsg = UserMessage.builder()
 
 <Code
   language="java"
-  title="UserMessage 多模态内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="UserMessage 多模态内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.content.Media;
 import org.springframework.util.MimeTypeUtils;
@@ -198,7 +198,7 @@ UserMessage userMsg = UserMessage.builder()
 
 <Code
   language="java"
-  title="AssistantMessage 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="AssistantMessage 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`ChatResponse response = chatModel.call(new Prompt("解释 AI"));
 AssistantMessage aiMessage = response.getResult().getOutput();
@@ -211,7 +211,7 @@ System.out.println(aiMessage.getText());`}
 
 <Code
   language="java"
-  title="手动创建 AssistantMessage 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="手动创建 AssistantMessage 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -244,7 +244,7 @@ ChatResponse response = chatModel.call(new Prompt(messages));`}
 
 <Code
   language="java"
-  title="AssistantMessage 工具调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="AssistantMessage 工具调用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
 
@@ -266,7 +266,7 @@ Spring AI Alibaba 的 `ChatResponse` 可以在其元数据中保存 token 计数
 
 <Code
   language="java"
-  title="Token 使用信息访问示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="Token 使用信息访问示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`ChatResponse response = chatModel.call(new Prompt("你好！"));
 ChatResponseMetadata metadata = response.getMetadata();
@@ -285,7 +285,7 @@ if (metadata != null && metadata.getUsage() != null) {
 
 <Code
   language="java"
-  title="流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import reactor.core.publisher.Flux;
 
@@ -311,7 +311,7 @@ responseStream.subscribe(
 
 <Code
   language="java"
-  title="ToolResponseMessage 工具响应消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="ToolResponseMessage 工具响应消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.chat.messages.ToolResponseMessage;
 import org.springframework.ai.chat.messages.ToolResponseMessage.ToolResponse;
@@ -363,7 +363,7 @@ ChatResponse response = chatModel.call(new Prompt(messages));`}
 
 <Code
   language="java"
-  title="图像输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="图像输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.content.Media;
 import org.springframework.util.MimeTypeUtils;
@@ -394,7 +394,7 @@ UserMessage message = UserMessage.builder()
 
 <Code
   language="java"
-  title="音频输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="音频输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.content.Media;
 import org.springframework.util.MimeTypeUtils;
@@ -412,7 +412,7 @@ UserMessage message = UserMessage.builder()
 
 <Code
   language="java"
-  title="视频输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="视频输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.content.Media;
 import org.springframework.util.MimeTypeUtils;
@@ -436,7 +436,7 @@ Chat models 接受消息对象序列作为输入并返回 `ChatResponse`（包�
 
 <Code
   language="java"
-  title="基础对话示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="基础对话示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.messages.Message;
@@ -471,7 +471,7 @@ Spring AI Alibaba 的消息类提供了 builder 模式以便于构建：
 
 <Code
   language="java"
-  title="Builder 模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="Builder 模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`// UserMessage with builder
 UserMessage userMsg = UserMessage.builder()
@@ -495,7 +495,7 @@ AssistantMessage assistantMsg = AssistantMessage.builder()
 
 <Code
   language="java"
-  title="消息复制和修改示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="消息复制和修改示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`// 复制消息
 UserMessage original = new UserMessage("原始消息");
@@ -514,7 +514,7 @@ ReactAgent 自动管理消息历史，但你也可以直接使用消息：
 
 <Code
   language="java"
-  title="在 ReactAgent 中使用消息" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
+  title="在 ReactAgent 中使用消息" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MessagesExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -540,3 +540,21 @@ List<Message> messages = List.of(
 );
 AssistantMessage response3 = agent.call(messages);`}
 </Code>
+
+## 读取与保留 Message Parts
+
+Spring AI 2.1 的 `Message.getParts()` 返回原始顺序的内容。读取普通文本可继续用 `getText()`。处理工具、媒体或推理时应保留原消息，避免从拼接后的文本重建消息。
+
+```java
+List<MessagePart> parts = assistantMessage.getParts();
+List<ReasoningPart> reasoning = assistantMessage.getReasoning();
+
+// 更新文本时保留推理、媒体、工具调用和提供商数据。
+AssistantMessage revised = assistantMessage.mutate()
+    .content(revisedText)
+    .build();
+```
+
+自定义存储应保留 `UnknownPart` 和 `OpaquePayload`，以便提供商回放。工具响应中的 `ToolResultPart` 可标识错误。直接处理流式模型事件时，可展示未完成的工具参数片段。工具执行应读取完整调用，`getToolCalls()` 会排除这些部分。
+
+[Spring AI 消息参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/models/chat.html) · [DashScope 多轮推理](/integration/chatmodels/dashScope#百炼模型路由与多轮推理)

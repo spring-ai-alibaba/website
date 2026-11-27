@@ -27,7 +27,7 @@ description: "在构建agent中，Graph中特定节点需要额外增加MCP提�
     <dependency>
         <groupId>com.alibaba.cloud.ai</groupId>
         <artifactId>spring-ai-alibaba-graph-core</artifactId>
-        <version>${spring-ai-alibaba.version}</version>
+        <version>2.1.0.0</version>
     </dependency>
 
     <dependency>
@@ -81,7 +81,7 @@ node 配置对应 mcp 服务的映射类
 
 <Code
   language="java"
-  title="McpNodeProperties" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+  title="McpNodeProperties" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
 >
 {`package com.spring.ai.tutorial.graph.mcp.config;
 
@@ -113,7 +113,7 @@ public class McpNodeProperties {
 
 <Code
   language="java"
-  title="McpGaphConfiguration" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+  title="McpGaphConfiguration" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
 >
 {`package com.spring.ai.tutorial.graph.mcp.config;
 
@@ -183,7 +183,7 @@ public class McpGaphConfiguration {
 
 <Code
   language="java"
-  title="McpClientToolCallbackProvider" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+  title="McpClientToolCallbackProvider" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
 >
 {`package com.spring.ai.tutorial.graph.mcp.tool;
 
@@ -256,7 +256,7 @@ public class McpClientToolCallbackProvider {
 
 <Code
   language="java"
-  title="McpNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+  title="McpNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -304,7 +304,7 @@ public static class McpNode implements NodeAction {
 
 <Code
   language="java"
-  title="配置 MCP 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+  title="配置 MCP 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -328,7 +328,7 @@ public static void configureMcpNode(ChatClient.Builder chatClientBuilder, Set<To
 
 <Code
   language="java"
-  title="McpController" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
+  title="McpController" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/McpNodeExample.java"
 >
 {`package com.spring.ai.tutorial.graph.mcp.controller;
 
@@ -387,3 +387,18 @@ public class McpController {
 
 调用接口，触发本地端 MCP Server 提供的时间服务
 ![](/img/user/ai/tutorials/graph/LMPkbZ5heoHs2Qx604kcdiplnlc.png)
+
+## 调用 Modern MCP 工具
+
+Graph MCP 节点按工具服务端点选择协议。连接 Spring AI 2.1 Modern 服务时使用 `McpNode.Protocol.MODERN`，并传入客户端实际请求的协议端点。
+
+```java
+McpNode node = McpNode.builder()
+    .protocol(McpNode.Protocol.MODERN)
+    .url("https://mcp.example.com/mcp")
+    .tool("list_tickets")
+    .outputKey("tickets")
+    .build();
+```
+
+既有 SSE 和 Streamable HTTP 节点继续使用各自的协议选项。[Modern MCP 客户端与协议](/integration/mcps/mcp-client-boot-starter-docs#modern-mcp-2026-07-28)

@@ -22,7 +22,7 @@ keywords: [Spring AI Alibaba, Graph, 并行流式, Parallel Streaming, 节点流
 
 <Code
   language="java"
-  title="并行节点流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelStreamingExample.java"
+  title="并行节点流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelStreamingExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -174,7 +174,7 @@ public class ParallelStreamingExample {
 
 <Code
   language="java"
-  title="单个节点的流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelStreamingExample.java"
+  title="单个节点的流式输出示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelStreamingExample.java"
 >
 {`/**
  * 示例 2: 单个节点的流式输出

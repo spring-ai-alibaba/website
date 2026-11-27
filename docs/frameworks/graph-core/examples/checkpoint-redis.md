@@ -62,7 +62,7 @@ RedisSaver 使用 Redisson 客户端进行配置。您需要先配置 Redisson �
 
 <Code
   language="java"
-  title="初始化 RedisSaver" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="初始化 RedisSaver" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.RedisSaver;
@@ -92,7 +92,7 @@ SaverConfig saverConfig = SaverConfig.builder()
 
 <Code
   language="java"
-  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -232,7 +232,7 @@ public class RedisCheckpointExample {
 
 <Code
   language="java"
-  title="Spring Boot 配置类" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="Spring Boot 配置类" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -300,7 +300,7 @@ Redis 会自动管理这些数据结构，无需手动创建表或 schema。
 
 <Code
   language="java"
-  title="恢复工作流" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="恢复工作流" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -320,7 +320,7 @@ workflow.invoke(Map.of(), config);`}
 
 <Code
   language="java"
-  title="查询历史状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="查询历史状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -343,7 +343,7 @@ for (StateSnapshot snapshot : history) {
 
 <Code
   language="java"
-  title="从特定检查点恢复" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="从特定检查点恢复" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -377,7 +377,7 @@ System.out.println("从检查点恢复执行完成");`}
 
 <Code
   language="java"
-  title="测试连接" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
+  title="测试连接" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CheckpointRedisExample.java"
 >
 {`// 测试 Redis 连接
 try {

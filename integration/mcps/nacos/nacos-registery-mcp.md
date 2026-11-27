@@ -24,13 +24,13 @@ Nacos 的友链：[Nacos 3.0 正式发布：MCP Registry、安全零信任、链
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-starter-mcp-server-webflux</artifactId>
-        <version>${spring-ai.version}</version>
+        <version>2.1.0</version>
     </dependency>
 
     <dependency>
         <groupId>com.alibaba.cloud.ai</groupId>
         <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>
-        <version>${spring-ai-extensions.version}</version>
+        <version>2.1.0.0</version>
     </dependency>
 
 </dependencies>

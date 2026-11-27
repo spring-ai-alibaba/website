@@ -32,7 +32,7 @@ Spring AI Alibaba 将短期记忆作为 Agent 状态的一部分进行管理。
 
 <Code
   language="java"
-  title="配置短期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="配置短期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 
@@ -63,7 +63,7 @@ agent.call("你好！我叫 Bob。", config);`}
 
 <Code
   language="java"
-  title="使用 Redis Checkpointer 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="使用 Redis Checkpointer 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.savers.RedisSaver;
 import org.redisson.api.RedissonClient;
@@ -87,7 +87,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="自定义记忆 Hook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="自定义记忆 Hook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -156,7 +156,7 @@ public class CustomMemoryHook extends ModelHook {
 
 <Code
   language="java"
-  title="MessageTrimmingHook 修剪消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="MessageTrimmingHook 修剪消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -233,7 +233,7 @@ System.out.println(finalResponse.getText());
 
 <Code
   language="java"
-  title="MessageDeletionHook 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="MessageDeletionHook 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -269,7 +269,7 @@ public class MessageDeletionHook extends MessagesModelHook {
 
 <Code
   language="java"
-  title="ClearAllMessagesHook 删除所有消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="ClearAllMessagesHook 删除所有消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -304,7 +304,7 @@ public class ClearAllMessagesHook extends MessagesModelHook {
 
 <Code
   language="java"
-  title="DeleteOldMessagesHook 删除旧消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="DeleteOldMessagesHook 删除旧消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -364,7 +364,7 @@ agent.call("我叫什么名字？", config);
 
 <Code
   language="java"
-  title="MessageSummarizationHook 总结消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="MessageSummarizationHook 总结消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -502,7 +502,7 @@ System.out.println(finalResponse.getText());
 
 <Code
   language="java"
-  title="在工具中读取短期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="在工具中读取短期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import org.springframework.ai.tool.ToolCallback;
@@ -564,7 +564,7 @@ System.out.println(response.getText());`}
 
 <Code
   language="java"
-  title="DynamicPromptInterceptor 动态提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="DynamicPromptInterceptor 动态提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
@@ -621,7 +621,7 @@ Map<String, Object> context = Map.of("user_name", "John Smith");`}
 
 <Code
   language="java"
-  title="TrimMessagesHook Before Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="TrimMessagesHook Before Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -678,7 +678,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ValidateResponseHook After Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
+  title="ValidateResponseHook After Model 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;
@@ -740,3 +740,24 @@ ReactAgent agent = ReactAgent.builder()
 * [Agents 文档](./agents.md) - 了解 ReactAgent 的核心概念
 * [Hooks 和 Interceptors](./hooks.md) - 了解如何扩展 Agent 功能
 * [Messages 文档](./messages.md) - 了解消息类型和使用
+
+## 在 LlmNode 中使用 Session Memory
+
+Spring AI 2.1 将 `ChatMemory` 和 `ChatMemoryRepository` 标记为废弃。构建新会话时，可使用 Session API 保存有序的消息、工具事件和压缩记录。Graph checkpoint 继续负责工作流状态和恢复位置，模型会话由 `SessionService` 管理。
+
+```java
+import com.alibaba.cloud.ai.graph.node.LlmNode;
+import org.springframework.ai.session.SessionService;
+
+// sessionService 由应用提供，conversationId 在进入该节点前写入 Graph state。
+LlmNode node = LlmNode.builder()
+    .chatClient(chatClient)
+    .userPromptTemplateKey("question")
+    .sessionMemory(sessionService, "conversationId")
+    .outputKey("answer")
+    .build();
+```
+
+`conversationId` 应为非空字符串，在同一对话的后续轮次复用，并按用户或租户隔离。使用 JDBC 仓库时，按 Spring AI 的 Session schema 初始化数据库；已有 `ChatMemoryRepository` 的应用应明确历史消息的迁移及会话 ID 映射。
+
+[Session Memory 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/memory/session/index.html) · [从 ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/session-memory.html)

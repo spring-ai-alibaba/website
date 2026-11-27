@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styles from './styles.module.css'
 import clsx from 'clsx'
+import Link from '@docusaurus/Link'
 
 interface AnnouncementBarProps {
   /**
@@ -18,7 +19,12 @@ interface AnnouncementBarProps {
 }
 
 export default function AnnouncementBar({
-  content = '🎉🎉 <a href="/docs/frameworks/agent-framework/tutorials/skills" target="_blank">1.1.2.0 版本正式发布</a>，适配 Spring AI 1.1.2，支持 Agent Skills，支持 Supervisor、Routing 等多种 Multi-agent 最佳实践！',
+  content = (
+    <span>
+      Spring AI Alibaba 2.1.0.0 已发布，适配 Spring AI 2.1.0。
+      <Link to="/docs/release-highlights">查看新特性与迁移指南</Link>
+    </span>
+  ),
   closable = true,
   onClose,
 }: AnnouncementBarProps) {

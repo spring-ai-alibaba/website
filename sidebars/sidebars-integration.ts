@@ -53,6 +53,7 @@ const sidebars: SidebarsConfig = {
       label: 'Multimodals',
       items: [
         'multimodals/multimodality',
+        'multimodals/dashscope-multimodal',
         {
           type: 'category',
           label: 'Audio',
@@ -98,6 +99,7 @@ const sidebars: SidebarsConfig = {
       label: 'RAG',
       items: [
         'rag/retrieval-augmented-generation',
+        'rag/bailian-knowledge',
         'rag/etl-pipeline',
         'rag/document-readers',
         'rag/document-parsers',
@@ -135,6 +137,7 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Vector Databases',
           items: [
+            'rag/vectordbs/precomputed-embeddings',
             'rag/vectordbs/analyticdb',
             'rag/vectordbs/elasticsearch',
             'rag/vectordbs/milvus',

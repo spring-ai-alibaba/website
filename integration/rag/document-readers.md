@@ -35,7 +35,7 @@ Document Reader 是 Spring AI 中用于从不同数据源读取文档的核心�
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-document-reader-poi</artifactId>
-    <version>${version}</version>
+    <version>2.1.0.0</version>
 </dependency>
 ```
 

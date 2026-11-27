@@ -13,7 +13,7 @@ OpenAi API 兼容模型指的是提供了 OpenAI API 兼容的一系列大模型
 
 ## 在项目中引入依赖
 
-需要在项目中接入具有 OpenAI API 规范的大模型时，只需要引入 `spring-ai-openai-spring-boot-starter` 即可。下面以 DeepSeek 为例演示如何进入具有类 OpenAI API 系列模型的接入。
+需要在项目中接入具有 OpenAI API 规范的大模型时，只需要引入 `spring-ai-starter-model-openai` 即可。下面以 DeepSeek 为例演示如何进入具有类 OpenAI API 系列模型的接入。
 
 ### 引入 `spring-ai-starter-model-openai`
 
@@ -37,8 +37,7 @@ OpenAi API 兼容模型指的是提供了 OpenAI API 兼容的一系列大模型
           api-key: ${OPENAI_API_KEY}
           base-url: ${OPENAI_BASE_URL}
           chat:
-            options:
-              model: ${MODEL_NAME}
+            model: ${MODEL_NAME}
     ```
 
 请注意，根据使用的模型服务平台不同，您需要为 `OPENAI_API_KEY`、`OPENAI_BASE_URL` 和 `model` 指定为对应平台的值。
@@ -86,6 +85,6 @@ OpenAi API 兼容模型指的是提供了 OpenAI API 兼容的一系列大模型
     @GetMapping("/simple/chat")
     public String simpleChat () {
 
-        return deepSeekChatModel.call(new Prompt(prompt)).getResult().getOutput().getContent();
+        return deepSeekChatModel.call(new Prompt(prompt)).getResult().getOutput().getText();
     }
     ```

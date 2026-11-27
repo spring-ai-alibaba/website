@@ -48,7 +48,7 @@ Spring AI Alibaba Graph 支持不同的持久化策略，允许您根据应用�
 
 <Code
   language="java"
-  title="编译时配置持久化策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+  title="编译时配置持久化策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -72,7 +72,7 @@ CompiledGraph graph = stateGraph.compile(
 
 <Code
   language="java"
-  title="执行时配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+  title="执行时配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -95,7 +95,7 @@ graph.invoke(inputData, config);`}
 
 <Code
   language="java"
-  title="原始版本" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+  title="原始版本" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -171,7 +171,7 @@ graph.invoke(Map.of("url", "https://www.example.com"), config);`}
 
 <Code
   language="java"
-  title="改进版本" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+  title="改进版本" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
@@ -254,7 +254,7 @@ graph.invoke(Map.of("urls", List.of("https://www.example.com")), config);`}
 
 <Code
   language="java"
-  title="从错误中恢复示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+  title="从错误中恢复示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -293,7 +293,7 @@ try {
 
 <Code
   language="java"
-  title="长时间运行的数据处理任务示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
+  title="长时间运行的数据处理任务示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LongTimeRunningTaskExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;

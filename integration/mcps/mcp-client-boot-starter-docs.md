@@ -829,3 +829,26 @@ ToolCallback[] toolCallbacks = toolCallbackProvider.getToolCallbacks();
 * [Model Context Protocol Specification](https://modelcontextprotocol.github.io/specification/)
 * [Spring Boot Auto-configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.developing-auto-configuration)
 
+
+## Modern MCP 2026-07-28
+
+Spring AI 2.1 和 MCP Java SDK 2.2.0 支持 MCP 2026-07-28。Modern 连接无状态，直接发送协议版本和客户端能力，省略 `initialize`。同一个应用可以按连接选择 Modern 或原有协议。
+
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        type: SYNC
+        streamable-http:
+          connections:
+            billing:
+              url: https://billing.example.com
+            tickets:
+              url: https://tickets.example.com
+              protocol: MODERN
+```
+
+省略 `protocol` 的连接继续使用原有 Streamable HTTP。配置 `type: ASYNC` 使用异步客户端。两种客户端均支持 `listTools` 和 `callTool`。使用 SDK 时，Modern 类型位于 `io.modelcontextprotocol.modern.client`。启用 Modern 服务端时设置 `spring.ai.mcp.server.protocol=MODERN`，在同一部署中保留相应旧协议的服务入口。
+
+[Nacos 网关](nacos/nacos-gateway-mcp.md) · [Spring AI Modern MCP 客户端](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/mcp/client/modern.html)

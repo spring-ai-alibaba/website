@@ -22,7 +22,7 @@ keywords: [子图, Subgraph, NodeAction, 模块化, 工作流组合, Graph嵌套
 
 <Code
   language="java"
-  title="定义子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+  title="定义子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -63,7 +63,7 @@ public static CompiledGraph createSubGraph(KeyStrategyFactory keyStrategyFactory
 
 <Code
   language="java"
-  title="将子图包装为 NodeAction" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+  title="将子图包装为 NodeAction" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -104,7 +104,7 @@ public static class SubGraphNode implements NodeAction {
 
 <Code
   language="java"
-  title="在父图中使用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+  title="在父图中使用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -141,7 +141,7 @@ StateGraph parentGraph = new StateGraph(keyStrategyFactory)
 
 <Code
   language="java"
-  title="执行父图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+  title="执行父图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
 >
 {`// 执行
 OverAllState result = compiledParent.invoke(Map.of());
@@ -154,7 +154,7 @@ System.out.println("Final result: " + result.value("final").orElse(""));
 
 <Code
   language="java"
-  title="带参数的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+  title="带参数的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
 >
 {`// 可配置的子图节点
 public class ConfigurableSubGraphNode implements NodeAction {
@@ -202,7 +202,7 @@ NodeAction configurableNode = new ConfigurableSubGraphNode(
 
 <Code
   language="java"
-  title="状态映射" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
+  title="状态映射" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsNodeActionExample.java"
 >
 {`public class SubGraphNodeWithMapping implements NodeAction {
 

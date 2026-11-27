@@ -129,7 +129,7 @@ ReactAgent reviewerAgent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="SequentialAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="SequentialAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.flow.agent.SequentialAgent;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -193,7 +193,7 @@ if (result.isPresent()) {
 
 <Code
   language="java"
-  title="控制推理内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="控制推理内容示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_agent")
@@ -241,7 +241,7 @@ if (result.isPresent()) {
 
 <Code
   language="java"
-  title="ParallelAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="ParallelAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.flow.agent.ParallelAgent;
 
@@ -308,7 +308,7 @@ if (result.isPresent()) {
 
 <Code
   language="java"
-  title="自定义合并策略完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="自定义合并策略完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`public class CustomMergeStrategy implements ParallelAgent.MergeStrategy {
 
@@ -357,7 +357,7 @@ ParallelAgent parallelAgent = ParallelAgent.builder()
 
 <Code
   language="java"
-  title="LlmRoutingAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="LlmRoutingAgent 实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.flow.agent.LlmRoutingAgent;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
@@ -420,7 +420,7 @@ Optional<OverAllState> result3 = routingAgent.invoke("请将以下内容翻译�
 
 <Code
   language="java"
-  title="优化路由准确性示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="优化路由准确性示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`// 1. 提供清晰明确的Agent描述
 ReactAgent codeAgent = ReactAgent.builder()
@@ -833,7 +833,7 @@ Spring AI Alibaba 提供了 `FlowAgent` 抽象类，允许你创建自定义的A
 
 <Code
   language="java"
-  title="FlowAgent 架构示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="FlowAgent 架构示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`public abstract class FlowAgent extends Agent {
 
@@ -857,7 +857,7 @@ Spring AI Alibaba 提供了 `FlowAgent` 抽象类，允许你创建自定义的A
 
 <Code
   language="java"
-  title="实现自定义FlowAgent示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="实现自定义FlowAgent示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.flow.agent.FlowAgent;
 import com.alibaba.cloud.ai.graph.agent.flow.builder.FlowAgentBuilder;
@@ -948,7 +948,7 @@ public class ConditionalAgent extends FlowAgent {
 
 <Code
   language="java"
-  title="使用自定义Agent示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="使用自定义Agent示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import java.util.Map;
@@ -1002,7 +1002,7 @@ Optional<OverAllState> result2 = conditionalAgent.invoke("请帮我分析一下�
 
 <Code
   language="java"
-  title="循环Agent实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="循环Agent实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`/**
  * 循环Agent：重复执行直到满足退出条件
@@ -1064,7 +1064,7 @@ CustomLoopAgent refinementAgent = CustomLoopAgent.builder()
 
 <Code
   language="java"
-  title="混合模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
+  title="混合模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MultiAgentExample.java"
 >
 {`// 1. 创建研究Agent（并行执行）
 ReactAgent webResearchAgent = ReactAgent.builder()

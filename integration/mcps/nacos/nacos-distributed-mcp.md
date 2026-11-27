@@ -25,19 +25,19 @@ Spring AI 通过集成 MCP 官方的 java sdk，让 Spring Boot 开发者可以�
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
-        <version>${spring-ai.version}</version>
+        <version>2.1.0</version>
     </dependency>
 
     <dependency>
         <groupId>com.alibaba.cloud.ai</groupId>
         <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-        <version>${spring-ai-alibaba.version}</version>
+        <version>2.1.0.0</version>
     </dependency>
 
     <dependency>
         <groupId>com.alibaba.cloud.ai</groupId>
         <artifactId>spring-ai-alibaba-starter-mcp-distributed</artifactId>
-        <version>${spring-ai-extensions.version}</version>
+        <version>2.1.0.0</version>
     </dependency>
 
 </dependencies>

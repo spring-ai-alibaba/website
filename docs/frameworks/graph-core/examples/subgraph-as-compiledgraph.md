@@ -23,7 +23,7 @@ keywords: [子图, Subgraph, CompiledGraph, 编译, 性能优化, Graph复用]
 
 <Code
   language="java"
-  title="创建并编译子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="创建并编译子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -69,7 +69,7 @@ StateGraph subGraphDef = new StateGraph(subKeyFactory)
 
 <Code
   language="java"
-  title="在节点中使用 CompiledGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="在节点中使用 CompiledGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -109,7 +109,7 @@ public static class CompiledSubGraphNode implements NodeAction {
 
 <Code
   language="java"
-  title="在父图中使用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="在父图中使用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -152,7 +152,7 @@ StateGraph parentGraph = new StateGraph(parentKeyFactory)
 
 <Code
   language="java"
-  title="多个子图复用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="多个子图复用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`/**
  * 多个子图复用
@@ -195,7 +195,7 @@ StateGraph mainGraph = new StateGraph(keyFactory)
 
 <Code
   language="java"
-  title="可配置的 CompiledGraph 包装器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="可配置的 CompiledGraph 包装器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`public class ConfigurableCompiledSubGraph implements NodeAction {
 
@@ -256,7 +256,7 @@ NodeAction node2 = new ConfigurableCompiledSubGraph(
 
 <Code
   language="java"
-  title="并行执行多个 CompiledGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="并行执行多个 CompiledGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`import java.util.concurrent.CompletableFuture;
 import java.util.List;
@@ -309,7 +309,7 @@ CompiledGraph 可以有自己独立的 checkpoint：
 
 <Code
   language="java"
-  title="带 Checkpoint 的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="带 Checkpoint 的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
 import com.alibaba.cloud.ai.graph.CompileConfig;
@@ -362,7 +362,7 @@ public class CheckpointedSubGraphNode implements NodeAction {
 
 <Code
   language="java"
-  title="预编译策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="预编译策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`// 服务启动时预编译所有子图
 @Configuration
@@ -413,7 +413,7 @@ public class WorkflowService {
 
 <Code
   language="java"
-  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
+  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsCompiledGraphExample.java"
 >
 {`// 1. 定义数据验证子图
 public CompiledGraph createValidationGraph() {

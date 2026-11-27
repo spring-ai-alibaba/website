@@ -36,7 +36,7 @@ Spring AI Alibaba Graph 将智能体工作流建模为图。您可以使用三�
 
 <Code
   language="java"
-  title="编译图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="编译图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -63,7 +63,7 @@ KeyStrategy 是理解如何将节点的更新应用到 `State` 的关键。`Stat
 
 <Code
   language="java"
-  title="创建 KeyStrategyFactory" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="创建 KeyStrategyFactory" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -90,7 +90,7 @@ var graphBuilder = new StateGraph(createKeyStrategyFactory());`}
 
 <Code
   language="java"
-  title="ReplaceStrategy 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="ReplaceStrategy 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`// 定义状态策略，使用 ReplaceStrategy
 KeyStrategyFactory keyStrategyFactory = () -> {
@@ -147,7 +147,7 @@ System.out.println("最终状态中的 value: " + (String)stateOptional.get().va
 
 <Code
   language="java"
-  title="AppendStrategy 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="AppendStrategy 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`// 定义状态策略，使用 AppendStrategy
 KeyStrategyFactory keyStrategyFactory = () -> {
@@ -213,7 +213,7 @@ Spring AI Alibaba 提供了内置的 [RemoveByHash]，允许通过比较其 `has
 
 <Code
   language="java"
-  title="RemoveByHash 使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="RemoveByHash 使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import static com.alibaba.cloud.ai.graph.StateGraph.END;
 import static com.alibaba.cloud.ai.graph.StateGraph.START;
@@ -258,7 +258,7 @@ var workflow = new StateGraph(createKeyStrategyFactory())
 
 <Code
   language="java"
-  title="为自定义数据类增加 Jackson 注解" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="为自定义数据类增加 Jackson 注解" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -304,7 +304,7 @@ public class CustomMessage {
 
 <Code
   language="java"
-  title="定制 StateGraph 中的默认 Serializer" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="定制 StateGraph 中的默认 Serializer" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.serializer.StateSerializer;
@@ -350,7 +350,7 @@ if (stateSerializer instanceof StateGraph.JacksonSerializer) {
 
 <Code
   language="java"
-  title="为 Graph 提供自定义序列化器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="为 Graph 提供自定义序列化器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.serializer.plain_text.jackson.SpringAIJacksonStateSerializer;
@@ -463,7 +463,7 @@ StateGraph graph = new StateGraph("demo", keyStrategyFactory, new CustomizedSeri
 
 <Code
   language="java"
-  title="使用 START 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="使用 START 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import static com.alibaba.cloud.ai.graph.StateGraph.START;`}
 </Code>
@@ -491,7 +491,7 @@ StateGraph graph = new StateGraph("demo", keyStrategyFactory, new CustomizedSeri
 
 <Code
   language="java"
-  title="添加条件边" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="添加条件边" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`import static com.alibaba.cloud.ai.graph.StateGraph.START;
 import static com.alibaba.cloud.ai.graph.StateGraph.END;
@@ -519,7 +519,7 @@ graph.addConditionalEdges("nodeA", edge_async(state -> "nodeB"),
 
 <Code
   language="java"
-  title="使用会话 ID" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
+  title="使用会话 ID" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/CoreLibraryExample.java"
 >
 {`// 指定会话 ID
 RunnableConfig config = RunnableConfig.builder().threadId("unique-id-1").build();

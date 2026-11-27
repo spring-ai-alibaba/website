@@ -52,7 +52,7 @@ Spring AI Alibaba 将长期记忆以 JSON 文档的形式存储在 Store 中。
 
 <Code
   language="java"
-  title="MemoryStore 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="MemoryStore 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
 import com.alibaba.cloud.ai.graph.store.StoreItem;
@@ -93,7 +93,7 @@ List<StoreItem> items = store.searchItems(
 
 <Code
   language="java"
-  title="在工具中读取长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="在工具中读取长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -175,7 +175,7 @@ agent.invoke("查询用户信息，namespace=['users'], key='user_123'", config)
 
 <Code
   language="java"
-  title="在工具中写入长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="在工具中写入长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -247,7 +247,7 @@ if (savedItem.isPresent()) {
 
 <Code
   language="java"
-  title="使用 ModelHook 管理长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="使用 ModelHook 管理长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
@@ -394,7 +394,7 @@ agent.invoke("请介绍一下我的信息。", config);`}
 
 <Code
   language="java"
-  title="结合短期和长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="结合短期和长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
@@ -529,7 +529,7 @@ agent.invoke("根据我的职业和今天的工作，给我一些建议。", con
 
 <Code
   language="java"
-  title="跨会话记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="跨会话记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -617,7 +617,7 @@ Agent 可以随着时间的推移学习并存储用户偏好。
 
 <Code
   language="java"
-  title="用户偏好学习示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
+  title="用户偏好学习示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;

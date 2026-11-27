@@ -73,12 +73,12 @@ dependencies {
 | spring.ai.openai.audio.transcription.api-key | API Key | - |
 | spring.ai.openai.audio.transcription.organization-id | 可选，您可以指定用于 API 请求的组织 | - |
 | spring.ai.openai.audio.transcription.project-id | 可选，您可以指定用于 API 请求的项目 | - |
-| spring.ai.openai.audio.transcription.options.model | 用于转录的模型 ID。可用模型：`gpt-4o-transcribe`（由 GPT-4o 驱动的 speech-to-text）、`gpt-4o-mini-transcribe`（由 GPT-4o mini 驱动的 speech-to-text）或 `whisper-1`（通用语音识别模型，默认） | whisper-1 |
-| spring.ai.openai.audio.transcription.options.response-format | 转录输出的格式，选项之一：json、text、srt、verbose_json 或 vtt | json |
-| spring.ai.openai.audio.transcription.options.prompt | 可选文本，用于指导模型的样式或继续先前的音频段。prompt 应与音频语言匹配 | - |
-| spring.ai.openai.audio.transcription.options.language | 输入音频的语言。以 ISO-639-1 格式提供输入语言将提高准确性和延迟 | - |
-| spring.ai.openai.audio.transcription.options.temperature | 采样温度，介于 0 和 1 之间。较高的值（如 0.8）将使输出更加随机，而较低的值（如 0.2）将使其更加专注和确定性。如果设置为 0，模型将使用对数概率自动增加温度，直到达到某些阈值 | 0 |
-| spring.ai.openai.audio.transcription.options.timestamp_granularities | 要为此转录填充的时间戳粒度。response_format 必须设置为 verbose_json 才能使用时间戳粒度。支持以下选项之一或两者：word 或 segment。注意：段时间戳没有额外的延迟，但生成单词时间戳会产生额外的延迟 | segment |
+| spring.ai.openai.audio.transcription.model | 用于转录的模型 ID。可用模型：`gpt-4o-transcribe`（由 GPT-4o 驱动的 speech-to-text）、`gpt-4o-mini-transcribe`（由 GPT-4o mini 驱动的 speech-to-text）或 `whisper-1`（通用语音识别模型，默认） | whisper-1 |
+| spring.ai.openai.audio.transcription.response-format | 转录输出的格式，选项之一：json、text、srt、verbose_json 或 vtt | json |
+| spring.ai.openai.audio.transcription.prompt | 可选文本，用于指导模型的样式或继续先前的音频段。prompt 应与音频语言匹配 | - |
+| spring.ai.openai.audio.transcription.language | 输入音频的语言。以 ISO-639-1 格式提供输入语言将提高准确性和延迟 | - |
+| spring.ai.openai.audio.transcription.temperature | 采样温度，介于 0 和 1 之间。较高的值（如 0.8）将使输出更加随机，而较低的值（如 0.2）将使其更加专注和确定性。如果设置为 0，模型将使用对数概率自动增加温度，直到达到某些阈值 | 0 |
+| spring.ai.openai.audio.transcription.timestamp_granularities | 要为此转录填充的时间戳粒度。response_format 必须设置为 verbose_json 才能使用时间戳粒度。支持以下选项之一或两者：word 或 segment。注意：段时间戳没有额外的延迟，但生成单词时间戳会产生额外的延迟 | segment |
 
 > **NOTE**: 您可以覆盖通用的 `spring.ai.openai.base-url`、`spring.ai.openai.api-key`、`spring.ai.openai.organization-id` 和 `spring.ai.openai.project-id` 属性。
 > 如果设置了 `spring.ai.openai.audio.transcription.base-url`、`spring.ai.openai.audio.transcription.api-key`、`spring.ai.openai.audio.transcription.organization-id` 和 `spring.ai.openai.audio.transcription.project-id` 属性，它们优先于通用属性。

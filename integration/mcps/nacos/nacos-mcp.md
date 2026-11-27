@@ -6,7 +6,7 @@ nacos 下载页面：[Nacos Server 下载页面](https://nacos.io/download/nacos
 
 ![nacos-html.png](/img/blog/extensions/mcp/nacos-html.png)
 
-选择下载最新的 3.1.0+ 版本，质量选择二进制包下载
+本版本线依赖 Nacos Client 3.3.0。使用当前环境所支持的 Nacos 3.x 服务端，按 Nacos 官方部署文档选择二进制发行包。
 
 ## 基础配置
 

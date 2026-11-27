@@ -107,30 +107,30 @@ dependencies {
 | spring.ai.deepseek.chat.api-key | 可选覆盖 spring.ai.deepseek.api-key 以提供 chat 特定的 API key | - |
 | spring.ai.deepseek.chat.completions-path | chat completions endpoint 的路径 | `/chat/completions` |
 | spring.ai.deepseek.chat.beta-prefix-path | beta feature endpoint 的前缀路径 | `/beta` |
-| spring.ai.deepseek.chat.options.model | 要使用的模型 ID。您可以使用 deepseek-reasoner 或 deepseek-chat。 | deepseek-chat |
-| spring.ai.deepseek.chat.options.frequencyPenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止文本中现有频率对新 tokens 进行惩罚，降低模型逐字重复同一行的可能性。 | 0.0f |
-| spring.ai.deepseek.chat.options.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。 | - |
-| spring.ai.deepseek.chat.options.presencePenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止是否出现新 tokens 进行惩罚，增加模型讨论新主题的可能性。 | 0.0f |
-| spring.ai.deepseek.chat.options.stop | 最多 4 个序列，API 将停止生成更多 tokens。 | - |
-| spring.ai.deepseek.chat.options.temperature | 要使用的采样 temperature，介于 0 和 2 之间。较高的值（如 0.8）将使输出更加随机，而较低的值（如 0.2）将使输出更加聚焦和确定性。我们通常建议修改此值或 top_p，但不要同时修改两者。 | 1.0F |
-| spring.ai.deepseek.chat.options.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 top_p 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 temperature，但不要同时修改两者。 | 1.0F |
-| spring.ai.deepseek.chat.options.logprobs | 是否返回输出 tokens 的 log probabilities。如果为 true，返回消息内容中返回的每个输出 token 的 log probabilities。 | - |
-| spring.ai.deepseek.chat.options.topLogprobs | 介于 0 和 20 之间的整数，指定在每个 token 位置返回的最可能的 tokens 数量，每个都有相关的 log probability。如果使用此参数，必须将 logprobs 设置为 true。 | - |
-| spring.ai.deepseek.chat.options.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.deepseek.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.deepseek.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
+| spring.ai.deepseek.chat.model | 要使用的模型 ID。您可以使用 deepseek-reasoner 或 deepseek-chat。 | deepseek-chat |
+| spring.ai.deepseek.chat.frequencyPenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止文本中现有频率对新 tokens 进行惩罚，降低模型逐字重复同一行的可能性。 | 0.0f |
+| spring.ai.deepseek.chat.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。 | - |
+| spring.ai.deepseek.chat.presencePenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止是否出现新 tokens 进行惩罚，增加模型讨论新主题的可能性。 | 0.0f |
+| spring.ai.deepseek.chat.stop | 最多 4 个序列，API 将停止生成更多 tokens。 | - |
+| spring.ai.deepseek.chat.temperature | 要使用的采样 temperature，介于 0 和 2 之间。较高的值（如 0.8）将使输出更加随机，而较低的值（如 0.2）将使输出更加聚焦和确定性。我们通常建议修改此值或 top_p，但不要同时修改两者。 | 1.0F |
+| spring.ai.deepseek.chat.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 top_p 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 temperature，但不要同时修改两者。 | 1.0F |
+| spring.ai.deepseek.chat.logprobs | 是否返回输出 tokens 的 log probabilities。如果为 true，返回消息内容中返回的每个输出 token 的 log probabilities。 | - |
+| spring.ai.deepseek.chat.topLogprobs | 介于 0 和 20 之间的整数，指定在每个 token 位置返回的最可能的 tokens 数量，每个都有相关的 log probability。如果使用此参数，必须将 logprobs 设置为 true。 | - |
+| spring.ai.deepseek.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
+| spring.ai.deepseek.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
+| spring.ai.deepseek.chat.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
 
 > **注意：** 您可以为 `ChatModel` 实现覆盖通用的 `spring.ai.deepseek.base-url` 和 `spring.ai.deepseek.api-key`。
 > 如果设置了 `spring.ai.deepseek.chat.base-url` 和 `spring.ai.deepseek.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 DeepSeek 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.deepseek.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.deepseek.chat` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ## Runtime Options [[chat-options]]
 
 [DeepSeekChatOptions.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-deepseek/src/main/java/org/springframework/ai/deepseek/DeepSeekChatOptions.java) 提供模型配置，例如要使用的模型、temperature、frequency penalty 等。
 
-在启动时，可以使用 `DeepSeekChatModel(api, options)` 构造函数或 `spring.ai.deepseek.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `DeepSeekChatModel(api, options)` 构造函数或 `spring.ai.deepseek.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项。
 例如，要覆盖特定请求的默认模型和 temperature：
@@ -140,8 +140,8 @@ ChatResponse response = chatModel.call(
     new Prompt(
         "Generate the names of 5 famous pirates. Please provide the JSON response without any code block markers such as ```json```.",
         DeepSeekChatOptions.builder()
-            .withModel(DeepSeekApi.ChatModel.DEEPSEEK_CHAT.getValue())
-            .withTemperature(0.8f)
+            .model("deepseek-chat")
+            .temperature(0.8)
         .build()
     ));
 ```
@@ -156,8 +156,8 @@ ChatResponse response = chatModel.call(
 
 ```properties
 spring.ai.deepseek.api-key=YOUR_API_KEY
-spring.ai.deepseek.chat.options.model=deepseek-chat
-spring.ai.deepseek.chat.options.temperature=0.8
+spring.ai.deepseek.chat.model=deepseek-chat
+spring.ai.deepseek.chat.temperature=0.8
 ```
 
 > **提示：** 将 `api-key` 替换为您的 DeepSeek 凭据。

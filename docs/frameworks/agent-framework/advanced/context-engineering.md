@@ -129,7 +129,7 @@ keywords:
 
 <Code
   language="java"
-  title="基于状态的动态提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="基于状态的动态提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
@@ -189,7 +189,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="基于存储的个性化提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="基于存储的个性化提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`// 从长期记忆加载用户偏好
 class PersonalizedPromptInterceptor extends ModelInterceptor {
@@ -273,7 +273,7 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
 
 <Code
   language="java"
-  title="MessageFilterInterceptor 消息过滤示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="MessageFilterInterceptor 消息过滤示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`class MessageFilterInterceptor extends ModelInterceptor {
     private final int maxMessages;
@@ -330,7 +330,7 @@ class PersonalizedPromptInterceptor extends ModelInterceptor {
 
 <Code
   language="java"
-  title="ContextualToolInterceptor 基于上下文的工具选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="ContextualToolInterceptor 基于上下文的工具选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`class ContextualToolInterceptor extends ModelInterceptor {
     private final Map<String, List<ToolCallback>> roleBasedTools;
@@ -388,7 +388,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="DynamicModelInterceptor 动态模型选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="DynamicModelInterceptor 动态模型选择示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`class DynamicModelInterceptor extends ModelInterceptor {
     private final ChatModel simpleModel;
@@ -432,7 +432,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="响应格式控制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="响应格式控制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`// 在Agent级别设置输出格式
 ReactAgent agent = ReactAgent.builder()
@@ -486,7 +486,7 @@ class DynamicFormatInterceptor extends ModelInterceptor {
 
 <Code
   language="java"
-  title="StatefulTool 工具中访问状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="StatefulTool 工具中访问状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`class StatefulTool implements Function<StatefulTool.Request, StatefulTool.Response> {
     public record Request(String query) {}
@@ -520,7 +520,7 @@ class DynamicFormatInterceptor extends ModelInterceptor {
 
 <Code
   language="java"
-  title="StateModifyingTool 工具修改状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="StateModifyingTool 工具修改状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`class StateModifyingTool implements Function<StateModifyingTool.Request, StateModifyingTool.Response> {
     public record Request(String data) {}
@@ -564,7 +564,7 @@ Spring AI Alibaba 支持以下 Hook 位置：
 
 <Code
   language="java"
-  title="LoggingHook 自定义Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="LoggingHook 自定义Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.Hook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -612,7 +612,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="SummarizationHook 消息摘要Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
+  title="SummarizationHook 消息摘要Hook示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPositions;

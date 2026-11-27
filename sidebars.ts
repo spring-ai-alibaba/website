@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
     'overview',
     'quick-start',
     'versions',
+    'release-highlights',
     {
       type: 'category',
       label: 'Agent Framework',

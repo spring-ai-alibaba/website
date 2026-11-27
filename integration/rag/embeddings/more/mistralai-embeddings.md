@@ -135,21 +135,21 @@ dependencies {
 | spring.ai.mistralai.embedding.base-url | 可选覆盖 spring.ai.mistralai.base-url 以提供 embedding 特定的 url | - |
 | spring.ai.mistralai.embedding.api-key | 可选覆盖 spring.ai.mistralai.api-key 以提供 embedding 特定的 api-key | - |
 | spring.ai.mistralai.embedding.metadata-mode | 文档内容提取模式。 | EMBED |
-| spring.ai.mistralai.embedding.options.model | 要使用的模型 | mistral-embed |
-| spring.ai.mistralai.embedding.options.encodingFormat | 返回 embeddings 的格式。可以是 float 或 base64。 | - |
+| spring.ai.mistralai.embedding.model | 要使用的模型 | mistral-embed |
+| spring.ai.mistralai.embedding.encodingFormat | 返回 embeddings 的格式。可以是 float 或 base64。 | - |
 
 注意：您可以为 `ChatModel` 和 `EmbeddingModel` 实现覆盖通用的 `spring.ai.mistralai.base-url` 和 `spring.ai.mistralai.api-key`。
 如果设置了 `spring.ai.mistralai.embedding.base-url` 和 `spring.ai.mistralai.embedding.api-key` 属性，它们优先于通用属性。
 同样，如果设置了 `spring.ai.mistralai.chat.base-url` 和 `spring.ai.mistralai.chat.api-key` 属性，它们优先于通用属性。
 如果您想为不同的模型和不同的模型端点使用不同的 MistralAI 账户，这很有用。
 
-提示：所有前缀为 `spring.ai.mistralai.embedding.options` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
+提示：所有前缀为 `spring.ai.mistralai.embedding` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
 
 ## 运行时选项
 
 https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-mistral-ai/src/main/java/org/springframework/ai/mistralai/MistralAiEmbeddingOptions.java[MistralAiEmbeddingOptions.java] 提供 MistralAI 配置，例如要使用的模型等。
 
-也可以使用 `spring.ai.mistralai.embedding.options` 属性配置默认选项。
+也可以使用 `spring.ai.mistralai.embedding` 属性配置默认选项。
 
 在启动时使用 `MistralAiEmbeddingModel` 构造函数来设置用于所有 embedding 请求的默认选项。
 在运行时，您可以使用 `MistralAiEmbeddingOptions` 实例作为 `EmbeddingRequest` 的一部分来覆盖默认选项。
@@ -161,14 +161,14 @@ https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-mistral-
 EmbeddingResponse textEmbeddingResponse = embeddingModel.call(
     new EmbeddingRequest(List.of("Hello World", "World is big and salvation is near"),
         MistralAiEmbeddingOptions.builder()
-            .withModel("mistral-embed")
+            .model("mistral-embed")
         .build()));
 
 // Using codestral-embed for code
 EmbeddingResponse codeEmbeddingResponse = embeddingModel.call(
     new EmbeddingRequest(List.of("public class HelloWorld {}", "def hello_world():"),
         MistralAiEmbeddingOptions.builder()
-            .withModel("codestral-embed")
+            .model("codestral-embed")
         .build()));
 ```
 
@@ -179,7 +179,7 @@ EmbeddingResponse codeEmbeddingResponse = embeddingModel.call(
 
 ```properties
 spring.ai.mistralai.api-key=YOUR_API_KEY
-spring.ai.mistralai.embedding.options.model=mistral-embed
+spring.ai.mistralai.embedding.model=mistral-embed
 ```
 
 ```java
@@ -233,7 +233,7 @@ var mistralAiApi = new MistralAiApi(System.getenv("MISTRAL_AI_API_KEY"));
 
 var embeddingModel = new MistralAiEmbeddingModel(this.mistralAiApi,
         MistralAiEmbeddingOptions.builder()
-                .withModel("mistral-embed")
+                .model("mistral-embed")
                 .withEncodingFormat("float")
                 .build());
 

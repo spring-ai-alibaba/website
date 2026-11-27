@@ -9,6 +9,15 @@ const darkCodeTheme = themes.vsDark
 // Generate GitHub links from project configuration
 const githubUrls = getGitHubUrls(projectConfig)
 
+const docsVersioning = {
+  lastVersion: 'current',
+  versions: {
+    current: { label: '2.1.x', path: '', badge: true },
+    '2.0.x': { label: '2.0.x', badge: true, banner: 'none' },
+    '1.x': { label: '1.x', badge: true, banner: 'none' },
+  },
+} as const
+
 const config: Config = {
   title: projectConfig.title,
   tagline: projectConfig.tagline,
@@ -248,6 +257,7 @@ const config: Config = {
         id: 'agents',
         path: 'agents-docs',
         routeBasePath: 'agents',
+        ...docsVersioning,
         sidebarPath: './sidebars/sidebars-agents.ts',
         editUrl: githubUrls.editDocs,
         showLastUpdateAuthor: true,
@@ -261,6 +271,7 @@ const config: Config = {
         id: 'ecosystem',
         path: 'ecosystem',
         routeBasePath: 'ecosystem',
+        ...docsVersioning,
         sidebarPath: './sidebars/sidebars-ecosystem.ts',
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
@@ -273,6 +284,7 @@ const config: Config = {
         id: 'integration',
         path: 'integration',
         routeBasePath: 'integration',
+        ...docsVersioning,
         sidebarPath: './sidebars/sidebars-integration.ts',
         editUrl: githubUrls.editDocs,
         showLastUpdateAuthor: true,
@@ -296,6 +308,7 @@ const config: Config = {
       'classic',
       {
         docs: {
+          ...docsVersioning,
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -425,6 +438,10 @@ const config: Config = {
               href: githubUrls.issues,
             },
           ],
+        },
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
         },
         {
           type: 'localeDropdown',

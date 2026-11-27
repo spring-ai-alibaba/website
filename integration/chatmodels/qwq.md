@@ -54,11 +54,6 @@ sidebar_position: 6
 		// 构造时，可以设置 ChatClient 的参数
 		// {@link org.springframework.ai.chat.client.ChatClient};
 		this.chatClient = ChatClient.builder(chatModel)
-				// 实现 Chat Memory 的 Advisor
-				// 在使用 Chat Memory 时，需要指定对话 ID，以便 Spring AI 处理上下文。
-				.defaultAdvisors(
-						new MessageChatMemoryAdvisor(new InMemoryChatMemory()),
-				)
 				// 实现 Logger 的 Advisor
 				.defaultAdvisors(
 						new SimpleLoggerAdvisor()
@@ -66,10 +61,8 @@ sidebar_position: 6
 				// 设置 ChatClient 中 ChatModel 的 Options 参数
 				.defaultOptions(
 						DashScopeChatOptions.builder()
-								.withTopP(0.7)
-								// Note: model must be set when use options build.
-								.withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
-								.build()
+								.topP(0.7)
+								.model("qwq-plus")
 				)
 				.build();
 	}

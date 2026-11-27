@@ -27,7 +27,7 @@ Hooks 和 Interceptors 在这些步骤的前后暴露了钩子点，允许你：
 
 <Code
   language="java"
-  title="添加 Hooks 和 Interceptors 到 ReactAgent" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="添加 Hooks 和 Interceptors 到 ReactAgent" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.*;
@@ -67,7 +67,7 @@ Spring AI Alibaba 为常见用例提供了预构建的 Hooks 和 Interceptors �
 
 <Code
   language="java"
-  title="SummarizationHook 消息压缩示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="SummarizationHook 消息压缩示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.summarization.SummarizationHook;
 
@@ -102,7 +102,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="HumanInTheLoopHook 人机协同示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="HumanInTheLoopHook 人机协同示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.hip.HumanInTheLoopHook;
 import com.alibaba.cloud.ai.graph.agent.hook.hip.ToolConfig;
@@ -135,7 +135,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ModelCallLimitHook 模型调用限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ModelCallLimitHook 模型调用限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
@@ -156,7 +156,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="PIIDetectionHook PII 检测示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="PIIDetectionHook PII 检测示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIDetectionHook;
 import com.alibaba.cloud.ai.graph.agent.hook.pii.PIIType;
@@ -187,7 +187,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ToolRetryInterceptor 工具重试示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ToolRetryInterceptor 工具重试示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.toolretry.ToolRetryInterceptor;
 
@@ -215,7 +215,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="TodoListInterceptor 规划示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="TodoListInterceptor 规划示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.todolist.TodoListInterceptor;
 
@@ -239,7 +239,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ToolSelectionInterceptor LLM 工具选择器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ToolSelectionInterceptor LLM 工具选择器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.toolselection.ToolSelectionInterceptor;
 
@@ -263,7 +263,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ToolEmulatorInterceptor LLM 工具模拟器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ToolEmulatorInterceptor LLM 工具模拟器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.toolemulator.ToolEmulatorInterceptor;
 
@@ -287,7 +287,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ContextEditingInterceptor 上下文编辑示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ContextEditingInterceptor 上下文编辑示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.contextediting.ContextEditingInterceptor;
 
@@ -323,7 +323,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="MessageTrimmingHook 消息修剪示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="MessageTrimmingHook 消息修剪示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
@@ -368,7 +368,7 @@ public class MessageTrimmingHook extends MessagesModelHook {
 
 <Code
   language="java"
-  title="使用不同策略的 MessagesModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="使用不同策略的 MessagesModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
@@ -413,7 +413,7 @@ public class ContextEnhancementHook extends MessagesModelHook {
 
 <Code
   language="java"
-  title="MessagesModelHook 跳转控制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="MessagesModelHook 跳转控制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
 import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
@@ -459,7 +459,7 @@ public class EarlyExitHook extends MessagesModelHook {
 
 <Code
   language="java"
-  title="CustomModelHook 自定义 ModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="CustomModelHook 自定义 ModelHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -501,7 +501,7 @@ public class CustomModelHook extends ModelHook {
 
 <Code
   language="java"
-  title="使用 RemoveByHash 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="使用 RemoveByHash 删除消息示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -584,7 +584,7 @@ public class MessageDeletionHook extends ModelHook {
 
 <Code
   language="java"
-  title="使用 MessagesModelHook 实现消息修剪" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="使用 MessagesModelHook 实现消息修剪" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.messages.AgentCommand;
@@ -622,7 +622,7 @@ public class SimpleMessageTrimmingHook extends MessagesModelHook {
 
 <Code
   language="java"
-  title="使用 ModelHook 实现消息修剪（可访问状态）" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="使用 ModelHook 实现消息修剪（可访问状态）" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -688,7 +688,7 @@ public class AdvancedMessageTrimmingHook extends ModelHook {
 
 <Code
   language="java"
-  title="CustomAgentHook 自定义 AgentHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="CustomAgentHook 自定义 AgentHook 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -730,7 +730,7 @@ public class CustomAgentHook extends AgentHook {
 
 <Code
   language="java"
-  title="LoggingInterceptor 自定义 ModelInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="LoggingInterceptor 自定义 ModelInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
@@ -772,7 +772,7 @@ public class LoggingInterceptor extends ModelInterceptor {
 
 <Code
   language="java"
-  title="DynamicToolInterceptor 动态工具管理示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="DynamicToolInterceptor 动态工具管理示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelRequest;
@@ -847,7 +847,7 @@ public class DynamicToolInterceptor extends ModelInterceptor {
 
 <Code
   language="java"
-  title="ToolMonitoringInterceptor 自定义 ToolInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ToolMonitoringInterceptor 自定义 ToolInterceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.interceptor.ToolInterceptor;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ToolCallRequest;
@@ -903,7 +903,7 @@ public class ToolMonitoringInterceptor extends ToolInterceptor {
 
 <Code
   language="java"
-  title="ModelCallCounterHook 调用计数器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ModelCallCounterHook 调用计数器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -971,7 +971,7 @@ public class ModelCallCounterHook extends ModelHook {
 
 <Code
   language="java"
-  title="ModelCallLimiterHook 调用次数限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ModelCallLimiterHook 调用次数限制示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
 import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
@@ -1042,7 +1042,7 @@ public class ModelCallLimiterHook extends ModelHook {
 
 <Code
   language="java"
-  title="使用 ModelCallCounterHook 和 ModelCallLimiterHook" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="使用 ModelCallCounterHook 和 ModelCallLimiterHook" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`ReactAgent agent = ReactAgent.builder()
     .name("limited_agent")
@@ -1066,7 +1066,7 @@ public class ModelCallLimiterHook extends ModelHook {
 
 <Code
   language="java"
-  title="多个 Hooks 和 Interceptors 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="多个 Hooks 和 Interceptors 配置示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`ReactAgent agent = ReactAgent.builder()
     .name("my_agent")
@@ -1168,7 +1168,7 @@ public class ModelCallLimiterHook extends ModelHook {
 
 <Code
   language="java"
-  title="ContentModerationInterceptor 内容审核示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ContentModerationInterceptor 内容审核示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`public class ContentModerationInterceptor extends ModelInterceptor {
 
@@ -1216,7 +1216,7 @@ public class ModelCallLimiterHook extends ModelHook {
 
 <Code
   language="java"
-  title="性能监控 Interceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="性能监控 Interceptor 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`// 模型调用性能监控
 public class ModelPerformanceInterceptor extends ModelInterceptor {
@@ -1293,7 +1293,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="ToolCacheInterceptor 工具缓存示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
+  title="ToolCacheInterceptor 工具缓存示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/HooksExample.java"
 >
 {`public class ToolCacheInterceptor extends ToolInterceptor {
 

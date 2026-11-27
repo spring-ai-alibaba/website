@@ -17,7 +17,7 @@ AI 应用程序需要支持在同一轮会话的多条消息间共享上下文�
 
 <Code
   language="java"
-  title="添加短期内存" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="添加短期内存" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`// 创建内存检查点器
 MemorySaver checkpointer = new MemorySaver();
@@ -68,7 +68,7 @@ graph.invoke(input, config);`}
 
 <Code
   language="java"
-  title="Redis 检查点器配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="Redis 检查点器配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.savers.RedisSaver;
 import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;
@@ -95,7 +95,7 @@ CompiledGraph graph = stateGraph.compile(
 
 <Code
   language="java"
-  title="使用短期内存的多轮对话示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="使用短期内存的多轮对话示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -181,7 +181,7 @@ graph.invoke(Map.of("messages", List.of(
 
 <Code
   language="java"
-  title="在子图中使用检查点器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="在子图中使用检查点器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -242,7 +242,7 @@ Spring AI Alibaba 借助 Store 组件来实现记忆的写入或读取管理。S
 
 <Code
   language="java"
-  title="使用 Store 存储用户信息" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="使用 Store 存储用户信息" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -335,7 +335,7 @@ System.out.println("加载的用户配置: " + result.get("userProfile"));`}
 
 <Code
   language="java"
-  title="使用 Store 实现缓存" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="使用 Store 实现缓存" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -428,7 +428,7 @@ System.out.println("第二次调用结果（从缓存）: " + result2.get("resul
 
 <Code
   language="java"
-  title="模拟耗时操作" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="模拟耗时操作" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`// 模拟耗时操作
 private static Object performExpensiveOperation(String key) {
@@ -446,7 +446,7 @@ private static Object performExpensiveOperation(String key) {
 
 <Code
   language="java"
-  title="结合短期和长期内存的完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
+  title="结合短期和长期内存的完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/MemoryExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;

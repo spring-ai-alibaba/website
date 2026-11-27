@@ -13,7 +13,7 @@ Spring AI Alibaba 支持通过 `ChatClient` 进行流式输出。
 
 <Code
   language="java"
-  title="使用流式 ChatClient" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
+  title="使用流式 ChatClient" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
 >
 {`import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -40,7 +40,7 @@ flux.subscribe(
 
 <Code
   language="java"
-  title="使用 Reactor 的阻塞式处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
+  title="使用 Reactor 的阻塞式处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
 >
 {`Flux<ChatResponse> flux = chatClient.prompt()
         .user("tell me a joke")
@@ -70,7 +70,7 @@ Stream completed
 
 <Code
   language="java"
-  title="创建带流式输出的 Graph 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
+  title="创建带流式输出的 Graph 节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -106,7 +106,7 @@ public class StreamingAgentNode implements NodeAction {
 
 <Code
   language="java"
-  title="配置和运行流式 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
+  title="配置和运行流式 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/LlmStreamingSpringAiExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;

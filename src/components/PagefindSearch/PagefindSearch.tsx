@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { translate } from '@docusaurus/Translate'
-import useBaseUrl from '@docusaurus/useBaseUrl'
+import { useActivePluginAndVersion } from '@docusaurus/plugin-content-docs/client'
+import projectConfig from '../../../project.config'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import clsx from 'clsx'
 import styles from './styles.module.css'
@@ -21,7 +22,11 @@ interface PagefindUIOptions {
   translations?: Record<string, string>;
 }
 
-type PagefindUIConstructor = new (options: PagefindUIOptions) => unknown
+interface PagefindUIInstance {
+  triggerFilters(filters: Record<string, string>): void;
+}
+
+type PagefindUIConstructor = new (options: PagefindUIOptions) => PagefindUIInstance
 
 declare global {
   interface Window {
@@ -74,12 +79,15 @@ function loadPagefindScript(src: string) {
 
 export default function PagefindSearch() {
   const { i18n } = useDocusaurusContext()
-  const scriptUrl = useBaseUrl('/pagefind/pagefind-ui.js')
-  const stylesheetUrl = useBaseUrl('/pagefind/pagefind-ui.css')
+  const version = useActivePluginAndVersion()?.activeVersion?.label
+  // The build indexes all locales together, under the deployment base URL.
+  const indexUrl = `${projectConfig.deployment.baseUrl}pagefind/`
+  const scriptUrl = `${indexUrl}pagefind-ui.js`
+  const stylesheetUrl = `${indexUrl}pagefind-ui.css`
   const [isOpen, setIsOpen] = useState(false)
   const [loadState, setLoadState] = useState<LoadState>('idle')
   const [shortcutLabel, setShortcutLabel] = useState('Ctrl K')
-  const initializedRef = useRef(false)
+  const pagefindRef = useRef<PagefindUIInstance | null>(null)
 
   const searchLabel = translate({
     id: 'theme.SearchBar.label',
@@ -129,7 +137,9 @@ export default function PagefindSearch() {
       return
     }
 
-    if (initializedRef.current) {
+    const filters: Record<string, string> = version ? { Version: version } : {}
+    if (pagefindRef.current) {
+      pagefindRef.current.triggerFilters(filters)
       focusSearchInput()
       return
     }
@@ -149,7 +159,7 @@ export default function PagefindSearch() {
           throw new Error('PagefindUI 未挂载到 window')
         }
 
-        new PagefindUI({
+        pagefindRef.current = new PagefindUI({
           element: `#${PAGEFIND_ELEMENT_ID}`,
           showImages: false,
           showSubResults: true,
@@ -167,7 +177,7 @@ export default function PagefindSearch() {
             },
         })
 
-        initializedRef.current = true
+        pagefindRef.current.triggerFilters(filters)
         setLoadState('ready')
         focusSearchInput()
       })
@@ -181,7 +191,7 @@ export default function PagefindSearch() {
     return () => {
       cancelled = true
     }
-  }, [focusSearchInput, i18n.currentLocale, isOpen, scriptUrl, stylesheetUrl])
+  }, [focusSearchInput, i18n.currentLocale, isOpen, scriptUrl, stylesheetUrl, version])
 
   const handleOverlayMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {

@@ -25,7 +25,7 @@ InterruptionMetadata 模式允许节点在运行时动态决定是否需要中�
 
 <Code
   language="java"
-  title="定义带中断的 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="定义带中断的 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -113,7 +113,7 @@ public static CompiledGraph createGraphWithInterrupt() throws GraphStateExceptio
 
 <Code
   language="java"
-  title="实现 InterruptableNodeAction" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="实现 InterruptableNodeAction" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`/**
  * 可中断的节点动作
@@ -160,7 +160,7 @@ public static class InterruptableNodeAction implements AsyncNodeActionWithConfig
 
 <Code
   language="java"
-  title="执行 Graph 直到中断" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="执行 Graph 直到中断" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.NodeOutput;
@@ -221,7 +221,7 @@ public static InterruptionMetadata executeUntilInterrupt(CompiledGraph graph) {
 
 <Code
   language="java"
-  title="等待用户输入并更新状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="等待用户输入并更新状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`/**
  * 等待用户输入并更新状态
@@ -265,7 +265,7 @@ StateSnapshot{node=step_1, state={messages=[Step 0, Step 1], human_feedback=back
 
 <Code
   language="java"
-  title="继续执行 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="继续执行 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`/**
  * 继续执行 Graph
@@ -310,7 +310,7 @@ interruptBefore 模式需要在编译 Graph 时提前指定中断点，在指定
 
 <Code
   language="java"
-  title="定义带中断的 Graph (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="定义带中断的 Graph (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -392,7 +392,7 @@ public static CompiledGraph createGraphWithInterrupt() throws GraphStateExceptio
 
 <Code
   language="java"
-  title="执行 Graph 直到中断 (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="执行 Graph 直到中断 (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -433,7 +433,7 @@ NodeOutput{node=step_1, state={messages=[Step 0, Step 1]}}
 
 <Code
   language="java"
-  title="等待用户输入并更新状态 (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="等待用户输入并更新状态 (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -482,7 +482,7 @@ StateSnapshot{node=step_1, state={messages=[Step 0, Step 1], human_feedback=back
 
 <Code
   language="java"
-  title="继续执行 Graph (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="继续执行 Graph (interruptBefore 模式)" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`/**
  * 继续执行 Graph
@@ -508,7 +508,7 @@ NodeOutput{node=step_1, state={messages=[Step 0, Step 1], human_feedback=back}}
 
 <Code
   language="java"
-  title="第二次等待用户输入" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="第二次等待用户输入" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`var userInput = "next"; // "next" 表示继续下一个节点
 System.out.printf("\n--User Input--\n用户选择: '%s'\n", userInput);
@@ -525,7 +525,7 @@ System.out.printf("\ngetNext()\n\twith invokeConfig:[%s]\n\twith updateConfig:[%
 
 <Code
   language="java"
-  title="继续执行直到完成" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="继续执行直到完成" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`// 继续执行 Graph
 graph.stream(null, updateConfig)
@@ -571,7 +571,7 @@ NodeOutput{node=__END__, state={messages=[Step 0, Step 1, Step 3], human_feedbac
 
 <Code
   language="java"
-  title="ExpanderNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="ExpanderNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`package com.spring.ai.tutorial.graph.human.node;
 
@@ -647,7 +647,7 @@ public class ExpanderNode implements NodeAction {
 
 <Code
   language="java"
-  title="TranslateNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="TranslateNode" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`package com.spring.ai.tutorial.graph.human.node;
 
@@ -720,7 +720,7 @@ public class TranslateNode implements NodeAction {
 
 <Code
   language="java"
-  title="边定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
+  title="边定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/HumanInTheLoopExample.java"
 >
 {`package com.spring.ai.tutorial.graph.human.dispatcher;
 

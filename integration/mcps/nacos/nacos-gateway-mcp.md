@@ -13,14 +13,14 @@ Spring AI Alibaba MCP Gateway 基于 Nacos 提供的 MCP server registry 实现�
     <dependency>
         <groupId>com.alibaba.cloud.ai</groupId>
         <artifactId>spring-ai-alibaba-starter-mcp-gateway</artifactId>
-        <version>${spring-ai-extensions.version}</version>
+        <version>2.1.0.0</version>
     </dependency>
 
     <!-- MCP Server WebFlux 支持（也可换成 WebMvc） -->
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-starter-mcp-server-webflux</artifactId>
-        <version>${spring-ai.version}</version>
+        <version>2.1.0</version>
     </dependency>
 
 </dependencies>
@@ -78,7 +78,7 @@ _        _streamable-http:
 <dependency>
   <groupId>com.alibaba.cloud.ai</groupId>
   <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>
-  <version>${spring-ai-extensions.version}</version>
+  <version>2.1.0.0</version>
 </dependency>
 ```
 
@@ -137,3 +137,11 @@ Gateway 被触发调用 restful 服务
 
 ![nacos-gateway-7](/img/blog/extensions/mcp/nacos-gateway-7.png)
 
+
+## 与 Modern MCP 服务共存
+
+Extensions 2.1.0.0 识别 Nacos 注册记录中的 `mcp-modern`。注册 Modern 服务时声明真实服务协议和端点；发现、路由和网关按照每条记录选择 Modern、Streamable HTTP 或 SSE。升级时可保留已有记录，同时为新服务注册独立的 Modern 入口。
+
+消费端可使用同步或异步方式调用 `listTools` 和 `callTool`。在逐服务迁移时，用匹配的协议遍历工具与执行只读调用，核对服务端点、请求头、认证和超时。
+
+[配置 Spring AI Modern MCP 客户端](../mcp-client-boot-starter-docs.md#modern-mcp-2026-07-28) · [Extensions 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.1.0.0)

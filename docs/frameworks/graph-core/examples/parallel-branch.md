@@ -14,7 +14,7 @@ Spring AI Alibaba Graph 允许您定义并行节点以加速总图执行。
 
 <Code
   language="java"
-  title="配置并行节点 Executor" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="配置并行节点 Executor" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import java.util.concurrent.ForkJoinPool;
@@ -86,7 +86,7 @@ RunnableConfig runnableConfig = RunnableConfig.builder()
 
 <Code
   language="java"
-  title="定义并行节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="定义并行节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -141,7 +141,7 @@ CompiledGraph graph = workflow.compile();`}
 
 <Code
   language="java"
-  title="执行并行 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="执行并行 Graph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`// 执行 Graph
 compiledGraph.stream(Map.of())
@@ -173,7 +173,7 @@ compiledGraph.stream(Map.of())
 
 <Code
   language="java"
-  title="条件返回到并行节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="条件返回到并行节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -221,7 +221,7 @@ CompiledGraph graph = workflow.compile();`}
 
 <Code
   language="java"
-  title="混合节点和子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="混合节点和子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -289,7 +289,7 @@ CompiledGraph graph = workflow.compile();`}
 
 <Code
   language="java"
-  title="仅使用子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="仅使用子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`// 创建三个子图
 CompiledGraph subgraphA1 = new StateGraph(keyStrategyFactory)
@@ -339,7 +339,7 @@ CompiledGraph graph = workflow.compile();`}
 
 <Code
   language="java"
-  title="完整示例：并行数据处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
+  title="完整示例：并行数据处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/ParallelBranchExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.CompiledGraph;

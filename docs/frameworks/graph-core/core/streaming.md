@@ -28,7 +28,7 @@ Flux 支持多个流的合并、转换、组合等操作，具备非常强大的
 
 <Code
   language="java"
-  title="流式节点实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
+  title="流式节点实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -72,7 +72,7 @@ public static class StreamingNode implements NodeAction {
 
 <Code
   language="java"
-  title="处理流式输出的节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
+  title="处理流式输出的节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -99,7 +99,7 @@ public static class ProcessStreamingNode implements NodeAction {
 
 <Code
   language="java"
-  title="使用流式输出的完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
+  title="使用流式输出的完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -197,7 +197,7 @@ public static void streamLLMTokens(ChatClient.Builder chatClientBuilder) throws 
 
 <Code
   language="java"
-  title="流式 LLM tokens" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
+  title="流式 LLM tokens" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
 >
 {`import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -342,7 +342,7 @@ NodeOutput(node="__END__", state={...})    ← 图执行完成
 
 <Code
   language="java"
-  title="流输出数据类型层次" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
+  title="流输出数据类型层次" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/StreamingExample.java"
 >
 {`// 基类：所有节点输出的基础类型
 NodeOutput {

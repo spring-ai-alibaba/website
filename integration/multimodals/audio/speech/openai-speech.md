@@ -77,16 +77,16 @@ dependencies {
 | spring.ai.openai.audio.speech.api-key | API Key | - |
 | spring.ai.openai.audio.speech.organization-id | 可选，您可以指定用于 API 请求的组织 | - |
 | spring.ai.openai.audio.speech.project-id | 可选，您可以指定用于 API 请求的项目 | - |
-| spring.ai.openai.audio.speech.options.model | 用于生成音频的模型 ID。可用模型：`gpt-4o-mini-tts`（默认，针对速度和成本优化）、`gpt-4o-tts`（更高质量）、`tts-1`（旧版，针对速度优化）或 `tts-1-hd`（旧版，针对质量优化） | gpt-4o-mini-tts |
-| spring.ai.openai.audio.speech.options.voice | 用于合成的语音。对于 OpenAI 的 TTS API，所选模型的可用语音之一：alloy、echo、fable、onyx、nova 和 shimmer | alloy |
-| spring.ai.openai.audio.speech.options.response-format | 音频输出的格式。支持的格式有 mp3、opus、aac、flac、wav 和 pcm | mp3 |
-| spring.ai.openai.audio.speech.options.speed | 语音合成的速度。可接受的范围是从 0.25（最慢）到 4.0（最快） | 1.0 |
+| spring.ai.openai.audio.speech.model | 用于生成音频的模型 ID。可用模型：`gpt-4o-mini-tts`（默认，针对速度和成本优化）、`gpt-4o-tts`（更高质量）、`tts-1`（旧版，针对速度优化）或 `tts-1-hd`（旧版，针对质量优化） | gpt-4o-mini-tts |
+| spring.ai.openai.audio.speech.voice | 用于合成的语音。对于 OpenAI 的 TTS API，所选模型的可用语音之一：alloy、echo、fable、onyx、nova 和 shimmer | alloy |
+| spring.ai.openai.audio.speech.response-format | 音频输出的格式。支持的格式有 mp3、opus、aac、flac、wav 和 pcm | mp3 |
+| spring.ai.openai.audio.speech.speed | 语音合成的速度。可接受的范围是从 0.25（最慢）到 4.0（最快） | 1.0 |
 
 > **NOTE**: 您可以覆盖通用的 `spring.ai.openai.base-url`、`spring.ai.openai.api-key`、`spring.ai.openai.organization-id` 和 `spring.ai.openai.project-id` 属性。
 > 如果设置了 `spring.ai.openai.audio.speech.base-url`、`spring.ai.openai.audio.speech.api-key`、`spring.ai.openai.audio.speech.organization-id` 和 `spring.ai.openai.audio.speech.project-id` 属性，它们优先于通用属性。
 > 如果您想为不同的模型和不同的模型端点使用不同的 OpenAI 账户，这很有用。
 
-> **TIP**: 所有以 `spring.ai.openai.audio.speech.options` 为前缀的属性都可以在运行时覆盖。
+> **TIP**: 所有以 `spring.ai.openai.audio.speech` 为前缀的属性都可以在运行时覆盖。
 
 ## Runtime Options
 

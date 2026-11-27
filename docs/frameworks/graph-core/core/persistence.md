@@ -18,7 +18,7 @@ Spring AI Alibaba Graph 具有内置的持久化层，通过检查点（Checkpoi
 
 <Code
   language="java"
-  title="指定 threadId" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="指定 threadId" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`RunnableConfig config = RunnableConfig.builder()
     .threadId("1")
@@ -43,7 +43,7 @@ Spring AI Alibaba Graph 具有内置的持久化层，通过检查点（Checkpoi
 
 <Code
   language="java"
-  title="检查点示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="检查点示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -128,7 +128,7 @@ graph.invoke(input, config);`}
 
 <Code
   language="java"
-  title="获取状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="获取状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -158,7 +158,7 @@ System.out.println("Specific checkpoint state: " + specificSnapshot.state());`}
 
 <Code
   language="java"
-  title="获取状态历史" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="获取状态历史" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -192,7 +192,7 @@ for (int i = 0; i < history.size(); i++) {
 
 <Code
   language="java"
-  title="重放图执行" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="重放图执行" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.RunnableConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -220,7 +220,7 @@ System.out.println("Replay executed");`}
 
 <Code
   language="java"
-  title="获取 checkpointer 状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="获取 checkpointer 状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`RunnableConfig config = RunnableConfig.builder().threadId("unique-id-1").build();
 graph.stream(Map.of("input", "你好"), config);
@@ -233,7 +233,7 @@ StateSnapshot lastSnapshot = workflow.getState(config);`}
 
 <Code
   language="java"
-  title="获取状态历史" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="获取状态历史" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`RunnableConfig config = RunnableConfig.builder().threadId("unique-id-1").build();
 Optional<NodeOutput> outputOptional = graph.invoke(inputs, config);
@@ -250,7 +250,7 @@ Collection<StateSnapshot> history = workflow.getStateHistory(config);`}
 
 <Code
   language="java"
-  title="更新状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="更新状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`RunnableConfig config = RunnableConfig.builder().threadId("unique-id-1").build();
 
@@ -266,7 +266,7 @@ var updatedConfig = graph.updateState(config, Map.of("the_key_to", "newValue"), 
 
 <Code
   language="java"
-  title="定义状态策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="定义状态策略" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`KeyStrategyFactory keyStrategyFactory = () -> {
     Map<String, KeyStrategy> keyStrategyMap = new HashMap<>();
@@ -286,7 +286,7 @@ var updatedConfig = graph.updateState(config, Map.of("the_key_to", "newValue"), 
 
 <Code
   language="java"
-  title="更新状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="更新状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -336,7 +336,7 @@ Spring AI Alibaba 提供了多种检查点器实现：
 
 <Code
   language="java"
-  title="MemorySaver 配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
+  title="MemorySaver 配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/core/PersistenceExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
 import com.alibaba.cloud.ai.graph.checkpoint.config.SaverConfig;

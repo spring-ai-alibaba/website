@@ -14,6 +14,7 @@ keywords: [ReactAgent, 快速开始, Quick Start, Spring AI Alibaba, Agent Frame
 
 * JDK 17+
 * Maven 3.8+
+* Spring Boot 4.2.0（依赖组合见[版本与依赖](versions.md)）
 * 选择你的 LLM 提供商并获取 API-KEY（如阿里云百炼的 DashScope）
 
 ### 添加依赖
@@ -26,14 +27,14 @@ keywords: [ReactAgent, 快速开始, Quick Start, Spring AI Alibaba, Agent Frame
   <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-    <version>1.1.2.0</version>
+    <version>2.1.0.0</version>
   </dependency>
 
   <!-- DashScope ChatModel 支持（如果使用其他模型，请跳转 Spring AI 文档选择对应的 starter） -->
   <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-    <version>1.1.2.0</version>
+    <version>2.1.0.0</version>
   </dependency>
 </dependencies>
 ```
@@ -59,7 +60,7 @@ spring:
 **获取 API Key**：
 
 * DashScope（阿里云百炼）：访问 [https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api](https://bailian.console.aliyun.com/?apiKey=1&tab=api#/api)
-* 其他模型提供商请 [参考文档](../integration/chatmodels/openai-chat)
+* 其他模型提供商请 [参考文档](/integration/chatmodels/openai-chat)
 
 ## 构建一个基础 Agent
 
@@ -215,9 +216,9 @@ ChatModel chatModel = DashScopeChatModel.builder()
     .dashScopeApi(dashScopeApi)
     .defaultOptions(DashScopeChatOptions.builder()
         // Note: model must be set when use options build.
-        .withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
-        .withTemperature(0.5)
-        .withMaxToken(1000)
+        .model(DashScopeChatModel.DEFAULT_MODEL_NAME)
+        .temperature(0.5)
+        .maxTokens(1000)
         .build())
     .build();
 ```
@@ -229,14 +230,14 @@ ChatModel chatModel = DashScopeChatModel.builder()
 <dependency>
  <groupId>com.alibaba.cloud.ai</groupId>
  <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
- <version>1.1.2.1</version>
+ <version>2.1.0.0</version>
 </dependency>
 
 <!-- OpenAI-->
 <dependency>
  <groupId>org.springframework.ai</groupId>
  <artifactId>spring-ai-starter-model-openai</artifactId>
- <version>1.1.2</version>
+ <version>2.1.0</version>
 </dependency>
 ```
 

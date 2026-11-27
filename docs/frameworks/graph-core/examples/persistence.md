@@ -16,10 +16,10 @@ keywords: [持久化, Persistence, 记忆, Checkpointer, MemorySaver, StateGraph
 2. 在编译图时通过 [`CompileConfig`] 传递 Checkpointer
 3. 使用 `threadId` 来标识不同的会话
 
-[`StateGraph`]: https://github.com/alibaba/spring-ai-alibaba/blob/main/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/StateGraph.java
-[`Checkpointer`]: https://github.com/alibaba/spring-ai-alibaba/blob/main/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/checkpoint/Checkpoint.java
-[`MemorySaver`]: https://github.com/alibaba/spring-ai-alibaba/blob/main/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/checkpoint/savers/MemorySaver.java
-[`CompileConfig`]: https://github.com/alibaba/spring-ai-alibaba/blob/main/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/CompileConfig.java
+[`StateGraph`]: https://github.com/alibaba/spring-ai-alibaba/blob/v2.1.0.0/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/StateGraph.java
+[`Checkpointer`]: https://github.com/alibaba/spring-ai-alibaba/blob/v2.1.0.0/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/checkpoint/Checkpoint.java
+[`MemorySaver`]: https://github.com/alibaba/spring-ai-alibaba/blob/v2.1.0.0/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/checkpoint/savers/MemorySaver.java
+[`CompileConfig`]: https://github.com/alibaba/spring-ai-alibaba/blob/v2.1.0.0/spring-ai-alibaba-graph-core/src/main/java/com/alibaba/cloud/ai/graph/CompileConfig.java
 
 ## 初始化配置
 

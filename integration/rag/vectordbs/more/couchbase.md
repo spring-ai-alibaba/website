@@ -247,7 +247,8 @@ public VectorStore couchbaseSearchVectorStore(Cluster cluster,
 // 这可以是任何 EmbeddingModel 实现。
 @Bean
 public EmbeddingModel embeddingModel() {
-    return new OpenAiEmbeddingModel(OpenAiApi.builder().apiKey(this.openaiKey).build());
+    return new OpenAiEmbeddingModel(MetadataMode.EMBED,
+        OpenAiEmbeddingOptions.builder().apiKey(this.openaiKey).build());
 }
 ```
 

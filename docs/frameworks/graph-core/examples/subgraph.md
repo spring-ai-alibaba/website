@@ -26,7 +26,7 @@ keywords: [Spring AI Alibaba, Subgraphs, 子图, 多智能体, Multi-agent, 组�
 
 <Code
   language="java"
-  title="直接添加编译的子图作为节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="直接添加编译的子图作为节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -90,7 +90,7 @@ CompiledGraph compiledParent = parentGraph.compile();`}
 
 <Code
   language="java"
-  title="在节点操作中调用子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="在节点操作中调用子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -187,7 +187,7 @@ CompiledGraph compiledParent = parentGraph.compile();`}
 
 <Code
   language="java"
-  title="直接嵌入 StateGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="直接嵌入 StateGraph" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -274,7 +274,7 @@ CompiledGraph compiledParent = parentGraph.compile();`}
 
 <Code
   language="java"
-  title="共享状态的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="共享状态的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -327,7 +327,7 @@ CompiledGraph compiledParent = parentGraph.compile();`}
 
 <Code
   language="java"
-  title="多个子图复用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="多个子图复用" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`// 创建数据处理子图
 KeyStrategyFactory dataProcessorFactory = () -> {
@@ -380,7 +380,7 @@ CompiledGraph compiledMain = mainGraph.compile();`}
 
 <Code
   language="java"
-  title="不同状态的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="不同状态的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -465,7 +465,7 @@ CompiledGraph compiledParent = parentGraph.compile();`}
 
 <Code
   language="java"
-  title="可配置的子图节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="可配置的子图节点" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`public static class ConfigurableSubGraphNode implements NodeAction {
     private final CompiledGraph subGraph;
@@ -510,7 +510,7 @@ ConfigurableSubGraphNode configurableNode = new ConfigurableSubGraphNode(
 
 <Code
   language="java"
-  title="可视化图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="可视化图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.GraphRepresentation;
 
@@ -536,7 +536,7 @@ System.out.println(representation.content());`}
 
 <Code
   language="java"
-  title="流式处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="流式处理" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import reactor.core.publisher.Flux;
@@ -558,7 +558,7 @@ stream.subscribe(
 
 <Code
   language="java"
-  title="多智能体系统示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="多智能体系统示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -648,7 +648,7 @@ Map<String, Object> result = multiAgentSystem.invoke(
 
 <Code
   language="java"
-  title="状态隔离示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
+  title="状态隔离示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;

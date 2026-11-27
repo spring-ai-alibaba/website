@@ -100,7 +100,7 @@ Spring AI 提供了开箱即用的 `QuestionAnswerAdvisor` 和 `RetrievalAugment
 
 <Code
   language="java"
-  title="使用 MessagesModelHook 实现两步RAG" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="使用 MessagesModelHook 实现两步RAG" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.messages.MessagesModelHook;
@@ -208,7 +208,7 @@ System.out.println("答案: " + response.getText());`}
 
 <Code
   language="java"
-  title="使用 ModelInterceptor 实现两步RAG" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="使用 ModelInterceptor 实现两步RAG" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.interceptor.ModelInterceptor;
@@ -315,7 +315,7 @@ System.out.println("答案: " + response.getText());`}
 
 <Code
   language="java"
-  title="使用 AgentHook 实现两步RAG（只检索一次）" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="使用 AgentHook 实现两步RAG（只检索一次）" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
@@ -483,7 +483,7 @@ System.out.println("答案: " + response.getText());`}
 
 <Code
   language="java"
-  title="构建知识库示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="构建知识库示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
@@ -525,7 +525,7 @@ Agent 启用 RAG 行为所需的唯一条件是访问一个或多个可以获取
 
 <Code
   language="java"
-  title="Agentic RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="Agentic RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.document.Document;
@@ -595,7 +595,7 @@ ragAgent.invoke("Spring AI Alibaba支持哪些向量数据库？");`}
 
 <Code
   language="java"
-  title="多工具Agentic RAG示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="多工具Agentic RAG示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.document.Document;
@@ -704,7 +704,7 @@ multiSourceAgent.invoke("比较我们的产品文档中的功能和最新的市�
 
 <Code
   language="java"
-  title="混合RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="混合RAG实现示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.hook.AgentHook;
@@ -991,7 +991,7 @@ Spring AI Alibaba 提供了构建 RAG 系统的核心组件和模块化架构：
 
 <Code
   language="java"
-  title="RAG核心组件导入" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
+  title="RAG核心组件导入" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/RAGExample.java"
 >
 {`// ETL Pipeline 组件
 import org.springframework.ai.document.Document;

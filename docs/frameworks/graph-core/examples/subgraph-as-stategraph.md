@@ -20,7 +20,7 @@ keywords: [子图, Subgraph, StateGraph, 组合, 工作流嵌套, Graph模块化
 
 <Code
   language="java"
-  title="定义子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="定义子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -80,7 +80,7 @@ public static StateGraph createProcessingSubGraph() throws GraphStateException {
 
 <Code
   language="java"
-  title="直接嵌入子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="直接嵌入子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`/**
  * 在父图中集成子图 - 方式 1: 直接嵌入
@@ -117,7 +117,7 @@ public static StateGraph createParentGraphWithDirectEmbedding() throws GraphStat
 
 <Code
   language="java"
-  title="使用编译后的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="使用编译后的子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.OverAllState;
@@ -167,7 +167,7 @@ CompiledGraph compiledSubGraph = createProcessingSubGraph().compile();
 
 <Code
   language="java"
-  title="共享状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="共享状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`// 父子图使用相同的 KeyStrategyFactory
 KeyStrategyFactory sharedKeyFactory = () -> {
@@ -200,7 +200,7 @@ StateGraph parentGraph = new StateGraph(sharedKeyFactory)
 
 <Code
   language="java"
-  title="状态隔离" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="状态隔离" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`public class IsolatedSubGraphNode implements NodeAction {
     private final CompiledGraph subGraph;
@@ -233,7 +233,7 @@ StateGraph parentGraph = new StateGraph(sharedKeyFactory)
 
 <Code
   language="java"
-  title="递归子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="递归子图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`// Level 2 子图
 StateGraph level2SubGraph = new StateGraph(keyFactory)
@@ -265,7 +265,7 @@ StateGraph parentGraph = new StateGraph(keyFactory)
 
 <Code
   language="java"
-  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
+  title="完整示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/SubgraphAsStateGraphExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.*;
 import com.alibaba.cloud.ai.graph.state.strategy.*;

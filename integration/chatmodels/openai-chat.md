@@ -128,38 +128,38 @@ Spring AI 自动向 OpenAI 发送带有 `User-Agent: spring-ai` header 的所有
 | spring.ai.openai.chat.api-key | 可选覆盖 `spring.ai.openai.api-key` 以提供 chat 特定的 API Key。 | - |
 | spring.ai.openai.chat.organization-id | 可选地，您可以指定用于 API 请求的组织。 | - |
 | spring.ai.openai.chat.project-id | 可选地，您可以指定用于 API 请求的项目。 | - |
-| spring.ai.openai.chat.options.model | 要使用的 OpenAI chat model 名称。您可以在以下模型之间选择：`gpt-4o`、`gpt-4o-mini`、`gpt-4-turbo`、`gpt-3.5-turbo` 等。有关更多信息，请参阅 [models](https://platform.openai.com/docs/models) 页面。 | `gpt-4o-mini` |
-| spring.ai.openai.chat.options.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.8 |
-| spring.ai.openai.chat.options.frequencyPenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止文本中现有频率对新 tokens 进行惩罚，降低模型逐字重复同一行的可能性。 | 0.0f |
-| spring.ai.openai.chat.options.logitBias | 修改指定 tokens 出现在 completion 中的可能性。 | - |
-| spring.ai.openai.chat.options.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。*用于非推理模型*（例如，gpt-4o、gpt-3.5-turbo）。*不能用于推理模型*（例如，o1、o3、o4-mini 系列）。*与 maxCompletionTokens 互斥* - 同时设置两者将导致 API 错误。 | - |
-| spring.ai.openai.chat.options.maxCompletionTokens | 可以为 completion 生成的 tokens 数量的上限，包括可见输出 tokens 和推理 tokens。*推理模型必需*（例如，o1、o3、o4-mini 系列）。*不能用于非推理模型*（例如，gpt-4o、gpt-3.5-turbo）。*与 maxTokens 互斥* - 同时设置两者将导致 API 错误。 | - |
-| spring.ai.openai.chat.options.n | 为每个输入消息生成多少个 chat completion 选择。请注意，您将根据所有选择中生成的 tokens 数收费。保持 `n` 为 1 以最小化成本。 | 1 |
-| spring.ai.openai.chat.options.store | 是否存储此 chat completion 请求的输出以供在我们的模型中使用 | false |
-| spring.ai.openai.chat.options.metadata | 用于在 chat completion 仪表板中过滤 completions 的开发人员定义的标签和值 | empty map |
-| spring.ai.openai.chat.options.output-modalities | 您希望模型为此请求生成的输出类型。大多数模型能够生成文本，这是默认值。`gpt-4o-audio-preview` 模型也可以用于生成音频。要请求此模型生成文本和音频响应，您可以使用：`text`、`audio`。不支持 streaming。 | - |
-| spring.ai.openai.chat.options.output-audio | 音频生成的音频参数。当通过 `output-modalities`: `audio` 请求音频输出时必需。需要 `gpt-4o-audio-preview` 模型，并且不支持 streaming completions。 | - |
-| spring.ai.openai.chat.options.presencePenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止是否出现新 tokens 进行惩罚，增加模型讨论新主题的可能性。 | - |
-| spring.ai.openai.chat.options.responseFormat.type | 与 `GPT-4o`、`GPT-4o mini`、`GPT-4 Turbo` 以及所有比 `gpt-3.5-turbo-1106` 更新的 `GPT-3.5 Turbo` 模型兼容。`JSON_OBJECT` 类型启用 JSON mode，这保证了模型生成的消息是有效的 JSON。`JSON_SCHEMA` 类型启用 [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs)，这保证了模型将匹配您提供的 JSON schema。JSON_SCHEMA 类型还需要设置 `responseFormat.schema` 属性。 | - |
-| spring.ai.openai.chat.options.responseFormat.name | 响应格式 schema 名称。仅适用于 `responseFormat.type=JSON_SCHEMA` | custom_schema |
-| spring.ai.openai.chat.options.responseFormat.schema | 响应格式 JSON schema。仅适用于 `responseFormat.type=JSON_SCHEMA` | - |
-| spring.ai.openai.chat.options.responseFormat.strict | 响应格式 JSON schema 遵守严格性。仅适用于 `responseFormat.type=JSON_SCHEMA` | - |
-| spring.ai.openai.chat.options.seed | 此功能处于 Beta 阶段。如果指定，我们的系统将尽最大努力进行确定性采样，以便使用相同的 seed 和参数重复请求应返回相同的结果。 | - |
-| spring.ai.openai.chat.options.stop | 最多 4 个序列，API 将停止生成更多 tokens。 | - |
-| spring.ai.openai.chat.options.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 `top_p` 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | - |
-| spring.ai.openai.chat.options.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
-| spring.ai.openai.chat.options.toolChoice | 控制模型调用哪个（如果有）function。`none` 意味着模型不会调用 function，而是生成消息。`auto` 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type: "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，`none` 是默认值。如果存在 functions，`auto` 是默认值。 | - |
-| spring.ai.openai.chat.options.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用。 | - |
-| spring.ai.openai.chat.options.stream-usage | （仅用于 streaming）设置为添加包含整个请求的 token 使用统计信息的额外块。此块的 `choices` 字段是一个空数组，所有其他块也将包含一个 usage 字段，但值为 null。 | false |
-| spring.ai.openai.chat.options.parallel-tool-calls | 是否在工具使用期间启用 [parallel function calling](https://platform.openai.com/docs/guides/function-calling/parallel-function-calling)。 | true |
-| spring.ai.openai.chat.options.prompt-cache-key | OpenAI 用于优化类似请求的缓存命中率的缓存 key。改善延迟并降低成本。在缓存目的上替换已弃用的 `user` 字段。[Learn more](https://platform.openai.com/docs/guides/prompt-caching)。 | - |
-| spring.ai.openai.chat.options.safety-identifier | 帮助 OpenAI 检测违反使用策略的用户的稳定标识符。应该是哈希值（例如，哈希用户名或电子邮件）。在安全跟踪上替换已弃用的 `user` 字段。[Learn more](https://platform.openai.com/docs/guides/safety-best-practices#safety-identifiers)。 | - |
-| spring.ai.openai.chat.options.http-headers | 要添加到 chat completion 请求的可选 HTTP headers。要覆盖 `api-key`，您需要使用 `Authorization` header key，并且必须在 key 值前加上 `Bearer` 前缀。 | - |
-| spring.ai.openai.chat.options.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
-| spring.ai.openai.chat.options.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
-| spring.ai.openai.chat.options.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
-| spring.ai.openai.chat.options.service-tier | 指定用于服务请求的 [processing type](https://platform.openai.com/docs/api-reference/responses/create#responses_create-service_tier)。 | - |
-| spring.ai.openai.chat.options.extra-body | 要包含在请求中的其他参数。接受任何键值对，这些键值对被展平到 JSON 请求的顶层。用于与支持标准 OpenAI API 之外参数的 OpenAI 兼容服务器（vLLM、Ollama 等）一起使用。官方 OpenAI API 会忽略未知参数。有关详细信息，请参阅 【openai-compatible-servers】。 | - |
+| spring.ai.openai.chat.model | 要使用的 OpenAI chat model 名称。您可以在以下模型之间选择：`gpt-4o`、`gpt-4o-mini`、`gpt-4-turbo`、`gpt-3.5-turbo` 等。有关更多信息，请参阅 [models](https://platform.openai.com/docs/models) 页面。 | `gpt-4o-mini` |
+| spring.ai.openai.chat.temperature | 用于控制生成 completions 的明显创造力的采样 temperature。较高的值将使输出更加随机，而较低的值将使结果更加聚焦和确定性。不建议为同一个 completions 请求修改 `temperature` 和 `top_p`，因为这两个设置的交互很难预测。 | 0.8 |
+| spring.ai.openai.chat.frequencyPenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止文本中现有频率对新 tokens 进行惩罚，降低模型逐字重复同一行的可能性。 | 0.0f |
+| spring.ai.openai.chat.logitBias | 修改指定 tokens 出现在 completion 中的可能性。 | - |
+| spring.ai.openai.chat.maxTokens | 在 chat completion 中生成的最大 tokens 数。输入 tokens 和生成 tokens 的总长度受模型上下文长度的限制。*用于非推理模型*（例如，gpt-4o、gpt-3.5-turbo）。*不能用于推理模型*（例如，o1、o3、o4-mini 系列）。*与 maxCompletionTokens 互斥* - 同时设置两者将导致 API 错误。 | - |
+| spring.ai.openai.chat.maxCompletionTokens | 可以为 completion 生成的 tokens 数量的上限，包括可见输出 tokens 和推理 tokens。*推理模型必需*（例如，o1、o3、o4-mini 系列）。*不能用于非推理模型*（例如，gpt-4o、gpt-3.5-turbo）。*与 maxTokens 互斥* - 同时设置两者将导致 API 错误。 | - |
+| spring.ai.openai.chat.n | 为每个输入消息生成多少个 chat completion 选择。请注意，您将根据所有选择中生成的 tokens 数收费。保持 `n` 为 1 以最小化成本。 | 1 |
+| spring.ai.openai.chat.store | 是否存储此 chat completion 请求的输出以供在我们的模型中使用 | false |
+| spring.ai.openai.chat.metadata | 用于在 chat completion 仪表板中过滤 completions 的开发人员定义的标签和值 | empty map |
+| spring.ai.openai.chat.output-modalities | 您希望模型为此请求生成的输出类型。大多数模型能够生成文本，这是默认值。`gpt-4o-audio-preview` 模型也可以用于生成音频。要请求此模型生成文本和音频响应，您可以使用：`text`、`audio`。不支持 streaming。 | - |
+| spring.ai.openai.chat.output-audio | 音频生成的音频参数。当通过 `output-modalities`: `audio` 请求音频输出时必需。需要 `gpt-4o-audio-preview` 模型，并且不支持 streaming completions。 | - |
+| spring.ai.openai.chat.presencePenalty | 介于 -2.0 和 2.0 之间的数字。正值会根据到目前为止是否出现新 tokens 进行惩罚，增加模型讨论新主题的可能性。 | - |
+| spring.ai.openai.chat.responseFormat.type | 与 `GPT-4o`、`GPT-4o mini`、`GPT-4 Turbo` 以及所有比 `gpt-3.5-turbo-1106` 更新的 `GPT-3.5 Turbo` 模型兼容。`JSON_OBJECT` 类型启用 JSON mode，这保证了模型生成的消息是有效的 JSON。`JSON_SCHEMA` 类型启用 [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs)，这保证了模型将匹配您提供的 JSON schema。JSON_SCHEMA 类型还需要设置 `responseFormat.schema` 属性。 | - |
+| spring.ai.openai.chat.responseFormat.name | 响应格式 schema 名称。仅适用于 `responseFormat.type=JSON_SCHEMA` | custom_schema |
+| spring.ai.openai.chat.responseFormat.schema | 响应格式 JSON schema。仅适用于 `responseFormat.type=JSON_SCHEMA` | - |
+| spring.ai.openai.chat.responseFormat.strict | 响应格式 JSON schema 遵守严格性。仅适用于 `responseFormat.type=JSON_SCHEMA` | - |
+| spring.ai.openai.chat.seed | 此功能处于 Beta 阶段。如果指定，我们的系统将尽最大努力进行确定性采样，以便使用相同的 seed 和参数重复请求应返回相同的结果。 | - |
+| spring.ai.openai.chat.stop | 最多 4 个序列，API 将停止生成更多 tokens。 | - |
+| spring.ai.openai.chat.topP | 除了 temperature 采样之外，还有一种称为 nucleus sampling 的替代方法，其中模型考虑具有 `top_p` 概率质量的 tokens 结果。因此，0.1 意味着只考虑包含 top 10% 概率质量的 tokens。我们通常建议修改此值或 `temperature`，但不要同时修改两者。 | - |
+| spring.ai.openai.chat.tools | 模型可以调用的工具列表。目前，仅支持 functions 作为工具。使用此选项提供模型可能为其生成 JSON 输入的 functions 列表。 | - |
+| spring.ai.openai.chat.toolChoice | 控制模型调用哪个（如果有）function。`none` 意味着模型不会调用 function，而是生成消息。`auto` 意味着模型可以在生成消息或调用 function 之间进行选择。通过 `{"type: "function", "function": {"name": "my_function"}}` 指定特定 function 会强制模型调用该 function。当没有 functions 时，`none` 是默认值。如果存在 functions，`auto` 是默认值。 | - |
+| spring.ai.openai.chat.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用。 | - |
+| spring.ai.openai.chat.stream-usage | （仅用于 streaming）设置为添加包含整个请求的 token 使用统计信息的额外块。此块的 `choices` 字段是一个空数组，所有其他块也将包含一个 usage 字段，但值为 null。 | false |
+| spring.ai.openai.chat.parallel-tool-calls | 是否在工具使用期间启用 [parallel function calling](https://platform.openai.com/docs/guides/function-calling/parallel-function-calling)。 | true |
+| spring.ai.openai.chat.prompt-cache-key | OpenAI 用于优化类似请求的缓存命中率的缓存 key。改善延迟并降低成本。在缓存目的上替换已弃用的 `user` 字段。[Learn more](https://platform.openai.com/docs/guides/prompt-caching)。 | - |
+| spring.ai.openai.chat.safety-identifier | 帮助 OpenAI 检测违反使用策略的用户的稳定标识符。应该是哈希值（例如，哈希用户名或电子邮件）。在安全跟踪上替换已弃用的 `user` 字段。[Learn more](https://platform.openai.com/docs/guides/safety-best-practices#safety-identifiers)。 | - |
+| spring.ai.openai.chat.http-headers | 要添加到 chat completion 请求的可选 HTTP headers。要覆盖 `api-key`，您需要使用 `Authorization` header key，并且必须在 key 值前加上 `Bearer` 前缀。 | - |
+| spring.ai.openai.chat.tool-names | 按名称标识的工具列表，用于在单个 prompt 请求中启用 function calling。具有这些名称的工具必须存在于 ToolCallback 注册表中。 | - |
+| spring.ai.openai.chat.tool-callbacks | 要注册到 ChatModel 的 Tool Callbacks。 | - |
+| spring.ai.openai.chat.internal-tool-execution-enabled | 如果为 false，Spring AI 不会在内部处理 tool calls，而是将它们代理到客户端。然后客户端负责处理 tool calls，将它们分派到适当的 function，并返回结果。如果为 true（默认值），Spring AI 将在内部处理 function calls。仅适用于支持 function calling 的 chat models | true |
+| spring.ai.openai.chat.service-tier | 指定用于服务请求的 [processing type](https://platform.openai.com/docs/api-reference/responses/create#responses_create-service_tier)。 | - |
+| spring.ai.openai.chat.extra-body | 要包含在请求中的其他参数。接受任何键值对，这些键值对被展平到 JSON 请求的顶层。用于与支持标准 OpenAI API 之外参数的 OpenAI 兼容服务器（vLLM、Ollama 等）一起使用。官方 OpenAI API 会忽略未知参数。有关详细信息，请参阅 【openai-compatible-servers】。 | - |
 
 > **注意：**
 > 使用 GPT-5 模型（如 `gpt-5`、`gpt-5-mini` 和 `gpt-5-nano`）时，不支持 `temperature` 参数。
@@ -171,7 +171,7 @@ Spring AI 自动向 OpenAI 发送带有 `User-Agent: spring-ai` header 的所有
 > 如果设置了 `spring.ai.openai.chat.base-url` 和 `spring.ai.openai.chat.api-key` 属性，则优先于通用属性。
 > 如果您想对不同的模型和不同的模型端点使用不同的 OpenAI 账户，这很有用。
 
-> **提示：** 所有前缀为 `spring.ai.openai.chat.options` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
+> **提示：** 所有前缀为 `spring.ai.openai.chat` 的属性都可以通过在 `Prompt` 调用中添加请求特定的 `chat-options` 在运行时覆盖。
 
 ### Token Limit Parameters: Model-Specific Usage
 
@@ -229,7 +229,7 @@ OpenAiChatOptions options = OpenAiChatOptions.builder()
 
 [OpenAiChatOptions.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiChatOptions.java) 类提供模型配置，例如要使用的模型、temperature、frequency penalty 等。
 
-在启动时，可以使用 `OpenAiChatModel(api, options)` 构造函数或 `spring.ai.openai.chat.options.*` 属性来配置默认选项。
+在启动时，可以使用 `OpenAiChatModel(api, options)` 构造函数或 `spring.ai.openai.chat.*` 属性来配置默认选项。
 
 在运行时，您可以通过向 `Prompt` 调用添加新的、请求特定的选项来覆盖默认选项。
 例如，要覆盖特定请求的默认模型和 temperature：
@@ -276,7 +276,7 @@ var userMessage = new UserMessage("Explain what do you see on this picture?",
         new Media(MimeTypeUtils.IMAGE_PNG, this.imageResource));
 
 ChatResponse response = chatModel.call(new Prompt(this.userMessage,
-        OpenAiChatOptions.builder().model(OpenAiApi.ChatModel.GPT_4_O.getValue()).build()));
+        OpenAiChatOptions.builder().model("gpt-4o").build()));
 ```
 
 > **提示：** GPT_4_VISION_PREVIEW 将从 2024 年 6 月 17 日起仅继续向此模型的现有用户提供。如果您不是现有用户，请使用 GPT_4_O 或 GPT_4_TURBO 模型。更多详细信息[这里](https://platform.openai.com/docs/deprecations/2024-06-06-gpt-4-32k-and-vision-preview-models)
@@ -289,7 +289,7 @@ var userMessage = new UserMessage("Explain what do you see on this picture?",
                 URI.create("https://docs.spring.io/spring-ai/reference/_images/multimodal.test.png")));
 
 ChatResponse response = chatModel.call(new Prompt(this.userMessage,
-        OpenAiChatOptions.builder().model(OpenAiApi.ChatModel.GPT_4_O.getValue()).build()));
+        OpenAiChatOptions.builder().model("gpt-4o").build()));
 ```
 
 > **提示：** 您也可以传递多个图像。
@@ -328,7 +328,7 @@ var userMessage = new UserMessage("What is this recording about?",
         List.of(new Media(MimeTypeUtils.parseMimeType("audio/mp3"), audioResource)));
 
 ChatResponse response = chatModel.call(new Prompt(List.of(userMessage),
-        OpenAiChatOptions.builder().model(OpenAiApi.ChatModel.GPT_4_O_AUDIO_PREVIEW).build()));
+        OpenAiChatOptions.builder().model("gpt-audio").build()));
 ```
 
 > **提示：** 您也可以传递多个音频文件。
@@ -350,7 +350,7 @@ var userMessage = new UserMessage("Tell me joke about Spring Framework");
 
 ChatResponse response = chatModel.call(new Prompt(List.of(userMessage),
         OpenAiChatOptions.builder()
-            .model(OpenAiApi.ChatModel.GPT_4_O_AUDIO_PREVIEW)
+            .model("gpt-audio")
             .outputModalities(List.of("text", "audio"))
             .outputAudio(new AudioParameters(Voice.ALLOY, AudioResponseFormat.WAV))
             .build()));
@@ -456,12 +456,12 @@ MathReasoning mathReasoning = this.outputConverter.convert(this.content);
 
 ```properties
 spring.ai.openai.api-key=YOUR_API_KEY
-spring.ai.openai.chat.options.model=gpt-4o-mini
+spring.ai.openai.chat.model=gpt-4o-mini
 
-spring.ai.openai.chat.options.response-format.type=JSON_SCHEMA
-spring.ai.openai.chat.options.response-format.name=MySchemaName
-spring.ai.openai.chat.options.response-format.schema={"type":"object","properties":{"steps":{"type":"array","items":{"type":"object","properties":{"explanation":{"type":"string"},"output":{"type":"string"}},"required":["explanation","output"],"additionalProperties":false}},"final_answer":{"type":"string"}},"required":["steps","final_answer"],"additionalProperties":false}
-spring.ai.openai.chat.options.response-format.strict=true
+spring.ai.openai.chat.response-format.type=JSON_SCHEMA
+spring.ai.openai.chat.response-format.name=MySchemaName
+spring.ai.openai.chat.response-format.schema={"type":"object","properties":{"steps":{"type":"array","items":{"type":"object","properties":{"explanation":{"type":"string"},"output":{"type":"string"}},"required":["explanation","output"],"additionalProperties":false}},"final_answer":{"type":"string"}},"required":["steps","final_answer"],"additionalProperties":false}
+spring.ai.openai.chat.response-format.strict=true
 ```
 
 ## Sample Controller
@@ -472,8 +472,8 @@ spring.ai.openai.chat.options.response-format.strict=true
 
 ```properties
 spring.ai.openai.api-key=YOUR_API_KEY
-spring.ai.openai.chat.options.model=gpt-4o
-spring.ai.openai.chat.options.temperature=0.7
+spring.ai.openai.chat.model=gpt-4o
+spring.ai.openai.chat.temperature=0.7
 ```
 
 > **提示：** 将 `api-key` 替换为您的 OpenAI 凭据。
@@ -507,168 +507,30 @@ public class ChatController {
 
 ## Manual Configuration
 
-[OpenAiChatModel](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiChatModel.java) 实现了 `ChatModel` 和 `StreamingChatModel`，并使用 【low-level-api】 连接到 OpenAI 服务。
-
-将 `spring-ai-openai` 依赖项添加到项目的 Maven `pom.xml` 文件中：
-
-```xml
-<dependency>
-    <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-openai</artifactId>
-</dependency>
-```
-
-或添加到您的 Gradle `build.gradle` 构建文件中。
-
-```groovy
-dependencies {
-    implementation 'org.springframework.ai:spring-ai-openai'
-}
-```
-
-> **提示：** 请参阅 [Dependency Management](https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management) 部分，将 Spring AI BOM 添加到您的构建文件中。
-
-接下来，创建一个 `OpenAiChatModel` 并将其用于文本生成：
+应用可直接使用 `ChatModel`，或者由 SDK 管理连接并在 Spring AI 模型中注入 `OpenAIClient` 和所需的异步客户端。只需配置 Key 和模型时，使用以下构建方式。
 
 ```java
-var openAiApi = OpenAiApi.builder()
-            .apiKey(System.getenv("OPENAI_API_KEY"))
-            .build();
-var openAiChatOptions = OpenAiChatOptions.builder()
-            .model("gpt-3.5-turbo")
-            .temperature(0.4)
-            .maxTokens(200)
-            .build();
-var chatModel = new OpenAiChatModel(this.openAiApi, this.openAiChatOptions);
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
 
-ChatResponse response = this.chatModel.call(
-    new Prompt("Generate the names of 5 famous pirates."));
-
-// Or with streaming responses
-Flux<ChatResponse> response = this.chatModel.stream(
-    new Prompt("Generate the names of 5 famous pirates."));
-```
-
-`OpenAiChatOptions` 提供 chat 请求的配置信息。
-`OpenAiApi.Builder` 和 `OpenAiChatOptions.Builder` 分别是 API 客户端和 chat 配置的流畅选项构建器。
-
-## Low-level OpenAiApi Client [[low-level-api]]
-
-[OpenAiApi](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/api/OpenAiApi.java) 为 [OpenAI Chat API](https://platform.openai.com/docs/api-reference/chat) 提供轻量级 Java 客户端。
-
-以下类图说明了 `OpenAiApi` chat 接口和构建块：
-
-![openai-chat-api.jpg](/img/integration/openai-chat-api.jpg)
-
-以下是如何以编程方式使用 API 的简单示例：
-
-```java
-OpenAiApi openAiApi = OpenAiApi.builder()
-            .apiKey(System.getenv("OPENAI_API_KEY"))
-            .build();
-
-ChatCompletionMessage chatCompletionMessage =
-    new ChatCompletionMessage("Hello world", Role.USER);
-
-// Sync request
-ResponseEntity<ChatCompletion> response = this.openAiApi.chatCompletionEntity(
-    new ChatCompletionRequest(List.of(this.chatCompletionMessage), "gpt-3.5-turbo", 0.8, false));
-
-// Streaming request
-Flux<ChatCompletionChunk> streamResponse = this.openAiApi.chatCompletionStream(
-        new ChatCompletionRequest(List.of(this.chatCompletionMessage), "gpt-3.5-turbo", 0.8, true));
-```
-
-请参阅 [OpenAiApi.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/api/OpenAiApi.java) 的 JavaDoc 了解更多信息。
-
-### Low-level API Examples
-
-* [OpenAiApiIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/api/OpenAiApiIT.java) 测试提供了一些如何使用轻量级库的一般示例。
-* [OpenAiApiToolFunctionCallIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/api/tool/OpenAiApiToolFunctionCallIT.java) 测试展示了如何使用 low-level API 调用 tool functions。
-基于 [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling/parallel-function-calling) 教程。
-
-## Low-level OpenAiFileApi Client [[low-level-file-api]]
-
-[OpenAiFileApi](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/api/OpenAiFileApi.java) 为 [OpenAI File API](https://platform.openai.com/docs/api-reference/files) 提供轻量级 Java 客户端，支持文件管理操作，例如上传、列出、检索、删除文件和访问文件内容。
-
-以下是如何以编程方式使用 API 的简单示例：
-
-```java
-OpenAiFileApi openAiFileApi = OpenAiFileApi.builder()
-			.apiKey(new SimpleApiKey(System.getenv("OPENAI_API_KEY")))
-			.build();
-
-// Upload a file
-byte[] fileBytes = Files.readAllBytes(Paths.get("evals.jsonl")); 
-OpenAiFileApi.UploadFileRequest uploadRequest = OpenAiFileApi.UploadFileRequest.builder()
-			.file(fileBytes)
-			.fileName("evals-data.jsonl")
-			.purpose(OpenAiFileApi.Purpose.EVALS)
-			.build();
-ResponseEntity<OpenAiFileApi.FileObject> uploadResponse = openAiFileApi.uploadFile(uploadRequest);
-
-// List files
-OpenAiFileApi.ListFileRequest listRequest = OpenAiFileApi.ListFileRequest.builder()
-			.purpose(OpenAiFileApi.Purpose.EVALS)
-			.build();
-ResponseEntity<OpenAiFileApi.FileObjectResponse> listResponse = openAiFileApi.listFiles(listRequest);
-
-// Retrieve file information
-ResponseEntity<OpenAiFileApi.FileObject> fileInfo = openAiFileApi.retrieveFile("file-id");
-
-// Delete a file
-ResponseEntity<OpenAiFileApi.DeleteFileResponse> deleteResponse = openAiFileApi.deleteFile("file-id");
-
-// Retrieve file content
-ResponseEntity<String> fileContent = openAiFileApi.retrieveFileContent("file-id");
-```
-
-### Low-level File API Examples
-
-* [OpenAiFileApiIT.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/api/OpenAiFileApiIT.java) 测试提供了一些如何使用轻量级 file api 库的一般示例。
-
-## API Key Management
-
-Spring AI 通过 `ApiKey` 接口及其实现提供灵活的 API key 管理。默认实现 `SimpleApiKey` 适用于大多数用例，但您也可以为更复杂的场景创建自定义实现。
-
-### Default Configuration
-
-默认情况下，Spring Boot auto-configuration 将使用 `spring.ai.openai.api-key` 属性创建 API key bean：
-
-```properties
-spring.ai.openai.api-key=your-api-key-here
-```
-
-### Custom API Key Configuration
-
-您可以使用构建器模式创建具有自己的 `ApiKey` 实现的 `OpenAiApi` 自定义实例：
-
-```java
-ApiKey customApiKey = new ApiKey() {
-    @Override
-    public String getValue() {
-        // Custom logic to retrieve API key
-        return "your-api-key-here";
-    }
-};
-
-OpenAiApi openAiApi = OpenAiApi.builder()
-    .apiKey(customApiKey)
+var chatModel = OpenAiChatModel.builder()
+    .options(OpenAiChatOptions.builder()
+        .apiKey(System.getenv("OPENAI_API_KEY"))
+        .model("gpt-4o-mini")
+        .build())
     .build();
-
-// Create a chat model with the custom OpenAiApi instance
-OpenAiChatModel chatModel = OpenAiChatModel.builder()
-    .openAiApi(openAiApi)
-    .build();
-// Build the ChatClient using the custom chat model
-ChatClient openAiChatClient = ChatClient.builder(chatModel).build();
+var response = chatModel.call(new Prompt("请介绍 Spring AI"));
 ```
 
-这在您需要以下情况时很有用：
+### 底层 SDK {#low-level-api}
 
-* 从安全密钥存储中检索 API key
-* 动态轮换 API keys
-* 实现自定义 API key 选择逻辑
+Spring AI 2.x 的 `spring-ai-openai` 模块使用 OpenAI Java SDK。升级使用 `OpenAiApi` 的应用时，可用 `OpenAiChatOptions` 配置连接，或向 `OpenAiChatModel.builder()` 注入定制的 SDK 客户端。
+
+### 文件管理 {#low-level-file-api}
+
+文件上传和管理直接调用 OpenAI Java SDK 的文件接口。
+
+[OpenAI Java SDK](https://github.com/openai/openai-java) · [Spring AI 2.0 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/spring-ai-2-0.html)
 
 ## Using Extra Parameters with OpenAI-Compatible Servers [[openai-compatible-servers]]
 
@@ -686,14 +548,14 @@ OpenAI 兼容的推理服务器（如 vLLM、Ollama 等）通常支持标准 Ope
 ### Configuration with Properties
 
 您可以使用 Spring Boot 属性配置额外参数。
-`spring.ai.openai.chat.options.extra-body` 下的每个属性都成为请求中的顶级参数：
+`spring.ai.openai.chat.extra-body` 下的每个属性都成为请求中的顶级参数：
 
 ```properties
 spring.ai.openai.base-url=http://localhost:8000/v1
-spring.ai.openai.chat.options.model=meta-llama/Llama-3-8B-Instruct
-spring.ai.openai.chat.options.temperature=0.7
-spring.ai.openai.chat.options.extra-body.top_k=50
-spring.ai.openai.chat.options.extra-body.repetition_penalty=1.1
+spring.ai.openai.chat.model=meta-llama/Llama-3-8B-Instruct
+spring.ai.openai.chat.temperature=0.7
+spring.ai.openai.chat.extra-body.top_k=50
+spring.ai.openai.chat.extra-body.repetition_penalty=1.1
 ```
 
 此配置将产生如下 JSON 请求：
@@ -734,11 +596,11 @@ ChatResponse response = chatModel.call(
 
 ```properties
 spring.ai.openai.base-url=http://localhost:8000/v1
-spring.ai.openai.chat.options.model=meta-llama/Llama-3-70B-Instruct
-spring.ai.openai.chat.options.extra-body.top_k=40
-spring.ai.openai.chat.options.extra-body.top_p=0.95
-spring.ai.openai.chat.options.extra-body.repetition_penalty=1.05
-spring.ai.openai.chat.options.extra-body.min_p=0.05
+spring.ai.openai.chat.model=meta-llama/Llama-3-70B-Instruct
+spring.ai.openai.chat.extra-body.top_k=40
+spring.ai.openai.chat.extra-body.top_p=0.95
+spring.ai.openai.chat.extra-body.repetition_penalty=1.05
+spring.ai.openai.chat.extra-body.min_p=0.05
 ```
 
 请参阅 [vLLM documentation](https://docs.vllm.ai/en/latest/) 以获取支持的采样参数的完整列表。
@@ -769,134 +631,24 @@ ChatResponse response = chatModel.call(new Prompt("Generate text", options));
 
 ### Reasoning Content from Reasoning Models
 
-一些支持推理模型的 OpenAI 兼容服务器（如 DeepSeek R1、带有推理解析器的 vLLM）通过其 API 响应中的 `reasoning_content` 字段公开模型的内部 chain of thought。
-此字段包含模型用于得出最终答案的逐步推理过程。
+使用返回推理内容的兼容提供商时，可从 `response.getResult().getOutput().getReasoning()` 读取 `ReasoningPart`。流式处理或保存历史时保留 `getParts()` 的顺序和提供商数据。对拒绝历史推理字段的服务可设置 `spring.ai.openai.chat.replay-reasoning-content=false`。
 
-Spring AI 将此字段从 JSON 响应映射到 AssistantMessage metadata 中的 `reasoningContent` key。
+[Spring AI OpenAI Chat 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/integrations/models/openai/chat.html)
 
-> **重要：**
-> **关于 `reasoning_content` 可用性的重要区别：**
->
-> * **OpenAI 兼容服务器**（DeepSeek、vLLM）：在 Chat Completions API 响应中公开 `reasoning_content` ✅
-> * **官方 OpenAI 模型**（GPT-5、o1、o3）：在 Chat Completions API 响应中**不**公开推理文本 ❌
->
-> 官方 OpenAI 推理模型在使用 Chat Completions API 时隐藏 chain-of-thought 内容。
-> 它们仅在 usage 统计信息中公开 `reasoning_tokens` 计数。
-> 要从官方 OpenAI 模型访问实际推理文本，您必须使用 OpenAI 的 Responses API（此客户端目前不支持的单独 endpoint）。
->
-> **回退行为：** 当服务器不提供 `reasoning_content` 时（例如，官方 OpenAI Chat Completions），`reasoningContent` metadata 字段将为空字符串。
+## Responses API
 
-#### Accessing Reasoning Content
+Spring AI 2.1 可在同一个 OpenAI starter 中选择 Responses API。应用继续注入 `ChatModel` 或 `ChatClient.Builder`，底层使用 `OpenAiResponsesChatModel`。
 
-使用兼容服务器时，您可以从响应 metadata 访问推理内容。
-
-**直接使用 ChatModel：**
-
-```java
-// Configure to use DeepSeek R1 or vLLM with a reasoning model
-ChatResponse response = chatModel.call(
-    new Prompt("Which number is larger: 9.11 or 9.8?")
-);
-
-// Get the assistant message
-AssistantMessage message = response.getResult().getOutput();
-
-// Access the reasoning content from metadata
-String reasoning = message.getMetadata().get("reasoningContent");
-if (reasoning != null && !reasoning.isEmpty()) {
-    System.out.println("Model's reasoning process:");
-    System.out.println(reasoning);
-}
-
-// The final answer is in the regular content
-System.out.println("\nFinal answer:");
-System.out.println(message.getContent());
+```yaml
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        api: responses
+        model: gpt-5-mini
 ```
 
-**使用 ChatClient：**
+Responses API 支持提供商托管工具和加密推理回放。在多轮请求间保留消息部分及其不透明负载。如果正在接入 OpenAI 兼容服务，请确认其实现的 API，Chat Completions 仍为默认模式。
 
-```java
-ChatClient chatClient = ChatClient.create(chatModel);
-
-String result = chatClient.prompt()
-    .user("Which number is larger: 9.11 or 9.8?")
-    .call()
-    .chatResponse()
-    .getResult()
-    .getOutput()
-    .getContent();
-
-// To access reasoning content with ChatClient, retrieve the full response
-ChatResponse response = chatClient.prompt()
-    .user("Which number is larger: 9.11 or 9.8?")
-    .call()
-    .chatResponse();
-
-AssistantMessage message = response.getResult().getOutput();
-String reasoning = message.getMetadata().get("reasoningContent");
-```
-
-#### Streaming Reasoning Content
-
-使用 streaming 响应时，推理内容像常规消息内容一样跨块累积：
-
-```java
-Flux<ChatResponse> responseFlux = chatModel.stream(
-    new Prompt("Solve this logic puzzle...")
-);
-
-StringBuilder reasoning = new StringBuilder();
-StringBuilder answer = new StringBuilder();
-
-responseFlux.subscribe(chunk -> {
-    AssistantMessage message = chunk.getResult().getOutput();
-
-    // Accumulate reasoning if present
-    String reasoningChunk = message.getMetadata().get("reasoningContent");
-    if (reasoningChunk != null) {
-        reasoning.append(reasoningChunk);
-    }
-
-    // Accumulate the final answer
-    if (message.getContent() != null) {
-        answer.append(message.getContent());
-    }
-});
-```
-
-#### Example: DeepSeek R1
-
-DeepSeek R1 是一个公开其内部推理过程的推理模型：
-
-```properties
-spring.ai.openai.api-key=${DEEPSEEK_API_KEY}
-spring.ai.openai.base-url=https://api.deepseek.com
-spring.ai.openai.chat.options.model=deepseek-reasoner
-```
-
-当您向 DeepSeek R1 发出请求时，响应将包括推理内容（模型的思考过程）和最终答案。
-
-请参阅 [DeepSeek API documentation](https://api-docs.deepseek.com/guides/reasoning_model) 以获取有关推理模型的更多详细信息。
-
-#### Example: vLLM with Reasoning Parser
-
-vLLM 在配置了推理解析器时支持推理模型：
-
-```bash
-vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B \
-    --enable-reasoning \
-    --reasoning-parser deepseek_r1
-```
-
-```properties
-spring.ai.openai.base-url=http://localhost:8000/v1
-spring.ai.openai.chat.options.model=deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
-```
-
-请查阅 [vLLM reasoning outputs documentation](https://docs.vllm.ai/en/latest/features/reasoning_outputs.html) 以获取支持的推理模型和解析器。
-
-> **注意：**
-> `reasoning_content` 的可用性完全取决于您使用的推理服务器。
-> 并非所有 OpenAI 兼容服务器都公开推理内容，即使在使用支持推理的模型时也是如此。
-> 请始终参考您服务器的 API 文档以了解响应中可用的字段。
-
+[Spring AI OpenAI Responses](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/integrations/models/openai/responses.html)

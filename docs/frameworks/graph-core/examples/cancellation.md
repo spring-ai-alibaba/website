@@ -28,7 +28,7 @@ Spring AI Alibaba Graph 提供了强大的图执行取消机制，这对于长�
 
 <Code
   language="java"
-  title="立即取消示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CancellationExample.java"
+  title="立即取消示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CancellationExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.NodeOutput;
@@ -97,7 +97,7 @@ System.out.println("是否已取消: " + disposable.isDisposed());`}
 
 <Code
   language="java"
-  title="使用迭代器消费流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CancellationExample.java"
+  title="使用迭代器消费流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CancellationExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.NodeOutput;
@@ -167,7 +167,7 @@ System.out.println("是否已取消: " + disposable.isDisposed());`}
 
 <Code
   language="java"
-  title="检查取消状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CancellationExample.java"
+  title="检查取消状态" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/CancellationExample.java"
 >
 {`import reactor.core.Disposable;
 

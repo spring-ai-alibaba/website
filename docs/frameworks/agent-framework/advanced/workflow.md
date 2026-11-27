@@ -53,7 +53,7 @@ Spring AI Alibaba 同时提供了声明式的 Agentic API 与底层原子化的 
 
 <Code
   language="java"
-  title="Node 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="Node 接口定义" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`public interface NodeAction {
     Map<String, Object> apply(OverAllState state) throws Exception;
@@ -74,7 +74,7 @@ public interface NodeActionWithConfig {
 
 <Code
   language="java"
-  title="基础 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="基础 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -105,7 +105,7 @@ public class TextProcessorNode implements NodeAction {
 
 <Code
   language="java"
-  title="高级 Node 示例：带配置的 AI Node" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="高级 Node 示例：带配置的 AI Node" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
@@ -164,7 +164,7 @@ public class QueryExpanderNode implements NodeActionWithConfig {
 
 <Code
   language="java"
-  title="条件评估 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="条件评估 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -203,7 +203,7 @@ public class ConditionEvaluatorNode implements NodeAction {
 
 <Code
   language="java"
-  title="并行结果聚合 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="并行结果聚合 Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
@@ -242,7 +242,7 @@ public class ParallelResultAggregatorNode implements NodeAction {
 
 <Code
   language="java"
-  title="集成自定义 Node 到 StateGraph 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="集成自定义 Node 到 StateGraph 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategyFactory;
@@ -308,7 +308,7 @@ public class WorkflowConfiguration {
 
 <Code
   language="java"
-  title="RobustNode 最佳实践示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="RobustNode 最佳实践示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`public class RobustNode implements NodeAction {
     private static final Logger logger = LoggerFactory.getLogger(RobustNode.class);
@@ -356,7 +356,7 @@ public class WorkflowConfiguration {
 
 <Code
   language="java"
-  title="ReactAgent 作为 SubGraph Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="ReactAgent 作为 SubGraph Node 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.StateGraph;
@@ -448,7 +448,7 @@ public class AgentWorkflowExample {
 
 <Code
   language="java"
-  title="多 Agent 协作工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="多 Agent 协作工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
@@ -557,7 +557,7 @@ public class MultiAgentWorkflow {
 
 <Code
   language="java"
-  title="Agent Node 与普通 Node 混合使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="Agent Node 与普通 Node 混合使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
@@ -676,7 +676,7 @@ Spring AI Alibaba Graph 支持两种执行方式：
 
 <Code
   language="java"
-  title="流式执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="流式执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.CompileConfig;
@@ -711,7 +711,7 @@ System.out.println("最终结果: " + lastOutput.state().data());`}
 
 <Code
   language="java"
-  title="同步执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="同步执行工作流示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.CompileConfig;
@@ -804,7 +804,7 @@ public class WorkflowExecutor {
 
 <Code
   language="java"
-  title="并行执行示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
+  title="并行执行示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/WorkflowExample.java"
 >
 {`// 并行执行示例
 workflow.addNode("parallel_start", node_async(new TransparentNode()));

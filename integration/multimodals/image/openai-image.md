@@ -117,27 +117,27 @@ dependencies {
 | spring.ai.openai.image.api-key | 可选覆盖 spring.ai.openai.api-key 以提供特定于聊天的 api-key | - |
 | spring.ai.openai.image.organization-id | 可选，您可以指定用于 API 请求的组织 | - |
 | spring.ai.openai.image.project-id | 可选，您可以指定用于 API 请求的项目 | - |
-| spring.ai.openai.image.options.n | 要生成的图像数量。必须在 1 到 10 之间。对于 dall-e-3，仅支持 n=1 | - |
-| spring.ai.openai.image.options.model | 用于图像生成的模型 | OpenAiImageApi.DEFAULT_IMAGE_MODEL |
-| spring.ai.openai.image.options.quality | 将生成的图像质量。HD 创建具有更精细细节和更大一致性的图像。此参数仅支持 dall-e-3 | - |
-| spring.ai.openai.image.options.response_format | 返回生成的图像的格式。必须是 URL 或 b64_json 之一 | - |
-| spring.ai.openai.image.options.size | 生成的图像大小。对于 dall-e-2，必须是 256x256、512x512 或 1024x1024 之一。对于 dall-e-3 模型，必须是 1024x1024、1792x1024 或 1024x1792 之一 | - |
-| spring.ai.openai.image.options.size_width | 生成的图像宽度。对于 dall-e-2，必须是 256、512 或 1024 之一 | - |
-| spring.ai.openai.image.options.size_height | 生成的图像高度。对于 dall-e-2，必须是 256、512 或 1024 之一 | - |
-| spring.ai.openai.image.options.style | 生成的图像样式。必须是 vivid 或 natural 之一。Vivid 使模型倾向于生成超真实和戏剧性的图像。Natural 使模型产生更自然、不那么超真实的图像。此参数仅支持 dall-e-3 | - |
-| spring.ai.openai.image.options.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用 | - |
+| spring.ai.openai.image.n | 要生成的图像数量。必须在 1 到 10 之间。对于 dall-e-3，仅支持 n=1 | - |
+| spring.ai.openai.image.model | 用于图像生成的模型 | OpenAiImageApi.DEFAULT_IMAGE_MODEL |
+| spring.ai.openai.image.quality | 将生成的图像质量。HD 创建具有更精细细节和更大一致性的图像。此参数仅支持 dall-e-3 | - |
+| spring.ai.openai.image.response_format | 返回生成的图像的格式。必须是 URL 或 b64_json 之一 | - |
+| spring.ai.openai.image.size | 生成的图像大小。对于 dall-e-2，必须是 256x256、512x512 或 1024x1024 之一。对于 dall-e-3 模型，必须是 1024x1024、1792x1024 或 1024x1792 之一 | - |
+| spring.ai.openai.image.size_width | 生成的图像宽度。对于 dall-e-2，必须是 256、512 或 1024 之一 | - |
+| spring.ai.openai.image.size_height | 生成的图像高度。对于 dall-e-2，必须是 256、512 或 1024 之一 | - |
+| spring.ai.openai.image.style | 生成的图像样式。必须是 vivid 或 natural 之一。Vivid 使模型倾向于生成超真实和戏剧性的图像。Natural 使模型产生更自然、不那么超真实的图像。此参数仅支持 dall-e-3 | - |
+| spring.ai.openai.image.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用 | - |
 
 > **NOTE**: 您可以覆盖通用的 `spring.ai.openai.base-url`、`spring.ai.openai.api-key`、`spring.ai.openai.organization-id` 和 `spring.ai.openai.project-id` 属性。
 > 如果设置了 `spring.ai.openai.image.base-url`、`spring.ai.openai.image.api-key`、`spring.ai.openai.image.organization-id` 和 `spring.ai.openai.image.project-id` 属性，它们优先于通用属性。
 > 如果您想为不同的模型和不同的模型端点使用不同的 OpenAI 账户，这很有用。
 
-> **TIP**: 所有以 `spring.ai.openai.image.options` 为前缀的属性都可以在运行时覆盖。
+> **TIP**: 所有以 `spring.ai.openai.image` 为前缀的属性都可以在运行时覆盖。
 
 ## Runtime Options
 
 [OpenAiImageOptions.java](https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiImageOptions.java) 提供模型配置，例如要使用的模型、质量、大小等。
 
-在启动时，可以使用 `OpenAiImageModel(OpenAiImageApi openAiImageApi)` 构造函数和 `withDefaultOptions(OpenAiImageOptions defaultOptions)` 方法配置默认选项。或者，使用前面描述的 `spring.ai.openai.image.options.*` 属性。
+在启动时，可以使用 `OpenAiImageModel(OpenAiImageApi openAiImageApi)` 构造函数和 `withDefaultOptions(OpenAiImageOptions defaultOptions)` 方法配置默认选项。或者，使用前面描述的 `spring.ai.openai.image.*` 属性。
 
 在运行时，您可以通过向 `ImagePrompt` 调用添加新的、特定于请求的选项来覆盖默认选项。
 例如，要覆盖 OpenAI 特定选项（如质量和要创建的图像数量），请使用以下代码示例：

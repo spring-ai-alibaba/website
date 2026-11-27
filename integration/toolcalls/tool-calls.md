@@ -40,7 +40,7 @@ Spring AI Alibaba 扩展了 Spring AI 的 Tool Calling 功能，提供了多种�
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-tool-calling-python</artifactId>
-    <version>${version}</version>
+    <version>2.1.0.0</version>
 </dependency>
 ```
 

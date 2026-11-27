@@ -1,0 +1,111 @@
+# 快速开始
+
+## Project Background
+
+Spring AI Alibaba Admin is an AI Agent development and evaluation platform based on Spring AI Alibaba, designed to provide developers and enterprises with a complete AI Agent lifecycle management solution. The platform supports a complete workflow from Prompt engineering, dataset management, evaluator configuration to experiment execution and result analysis, helping users quickly build, test, and optimize AI Agent applications.
+
+> Github repository: https://github.com/spring-ai-alibaba/spring-ai-alibaba-admin
+
+## Core Features
+
+### 🤖 Prompt Management
+- **Prompt Template Management**: Create, update, and delete Prompt templates
+- **Version Control**: Support for Prompt version management and history tracking
+- **Real-time Debugging**: Provide online Prompt debugging and streaming responses
+- **Session Management**: Support for multi-turn conversation session management
+
+### 📊 Dataset Management
+- **Dataset Creation**: Support for importing and creating datasets in multiple formats
+- **Version Management**: Dataset version control and history management
+- **Data Item Management**: Fine-grained data item CRUD operations
+- **Create from Trace**: Support for creating datasets from OpenTelemetry trace data
+
+### ⚖️ Evaluator Management
+- **Evaluator Configuration**: Support for creating and configuring various evaluators
+- **Template System**: Provide evaluator templates and custom evaluation logic
+- **Debugging Features**: Support for online evaluator debugging and testing
+- **Version Management**: Evaluator version control and release management
+
+### 🧪 Experiment Management
+- **Experiment Execution**: Automated execution of evaluation experiments
+- **Result Analysis**: Detailed experiment result analysis and statistics
+- **Experiment Control**: Support for starting, stopping, restarting, and deleting experiments
+- **Batch Processing**: Support for batch experiment execution and result comparison
+
+### 📈 Observability
+- **Trace Tracking**: Integrated OpenTelemetry providing complete trace tracking
+- **Service Monitoring**: Support for service list and overview statistics
+- **Trace Analysis**: Provide detailed Trace details and Span analysis
+
+### 🔧 Model Configuration
+- **Multi-model Support**: Support for mainstream AI models including OpenAI, DashScope, DeepSeek
+- **Configuration Management**: Unified configuration and management of model parameters
+- **Dynamic Switching**: Support for dynamic updates of model configuration at runtime
+
+## System Architecture
+
+### Overall Architecture
+
+![Overall Architecture](/img/admin/arch.png)
+
+## 🚀 Quick Start
+
+### Prerequisites
+- 🐳 **Docker** (for containerized deployment) + **Docker Compose**: 2.0+
+- ☕ **Java 17+** (for source code execution) + **Maven**: 3.8+
+- 🌐 **AI Model Provider API Keys**, supporting OpenAI, DashScope, DeepSeek
+
+### Running from Source Code
+
+#### 1. Clone the Project
+
+```bash
+git clone https://github.com/spring-ai-alibaba/spring-ai-alibaba-admin.git
+cd admin
+```
+
+#### 2. Configure Your API Keys
+Modify the model configuration in `spring-ai-alibaba-admin-server/model-config.yaml` according to your model provider.
+- If you use DashScope, please refer to the model-config-dashscope.yaml template for configuration
+- If you use DeepSeek, please refer to the model-config-deepseek.yaml template for configuration
+- If you use OpenAI, please refer to the model-config-openai.yaml template for configuration
+> 💡 **Get Your DashScope API Key**: Visit [Alibaba Cloud Bailian Console](https://bailian.console.aliyun.com/?tab=model#/api-key) to get a free API key.
+
+#### 3. Nacos Configuration (Optional)
+If you need to modify the Nacos address, please update the configuration in the `spring-ai-alibaba-admin-server/src/main/resources/application.yml` file
+```yaml
+nacos:
+  server-addr: ${nacos-address}
+```
+
+### 4. Start SAA Admin
+Execute the startup script in the root directory. This script will help you start the database-related services
+
+```bash
+sh start.sh
+```
+Start the application in the spring-ai-alibaba-admin-server directory
+```bash
+mvn spring-boot:run
+```
+
+### 5. Access the Application
+
+Open your browser and visit http://localhost:8080 to use the SAA Admin platform.
+
+At this point, you can already manage, debug, evaluate, and observe prompts on the platform. If you expect your Spring AI Alibaba Agent application to integrate with Nacos for prompt loading and dynamic updates, and observe the online running status, you can refer to step 6 to configure your AI Agent application.
+
+### 6. Connect Your AI Agent Application
+Admin is an application with its own runtime dependencies. Check the Admin POM for its versions and the application configuration for the Nacos and observability connection settings. Manage the Agent application's dependencies with the BOM for the Agent release line you selected.
+
+[Admin source and configuration](https://github.com/alibaba/spring-ai-alibaba/tree/v1.1.2.2/spring-ai-alibaba-admin)
+
+## License
+
+This project is open source under the Apache License 2.0 license.
+
+## Contributing
+
+We welcome submitting Issues and Pull Requests to help improve the project.
+
+ 

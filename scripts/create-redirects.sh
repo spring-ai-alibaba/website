@@ -2,7 +2,7 @@
 
 # 脚本说明：为旧版本路径创建重定向 HTML 文件 + 404 页面
 # 用途：
-#   1. 将所有旧版本路径（/docs/1.0.0.2/*, /docs/1.0.0-M6.1/* 等）重定向到 /docs/overview
+#   1. 将旧版文档路径重定向到对应版本线的文档首页
 #   2. 创建智能 404 页面，捕获所有找不到的旧路径
 # 使用：npm run build && ./scripts/create-redirects.sh
 
@@ -134,22 +134,21 @@ cat > "build/404.html" << 'EOF404'
     <script>
       (function() {
         var currentPath = window.location.pathname;
-        var targetPath = '/docs/overview';
+        var locale = currentPath.startsWith('/en/') ? '/en' : '';
+        var route = currentPath.slice(locale.length);
+        var targetPath = locale + '/docs/overview';
 
-        var oldVersionPatterns = [
-          /\/docs\/1\.0\.0\.2\//,
-          /\/docs\/1\.0\.0-M6\.1\//,
-          /\/docs\/1\.0\.0-M5\.1\//,
-          /\/docs\/1\.0\.0-M3\.2\//
-        ];
-
-        var isOldVersion = oldVersionPatterns.some(function(pattern) {
-          return pattern.test(currentPath);
-        });
+        var archivedVersion = route.match(/^\/(?:docs|agents|integration|ecosystem)\/(1\.x|2\.0\.x)(?:\/|$)/);
+        var oldVersion = route.match(/^\/docs\/1\.0\.0(?:\.2|-M(?:[56]\.1|3\.2))(?:\/|$)/);
+        var isOldVersion = archivedVersion || oldVersion;
+        if (isOldVersion) {
+          var version = archivedVersion ? archivedVersion[1] : '1.x';
+          targetPath = locale + '/docs/' + version + '/overview';
+        }
 
         if (isOldVersion) {
           document.getElementById('message').innerHTML =
-            '<span class="spinner"></span>检测到旧版本文档路径，正在跳转到最新文档...';
+            '<span class="spinner"></span>正在跳转到该版本的文档首页...';
         } else {
           document.getElementById('message').innerHTML =
             '<span class="spinner"></span>页面不存在，正在跳转到文档首页...';
@@ -193,7 +192,7 @@ echo ""
 echo "🧪 测试方法："
 echo "  1. npm run serve"
 echo "  2. 访问 http://localhost:3000/docs/1.0.0.2"
-echo "     → 应跳转到 /docs/overview"
+echo "     → 应跳转到 /docs/1.x/overview"
 echo "  3. 访问 http://localhost:3000/docs/1.0.0.2/get-started/workflow"
-echo "     → 应跳转到 /docs/overview（通过404页面）"
+echo "     → 应跳转到 /docs/1.x/overview（通过404页面）"
 echo ""

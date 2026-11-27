@@ -152,63 +152,21 @@ public class ChatClientExample {
 
 #### 多个 OpenAI 兼容的 API 端点
 
-`OpenAiApi` 和 `OpenAiChatModel` 类提供了一个 `mutate()` 方法，允许您创建具有不同属性的现有实例的变体。
-当您需要与多个 OpenAI 兼容的 API 一起工作时，这特别有用。
+每个端点可以独立构造 `OpenAiChatModel` 和 `ChatClient`。如需同时连接多个服务，可定义多个 Bean 并通过 `@Qualifier` 选择。
 
 ```java
+ChatModel compatibleModel = OpenAiChatModel.builder()
+    .options(OpenAiChatOptions.builder()
+        .baseUrl(endpoint)
+        .apiKey(apiKey)
+        .model(modelName)
+        .build())
+    .build();
 
-@Service
-public class MultiModelService {
-    
-    private static final Logger logger = LoggerFactory.getLogger(MultiModelService.class);
-    
-    @Autowired
-    private OpenAiChatModel baseChatModel;
-    
-    @Autowired
-    private OpenAiApi baseOpenAiApi;
-    
-    public void multiClientFlow() {
-        try {
-            // Derive a new OpenAiApi for Groq (Llama3)
-            OpenAiApi groqApi = baseOpenAiApi.mutate()
-                .baseUrl("https://api.groq.com/openai")
-                .apiKey(System.getenv("GROQ_API_KEY"))
-                .build();
-            
-            // Derive a new OpenAiApi for OpenAI GPT-4
-            OpenAiApi gpt4Api = baseOpenAiApi.mutate()
-                .baseUrl("https://api.openai.com")
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .build();
-            
-            // Derive a new OpenAiChatModel for Groq
-            OpenAiChatModel groqModel = baseChatModel.mutate()
-                .openAiApi(groqApi)
-                .defaultOptions(OpenAiChatOptions.builder().model("llama3-70b-8192").temperature(0.5).build())
-                .build();
-            
-            // Derive a new OpenAiChatModel for GPT-4
-            OpenAiChatModel gpt4Model = baseChatModel.mutate()
-                .openAiApi(gpt4Api)
-                .defaultOptions(OpenAiChatOptions.builder().model("gpt-4").temperature(0.7).build())
-                .build();
-            
-            // Simple prompt for both models
-            String prompt = "What is the capital of France?";
-            
-            String groqResponse = ChatClient.builder(groqModel).build().prompt(prompt).call().content();
-            String gpt4Response = ChatClient.builder(gpt4Model).build().prompt(prompt).call().content();
-            
-            logger.info("Groq (Llama3) response: {}", groqResponse);
-            logger.info("OpenAI GPT-4 response: {}", gpt4Response);
-        }
-        catch (Exception e) {
-            logger.error("Error in multi-client flow", e);
-        }
-    }
-}
+ChatClient compatibleClient = ChatClient.create(compatibleModel);
 ```
+
+`ChatClient` 的 `.options(...)` 和 `.defaultOptions(...)` 接收选项构建器；用 `ChatModel.call(new Prompt(...))` 直接调用时传入已构建的选项。模型默认配置通过 `ChatModel.getOptions()` 读取。
 
 ## ChatClient 流式 API
 
@@ -653,15 +611,16 @@ ChatClient.builder(chatModel)
     .build()
     .prompt()
     .advisors(
-        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+        SessionMemoryAdvisor.builder(sessionService).build(),
         QuestionAnswerAdvisor.builder(vectorStore).build()
     )
+    .advisors(spec -> spec.param(SessionMemoryAdvisor.SESSION_ID_CONTEXT_KEY, sessionId))
     .user(userText)
     .call()
     .content();
 ```
 
-在此配置中，`MessageChatMemoryAdvisor` 将首先执行，将对话历史添加到 prompt。
+在此配置中，`SessionMemoryAdvisor` 将首先执行，将对话历史添加到 prompt。
 然后，`QuestionAnswerAdvisor` 将基于用户的问题和添加的对话历史执行搜索，可能提供更相关的结果。
 
 [了解 Question Answer Advisor](rag/retrieval-augmented-generation#_questionansweradvisor)
@@ -721,22 +680,11 @@ SimpleLoggerAdvisor customLogger = new SimpleLoggerAdvisor(
 
 > **TIP:** 在生产环境中记录敏感信息时要小心。
 
-## Chat Memory
+## Session Memory
 
-`ChatMemory` 接口表示聊天对话记忆的存储。
-它提供向对话添加消息、从对话检索消息和清除对话历史的方法。
+Spring AI 2.1 将 `ChatMemory` 标记为废弃。新项目可以引入 `org.springframework.ai:spring-ai-session-advisor`，通过 `SessionMemoryAdvisor` 读取并保存会话历史，按需添加负责轮次边界和压缩的 `SessionTurnAdvisor`。每次请求传入唯一且稳定的会话 ID。已有应用应按迁移指南将历史映射到 Session 事件仓库。
 
-目前有一个内置实现：`MessageWindowChatMemory`。
-
-`MessageWindowChatMemory` 是一个聊天记忆实现，它维护最多指定最大大小（默认值：20 条消息）的消息窗口。
-当消息数量超过此限制时，较旧的消息会被逐出，但系统消息会被保留。
-如果添加新的系统消息，所有先前的系统消息都会从记忆中删除。
-这确保对话始终可以使用最新的上下文，同时保持内存使用有界。
-
-`MessageWindowChatMemory` 由 `ChatMemoryRepository` 抽象支持，该抽象为聊天对话记忆提供存储实现。
-有多个实现可用，包括 `InMemoryChatMemoryRepository`、`JdbcChatMemoryRepository`、`CassandraChatMemoryRepository` 和 `Neo4jChatMemoryRepository`。
-
-有关更多详细信息和使用示例，请参阅 [Chat Memory](https://docs.spring.io/spring-ai/reference/chat-memory.html) 文档。
+[Session Memory 参考](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/memory/session/index.html) · [ChatMemory 迁移](https://docs.spring.io/spring-ai/reference/2.1-SNAPSHOT/upgrading/session-memory.html)
 
 ## 实现说明
 

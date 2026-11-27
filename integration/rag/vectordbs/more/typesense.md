@@ -145,7 +145,8 @@ public VectorStore vectorStore(Client client, EmbeddingModel embeddingModel) {
 // 这可以是任何 EmbeddingModel 实现
 @Bean
 public EmbeddingModel embeddingModel() {
-    return new OpenAiEmbeddingModel(new OpenAiApi(System.getenv("OPENAI_API_KEY")));
+    return new OpenAiEmbeddingModel(MetadataMode.EMBED,
+        OpenAiEmbeddingOptions.builder().apiKey(System.getenv("OPENAI_API_KEY")).build());
 }
 ```
 

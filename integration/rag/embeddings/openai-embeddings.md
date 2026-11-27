@@ -130,23 +130,23 @@ dependencies {
 | spring.ai.openai.embedding.organization-id | 可选地，您可以指定用于 API 请求的组织。 | - |
 | spring.ai.openai.embedding.project-id | 可选地，您可以指定用于 API 请求的项目。 | - |
 | spring.ai.openai.embedding.metadata-mode | 文档内容提取模式。 | EMBED |
-| spring.ai.openai.embedding.options.model | 要使用的模型 | text-embedding-ada-002 (其他选项：text-embedding-3-large, text-embedding-3-small) |
-| spring.ai.openai.embedding.options.encodingFormat | 返回 embeddings 的格式。可以是 float 或 base64。 | - |
-| spring.ai.openai.embedding.options.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用。 | - |
-| spring.ai.openai.embedding.options.dimensions | 结果输出 embeddings 应具有的维度数。仅在 `text-embedding-3` 及更高版本的模型中支持。 | - |
+| spring.ai.openai.embedding.model | 要使用的模型 | text-embedding-ada-002 (其他选项：text-embedding-3-large, text-embedding-3-small) |
+| spring.ai.openai.embedding.encodingFormat | 返回 embeddings 的格式。可以是 float 或 base64。 | - |
+| spring.ai.openai.embedding.user | 代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用。 | - |
+| spring.ai.openai.embedding.dimensions | 结果输出 embeddings 应具有的维度数。仅在 `text-embedding-3` 及更高版本的模型中支持。 | - |
 
 注意：您可以为 `ChatModel` 和 `EmbeddingModel` 实现覆盖通用的 `spring.ai.openai.base-url` 和 `spring.ai.openai.api-key`。
 如果设置了 `spring.ai.openai.embedding.base-url` 和 `spring.ai.openai.embedding.api-key` 属性，它们优先于通用属性。
 同样，如果设置了 `spring.ai.openai.chat.base-url` 和 `spring.ai.openai.chat.api-key` 属性，它们优先于通用属性。
 如果您想为不同的模型和不同的模型端点使用不同的 OpenAI 账户，这很有用。
 
-提示：所有前缀为 `spring.ai.openai.embedding.options` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
+提示：所有前缀为 `spring.ai.openai.embedding` 的属性都可以通过在 `EmbeddingRequest` 调用中添加特定于请求的 [embedding-options](#embedding-options) 在运行时覆盖。
 
 ## 运行时选项
 
 https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiEmbeddingOptions.java[OpenAiEmbeddingOptions.java] 提供 OpenAI 配置，例如要使用的模型等。
 
-也可以使用 `spring.ai.openai.embedding.options` 属性配置默认选项。
+也可以使用 `spring.ai.openai.embedding` 属性配置默认选项。
 
 在启动时使用 `OpenAiEmbeddingModel` 构造函数来设置用于所有 embedding 请求的默认选项。
 在运行时，您可以使用 `OpenAiEmbeddingOptions` 实例作为 `EmbeddingRequest` 的一部分来覆盖默认选项。
@@ -168,7 +168,7 @@ EmbeddingResponse embeddingResponse = embeddingModel.call(
 
 ```properties
 spring.ai.openai.api-key=YOUR_API_KEY
-spring.ai.openai.embedding.options.model=text-embedding-ada-002
+spring.ai.openai.embedding.model=text-embedding-ada-002
 ```
 
 ```java
@@ -218,21 +218,13 @@ dependencies {
 接下来，创建一个 `OpenAiEmbeddingModel` 实例并使用它来计算两个输入文本之间的相似性：
 
 ```java
-var openAiApi = OpenAiApi.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .build();
-
 var embeddingModel = new OpenAiEmbeddingModel(
-		this.openAiApi,
-        MetadataMode.EMBED,
-        OpenAiEmbeddingOptions.builder()
-                .model("text-embedding-ada-002")
-                .user("user-6")
-                .build(),
-        RetryUtils.DEFAULT_RETRY_TEMPLATE);
-
-EmbeddingResponse embeddingResponse = this.embeddingModel
-        .embedForResponse(List.of("Hello World", "World is big and salvation is near"));
+    MetadataMode.EMBED,
+    OpenAiEmbeddingOptions.builder()
+        .apiKey(System.getenv("OPENAI_API_KEY"))
+        .model("text-embedding-3-small")
+        .build());
+EmbeddingResponse response = embeddingModel.embedForResponse(List.of("Spring AI"));
 ```
 
 `OpenAiEmbeddingOptions` 提供 embedding 请求的配置信息。

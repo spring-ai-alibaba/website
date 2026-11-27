@@ -43,7 +43,7 @@ Spring AI Alibaba 扩展了该接口，提供了多种格式的解析实现，�
 <dependency>
     <groupId>com.alibaba.cloud.ai</groupId>
     <artifactId>spring-ai-alibaba-starter-document-parser-tika</artifactId>
-    <version>${version}</version>
+    <version>2.1.0.0</version>
 </dependency>
 ```
 
@@ -373,3 +373,16 @@ public interface DocumentParser {
 ---
 
 **注意**：本文档基于当前可用的实现。随着项目的发展，可能会有新的 Parser 实现添加或现有实现的更新。建议定期查看项目文档以获取最新信息。
+
+## Tika 提取上限
+
+Extensions 2.1.0.0 的 `TikaDocumentParser` 默认最多从单个文档抽取 1,000 万字符。超限时解析失败。应用可根据文档大小和内存预算指定显式上限。
+
+```java
+var parser = new TikaDocumentParser(2_000_000);
+List<Document> documents = parser.parse(resource.getInputStream());
+```
+
+在批量导入时记录并单独处理失败文档。例如，先按文件大小筛查，或拆分异常大的文件后重新导入。
+
+[Extensions 2.1.0.0 发布说明](https://github.com/spring-ai-alibaba/spring-ai-extensions/releases/tag/v2.1.0.0)

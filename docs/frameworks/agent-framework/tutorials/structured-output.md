@@ -12,7 +12,7 @@ Spring AI Alibaba 的 `ReactAgent.Builder` 通过 `outputSchema` 和 `outputType
 
 <Code
   language="java"
-  title="结构化输出基础配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="结构化输出基础配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`ReactAgent agent = ReactAgent.builder()
     .name("agent")
@@ -43,7 +43,7 @@ Spring AI Alibaba 支持两种方式控制结构化输出：
 
 <Code
   language="java"
-  title="outputSchema 方法签名" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="outputSchema 方法签名" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`Builder outputSchema(String outputSchema)`}
 </Code>
@@ -59,7 +59,7 @@ Spring AI Alibaba 支持两种方式控制结构化输出：
 
 <Code
   language="java"
-  title="基本 JSON Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="基本 JSON Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -104,7 +104,7 @@ System.out.println(result.getText());
 
 <Code
   language="java"
-  title="复杂嵌套 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="复杂嵌套 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`import org.springframework.ai.converter.BeanOutputConverter;
 
@@ -156,7 +156,7 @@ System.out.println(result.getText());
 
 <Code
   language="java"
-  title="结构化分析 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="结构化分析 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`import org.springframework.ai.converter.BeanOutputConverter;
 
@@ -212,7 +212,7 @@ System.out.println(result.getText());`}
 
 <Code
   language="java"
-  title="outputType 方法签名" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="outputType 方法签名" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`Builder outputType(Class<?> outputType)`}
 </Code>
@@ -226,7 +226,7 @@ System.out.println(result.getText());`}
 
 <Code
   language="java"
-  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
@@ -283,7 +283,7 @@ System.out.println(result.getText());
 
 <Code
   language="java"
-  title="DashScope 原生结构化输出配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="DashScope 原生结构化输出配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`ChatOptions options = DashScopeChatOptions.builder()
 	.withResponseFormat(
@@ -297,7 +297,7 @@ System.out.println(result.getText());
 
 <Code
   language="java"
-  title="增强用户消息方法示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="增强用户消息方法示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`// In AgentLlmNode.augmentUserMessage() method
 public void augmentUserMessage(List<Message> messages, String outputSchema) {
@@ -331,7 +331,7 @@ public void augmentUserMessage(List<Message> messages, String outputSchema) {
 
 <Code
   language="java"
-  title="Try-Catch 错误处理示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="Try-Catch 错误处理示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`ReactAgent agent = ReactAgent.builder()
     .name("data_extractor")
@@ -355,7 +355,7 @@ try {
 
 <Code
   language="java"
-  title="验证模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="验证模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`public class ValidatedOutput {
     private String title;
@@ -382,7 +382,7 @@ output.validate();  // 如果无效则抛出异常`}
 
 <Code
   language="java"
-  title="重试模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
+  title="重试模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
 >
 {`int maxRetries = 3;
 DataOutput data = null;

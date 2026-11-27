@@ -12,7 +12,7 @@ Spring AI Alibaba Graph 支持将工作流导出为 PlantUML 格式，方便可�
 
 <Code
   language="java"
-  title="PlantUML 工具函数" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
+  title="PlantUML 工具函数" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
 >
 {`import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -41,7 +41,7 @@ static void displayDiagram(GraphRepresentation representation) throws IOExceptio
 
 <Code
   language="java"
-  title="简单示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
+  title="简单示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
 >
 {`var code = """
     @startuml
@@ -59,7 +59,7 @@ display(plantUML2PNG(code));`}
 
 <Code
   language="java"
-  title="从 Graph 生成 PlantUML" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
+  title="从 Graph 生成 PlantUML" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/PlantUmlExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.GraphRepresentation;

@@ -39,7 +39,7 @@ AI model 无法访问实时信息。任何假设了解当前日期或天气预�
 
 <Code
   language="java"
-  title="DateTimeTools 信息检索示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="DateTimeTools 信息检索示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import java.time.LocalDateTime;
 import org.springframework.ai.tool.annotation.Tool;
@@ -59,7 +59,7 @@ class DateTimeTools {
 
 <Code
   language="java"
-  title="使用 DateTimeTools 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 DateTimeTools 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ChatModel chatModel = ...;
 
@@ -83,7 +83,7 @@ AI model 可用于生成完成某些目标的计划。例如，model 可以生�
 
 <Code
   language="java"
-  title="DateTimeTools 执行操作示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="DateTimeTools 执行操作示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -110,7 +110,7 @@ class DateTimeTools {
 
 <Code
   language="java"
-  title="使用多个工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用多个工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ChatModel chatModel = ...;
 
@@ -160,7 +160,7 @@ Spring AI 提供了两种从方法指定 tools（即 `ToolCallback`(s)）的内�
 
 <Code
   language="java"
-  title="@Tool 注解示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="@Tool 注解示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`class DateTimeTools {
 
@@ -191,7 +191,7 @@ Spring AI 将自动为 `@Tool` 注解方法的输入参数生成 JSON schema。S
 
 <Code
   language="java"
-  title="使用 @ToolParam 注解示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 @ToolParam 注解示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -224,7 +224,7 @@ class DateTimeTools {
 
 <Code
   language="java"
-  title="MethodToolCallback 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="MethodToolCallback 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.util.ReflectionUtils;
 import org.springframework.ai.tool.ToolCallback;
@@ -261,7 +261,7 @@ ToolCallback toolCallback = MethodToolCallback.builder()
 
 <Code
   language="java"
-  title="静态方法示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="静态方法示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`class DateTimeTools {
 
@@ -303,7 +303,7 @@ Spring AI 提供了对从函数指定工具的内置支持，可以通过编程�
 
 <Code
   language="java"
-  title="WeatherService 工具定义示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="WeatherService 工具定义示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import java.util.function.Function;
 
@@ -330,7 +330,7 @@ public record WeatherResponse(double temp, Unit unit) {}`}
 
 <Code
   language="java"
-  title="FunctionToolCallback 构建示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="FunctionToolCallback 构建示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
@@ -352,7 +352,7 @@ ToolCallback toolCallback = FunctionToolCallback
 
 <Code
   language="java"
-  title="添加工具到 ChatClient 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="添加工具到 ChatClient 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.chat.client.ChatClient;
 
@@ -371,7 +371,7 @@ ChatClient.create(chatModel)
 
 <Code
   language="java"
-  title="添加默认工具到 ChatClient 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="添加默认工具到 ChatClient 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ChatModel chatModel = ...;
 ToolCallback toolCallback = ...;
@@ -389,7 +389,7 @@ ChatClient chatClient = ChatClient.builder(chatModel)
 
 <Code
   language="java"
-  title="添加工具到 ChatModel 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="添加工具到 ChatModel 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -412,7 +412,7 @@ chatModel.call(prompt);`}
 
 <Code
   language="java"
-  title="使用 @Bean 定义工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 @Bean 定义工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -438,7 +438,7 @@ class WeatherTools {
 
 <Code
   language="java"
-  title="使用 @ToolParam 注解示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 @ToolParam 注解示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.tool.annotation.ToolParam;
 
@@ -452,7 +452,7 @@ record WeatherRequest(
 
 <Code
   language="java"
-  title="使用常量定义工具名称示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用常量定义工具名称示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`@Configuration(proxyBeanMethods = false)
 class WeatherTools {
@@ -471,7 +471,7 @@ class WeatherTools {
 
 <Code
   language="java"
-  title="使用动态规范添加工具到 ChatClient" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用动态规范添加工具到 ChatClient" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ChatClient.create(chatModel)
     .prompt("What's the weather like in Copenhagen?")
@@ -484,7 +484,7 @@ class WeatherTools {
 
 <Code
   language="java"
-  title="使用动态规范添加默认工具到 ChatClient" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用动态规范添加默认工具到 ChatClient" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ChatModel chatModel = ...;
 
@@ -517,7 +517,7 @@ ChatClient chatClient = ChatClient.builder(chatModel)
 
 <Code
   language="java"
-  title="ToolCallback 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="ToolCallback 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`public interface ToolCallback {
 
@@ -554,7 +554,7 @@ Spring AI 为 tool 方法（`MethodToolCallback`）和 tool 函数（`FunctionTo
 
 <Code
   language="java"
-  title="ToolDefinition 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="ToolDefinition 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`public interface ToolDefinition {
 
@@ -580,7 +580,7 @@ Spring AI 为 tool 方法（`MethodToolCallback`）和 tool 函数（`FunctionTo
 
 <Code
   language="java"
-  title="构建 ToolDefinition 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="构建 ToolDefinition 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ToolDefinition toolDefinition = ToolDefinition.builder()
     .name("currentWeather")
@@ -635,7 +635,7 @@ Spring AI 为 tool 方法（`MethodToolCallback`）和 tool 函数（`FunctionTo
 
 <Code
   language="java"
-  title="可选参数示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="可选参数示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`class CustomerTools {
 
@@ -655,7 +655,7 @@ Tool call 的结果使用 `ToolCallResultConverter` 序列化，然后发送回 
 
 <Code
   language="java"
-  title="ToolCallResultConverter 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="ToolCallResultConverter 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`@FunctionalInterface
 public interface ToolCallResultConverter {
@@ -679,7 +679,7 @@ Spring AI 在方法和函数 tools 中都依赖 `ToolCallResultConverter`。
 
 <Code
   language="java"
-  title="自定义结果转换器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="自定义结果转换器示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`class CustomerTools {
 
@@ -715,7 +715,7 @@ Spring AI 在方法和函数 tools 中都依赖 `ToolCallResultConverter`。
 
 <Code
   language="java"
-  title="returnDirect 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="returnDirect 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`class CustomerTools {
 
@@ -731,7 +731,7 @@ Spring AI 在方法和函数 tools 中都依赖 `ToolCallResultConverter`。
 
 <Code
   language="java"
-  title="使用 ToolMetadata 设置 returnDirect" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 ToolMetadata 设置 returnDirect" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ToolMetadata toolMetadata = ToolMetadata.builder()
     .returnDirect(true)
@@ -748,7 +748,7 @@ Tool 执行是使用提供的输入参数调用 tool 并返回结果的过程。
 
 <Code
   language="java"
-  title="ToolCallingManager 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="ToolCallingManager 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`public interface ToolCallingManager {
 
@@ -769,7 +769,7 @@ Tool 执行是使用提供的输入参数调用 tool 并返回结果的过程。
 
 <Code
   language="java"
-  title="自定义 ToolCallingManager" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="自定义 ToolCallingManager" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`@Bean
 ToolCallingManager toolCallingManager() {
@@ -810,7 +810,7 @@ ToolCallingManager toolCallingManager() {
 
 <Code
   language="java"
-  title="用户控制的 Tool 执行示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="用户控制的 Tool 执行示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ChatModel chatModel = ...;
 ToolCallingManager toolCallingManager = ToolCallingManager.builder().build();
@@ -842,7 +842,7 @@ System.out.println(chatResponse.getResult().getOutput().getText());`}
 
 <Code
   language="java"
-  title="ToolExecutionExceptionProcessor 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="ToolExecutionExceptionProcessor 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`@FunctionalInterface
 public interface ToolExecutionExceptionProcessor {
@@ -866,7 +866,7 @@ public interface ToolExecutionExceptionProcessor {
 
 <Code
   language="java"
-  title="自定义异常处理器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="自定义异常处理器" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`@Bean
 ToolExecutionExceptionProcessor toolExecutionExceptionProcessor() {
@@ -886,7 +886,7 @@ ToolExecutionExceptionProcessor toolExecutionExceptionProcessor() {
 
 <Code
   language="java"
-  title="ToolCallbackResolver 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="ToolCallbackResolver 接口" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`public interface ToolCallbackResolver {
 
@@ -913,7 +913,7 @@ ToolExecutionExceptionProcessor toolExecutionExceptionProcessor() {
 
 <Code
   language="java"
-  title="自定义 ToolCallbackResolver" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="自定义 ToolCallbackResolver" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`@Bean
 ToolCallbackResolver toolCallbackResolver(List<ToolCallback> toolCallbacks) {
@@ -942,7 +942,7 @@ Tool calling 功能的所有主要操作都在 `DEBUG` 级别记录。您可以�
 
 <Code
   language="java"
-  title="自定义工具名称示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="自定义工具名称示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ToolCallback searchTool = FunctionToolCallback
     .builder("web_search", new SearchFunction())  // 自定义名称
@@ -961,7 +961,7 @@ System.out.println(searchTool.getToolDefinition().name());  // web_search`}
 
 <Code
   language="java"
-  title="自定义工具描述示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="自定义工具描述示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`ToolCallback calculatorTool = FunctionToolCallback
     .builder("calculator", new CalculatorFunction())
@@ -978,7 +978,7 @@ System.out.println(searchTool.getToolDefinition().name());  // web_search`}
 
 <Code
   language="java"
-  title="使用 Java Record 定义复杂输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 Java Record 定义复杂输入示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.tool.annotation.ToolParam;
 
@@ -1038,7 +1038,7 @@ ToolCallback weatherTool = FunctionToolCallback
 
 <Code
   language="java"
-  title="使用 ToolContext 访问状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 ToolContext 访问状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
@@ -1102,7 +1102,7 @@ ToolCallback summaryTool = FunctionToolCallback
 
 <Code
   language="java"
-  title="在 Hook 中更新状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="在 Hook 中更新状态示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`// 在 Hook 中更新状态
 import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
@@ -1140,7 +1140,7 @@ public class UpdateStateHook extends ModelHook {
 
 <Code
   language="java"
-  title="使用 ToolContext 访问上下文示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 ToolContext 访问上下文示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import org.springframework.ai.chat.model.ToolContext;
 import java.util.function.BiFunction;
@@ -1217,7 +1217,7 @@ agent.call("question", config);`}
 
 <Code
   language="java"
-  title="使用 Memory 存储示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 Memory 存储示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.checkpoint.savers.RedisSaver;
 
@@ -1266,7 +1266,7 @@ ReactAgent 提供了多种方式来提供和使用工具。根据你的使用场
 
 <Code
   language="java"
-  title="使用 tools() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 tools() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.ToolCallback;
@@ -1306,7 +1306,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="使用 methodTools() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 methodTools() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.annotation.Tool;
@@ -1361,7 +1361,7 @@ ReactAgent multiAgent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="使用 toolCallbackProviders() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 toolCallbackProviders() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.ToolCallback;
@@ -1414,7 +1414,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="使用 toolNames() 和 resolver() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 toolNames() 和 resolver() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.ToolCallback;
@@ -1462,7 +1462,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="使用 resolver() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="使用 resolver() 方法提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.ToolCallback;
@@ -1503,7 +1503,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="组合使用多种工具提供方式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="组合使用多种工具提供方式" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.ToolCallback;
@@ -1560,7 +1560,7 @@ ReactAgent agent = ReactAgent.builder()
 
 <Code
   language="java"
-  title="在 ReactAgent 中使用工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
+  title="在 ReactAgent 中使用工具示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/ToolsExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import org.springframework.ai.tool.ToolCallback;
@@ -1638,7 +1638,7 @@ spring:
 
 <Code
   language="java"
-  title="基于 Spring Boot 的自动发现构建 MCP Client 为 React Agent 提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
+  title="基于 Spring Boot 的自动发现构建 MCP Client 为 React Agent 提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
 >
 {`
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
@@ -1732,7 +1732,7 @@ public class RemoteMcpToolsExample {
 
 <Code
   language="java"
-  title="使用 MCP SDK 为 React Agent 提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
+  title="使用 MCP SDK 为 React Agent 提供工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
 >
 {`
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
@@ -1914,7 +1914,7 @@ public class RemoteMcpToolsExample {
 
 <Code
   language="java"
-  title="为 ChatClient 提供 MCP 工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
+  title="为 ChatClient 提供 MCP 工具" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/mcp/RemoteMcpToolsExample.java"
 >
 {`
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;

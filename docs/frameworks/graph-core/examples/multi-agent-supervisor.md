@@ -19,7 +19,7 @@ keywords: [Spring AI Alibaba, Graph, 多智能体, Supervisor, 监督者模式, 
 
 <Code
   language="java"
-  title="多智能体监督者模式实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/MultiAgentSupervisorExample.java"
+  title="多智能体监督者模式实现" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/MultiAgentSupervisorExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.CompiledGraph;
 import com.alibaba.cloud.ai.graph.KeyStrategy;
@@ -377,7 +377,7 @@ public class MultiAgentSupervisorExample {
 
 <Code
   language="java"
-  title="执行多智能体监督者图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/MultiAgentSupervisorExample.java"
+  title="执行多智能体监督者图" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/graph/examples/MultiAgentSupervisorExample.java"
 >
 {`// 执行 Graph（Supervisor -> Coder）
 public void executeGraphWithCoder(CompiledGraph graph) {

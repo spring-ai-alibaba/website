@@ -27,7 +27,7 @@ ollama pull <model-name>
 ollama pull hf.co/<username>/<model-repository>
 ```
 
-或者，您可以启用自动下载任何所需模型的选项：xref:auto-pulling-models[Auto-pulling Models]。
+或者，您可以启用自动下载任何所需模型的选项：[自动拉取模型](#auto-pulling-models)。
 
 ## 自动配置
 
@@ -72,7 +72,7 @@ Spring AI 工件发布在 Maven Central 和 Spring Snapshot 仓库中。
 |----------|-------------|---------|
 | spring.ai.ollama.base-url | Ollama API 服务器运行的基础 URL。 | `+http://localhost:11434+` |
 
-以下是用于初始化 Ollama 集成和 xref:auto-pulling-models[auto-pulling models] 的属性。
+以下是用于初始化 Ollama 集成和 [自动拉取模型](#auto-pulling-models) 的属性。
 
 | Property | Description | Default |
 |----------|-------------|---------|
@@ -168,8 +168,7 @@ EmbeddingResponse embeddingResponse = embeddingModel.call(
             .build());
 ```
 
-## Auto-pulling Models
-
+## Auto-pulling Models {#auto-pulling-models}
 Spring AI Ollama 可以在 Ollama 实例中不可用时自动拉取模型。
 此功能对于开发和测试以及将应用程序部署到新环境特别有用。
 
@@ -229,7 +228,7 @@ spring:
 ## HuggingFace Models
 
 Ollama 可以开箱即用地访问所有 https://huggingface.co/models?library=gguf&sort=trending[GGUF Hugging Face] Embedding 模型。
-您可以通过名称拉取这些模型中的任何一个：`ollama pull hf.co/<username>/<model-repository>` 或配置自动拉取策略：xref:auto-pulling-models[Auto-pulling Models]：
+您可以通过名称拉取这些模型中的任何一个：`ollama pull hf.co/<username>/<model-repository>` 或配置自动拉取策略：[自动拉取模型](#auto-pulling-models)：
 
 ```properties
 spring.ai.ollama.embedding.options.model=hf.co/mixedbread-ai/mxbai-embed-large-v1

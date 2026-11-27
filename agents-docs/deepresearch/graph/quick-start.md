@@ -49,7 +49,7 @@ DeepResearch/
 
 ## 🧩 系统架构
 
-![](../images/deepresearch-architecture-zh.gif)
+![](/img/deepresearch/deepresearch-architecture-zh.gif)
 
 ## 🔍 运行示例
 
@@ -57,7 +57,7 @@ DeepResearch/
 
 ![](https://yingziimage.oss-cn-beijing.aliyuncs.com/img/image-20251001121713795.png)
 
-![](../images/deepresearch-system.png)
+![](/img/deepresearch/deepresearch-system.png)
 
 ## 🚀 快速开始
 
