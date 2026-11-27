@@ -209,11 +209,11 @@ Optional<OverAllState> result = coordinatorAgent.invoke("请写一篇关于秋�
 
 #### 使用 outputSchema
 
-使用 `BeanOutputConverter` 生成输出 Schema，提供类型安全和自动 schema 生成：
+用 `BeanOutputConverter` 生成子 Agent 的 JSON Schema。子 Agent 校验最终结果，主 Agent 从工具响应读取 JSON。
 
 <Code
   language="java"
-  title="使用 outputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
+  title="使用 outputSchema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/AgentToolExample.java"
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
@@ -236,14 +236,15 @@ public static class ArticleOutput {
 
 // 使用 BeanOutputConverter 生成 outputSchema
 BeanOutputConverter<ArticleOutput> outputConverter = new BeanOutputConverter<>(ArticleOutput.class);
-String format = outputConverter.getFormat();
+String schema = outputConverter.getJsonSchema();
 
 ReactAgent writerAgent = ReactAgent.builder()
     .name("writer_with_output_schema")
     .model(chatModel)
     .description("写文章并返回结构化输出")
-    .instruction("你是一个专业作家。请创作文章并严格按照指定的JSON格式返回结果。")
-    .outputSchema(format) 
+    .instruction("你是一个专业作家。请创作文章并提交结构化结果。")
+    .outputSchema(schema)
+    .outputType(ArticleOutput.class)
     .build();
 
 ReactAgent coordinatorAgent = ReactAgent.builder()
@@ -258,7 +259,7 @@ Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于冬天�
 
 #### 使用 outputType
 
-使用 Java 类型定义输出，框架会自动生成输出 schema：
+也可以从 Java 类型自动生成 JSON Schema。参见[结构化输出](../tutorials/structured-output.md)。
 
 <Code
   language="java"
@@ -266,7 +267,6 @@ Optional<OverAllState> result = coordinatorAgent.invoke("写一篇关于冬天�
 >
 {`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.agent.AgentTool;
-import org.springframework.ai.converter.BeanOutputConverter;
 
 // 定义输出类型
 public class ArticleOutput {

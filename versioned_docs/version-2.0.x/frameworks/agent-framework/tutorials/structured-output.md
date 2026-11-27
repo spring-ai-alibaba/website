@@ -1,410 +1,136 @@
 ---
 title: Structured Output 结构化输出
-description: 学习如何让Agent返回特定格式的结构化数据，使用JSON Schema或Java POJO定义输出格式
-keywords: [Structured Output, 结构化输出, JSON Schema, POJO, outputSchema, outputType, 数据格式化]
+description: 用 ReactAgent 的输出格式提示、Java 类型转换和 ChatClient 的 JSON Schema 校验获取可消费的结构化结果。
+keywords: [Structured Output, 结构化输出, JSON Schema, ReactAgent, ChatClient, outputSchema, outputType]
 ---
 
 # Structured Output 结构化输出
 
-结构化输出允许 Agent 以特定的、可预测的格式返回数据。相比于解析自然语言响应，您可以直接获得 JSON 对象或 Java POJO 形式的结构化数据，应用程序可以直接使用。
-
-Spring AI Alibaba 的 `ReactAgent.Builder` 通过 `outputSchema` 和 `outputType` 方法处理结构化输出。当您设置所需的结构化输出模式时，Agent 会自动在用户消息中增加模式指令，模型会根据指定的格式生成数据。
-
-<Code
-  language="java"
-  title="结构化输出基础配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`ReactAgent agent = ReactAgent.builder()
-    .name("agent")
-    .model(chatModel)
-    .outputSchema(schemaString)  // Custom JSON schema as String
-    // OR
-    .outputType(MyClass.class)   // Java class - auto-converted to schema
-    .build();`}
-</Code>
+结构化输出适合信息提取、分类和工作流路由。例如，从文本中提取联系人并将结果转为 Java 对象，供后续代码按字段处理。本页适用于 Spring AI Alibaba 2.0.x。
 
 ## 输出格式选项
 
-Spring AI Alibaba 支持两种方式控制结构化输出：
-
-* **`outputSchema(String schema)`**: 提供 JSON schema 字符串。推荐使用 `BeanOutputConverter` 从 Java 类自动生成 schema，也可以手动提供自定义的 schema 字符串
-* **`outputType(Class<?> type)`**: 提供 Java 类 - 使用 `BeanOutputConverter` 自动转换为 JSON schema（推荐方式，类型安全）
-* **不指定**: 返回非结构化的自然语言响应
-
-**推荐做法**：使用 `BeanOutputConverter` 生成 schema，既保证了类型安全，又实现了自动 schema 生成，代码更易维护。
-
-结构化响应在 Agent 的 `AssistantMessage` 中作为 JSON 文本返回，可以解析为您需要的格式。
-
-## 输出 Schema 策略
-
-您可以使用 `BeanOutputConverter` 从 Java 类自动生成 JSON schema，或者直接提供 JSON schema 字符串。推荐使用 `BeanOutputConverter` 以获得类型安全和自动 schema 生成。
-
-### 方法签名
-
-<Code
-  language="java"
-  title="outputSchema 方法签名" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`Builder outputSchema(String outputSchema)`}
-</Code>
-
-**参数:**
-- `outputSchema` (String, 必需): 定义结构化输出格式的 JSON schema 字符串。可以通过 `BeanOutputConverter.getFormat()` 方法从 Java 类自动生成，也可以手动提供自定义的 schema 字符串。
-
-### 示例
-
-**基本 JSON Schema:**
-
-使用 `BeanOutputConverter` 从 Java 类自动生成 JSON Schema：
-
-<Code
-  language="java"
-  title="基本 JSON Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.converter.BeanOutputConverter;
-
-// 定义输出类型
-public static class ContactInfo {
-    private String name;
-    private String email;
-    private String phone;
-
-    // Getters and Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-}
-
-// 使用 BeanOutputConverter 生成 outputSchema
-BeanOutputConverter<ContactInfo> outputConverter = new BeanOutputConverter<>(ContactInfo.class);
-String format = outputConverter.getFormat();
-
-ReactAgent agent = ReactAgent.builder()
-    .name("contact_extractor")
-    .model(chatModel)
-    .outputSchema(format)
-    .build();
-
-AssistantMessage result = agent.call(
-    "从以下信息提取联系方式：张三，zhangsan@example.com，(555) 123-4567"
-);
-
-System.out.println(result.getText());
-// 输出: {"name": "张三", "email": "zhangsan@example.com", "phone": "(555) 123-4567"}`}
-</Code>
-
-**复杂嵌套 Schema:**
-
-使用 `BeanOutputConverter` 处理复杂嵌套结构：
-
-<Code
-  language="java"
-  title="复杂嵌套 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`import org.springframework.ai.converter.BeanOutputConverter;
-
-// 定义输出类型（包含嵌套类）
-public static class ProductReview {
-    private int rating;
-    private String sentiment;
-    private String[] keyPoints;
-    private ReviewDetails details;
-
-    // Getters and Setters
-    public int getRating() { return rating; }
-    public void setRating(int rating) { this.rating = rating; }
-    public String getSentiment() { return sentiment; }
-    public void setSentiment(String sentiment) { this.sentiment = sentiment; }
-    public String[] getKeyPoints() { return keyPoints; }
-    public void setKeyPoints(String[] keyPoints) { this.keyPoints = keyPoints; }
-    public ReviewDetails getDetails() { return details; }
-    public void setDetails(ReviewDetails details) { this.details = details; }
-
-    public static class ReviewDetails {
-        private String[] pros;
-        private String[] cons;
-        // Getters and Setters
-    }
-}
-
-// 使用 BeanOutputConverter 生成 outputSchema
-BeanOutputConverter<ProductReview> outputConverter = new BeanOutputConverter<>(ProductReview.class);
-String format = outputConverter.getFormat();
-
-ReactAgent agent = ReactAgent.builder()
-    .name("review_analyzer")
-    .model(chatModel)
-    .outputSchema(format)
-    .build();
-
-AssistantMessage result = agent.call(
-    "分析评价：这个产品很棒，5星好评。配送快速，但价格稍贵。"
-);
-
-System.out.println(result.getText());
-// 输出: {"rating": 5, "sentiment": "正面", "keyPoints": [...], "details": {...}}`}
-</Code>
-
-**结构化分析 Schema:**
-
-使用 `BeanOutputConverter` 处理包含实体识别的复杂结构：
-
-<Code
-  language="java"
-  title="结构化分析 Schema 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`import org.springframework.ai.converter.BeanOutputConverter;
-
-// 定义输出类型（包含嵌套实体类）
-public static class TextAnalysis {
-    private String summary;
-    private String[] keywords;
-    private String sentiment;
-    private Entities entities;
-
-    // Getters and Setters
-    public String getSummary() { return summary; }
-    public void setSummary(String summary) { this.summary = summary; }
-    public String[] getKeywords() { return keywords; }
-    public void setKeywords(String[] keywords) { this.keywords = keywords; }
-    public String getSentiment() { return sentiment; }
-    public void setSentiment(String sentiment) { this.sentiment = sentiment; }
-    public Entities getEntities() { return entities; }
-    public void setEntities(Entities entities) { this.entities = entities; }
-
-    public static class Entities {
-        private String[] persons;
-        private String[] locations;
-        private String[] organizations;
-        // Getters and Setters
-    }
-}
-
-// 使用 BeanOutputConverter 生成 outputSchema
-BeanOutputConverter<TextAnalysis> outputConverter = new BeanOutputConverter<>(TextAnalysis.class);
-String format = outputConverter.getFormat();
-
-ReactAgent agent = ReactAgent.builder()
-    .name("text_analyzer")
-    .model(chatModel)
-    .outputSchema(format)
-    .build();
-
-AssistantMessage result = agent.call(
-    "分析这段文字：昨天，李明在北京参加了阿里巴巴公司的技术大会，感受到了创新的力量。"
-);
-
-System.out.println(result.getText());`}
-</Code>
-
-使用 `BeanOutputConverter` 生成 schema 提供了类型安全和自动生成的优势。如果您需要完全自定义的 schema 格式，也可以直接提供 JSON schema 字符串。`outputSchema` 方法支持两种方式，为您提供最大的灵活性。
+| 场景 | 入口 | 结果 |
+| --- | --- | --- |
+| Agent 需要工具、工作流、会话状态或人工介入 | `ReactAgent.outputType(...)` 或 `outputSchema(...)` | `AssistantMessage` 中的最终文本，由应用转换和校验 |
+| 直接调用模型并取得 Java 对象 | `ChatClient.call().entity(...)` | 转换后的 Java 对象 |
+| 直接调用模型并对结构有更严格的要求 | `ChatClient` 的 `validateSchema()` 或 `useProviderStructuredOutput()` | 根据选择进行客户端校验、服务端约束或两者结合 |
 
 ## 输出类型策略
 
-对于类型安全的结构化输出，您可以提供 Java 类，Spring AI Alibaba 将使用 `BeanOutputConverter` 自动将其转换为 JSON schema。这种方法确保了编译时类型安全和自动 schema 生成。
+`outputType(Class<?>)` 根据可反序列化的 Java 类型生成格式提示。下面用 Java record 定义联系方式，并使用 `BeanOutputConverter` 转换最终消息。
 
-### 方法签名
+```java
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import org.springframework.ai.converter.BeanOutputConverter;
 
-<Code
-  language="java"
-  title="outputType 方法签名" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`Builder outputType(Class<?> outputType)`}
-</Code>
+record ContactInfo(String name, String email, String phone) {}
 
-**参数:**
-- `outputType` (`Class<?>`, 必需): 定义输出结构的 Java 类。该类应该是带有标准 getter 和 setter 的 POJO。
-
-### 示例
-
-使用 `outputType` 是最简洁的方式，框架会自动使用 `BeanOutputConverter` 将 Java 类转换为 JSON schema：
-
-<Code
-  language="java"
-  title="使用 outputType 示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import org.springframework.ai.chat.messages.AssistantMessage;
-
-// 定义输出类型
-public static class ContactInfo {
-    private String name;
-    private String email;
-    private String phone;
-
-    // Getters and Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-}
-
-// 直接使用 outputType，框架会自动处理 schema 转换
-ReactAgent agent = ReactAgent.builder()
+var agent = ReactAgent.builder()
     .name("contact_extractor")
     .model(chatModel)
-    .outputType(ContactInfo.class)  
-    .saver(new MemorySaver())
+    .outputType(ContactInfo.class)
     .build();
 
-AssistantMessage result = agent.call(
-    "从以下信息提取联系方式：张三，zhangsan@example.com，(555) 123-4567"
-);
+var reply = agent.call("""
+    提取姓名、电子邮件和电话号码。原文没有的联系方式用 null。
+    联系人张三，zhangsan@example.com
+    """);
 
-System.out.println(result.getText());
-// 输出: {"name": "张三", "email": "zhangsan@example.com", "phone": "(555) 123-4567"}`}
-</Code>
+var converter = new BeanOutputConverter<>(ContactInfo.class);
+ContactInfo contact = converter.convert(reply.getText());
+System.out.println(contact.email());
+```
 
-**`outputType` vs `outputSchema`**：
-- `outputType`: 更简洁，直接传入 Java 类，框架自动处理（**推荐**）
-- `outputSchema`: 需要手动使用 `BeanOutputConverter` 生成 schema，或提供自定义字符串，提供更多控制
+示例输出为 `zhangsan@example.com`。模型可能返回带 Markdown 围栏的 JSON，转换器可处理常见的文本包装。字段必填、数值范围和业务规则仍应在应用中明确校验。
+
+## 输出 Schema 策略
+
+`outputSchema(String)` 把传入的字符串作为格式提示追加到模型请求。可以传入 `BeanOutputConverter.getFormat()` 生成的格式指令，也可以手写指令和 JSON Schema。两项都配置时，显式 `outputSchema` 优先。
+
+```java
+String schema = """
+    {
+      "type": "object",
+      "properties": {
+        "rating": {"type": "integer", "minimum": 1, "maximum": 5},
+        "sentiment": {"enum": ["POSITIVE", "NEUTRAL", "NEGATIVE"]},
+        "keyPoints": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["rating", "sentiment", "keyPoints"],
+      "additionalProperties": false
+    }
+    """;
+
+var reviewAgent = ReactAgent.builder()
+    .name("review_analyzer")
+    .model(chatModel)
+    .outputSchema("只返回符合以下 JSON Schema 的 JSON 对象。\n" + schema)
+    .build();
+
+var reply = reviewAgent.call("分析评价：5 星。配送很快，价格偏高。");
+```
+
+这份 Schema 描述了评分范围、情感枚举和数组形状。应用如需判定模型是否遵守全部 Schema 关键字，可以用 JSON Schema 校验器检查完整响应，再转换为业务类型。
+
+`getFormat()` 返回适合加入提示词的指令，包含 JSON Schema。`getJsonSchema()` 返回 Schema 本身，适合交给校验器或模型的原生 Schema 选项。
 
 ## 工作原理
 
-当 outputFormat 或 outputType 被指定时，Spring AI Alibaba 会自动选择：
+### Agent 状态与流式输出
 
-* 当大模型服务支持 “原生结构化输出” 时（目前支持 OpenAiChatModel、DashScopeChatModel），自动使用模型内置的结构化输出能力（这也是目前最稳定、可靠的方式，因为模型服务会自动提供校验支持）。
-* 针对其他没有 “原生结构化输出” 的模型，Spring AI Alibaba 会使用内置的 ToolCall策略，通过一个动态的 ToolCall 来格式化模型输出。
+`ReactAgent` 将输出格式用于提示词引导，保留原有的模型和工具执行流程。`call(...)` 返回 `AssistantMessage`。需要从状态取结果时，可以为 Agent 配置 `outputKey("contact")`，再从 `invokeAndGetOutput(...)` 的状态读取该键。这个键保存的也是消息，读取后使用对应的转换器。
 
-结构化响应将在 Agent 的状态对象 OverAllState 中返回，可通过 `structured_output` 读取。
+```java
+import com.alibaba.cloud.ai.graph.action.InterruptionMetadata;
+import org.springframework.ai.chat.messages.AssistantMessage;
 
+var output = contactAgent.invokeAndGetOutput(input, config).orElseThrow();
+if (output instanceof InterruptionMetadata interruption) {
+    // 使用中断信息处理人工反馈，再恢复执行。
+}
+else {
+    var message = output.state().value("contact", AssistantMessage.class).orElseThrow();
+    ContactInfo contact = converter.convert(message.getText());
+}
+```
+
+这里的 `contactAgent` 使用 `outputKey("contact")`，`converter` 的目标类型为 `ContactInfo`。人工介入和工作流暂停时，先完成恢复流程。流式调用在收到完整的最终文本后再解析，单个片段可能只有一个 JSON 字段的一部分。
+
+### 工具调用与输出格式
+
+工具的输入 Schema 用于生成和约束工具参数，`outputType` 和 `outputSchema` 用于引导最终文本。工具调用可能经过多轮后才有最终答复。需要模型原生 Schema 与工具调用同时生效时，请核对具体模型是否支持组合使用。
 
 ### 模型原生结构化输出
 
-比如，针对 DashScopeChatModel 模型，在配置 outputSchema 或 outputType 后，Spring AI Alibaba 会自动设置如下参数，以启用模型原生结构化输出能力。
+只需要调用模型并取得对象时，可以直接使用 Spring AI `ChatClient`。原生结构化输出通过服务端请求选项传入 Schema，具体支持取决于模型适配器和模型版本。JSON 对象模式主要约束输出为 JSON 对象，字段和取值约束由 JSON Schema 模式或客户端校验负责。
 
-<Code
-  language="java"
-  title="DashScope 原生结构化输出配置" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`ChatOptions options = DashScopeChatOptions.builder()
-	.withResponseFormat(
-		DashScopeResponseFormat.builder()
-			.type(DashScopeResponseFormat.Type.JSON_OBJECT)
-			.build())
-	.build();`}
-</Code>
+```java
+ContactInfo contact = chatClient.prompt()
+    .user("提取联系人：张三，zhangsan@example.com，13800138000")
+    .call()
+    .entity(ContactInfo.class,
+        spec -> spec.useProviderStructuredOutput().validateSchema());
+```
 
-同时，Spring AI Alibaba 框架会增强系统 Prompt，引导模型输出格式化内容
+`useProviderStructuredOutput()` 请求服务端原生约束。对于不具备原生能力的模型选项，Spring AI `ChatClient` 会使用提示词引导。`validateSchema()` 会检查完整输出，在格式或结构校验失败时将错误反馈给模型并按次数上限重新生成。这些选项配置在 `ChatClient.entity(...)` 调用上。
 
-<Code
-  language="java"
-  title="增强用户消息方法示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`// In AgentLlmNode.augmentUserMessage() method
-public void augmentUserMessage(List<Message> messages, String outputSchema) {
-    if (!StringUtils.hasText(outputSchema)) {
-        return;
-    }
-
-    for (int i = messages.size() - 1; i >= 0; i--) {
-        Message message = messages.get(i);
-        if (message instanceof UserMessage userMessage) {
-            messages.set(i, userMessage.mutate()
-                .text(userMessage.getText() + System.lineSeparator() + outputSchema)
-                .build());
-            break;
-        }
-    }
-}`}
-</Code>
-
-> 注意，相比于 DashScope 模型是通过增强 Prompt 提示词实现最终的 JSON 格式，实现的是一个尽最大努力的效果，OpenAI 模型则是在模型 API 层面支持 Json 格式，提供格式的严格保证支持。
-
-### ToolCall 结构化输出
-
-对于不支持原生结构化输出的模型，Spring AI Alibaba 支持通过调用工具来实现相同效果。此方法适用于所有支持工具调用的模型，即大多数现代模型。
+`List<ContactInfo>` 等泛型结果可以通过 `entity(new ParameterizedTypeReference<List<ContactInfo>>() {})` 读取，前提是所选模型支持相应的输出形状。转换成功后，如果还需要原始响应和用量信息，可以使用 `responseEntity(...)` 同时获取响应与对象。
 
 ## 错误处理
 
-模型可能不总是返回格式完美的 JSON。以下是处理潜在问题的策略:
+| 情况 | 处理方式 |
+| --- | --- |
+| 输出为空、截断或无法解析 | 保留失败状态。独立、无副作用的提取步骤可以使用 `validateSchema()` 进行有界纠正。 |
+| JSON 可解析但字段不符合规则 | 校验必填字段、范围和跨字段约束，例如评分必须在 1 到 5 之间。 |
+| Agent 仍在调用工具或等待人工输入 | 等待 Agent 完成工具调用，或使用中断信息恢复。 |
+| 模型拒答或内容被过滤 | 读取模型响应元数据，按拒答或过滤处理。 |
 
-### Try-Catch 模式
-
-<Code
-  language="java"
-  title="Try-Catch 错误处理示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`ReactAgent agent = ReactAgent.builder()
-    .name("data_extractor")
-    .model(chatModel)
-    .outputType(DataOutput.class)
-    .build();
-
-try {
-    AssistantMessage result = agent.call("提取数据");
-    ObjectMapper mapper = new ObjectMapper();
-    DataOutput data = mapper.readValue(result.getText(), DataOutput.class);
-    // 处理数据
-} catch (JsonProcessingException e) {
-    System.err.println("JSON解析失败: " + e.getMessage());
-    System.err.println("原始输出: " + result.getText());
-    // 回退处理
-}`}
-</Code>
-
-### 验证模式
-
-<Code
-  language="java"
-  title="验证模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`public class ValidatedOutput {
-    private String title;
-    private Integer rating;
-
-    public void validate() throws IllegalArgumentException {
-        if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("标题不能为空");
-        }
-        if (rating != null && (rating < 1 || rating > 5)) {
-            throw new IllegalArgumentException("评分必须在1-5之间");
-        }
-    }
-
-    // Getter 和 Setter 方法...
-}
-
-AssistantMessage result = agent.call("生成评价");
-ValidatedOutput output = mapper.readValue(result.getText(), ValidatedOutput.class);
-output.validate();  // 如果无效则抛出异常`}
-</Code>
-
-### 重试模式
-
-<Code
-  language="java"
-  title="重试模式示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java"
->
-{`int maxRetries = 3;
-DataOutput data = null;
-
-for (int i = 0; i < maxRetries; i++) {
-    try {
-        AssistantMessage result = agent.call("提取数据");
-        data = mapper.readValue(result.getText(), DataOutput.class);
-        break;  // 成功
-    } catch (Exception e) {
-        if (i == maxRetries - 1) {
-            throw new RuntimeException("多次尝试后仍然失败", e);
-        }
-        System.out.println("第" + (i + 1) + "次尝试失败，重试中...");
-    }
-}`}
-</Code>
-
-Spring AI Alibaba 专注于简单性和灵活性，允许开发者在显式 schema 字符串（最大控制）和 Java 类（类型安全）之间进行选择。
+对 2.0.x 的模型拒答或过滤结果，可使用 `ChatClient.call().chatResponse()` 先检查响应元数据，再决定是否运行转换器。
+如果前面的 Agent 工具会写入数据或产生其他外部副作用，将格式纠正放在独立的结果提取步骤，避免重跑已执行的工具。
 
 ## 相关文档
 
-- [Agents](./agents.md) - 了解 ReactAgent 功能
-- [Models](./models.md) - 支持的聊天模型
-- [Messages](./messages.md) - 消息类型和处理
+- [本版本的 Java 示例](https://github.com/alibaba/spring-ai-alibaba/blob/v2.0.3.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/tutorials/StructuredOutputExample.java)
+- [Spring AI 结构化输出](https://docs.spring.io/spring-ai/reference/2.0/api/structured-output.html)
+- [Agent 基础](./agents.md) · [模型](./models.md) · [消息](./messages.md)
