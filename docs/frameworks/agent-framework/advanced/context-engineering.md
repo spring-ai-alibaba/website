@@ -45,9 +45,9 @@ keywords:
 
 | 上下文类型                               | 你控制的内容                                                | 瞬态或持久 |
 | ---------------------------------------- | ----------------------------------------------------------- | ---------- |
-| **[模型上下文](#模型上下文model-context)**         | 模型调用中包含什么（指令、消息历史、工具、响应格式）        | 瞬态       |
-| **[工具上下文](#工具上下文tool-context)**          | 工具可以访问和产生什么（对状态、存储、运行时上下文的读/写） | 持久       |
-| **[生命周期上下文](#生命周期上下文lifecycle-context)** | 模型和工具调用之间发生什么（摘要、防护栏、日志等）          | 持久       |
+| **[模型上下文](#模型上下文model-context)**         | 模型调用中包含什么（指令、消息历史、工具、响应格式） | 单次请求 |
+| **[工具上下文](#工具上下文tool-context)**          | 工具可以访问和产生什么（对状态、存储、运行时上下文的读/写） | 由数据载体决定 |
+| **[生命周期上下文](#生命周期上下文lifecycle-context)** | 模型和工具调用之间发生什么（摘要、防护栏、日志等） | 由数据载体决定 |
 
 > - 瞬态上下文。LLM 在单次调用中看到的内容。你可以修改消息、工具或提示，而不改变状态中保存的内容。
 > - 持久上下文。跨轮次保存在状态中的内容。生命周期钩子和工具写入会永久修改它。
@@ -58,8 +58,8 @@ keywords:
 
 | 数据源            | 别名     | 范围     | 示例                                          |
 | ----------------- | -------- | -------- | --------------------------------------------- |
-| **运行时上下文**  | 静态配置 | 会话范围 | 用户 ID、API 密钥、数据库连接、权限、环境设置 |
-| **状态（State）** | 短期记忆 | 会话范围 | 当前消息、上传的文件、认证状态、工具结果      |
+| **运行时上下文**  | 调用参数 | 本次调用 | 已认证的用户 ID、业务域、权限或运行配置 |
+| **状态（State）** | 短期记忆 | 线程范围 | 当前消息、业务进度、工具结果 |
 | **存储（Store）** | 长期记忆 | 跨会话   | 用户偏好、提取的见解、记忆、历史数据          |
 
 ### 工作原理
@@ -342,77 +342,9 @@ ReactAgent agent = ReactAgent.builder()
 
 #### 基于存储的个性化提示
 
-<Code
-  language="java"
-  title="基于存储的个性化提示示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextEngineeringExample.java"
->
-{`// 从长期记忆加载用户偏好
-class PersonalizedPromptInterceptor extends ModelInterceptor {
-    private final UserPreferenceStore store;
+对于语言、回复格式等已知业务键，可以从应用认证结果派生命名空间，使用 `Store.getItem(namespace, key)` 读取，并把允许的结构化字段转换为本次请求的参考数据。设置字段和长度上限，让最终请求的预算覆盖这些内容。应用配置继续提供系统指令。
 
-    public PersonalizedPromptInterceptor(UserPreferenceStore store) {
-        this.store = store;
-    }
-
-    @Override
-    public ModelResponse interceptModel(ModelRequest request, ModelCallHandler handler) {
-        // 从运行时上下文获取用户ID
-        String userId = getUserIdFromContext(request);
-
-        // 从存储加载用户偏好
-        UserPreferences prefs = store.getPreferences(userId);
-
-        // 构建个性化提示
-        String personalizedPrompt = buildPersonalizedPrompt(prefs);
-
-        // 更新系统消息（参考 TodoListInterceptor 的实现方式）
-        SystemMessage enhancedSystemMessage;
-        if (request.getSystemMessage() == null) {
-            enhancedSystemMessage = new SystemMessage(personalizedPrompt);
-        } else {
-            enhancedSystemMessage = new SystemMessage(
-                request.getSystemMessage().getText() + "\n\n" + personalizedPrompt
-            );
-        }
-
-        // 创建增强的请求
-        ModelRequest enhancedRequest = ModelRequest.builder(request)
-            .systemMessage(enhancedSystemMessage)
-            .build();
-
-        // 调用处理器
-        return handler.call(enhancedRequest);
-    }
-
-    private String getUserIdFromContext(ModelRequest request) {
-        // 相当于是从 RunnableConfig 中读取提取用户ID，所以agent调用时要设置 user-id
-        return request.getContext().get("user-id"); // 简化示例
-    }
-
-    private String buildPersonalizedPrompt(UserPreferences prefs) {
-        StringBuilder prompt = new StringBuilder("你是一个有用的助手。");
-
-        if (prefs.getCommunicationStyle() != null) {
-            prompt.append("\n沟通风格：").append(prefs.getCommunicationStyle());
-        }
-
-        if (prefs.getLanguage() != null) {
-            prompt.append("\n使用语言：").append(prefs.getLanguage());
-        }
-
-        if (!prefs.getInterests().isEmpty()) {
-            prompt.append("\n用户兴趣：").append(String.join(", ", prefs.getInterests()));
-        }
-
-        return prompt.toString();
-    }
-
-    @Override
-    public String getName() {
-        return "PersonalizedPromptInterceptor";
-    }
-}`}
-</Code>
+需要模型根据任务选择记忆时，注册 `LongTermMemoryTools`，让模型先搜索键，再按需读取数据。读写示例和命名空间规则见 [Agent 记忆管理](./memory.md)。
 
 ### 消息历史（Messages）
 

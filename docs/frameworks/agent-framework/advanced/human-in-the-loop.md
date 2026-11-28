@@ -113,12 +113,18 @@ var feedback = InterruptionMetadata.builder(interruption)
     .toolFeedbacks(decisions)
     .build();
 var resumeConfig = RunnableConfig.builder(config).addHumanFeedback(feedback).build();
-var next = agent.invokeAndGetOutput("", resumeConfig).orElseThrow();
+var next = agent.invokeAndGetOutput(Map.of(), resumeConfig).orElseThrow();
 ```
 
 `InterruptionMetadata.builder(interruption)` 保留本次中断的 ID，`ToolFeedback.builder(request)` 保留对应的调用 ID 和工具名称。恢复使用原 `threadId` 和空输入，新一轮工具调用可能再次暂停。
 
 若只提交了部分决策，Agent 会返回原审批批次，应用需要重新提交完整批次。重复或未知的调用 ID、与当前批次不匹配的中断 ID，以及未获允许的决策都会在工具执行前报错。使用 `config.withResume()` 可以在未提交决策时重新获取待审批次。
+
+使用持久化 saver 时，可在新进程中重建 Agent，再用原线程配置调用 `agent.getPendingInterruption(config)`。它读取最新检查点中的待审批次，无需调用模型或执行工具。直接调用子 Agent 工具产生多个中断时，从 `pendingInterruptions()` 选择要恢复的请求。
+
+应用在读取审批及提交反馈之前验证线程归属和审核者权限。待审批次存在时，普通新轮次会被拒绝，原检查点可继续用于恢复。已完成的线程或旧检查点上的带 ID 反馈会报错。旧检查点若未保存审批记录，可沿用原有的 `withResume()` 路径获取待审请求。
+
+偏好保存工具在审批恢复时还需要应用提供当前写权限和原许可。数据库已经保存但工具检查点提交失败时，使用同一操作 ID 恢复可以取回原回执。[偏好保存与失败恢复](./memory.md#审批工具保存与失败恢复)
 
 ### 提交编辑或拒绝
 

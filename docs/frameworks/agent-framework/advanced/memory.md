@@ -1,714 +1,217 @@
 ---
-title: 记忆管理（Memory）
-description: 了解如何在Agent中使用记忆管理功能，实现对话历史存储、检查点机制和状态持久化
-keywords: [记忆管理, Memory, 检查点, Checkpoint, 状态持久化, 对话历史, MemorySaver, 会话管理]
+title: Agent 记忆管理
+description: 使用 ReactAgent 的 checkpoint 延续同一会话，为 Agent 配置按作用域隔离的跨会话召回与显式写入。
+keywords: [Agent Memory, ReactAgent, Checkpoint, Store, LongTermMemoryTools, 记忆管理]
 ---
 
-## 概述
+# Agent 记忆管理
 
-Spring AI Alibaba 的 Agent 使用持久化机制来实现长期记忆功能。这是一个高级主题，需要对 Spring AI Alibaba 的 Agent 框架有一定了解。
+| 要解决的问题 | 使用的能力 | 作用域 |
+| --- | --- | --- |
+| 继续聊天或恢复暂停的工具 | Graph checkpoint | 同一 `threadId` |
+| 控制模型读取的历史长度 | 请求编辑或 checkpoint 摘要 | 单次请求或同一线程 |
+| 在新会话读取用户偏好 | `Store` 与 `LongTermMemoryTools` | 应用授权的命名空间 |
+| 保存、更正和删除语言或回复格式 | `PreferenceMemory` | 应用授权的命名空间及偏好键 |
+| 管理直接使用 ChatClient 的对话 | Spring AI Session Memory | 同一 `sessionId` |
 
 对于需要重启后继续的会话，可以[在 checkpoint 中保存摘要和归档引用](./context-engineering.md#checkpoint-and-archive)。如果需要让模型自行搜索并读取当前身份可访问的资料，可以[注册按需长期记忆工具](./context-engineering.md#skills-and-memory)。
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                     ReactAgent                          │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  ┌──────────────────┐        ┌────────────────────┐   │
-│  │  短期记忆         │        │   长期记忆          │   │
-│  │  Short-term      │        │   Long-term        │   │
-│  │  (MemorySaver)   │        │   (MemoryStore)    │   │
-│  └──────────────────┘        └────────────────────┘   │
-│         │                             │                │
-│         │ threadId                    │ namespace/key  │
-│         ↓                             ↓                │
-│  ┌──────────────────┐        ┌────────────────────┐   │
-│  │  对话历史         │        │  用户画像          │   │
-│  │  Conversation    │        │  User Profiles     │   │
-│  │  History         │        │  Preferences       │   │
-│  │  Message State   │        │  Persistent Data   │   │
-│  └──────────────────┘        └────────────────────┘   │
-│                                                         │
-│  ┌─────────────────────────────────────────────────┐  │
-│  │            ModelHook / 拦截器                    │  │
-│  │  - beforeModel: 加载并注入记忆                   │  │
-│  │  - afterModel: 保存并学习交互内容                │  │
-│  └─────────────────────────────────────────────────┘  │
-│                                                         │
-│  ┌─────────────────────────────────────────────────┐  │
-│  │            记忆工具 Tools                        │  │
-│  │  - saveMemory: 显式保存到长期记忆                │  │
-│  │  - getMemory: 显式从长期记忆检索                 │  │
-│  └─────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
+[会话记忆入门](../tutorials/memory.md) · [上下文工程](./context-engineering.md)
+
+## 线程状态与上下文窗口
+
+`ReactAgent` 使用 Graph state 中的 `messages` 和其他状态键。配置 saver 后，同一 `threadId` 的新调用继承工作流状态。审批完成后继续待执行的工具时，沿用同一线程并按中断记录提交反馈。应用负责校验线程归属，在线程、租户和用户之间建立稳定映射。
+
+模型上下文过长时，先明确需要控制的范围。
+
+| 目标 | 用法 | 行为 |
+| --- | --- | --- |
+| 缩短本次输入 | `ContextEditingInterceptor` 或自定义 `ModelInterceptor` | 编辑模型请求的视图。后续步骤仍可从 Graph state 读取历史。 |
+| 后续模型调用沿用旧轮次摘要 | `CheckpointContextCompaction` | 达到阈值时尝试总结已完成的旧轮次，保存摘要记录。原历史仍由 checkpoint 保留。 |
+| 修改后续步骤读取的消息状态 | `MessagesModelHook` 与 `UpdatePolicy.REPLACE` | 显式替换当前 `messages`。旧检查点和归档按各自的保留策略管理。 |
+
+请求编辑和状态替换都要保留必要的指令、当前用户请求，以及工具调用和对应的全部结果。待执行或待审批的工具仍需要原始调用上下文。为模型单独设置输入预算。摘要的触发阈值决定何时尝试生成摘要，模型预算决定请求能否发送。
+
+```java
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.context.CheckpointContextCompaction;
+import com.alibaba.cloud.ai.graph.checkpoint.savers.file.FileSystemSaver;
+
+var compaction = CheckpointContextCompaction.builder(summarizer, 6000)
+    .keepRecentTurns(2)
+    .build();
+var agent = ReactAgent.builder()
+    .name("support")
+    .model(chatModel)
+    .saver(FileSystemSaver.builder().targetFolder(checkpointDir).build())
+    .checkpointContextCompaction(compaction)
+    .build();
 ```
 
-## 记忆存储
+`summarizer` 是用于生成摘要的 `ChatModel`，`checkpointDir` 是用于在本地重启后续跑的目录。多实例部署时，根据部署拓扑选择持久化 saver，并串行处理同一线程的执行。大工具结果可用 `ToolResultArchive` 保存，再用 `read_archived_tool_result` 回读引用。归档访问与跨会话偏好访问分别授权。
 
-Spring AI Alibaba 将长期记忆以 JSON 文档的形式存储在 Store 中。
+[人工审批与恢复](./human-in-the-loop.md) · [压缩、归档和按需加载示例](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/ContextManagementRecipes.java)
 
-每个记忆都在自定义的 `namespace`（类似于文件夹）下组织，并使用唯一的 `key`（类似于文件名）。命名空间通常包含用户或组织 ID 或其他标签，以便更容易地组织信息。
+### 在工具中读写线程状态
 
-这种结构支持记忆的层次化组织。通过内容过滤器支持跨命名空间搜索。
+用 `ToolContextHelper.getState(toolContext)` 查看工具执行时的状态，通过 `getStateForUpdate(toolContext)` 提交变更。在 Hook 的 `getKeyStrategys()` 中为自定义键注册合并规则，例如为 `notes` 注册 `AppendStrategy`。工具节点会随工具结果提交成功的更新，失败工具的暂存更新会被丢弃。并行工具的同键更新按注册的策略和调用顺序合并。串行工具在同批次对同一个键的更新保留最后一次成功更新。
 
-<Code
-  language="java"
-  title="MemoryStore 基础使用示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
-import com.alibaba.cloud.ai.graph.store.StoreItem;
+重建 Agent 后，可用 `agent.getCurrentState(config)` 查看 checkpoint 中的状态。操作前验证 `threadId` 归属。[线程笔记和审批示例](https://github.com/alibaba/spring-ai-alibaba/blob/main/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java)
 
-import java.util.*;
+## 在新会话中按需读取记忆
 
-// MemoryStore 将数据保存到内存字典中。在生产环境中请使用基于数据库的存储实现
-MemoryStore store = new MemoryStore();
+`StoreItem` 用命名空间和业务键标识结构化文档。下面的例子为支持业务保存语言偏好。同一用户的两个线程使用同一份偏好。另一个用户拥有独立的命名空间。
 
-String userId = "my-user";
-String applicationContext = "chitchat";
-List<String> namespace = List.of(userId, applicationContext);
+示例中的 `tenantId`、`userId` 来自应用认证和授权结果，`firstThreadId`、`secondThreadId` 是由应用生成并验证归属的两个内部线程 ID。
 
-// 保存记忆
-Map<String, Object> memoryData = new HashMap<>();
-memoryData.put("rules", List.of(
-    "用户喜欢简短直接的语言",
-    "用户只说中文和Java"
-));
-memoryData.put("my-key", "my-value");
+```java
+import java.util.List;
+import java.util.Map;
 
-StoreItem item = StoreItem.of(namespace, "a-memory", memoryData);
-store.putItem(item);
-
-// 通过ID获取记忆
-Optional<StoreItem> retrievedItem = store.getItem(namespace, "a-memory");
-
-// 在此命名空间内搜索记忆，通过内容等价性过滤，按向量相似度排序
-List<StoreItem> items = store.searchItems(
-    namespace,
-    Map.of("my-key", "my-value")
-);`}
-</Code>
-
-## 在工具中读取长期记忆
-
-下面的示例展示了如何创建一个工具，让 Agent 能够查询用户信息。
-
-<Code
-  language="java"
-  title="在工具中读取长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
 import com.alibaba.cloud.ai.graph.RunnableConfig;
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.memory.LongTermMemoryTools;
 import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
 import com.alibaba.cloud.ai.graph.store.StoreItem;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.function.FunctionToolCallback;
+import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
 
-import java.util.*;
-import java.util.function.BiFunction;
+var store = new MemoryStore();
+var namespace = List.of(tenantId, "support", userId, "preferences");
+store.putItem(StoreItem.of(namespace, "reply_language", Map.of("language", "中文")));
 
-// 定义请求和响应记录
-public record GetMemoryRequest(List<String> namespace, String key) {}
-public record MemoryResponse(String message, Map<String, Object> value) {}
-
-// 创建内存存储
-MemoryStore store = new MemoryStore();
-
-// 向存储中写入示例数据
-Map<String, Object> userData = new HashMap<>();
-userData.put("name", "张三");
-userData.put("language", "中文");
-
-StoreItem userItem = StoreItem.of(List.of("users"), "user_123", userData);
-store.putItem(userItem);
-
-// 创建获取用户信息的工具
-BiFunction<GetMemoryRequest, ToolContext, MemoryResponse> getUserInfoFunction =
-    (request, context) -> {
-        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
-        Store store = runnableConfig.store();
-        Optional<StoreItem> itemOpt = store.getItem(request.namespace(), request.key());
-        if (itemOpt.isPresent()) {
-            Map<String, Object> value = itemOpt.get().getValue();
-            return new MemoryResponse("找到用户信息", value);
-        }
-        return new MemoryResponse("未找到用户", Map.of());
-    };
-
-ToolCallback getUserInfoTool = FunctionToolCallback.builder("getUserInfo", getUserInfoFunction)
-    .description("查询用户信息")
-    .inputType(GetMemoryRequest.class)
-    .build();
-
-// 创建Agent
-ReactAgent agent = ReactAgent.builder()
-    .name("memory_agent")
-    .model(chatModel)
-    .tools(getUserInfoTool)
-    .saver(new MemorySaver())
-    .build();
-
-// 创建内存存储
-MemoryStore store = new MemoryStore();
-// 向存储中写入示例数据
-Map<String, Object> userData = new HashMap<>();
-userData.put("name", "张三");
-userData.put("language", "中文");
-
-StoreItem userItem = StoreItem.of(List.of("users"), "user_123", userData);
-store.putItem(userItem);
-
-// 运行Agent
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("session_001")
-    .addMetadata("user_id", "user_123")
+var memory = LongTermMemoryTools.builder()
     .store(store)
+    .namespace(config -> config.metadata("tenantId")
+        .filter(String.class::isInstance).map(String.class::cast)
+        .filter(tenant -> !tenant.isBlank())
+        .flatMap(tenant -> config.metadata("userId")
+            .filter(String.class::isInstance).map(String.class::cast)
+            .filter(user -> !user.isBlank())
+            .map(user -> List.of(tenant, "support", user, "preferences")))
+        .orElseGet(List::of))
+    .maxSearchResults(5)
+    .pageCharacters(1024)
+    .maxCallsPerToolPerTurn(8)
     .build();
 
-agent.invoke("查询用户信息，namespace=['users'], key='user_123'", config);`}
-</Code>
-
-## 在工具中写入长期记忆
-
-下面的示例展示了如何创建一个更新用户信息的工具。
-
-<Code
-  language="java"
-  title="在工具中写入长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
-import com.alibaba.cloud.ai.graph.store.StoreItem;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.function.FunctionToolCallback;
-
-import java.util.*;
-import java.util.function.BiFunction;
-
-// 定义请求记录
-public record SaveMemoryRequest(List<String> namespace, String key, Map<String, Object> value) {}
-public record MemoryResponse(String message, Map<String, Object> value) {}
-
-// 创建内存存储
-MemoryStore store = new MemoryStore();
-
-// 创建保存用户信息的工具
-BiFunction<SaveMemoryRequest, ToolContext, MemoryResponse> saveUserInfoFunction =
-    (request, context) -> {
-        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
-        Store store = runnableConfig.store();
-        StoreItem item = StoreItem.of(request.namespace(), request.key(), request.value());
-        store.putItem(item);
-        return new MemoryResponse("成功保存用户信息", request.value());
-    };
-
-ToolCallback saveUserInfoTool = FunctionToolCallback.builder("saveUserInfo", saveUserInfoFunction)
-    .description("保存用户信息")
-    .inputType(SaveMemoryRequest.class)
-    .build();
-
-// 创建Agent
-ReactAgent agent = ReactAgent.builder()
-    .name("save_memory_agent")
+var agent = ReactAgent.builder()
+    .name("support")
     .model(chatModel)
-    .tools(saveUserInfoTool)
     .saver(new MemorySaver())
+    .tools(memory.tools())
     .build();
 
-// 创建内存存储
-MemoryStore store = new MemoryStore();
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("session_001")
-    .addMetadata("user_id", "user_123")
-    .store(store)
+var first = RunnableConfig.builder().threadId(firstThreadId)
+    .addMetadata("tenantId", tenantId).addMetadata("userId", userId).build();
+var second = RunnableConfig.builder().threadId(secondThreadId)
+    .addMetadata("tenantId", tenantId).addMetadata("userId", userId).build();
+
+agent.call("我正在处理 Atlas 项目的工单。", first);
+var reply = agent.call("请读取我的 reply_language 偏好，再用该语言回复。", second);
+```
+
+`search_memory` 根据文本查询返回有限数量的键。内置工具按键排序，匹配方式由所用 Store 决定。使用 `MemoryStore` 时，查询匹配键或值中的文本。`read_memory` 接收键和可选 `offset`，返回 `content` 和可用于续读的 `nextOffset`。已知业务键时可以直接调用读取工具。应用需要确定性读取的配置时，可直接用 `Store.getItem(namespace, key)`，再把所需字段作为当前请求的数据传给模型。
+
+工具在每次调用时解析精确命名空间，缺少有效身份时返回空命名空间即可拒绝访问。将租户、业务域和用户 ID 放在独立的命名空间片段中。片段不能包含斜杠、反斜杠或控制字符，也不能使用 `.` 或 `..`。使用 `RunnableConfig.builder().store(store)` 按调用注入后端时，可以省略工具 Builder 的 `.store(store)`。子 Agent 需要应用授予的身份和可用工具。按[子 Agent 委派](./agent-tool.md)传递允许的上下文。
+
+`maxQueryCharacters` 限制单次搜索的长度，默认 1024 个 UTF-16 代码单元。`maxCallsPerToolPerTurn` 分别限制每轮的搜索次数与读取次数，并与 Agent 的 `toolCallLimits` 共同生效。审批恢复继续沿用同一轮的计数。页面大小限制单次读取结果，最后进入模型的内容仍受模型请求预算约束。
+
+搜索未命中时返回空列表。读取不存在的键时返回条目不可用。存储或作用域解析发生异常时，工具返回暂时不可用，模型可以继续当前任务。可通过 `.observationRegistry(registry)` 记录 `saa.agent.memory` 的操作耗时和结果类别。观测上下文提供命中数量、页大小及分页状态，诊断不包含查询文本、记忆正文或身份。
+
+`MemoryStore` 和 `MemorySaver` 都在进程内保存数据。需要在进程重启后保留两类记忆时，分别配置持久化 Store 和 saver。
+
+## 显式保存、更正和删除偏好
+
+使用 `PreferenceMemory` 保存用户明确选择的语言和回复格式。应用通过可信运行配置解析命名空间并授予读写权限。同一个用户换线程后仍可读取当前值。
+
+| 偏好键 | 工具参数 | 允许值 |
+| --- | --- | --- |
+| `REPLY_LANGUAGE` | `reply_language` | 默认允许 `zh-CN` 和 `en-US`，可用 `languageTags(...)` 配置应用的允许列表。 |
+| `REPLY_FORMAT` | `reply_format` | `paragraphs`、`bullets` 和 `markdown`。 |
+
+### 配置数据源和授权
+
+传入可开独立 JDBC 连接的 PostgreSQL 或 H2 `DataSource`，并在应用初始化或迁移时调用 `initializeSchema()` 创建偏好和操作回执表。`authenticatedNamespace` 从应用验证的租户和用户身份派生命名空间。`canChangePreferences` 按当前权限授权每次变更。
+
+```java
+import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.memory.PreferenceMemory;
+import com.alibaba.cloud.ai.graph.agent.memory.PreferenceMemory.ToolWritePermit;
+
+var preferences = PreferenceMemory.builder(dataSource)
+    .namespace(authenticatedNamespace)
+    .authorizeWrites(canChangePreferences)
+    .toolWritePermit(run -> run.metadata("approvedPreferenceWrite")
+        .filter(ToolWritePermit.class::isInstance).map(ToolWritePermit.class::cast)
+        .orElse(null))
     .build();
+preferences.initializeSchema();
 
-// 运行Agent
-agent.invoke(
-    "我叫张三，请保存我的信息。使用 saveUserInfo 工具，namespace=['users'], key='user_123', value={'name': '张三'}",
-    config
-);
-
-// 可以直接访问存储获取值
-Optional<StoreItem> savedItem = store.getItem(List.of("users"), "user_123");
-if (savedItem.isPresent()) {
-    Map<String, Object> savedValue = savedItem.get().getValue();
-}`}
-</Code>
-
-## 使用 ModelHook 管理长期记忆
-
-下面的示例展示了如何使用 ModelHook 在模型调用前后自动加载和保存长期记忆。
-
-<Code
-  language="java"
-  title="使用 ModelHook 管理长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.agent.hook.JumpTo;
-import com.alibaba.cloud.ai.graph.OverAllState;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
-import com.alibaba.cloud.ai.graph.store.StoreItem;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-
-// 创建记忆拦截器
-ModelHook memoryInterceptor = new ModelHook() {
-    @Override
-    public String getName() {
-        return "memory_interceptor";
-    }
-
-
-    @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL, HookPosition.AFTER_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        // 从配置中获取用户ID
-        String userId = (String) config.metadata("user_id").orElse(null);
-        if (userId == null) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        Store store = config.store();
-        // 从记忆存储中加载用户画像
-        Optional<StoreItem> itemOpt = store.getItem(List.of("user_profiles"), userId);
-        if (itemOpt.isPresent()) {
-            Map<String, Object> profile = itemOpt.get().getValue();
-
-            // 将用户上下文注入系统消息
-            String userContext = String.format(
-                "用户信息：姓名=%s, 年龄=%s, 邮箱=%s, 偏好=%s",
-                profile.get("name"),
-                profile.get("age"),
-                profile.get("email"),
-                profile.get("preferences")
-            );
-
-            // 获取消息列表
-            List<Message> messages = (List<Message>) state.value("messages").orElse(new ArrayList<>());
-            List<Message> newMessages = new ArrayList<>();
-
-            // 查找是否已存在 SystemMessage
-            SystemMessage existingSystemMessage = null;
-            int systemMessageIndex = -1;
-            for (int i = 0; i < messages.size(); i++) {
-                Message msg = messages.get(i);
-                if (msg instanceof SystemMessage) {
-                    existingSystemMessage = (SystemMessage) msg;
-                    systemMessageIndex = i;
-                    break;
-                }
-            }
-
-            // 如果找到 SystemMessage，更新它；否则创建新的
-            SystemMessage enhancedSystemMessage;
-            if (existingSystemMessage != null) {
-                // 更新现有的 SystemMessage
-                enhancedSystemMessage = new SystemMessage(
-                    existingSystemMessage.getText() + "\n\n" + userContext
-                );
-            } else {
-                // 创建新的 SystemMessage
-                enhancedSystemMessage = new SystemMessage(userContext);
-            }
-
-            // 构建新的消息列表
-            if (systemMessageIndex >= 0) {
-                // 如果找到了 SystemMessage，替换它
-                for (int i = 0; i < messages.size(); i++) {
-                    if (i == systemMessageIndex) {
-                        newMessages.add(enhancedSystemMessage);
-                    } else {
-                        newMessages.add(messages.get(i));
-                    }
-                }
-            } else {
-                // 如果没有找到 SystemMessage，在开头添加新的
-                newMessages.add(enhancedSystemMessage);
-                newMessages.addAll(messages);
-            }
-
-            return CompletableFuture.completedFuture(Map.of("messages", newMessages));
-        }
-
-        return CompletableFuture.completedFuture(Map.of());
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        // 可以在这里实现对话后的记忆保存逻辑
-        return CompletableFuture.completedFuture(Map.of());
-    }
-};
-
-// 创建带有记忆拦截器的Agent
-ReactAgent agent = ReactAgent.builder()
-    .name("memory_agent")
+var agent = ReactAgent.builder()
+    .name("support")
     .model(chatModel)
-    .hooks(memoryInterceptor)
-    .saver(new MemorySaver())
+    .saver(checkpointSaver)
+    .tools(preferences.tools())
     .build();
+```
 
-// 创建内存存储
-MemoryStore memoryStore = new MemoryStore();
+将 `preferences.tools()` 注册给 Agent，即可调用 `read_preference` 读取固定业务键的值和版本。配置 `toolWritePermit(...)` 后，还会注册需要人工审批的 `save_preference`。应用也可以直接调用 Java API 管理偏好。
 
-// 模拟数据，预先填充用户画像
-Map<String, Object> profileData = new HashMap<>();
-profileData.put("name", "王小明");
-profileData.put("age", 28);
-profileData.put("email", "wang@example.com");
-profileData.put("preferences", List.of("喜欢咖啡", "喜欢阅读"));
+### 通过应用发起保存、更正和删除
 
-StoreItem profileItem = StoreItem.of(List.of("user_profiles"), "user_001", profileData);
-memoryStore.putItem(profileItem);
+在界面上读取当前值时保留其版本。用户确认保存或更正时，传入该版本以及本次操作的唯一 ID。以下调用展示两种偏好的保存、跨线程读取、更正和删除。应用收到每项回执后，根据状态决定如何响应。
 
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("session_001")
-    .addMetadata("user_id", "user_001")
-    .store(memoryStore)
-    .build();
+```java
+import static com.alibaba.cloud.ai.graph.agent.memory.PreferenceMemory.Key.REPLY_FORMAT;
+import static com.alibaba.cloud.ai.graph.agent.memory.PreferenceMemory.Key.REPLY_LANGUAGE;
 
-// Agent会自动加载用户画像信息
-agent.invoke("请介绍一下我的信息。", config);`}
-</Code>
+var languageSaved = preferences.save(writeConfig, REPLY_LANGUAGE, "zh-CN",
+    displayedLanguageVersion, saveLanguageId);
+var formatSaved = preferences.save(writeConfig, REPLY_FORMAT, "bullets",
+    displayedFormatVersion, saveFormatId);
 
-## 结合短期和长期记忆
+var language = preferences.read(otherThreadConfig, REPLY_LANGUAGE);
+var format = preferences.read(otherThreadConfig, REPLY_FORMAT);
+var corrected = preferences.save(writeConfig, REPLY_LANGUAGE, "en-US",
+    language.version(), correctLanguageId);
+var deleted = preferences.delete(writeConfig, REPLY_FORMAT, format.version(), deleteFormatId);
+```
 
-短期记忆用于存储对话上下文，长期记忆用于存储持久化数据。下面的示例展示了如何同时使用两种记忆。
+- `SAVED` 和 `DELETED` 表示数据库已经提交。重试同一操作时复用原 ID、原版本和原参数。`replayed=true` 表示这是原操作的回执。读取当前偏好以确认后来发生的更正或删除。
+- `VERSION_CONFLICT` 表示偏好在本次操作提交前已变化。读取最新版本，取得用户确认后，用新的操作 ID 提交更正。`OPERATION_CONFLICT` 表示同一作用域内已有操作使用该 ID，但参数不同。
+- 版本 `0` 表示该偏好从未变更。删除会清除当前值并递增版本，保留删除版本与幂等回执。旧版本的变更无法把已删除的值写回。
 
-<Code
-  language="java"
-  title="结合短期和长期记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.OverAllState;
+读取接口会立即反映已经提交的更正和删除。已出现在旧线程中的工具结果继续由该线程的 checkpoint 保留策略管理。
+
+### 审批工具保存与失败恢复
+
+Agent 收到用户明确保存偏好的请求并调用 `save_preference` 后，会暂停等待审批。应用先验证线程归属及审核者权限，再从已保存的中断选出待审批调用。下面展示只有一项待审的批次。应用应在保存审核决定时，为该操作生成并保留稳定的 `operationId`，复跑时复用原许可的数据。需要跨进程恢复时，为 Agent 配置持久化 `checkpointSaver`。
+
+```java
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.store.Store;
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
-import com.alibaba.cloud.ai.graph.store.StoreItem;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
+import com.alibaba.cloud.ai.graph.action.InterruptionMetadata;
+import com.alibaba.cloud.ai.graph.action.InterruptionMetadata.ToolFeedback;
+import com.alibaba.cloud.ai.graph.action.InterruptionMetadata.ToolFeedback.FeedbackResult;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+var pending = agent.getPendingInterruption(threadConfig).orElseThrow();
+var approved = ToolFeedback.builder(pending.toolFeedbacks().get(0))
+    .result(FeedbackResult.APPROVED).build();
+var permit = preferences.permitSave(threadConfig, pending, approved, operationId);
+var authorized = RunnableConfig.builder(threadConfig)
+    .addMetadata("approvedPreferenceWrite", permit).build();
+var feedback = InterruptionMetadata.builder(pending).toolFeedbacks(List.of(approved)).build();
+var output = agent.invokeAndGetOutput(Map.of(),
+    RunnableConfig.builder(authorized).addHumanFeedback(feedback).build());
+```
 
-// 创建组合记忆Hook
-ModelHook combinedMemoryHook = new ModelHook() {
-    @Override
-    public String getName() {
-        return "combined_memory";
-    }
+许可绑定已审参数、线程、执行 ID、工具调用 ID 和命名空间。工具执行及恢复时会再次检查当前写权限。撤销权限或切换主体后，旧许可无法继续写入。
 
+偏好更新与操作回执在同一数据库事务中提交。Graph 使用自己的检查点。若偏好已提交、工具检查点保存失败，按当前权限重建运行配置并从审核记录恢复原许可，再从最新检查点以空输入调用 `withResume()`。再次执行工具会返回原回执，期间其他线程提交的更正或删除继续有效。应用按回执的状态确认保存结果。[人工审批与恢复](./human-in-the-loop.md)
 
-    @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.BEFORE_MODEL};
-    }
+通用 `LongTermMemoryTools` 仍可读取已有 Store 记录。使用 `PreferenceMemory` 接管偏好时，由应用校验旧值，再通过显式保存 API 导入。
 
-    @Override
-    public CompletableFuture<Map<String, Object>> beforeModel(OverAllState state, RunnableConfig config) {
-        Optional<Object> userIdOpt = config.metadata("user_id");
-        if (userIdOpt.isEmpty()) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-        String userId = (String) userIdOpt.get();
-
-        Store memoryStore = config.store();
-        // 从长期记忆加载
-        Optional<StoreItem> profileOpt = memoryStore.getItem(List.of("profiles"), userId);
-        if (profileOpt.isEmpty()) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        Map<String, Object> profile = profileOpt.get().getValue();
-        String contextInfo = String.format("长期记忆：用户 %s, 职业: %s",
-            profile.get("name"), profile.get("occupation"));
-
-        // 获取消息列表
-        List<Message> messages = (List<Message>) state.value("messages").orElse(new ArrayList<>());
-        List<Message> newMessages = new ArrayList<>();
-
-        // 查找是否已存在 SystemMessage
-        SystemMessage existingSystemMessage = null;
-        int systemMessageIndex = -1;
-        for (int i = 0; i < messages.size(); i++) {
-            Message msg = messages.get(i);
-            if (msg instanceof SystemMessage) {
-                existingSystemMessage = (SystemMessage) msg;
-                systemMessageIndex = i;
-                break;
-            }
-        }
-
-        // 如果找到 SystemMessage，更新它；否则创建新的
-        SystemMessage enhancedSystemMessage;
-        if (existingSystemMessage != null) {
-            // 更新现有的 SystemMessage
-            enhancedSystemMessage = new SystemMessage(
-                existingSystemMessage.getText() + "\n\n" + contextInfo
-            );
-        } else {
-            // 创建新的 SystemMessage
-            enhancedSystemMessage = new SystemMessage(contextInfo);
-        }
-
-        // 构建新的消息列表
-        if (systemMessageIndex >= 0) {
-            // 如果找到了 SystemMessage，替换它
-            for (int i = 0; i < messages.size(); i++) {
-                if (i == systemMessageIndex) {
-                    newMessages.add(enhancedSystemMessage);
-                } else {
-                    newMessages.add(messages.get(i));
-                }
-            }
-        } else {
-            // 如果没有找到 SystemMessage，在开头添加新的
-            newMessages.add(enhancedSystemMessage);
-            newMessages.addAll(messages);
-        }
-
-        return CompletableFuture.completedFuture(Map.of("messages", newMessages));
-    }
-};
-
-// 创建Agent
-ReactAgent agent = ReactAgent.builder()
-    .name("combined_memory_agent")
-    .model(chatModel)
-    .hooks(combinedMemoryHook)
-    .saver(new MemorySaver()) // 短期记忆
-    .build();
-
-// 创建记忆存储
-MemoryStore memoryStore = new MemoryStore();
-// 设置长期记忆
-Map<String, Object> userProfile = new HashMap<>();
-userProfile.put("name", "李工程师");
-userProfile.put("occupation", "软件工程师");
-
-StoreItem profileItem = StoreItem.of(List.of("profiles"), "user_002", userProfile);
-memoryStore.putItem(profileItem);
-
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("combined_thread")
-    .addMetadata("user_id", "user_002")
-    .store(memoryStore)
-    .build();
-
-// 短期记忆：在对话中记住
-agent.invoke("我今天在做一个 Spring 项目。", config);
-
-// 提出需要同时使用两种记忆的问题
-agent.invoke("根据我的职业和今天的工作，给我一些建议。", config);
-// 响应会同时使用长期记忆（职业）和短期记忆（Spring项目）`}
-</Code>
-
-## 跨会话记忆
-
-同一用户在不同会话中应该能够访问相同的长期记忆。
-
-<Code
-  language="java"
-  title="跨会话记忆示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.store.Store;
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
-import com.alibaba.cloud.ai.graph.store.StoreItem;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.function.FunctionToolCallback;
-
-import java.util.*;
-import java.util.function.BiFunction;
-
-// 定义请求和响应记录
-record SaveMemoryRequest(List<String> namespace, String key, Map<String, Object> value) {}
-record GetMemoryRequest(List<String> namespace, String key) {}
-record MemoryResponse(String message, Map<String, Object> value) {}
-
-// 创建记忆存储和工具
-MemoryStore memoryStore = new MemoryStore();
-
-ToolCallback saveMemoryTool = FunctionToolCallback.builder("saveMemory",
-    (BiFunction<SaveMemoryRequest, ToolContext, MemoryResponse>) (request, context) -> {
-        StoreItem item = StoreItem.of(request.namespace(), request.key(), request.value());
-        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
-        Store store = runnableConfig.store();
-        store.putItem(item);
-        return new MemoryResponse("已保存", request.value());
-    })
-    .description("保存到长期记忆")
-    .inputType(SaveMemoryRequest.class)
-    .build();
-
-ToolCallback getMemoryTool = FunctionToolCallback.builder("getMemory",
-    (BiFunction<GetMemoryRequest, ToolContext, MemoryResponse>) (request, context) -> {
-        RunnableConfig runnableConfig = (RunnableConfig) context.getContext().get("config");
-        Store store = runnableConfig.store();
-        Optional<StoreItem> itemOpt = store.getItem(request.namespace(), request.key());
-        return new MemoryResponse(
-            itemOpt.isPresent() ? "找到" : "未找到",
-            itemOpt.map(StoreItem::getValue).orElse(Map.of())
-        );
-    })
-    .description("从长期记忆获取")
-    .inputType(GetMemoryRequest.class)
-    .build();
-
-ReactAgent agent = ReactAgent.builder()
-    .name("session_agent")
-    .model(chatModel)
-    .tools(saveMemoryTool, getMemoryTool)
-    .saver(new MemorySaver())
-    .build();
-
-// 会话1：保存信息
-RunnableConfig session1 = RunnableConfig.builder()
-    .threadId("session_morning")
-    .addMetadata("user_id", "user_003")
-    .store(memoryStore)
-    .build();
-
-agent.invoke(
-    "记住我的密码是 secret123。用 saveMemory 保存，namespace=['credentials'], key='user_003_password', value={'password': 'secret123'}。",
-    session1
-);
-
-// 会话2：检索信息（不同的线程，同一用户）
-RunnableConfig session2 = RunnableConfig.builder()
-    .threadId("session_afternoon")
-    .addMetadata("user_id", "user_003")
-    .store(memoryStore)
-    .build();
-
-agent.invoke(
-    "我的密码是什么？用 getMemory 获取，namespace=['credentials'], key='user_003_password'。",
-    session2
-);
-// 长期记忆在不同会话间持久化`}
-</Code>
-
-## 用户偏好学习
-
-Agent 可以随着时间的推移学习并存储用户偏好。
-
-<Code
-  language="java"
-  title="用户偏好学习示例" sourceUrl="https://github.com/alibaba/spring-ai-alibaba/tree/v2.1.0.0/examples/documentation/src/main/java/com/alibaba/cloud/ai/examples/documentation/framework/advanced/MemoryExample.java"
->
-{`import com.alibaba.cloud.ai.graph.agent.ReactAgent;
-import com.alibaba.cloud.ai.graph.agent.hook.ModelHook;
-import com.alibaba.cloud.ai.graph.agent.hook.HookPosition;
-import com.alibaba.cloud.ai.graph.OverAllState;
-import com.alibaba.cloud.ai.graph.RunnableConfig;
-import com.alibaba.cloud.ai.graph.checkpoint.savers.MemorySaver;
-import com.alibaba.cloud.ai.graph.store.stores.MemoryStore;
-import com.alibaba.cloud.ai.graph.store.StoreItem;
-import org.springframework.ai.chat.messages.Message;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-
-MemoryStore memoryStore = new MemoryStore();
-
-ModelHook preferenceLearningHook = new ModelHook() {
-    @Override
-    public String getName() {
-        return "preference_learning";
-    }
-
-
-    @Override
-    public HookPosition[] getHookPositions() {
-        return new HookPosition[]{HookPosition.AFTER_MODEL};
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Object>> afterModel(OverAllState state, RunnableConfig config) {
-        String userId = (String) config.metadata("user_id").orElse(null);
-        if (userId == null) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        // 提取用户输入
-        List<Message> messages = (List<Message>) state.value("messages").orElse(new ArrayList<>());
-        if (messages.isEmpty()) {
-            return CompletableFuture.completedFuture(Map.of());
-        }
-
-        // 加载现有偏好
-        Optional<StoreItem> prefsOpt = memoryStore.getItem(List.of("user_data"), userId + "_preferences");
-        List<String> prefs = new ArrayList<>();
-        if (prefsOpt.isPresent()) {
-            Map<String, Object> prefsData = prefsOpt.get().getValue();
-            prefs = (List<String>) prefsData.getOrDefault("items", new ArrayList<>());
-        }
-
-        // 简单的偏好提取（实际应用中使用NLP）
-        for (Message msg : messages) {
-            String content = msg.getText().toLowerCase();
-            if (content.contains("喜欢") || content.contains("偏好")) {
-                prefs.add(msg.getText());
-
-                Map<String, Object> prefsData = new HashMap<>();
-                prefsData.put("items", prefs);
-                StoreItem item = StoreItem.of(List.of("user_data"), userId + "_preferences", prefsData);
-                memoryStore.putItem(item);
-
-                System.out.println("学习到用户偏好 " + userId + ": " + msg.getText());
-            }
-        }
-
-        return CompletableFuture.completedFuture(Map.of());
-    }
-};
-
-ReactAgent agent = ReactAgent.builder()
-    .name("learning_agent")
-    .model(chatModel)
-    .hooks(preferenceLearningHook)
-    .saver(new MemorySaver())
-    .build();
-
-RunnableConfig config = RunnableConfig.builder()
-    .threadId("learning_thread")
-    .addMetadata("user_id", "user_004")
-    .store(memoryStore)
-    .build();
-
-// 用户表达偏好
-agent.invoke("我喜欢喝绿茶。", config);
-agent.invoke("我偏好早上运动。", config);
-
-// 验证偏好已被存储
-Optional<StoreItem> savedPrefs = memoryStore.getItem(List.of("user_data"), "user_004_preferences");
-if (savedPrefs.isPresent()) {
-    // 偏好应该被保存到长期记忆中
-}`}
-</Code>
+[RAG 与知识库](./rag.md) · [Graph Store 与 checkpoint](../../graph-core/core/memory.md)
 
