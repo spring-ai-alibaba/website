@@ -19,8 +19,6 @@ RAG 在回答时为模型提供与问题相关的外部证据。Spring AI 的 `D
 
 向量检索与关键词检索的融合属于检索器内部的**混合检索**。三种应用架构都可以使用[混合检索](/integration/rag/retrieval-augmented-generation#extensions-hyde-hybrid-search)。
 
-[LangChain Deep Agents 的 RAG 架构](https://docs.langchain.com/oss/python/deepagents/retrieval)
-
 ## 两步 RAG {#2-step-rag}
 
 在一次 `ChatClient` 请求上挂载 `RetrievalAugmentationAdvisor`。Advisor 运行检索链、把文档交给生成模型，并在响应上下文中保留最终提供给模型的文档。示例中的 `retriever` 可以来自 `VectorStoreDocumentRetriever`、百炼或应用自己的数据源。

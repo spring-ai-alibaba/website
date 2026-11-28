@@ -95,7 +95,7 @@ Spring AI Alibaba 官方社区开发了一个**包含完整 “前端 UI+后端�
     - [MCP 和安全](https://java2ai.com/blog/spring-ai-100-ga-released/?spm=5176.29160081.0.0.2856aa5c2PwbQU#mcp-%E5%92%8C%E5%AE%89%E5%85%A8)
 
 ### Multi-Agent 多智能体框架
-Graph 是 Spring AI Alibaba 社区核心实现之一，也是整个框架在设计理念上区别于 Spring AI 只做底层原子抽象的地方，Spring AI Alibaba 期望帮助开发者更容易地构建智能体应用。基于 Spring AI Alibaba Graph 开发者可以构建工作流、多智能体应用。Spring AI Alibaba Graph 在设计理念上借鉴 LangGraph，因此在一定程度上可以理解为是 Java 版的 LangGraph 实现，社区在此基础上增加了大量预置 Node、简化了 State 定义过程等，让开发者更容易编写对等低代码平台的工作流、多智能体等。
+Spring AI Alibaba Graph 为 Java 应用提供工作流和多智能体编排。节点通过共享状态传递数据，条件边根据执行结果选择下一步，检查点保存可恢复的运行状态。开发者可以在同一张图中组合预置节点、自定义业务逻辑和 Agent。
 
 Spring AI Alibaba Graph 核心能力：
 
@@ -167,7 +167,7 @@ Flux<String> response = chatClient.prompt(query)
 
 ![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_4.png)
 
-值得注意的是，Spring AI Alibaba Graph 中提供大量预置节点，这些节点可以对标到市面上主流的如 Dify、百炼等低代码平台，典型节点包括 LlmNode（大模型节点）、QuestionClassifierNode（问题分类节点）、ToolNode（工具节点）等，为用户免去重复开发、定义的负担，只需要专注流程串联。
+Spring AI Alibaba Graph 提供 `LlmNode`、`QuestionClassifierNode` 和 `ToolNode` 等预置节点。应用可以直接把模型调用、问题分类和工具执行组合进工作流。
 
 以上是一个可视化绘制的“用户评价分类系统”工作流，对应 Spring AI Alibaba Graph 代码如下所示：
 
@@ -184,12 +184,7 @@ StateGraph stateGraph = new StateGraph("Consumer Service Workflow Demo", stateFa
 ```
 
 ### 多智能体（Multi-Agent）
-复杂任务拆解的另一种解决方案是**多智能体**，相比于工作流，多智能体虽也遵循特定的流程，但是在整个决策、执行流程上具备更多的自主性和灵活性。多个子智能体间通过通信协作完成，最终完成任务解答，在业界，有多种常见的多智能体通信模型，如下图是几个典型示例：
-
-![Spring AI Alibaba 1.0 GA](/img/blog/spring-ai-alibaba-ga/img_5.png)
-
-> 图片出自 Langchain 官方博客
->
+应用可以由协调 Agent 将任务分派给不同的专家，也可以在对话过程中把处理权交接给另一个 Agent。两种模式的控制流和接入示例见[多智能体指南](/docs/frameworks/agent-framework/advanced/multi-agent)。
 
 Spring AI Alibaba Graph 可用来开发各种多智能体模式。官方社区目前发布了几款基于 Spring AI Alibaba Graph 开发的智能体产品，包括通用智能体 JManus、DeepResearch 智能体、AgentScope 等。
 

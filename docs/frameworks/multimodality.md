@@ -107,7 +107,7 @@ flowchart LR
 
 检查工具媒体支持时要看适配器如何写出工具消息。Spring AI 2.1.0 的 OpenAI Chat Completions、Anthropic 和 Google GenAI 聊天适配器都从 `getResponses()` 读取旧式文本视图，该视图会丢弃嵌套媒体。只有适配器实际编码 `getResults()` 中的媒体并通过端点测试，才可使用原生工具媒体路径。[OpenAI 实现](https://github.com/spring-projects/spring-ai/blob/v2.1.0/models/spring-ai-openai/src/main/java/org/springframework/ai/openai/OpenAiChatModel.java) · [Anthropic 实现](https://github.com/spring-projects/spring-ai/blob/v2.1.0/models/spring-ai-anthropic/src/main/java/org/springframework/ai/anthropic/AnthropicChatModel.java) · [Google GenAI 实现](https://github.com/spring-projects/spring-ai/blob/v2.1.0/models/spring-ai-google-genai/src/main/java/org/springframework/ai/google/genai/GoogleGenAiChatModel.java) · [DashScope 消息映射](https://github.com/spring-ai-alibaba/spring-ai-extensions/blob/v2.1.0.0/models/spring-ai-alibaba-dashscope/src/main/java/com/alibaba/cloud/ai/dashscope/chat/DashScopeMessageParts.java)
 
-Deep Agents 将用户上传、工具发现媒体和工具交付文件组合在同一轮次中。其 `read_file` 可对特定文件返回媒体块，也可以抽取视频帧。长会话通过后端存储和引用保留原始文件。Spring AI Alibaba 当前的 `ReadFileTool` 是文本读取工具。类似用法可通过专门的 `inspect_media`、`transcribe_audio` 或 `read_document` 工具实现，并按调用关联记录文件来源。引入框架级媒体读取能力时，可将文件识别、抽帧和权限复用在同一服务中。[Deep Agents 多模态指南](https://docs.langchain.com/oss/python/deepagents/multimodal)
+Spring AI Alibaba 的 `ReadFileTool` 读取文本。应用需要检查媒体、转写音频或解析文档时，可以注册专用工具，将上传文件保存在后端，并在调用中传递经过授权的文件引用。需要分析视频时，可由媒体工具抽取视频帧并记录帧的来源。
 
 ## 流式、历史与恢复
 
