@@ -146,6 +146,6 @@ mvn spring-boot:run
 ```
 
 ## 设计理念与未来规划
-当前版本的 Spring AI Alibaba Graph 在设计理念上大幅参考了 Langgraph，包括全局 State 管理、Graph 定义等，基本上可以说是 Langgraph 的 Java 实现版本，特别感谢 Langchain 社区开源贡献的 Langgraph 智能体框架，让我们可以站在巨人肩膀上继续前进。Agent 技术一直在快速发展之中，我们将在此基础上探索更多前沿 Agent 实现方案。
+Spring AI Alibaba Graph 通过 `StateGraph` 定义节点和执行路径，通过 `OverAllState` 在节点之间传递数据。这套运行模型可以编排固定工作流，也可以组织根据状态选择下一步的多智能体应用。
 
 Spring AI Alibaba Graph 尚未正式发布，欢迎开发者通过 Github 源码体验并参与贡献：[https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-graph](https://github.com/alibaba/spring-ai-alibaba/tree/main/spring-ai-alibaba-graph)
